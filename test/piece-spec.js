@@ -72,7 +72,7 @@ class Puzzle {
 
   newPiece(options = {}) {
     const piece = new Piece(options);
-    piece.puzzle = this;
+    piece.belongsTo(this);
     return piece;
   }
 }
@@ -87,6 +87,13 @@ class Piece {
   }
 
   /**
+   * @param {Puzzle} puzzle
+   */
+  belongsTo(puzzle) {
+    this.puzzle = puzzle;
+  }
+
+  /**
    *
    * @param {Point} point
    */
@@ -94,12 +101,22 @@ class Piece {
     this.position = point;
   }
 
+
   /**
    *
    * @param {Piece} other
    * @returns {boolean}
    */
-  vericallyCloseTo(other) {
+  canConnectWith(other) {
+    return this.verticallyCloseTo(other) && this.verticallyMatch(other) || this.horizontallyCloseTo(other) && this.horizontallyMatch(other);
+  }
+
+  /**
+   *
+   * @param {Piece} other
+   * @returns {boolean}
+   */
+  verticallyCloseTo(other) {
     return this.downPosition.closeTo(other.upPosition, this.proximityTolerance);
   }
 
@@ -352,8 +369,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(point(0, 0))
 
-    assert(!a.vericallyCloseTo(b));
-    assert(!b.vericallyCloseTo(a));
+    assert(!a.verticallyCloseTo(b));
+    assert(!b.verticallyCloseTo(a));
   })
 
 
@@ -379,8 +396,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(point(0, 20))
 
-    assert(!a.vericallyCloseTo(b));
-    assert(!b.vericallyCloseTo(a));
+    assert(!a.verticallyCloseTo(b));
+    assert(!b.verticallyCloseTo(a));
   })
 
   it("can check whether pieces are horizontally close when far away", () => {
@@ -405,8 +422,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(point(0, 2))
 
-    assert(!a.vericallyCloseTo(b));
-    assert(!b.vericallyCloseTo(a));
+    assert(!a.verticallyCloseTo(b));
+    assert(!b.verticallyCloseTo(a));
   })
 
   it("can check whether pieces are horizontally close when partially overlapped", () => {
@@ -431,8 +448,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(point(0, 3))
 
-    assert(a.vericallyCloseTo(b));
-    assert(!b.vericallyCloseTo(a));
+    assert(a.verticallyCloseTo(b));
+    assert(!b.verticallyCloseTo(a));
   })
 
   it("can check whether pieces are horizontally close when partially overlapped", () => {
@@ -468,5 +485,22 @@ describe("piece", () => {
     assert.deepEqual(piece.leftPosition, point(-2, 0));
   })
 
+  it("checks if can connect", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot});
+
+    a.placeAt(point(0, 0))
+    b.placeAt(point(0, 3))
+    c.placeAt(point(3, 3))
+
+    assert(a.canConnectWith(b));
+    assert(b.canConnectWith(c));
+
+    assert(!b.canConnectWith(a));
+    assert(!c.canConnectWith(b));
+  })
 })
 
