@@ -1,7 +1,22 @@
 const assert = require('assert');
 
-class Piece {
+class Puzzle {
+  /**
+   *
+   * @param {number} pieceSize
+   */
+  constructor(pieceSize = 1) {
+    this.pieceSize = pieceSize;
+  }
 
+  newPiece(options = {}) {
+    const piece = new Piece(options);
+    piece.puzzle = this;
+    return piece;
+  }
+}
+
+class Piece {
 
   constructor({up, down, left, right} = {}) {
     this.up = up || None;
@@ -36,6 +51,10 @@ class Piece {
     return this.right.match(other.left);
   }
 
+  get pieceSize() {
+    return this.puzzle.pieceSize;
+  }
+
 }
 
 class Point {
@@ -60,8 +79,6 @@ class Point {
   }
 
 }
-
-
 
 const Tab = {
   isSlot: () => false,
@@ -177,5 +194,23 @@ describe("piece", () => {
     assert(!a.mayMatchHorizontally(b))
     assert(!b.mayMatchHorizontally(a))
   })
+
+  it("can create a piece from a puzzle", () => {
+    const puzzle = new Puzzle();
+    const piece = puzzle.newPiece();
+
+    assert(piece.puzzle === puzzle);
+  })
+
+
+  it("can create a piece from a puzzle", () => {
+    const puzzle = new Puzzle();
+    const piece = puzzle.newPiece();
+
+    assert(piece.puzzle === puzzle);
+  })
+
+
+
 })
 
