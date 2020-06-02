@@ -1,0 +1,22 @@
+{
+  "name": "puzzle",
+  "version": "0.0.1",
+  "description": "Puzzles for js",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flbulgarelli/puzzlejs.git"
+  },
+  "author": "Franco Leonardo Bulgarelli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flbulgarelli/puzzlejs/issues"
+  },
+  "homepage": "https://github.com/flbulgarelli/puzzlejs#readme",
+  "devDependencies": {
+    "mocha": "^7.2.0"
+  }
+}
