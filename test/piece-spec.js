@@ -32,6 +32,11 @@ class Anchor {
     return this.copy().translate(dx, dy);
   }
 
+  /**
+   *
+   * @param {number} dx
+   * @param {number} dy
+   */
   translate(dx, dy) {
     this.x += dx;
     this.y += dy;
@@ -167,7 +172,23 @@ class Piece {
    * @param {number} dy
    */
   translate(dx, dy) {
-    throw new Error("Method not implemented.");
+    this.centralAnchor.translate(dx, dy);
+  }
+
+
+  /**
+   *
+   * @param {number} dx
+   * @param {number} dy
+   * @param {Piece[]} pushedPieces
+   */
+  push(dx, dy, pushedPieces = []) {
+    const stationaries = this.connections.filter(it => pushedPieces.indexOf(it) === -1);
+
+    this.translate(dx, dy);
+
+    pushedPieces.push(this);
+    stationaries.forEach(it =>it.push(dx, dy, pushedPieces));
   }
 
   /**
@@ -638,7 +659,42 @@ describe("piece", () => {
     piece.translate(10, 5);
 
     assert.deepEqual(piece.centralAnchor, anchor(10, 5));
+  })
 
+
+  it("pushes when no connections", () => {
+    const puzzle = new Puzzle();
+    const piece = puzzle.newPiece({down: Tab});
+
+    piece.placeAt(anchor(0, 0));
+    piece.push(10, 5);
+
+    assert.deepEqual(piece.centralAnchor, anchor(10, 5));
+  })
+
+  it("pushes when no connections", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({right: Tab});
+    const b = puzzle.newPiece({left: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot, right: Tab, down: Slot});
+    const d = puzzle.newPiece({up: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(3, 0))
+    c.placeAt(anchor(6, 0))
+    d.placeAt(anchor(6, 3))
+
+    a.connectHorizontally(b);
+    b.connectHorizontally(c);
+    c.connectVertically(d);
+
+    a.push(1, 1);
+
+    assert.deepEqual(a.centralAnchor, anchor(1, 1));
+    assert.deepEqual(b.centralAnchor, anchor(4, 1));
+    assert.deepEqual(c.centralAnchor, anchor(7, 1));
+    assert.deepEqual(d.centralAnchor, anchor(7, 4));
   })
 })
 
