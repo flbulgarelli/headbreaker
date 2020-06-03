@@ -1,7 +1,7 @@
 const assert = require('assert');
 
 
-class Point {
+class Anchor {
 
   /**
    *
@@ -15,7 +15,7 @@ class Point {
 
   /**
    *
-   * @param {Point} other
+   * @param {Anchor} other
    * @returns {boolean}
    */
   equals(other) {
@@ -27,7 +27,7 @@ class Point {
    * @param {number} dy
    */
   vericallyTranslate(dy) {
-    return new Point(this.x, this.y + dy);
+    return new Anchor(this.x, this.y + dy);
   }
 
   /**
@@ -35,12 +35,12 @@ class Point {
    * @param {number} dx
    */
   horizontallyTranslate(dx) {
-    return new Point(this.x + dx, this.y);
+    return new Anchor(this.x + dx, this.y);
   }
 
   /**
    *
-   * @param {Point} other
+   * @param {Anchor} other
    * @param {number} tolerance
    * @returns {boolean}
    */
@@ -150,10 +150,10 @@ class Piece {
 
   /**
    *
-   * @param {Point} point
+   * @param {Anchor} anchor
    */
-  placeAt(point) {
-    this.position = point;
+  placeAt(anchor) {
+    this.position = anchor;
   }
 
   /**
@@ -211,28 +211,28 @@ class Piece {
   }
 
   /**
-   * @return {Point}
+   * @return {Anchor}
    */
   get downPosition() {
     return this.position.vericallyTranslate(this.size);
   }
 
   /**
-   * @return {Point}
+   * @return {Anchor}
    */
   get rightPosition() {
     return this.position.horizontallyTranslate(this.size);
   }
 
   /**
-   * @return {Point}
+   * @return {Anchor}
    */
   get upPosition() {
     return this.position.vericallyTranslate(-this.size);
   }
 
   /**
-   * @return {Point}
+   * @return {Anchor}
    */
   get leftPosition() {
     return this.position.horizontallyTranslate(-this.size);
@@ -284,41 +284,41 @@ const None = {
  *
  * @param {number} x
  * @param {number} y
- * @returns {Point}
+ * @returns {Anchor}
  */
-function point(x, y) {
-  return new Point(x, y);
+function anchor(x, y) {
+  return new Anchor(x, y);
 }
 
-describe("point", () => {
+describe("anchor", () => {
   it("can translate vertically", () => {
-    assert.deepEqual(point(1, 5).vericallyTranslate(4), point(1, 9));
-    assert.deepEqual(point(1, 5).vericallyTranslate(-5), point(1, 0));
+    assert.deepEqual(anchor(1, 5).vericallyTranslate(4), anchor(1, 9));
+    assert.deepEqual(anchor(1, 5).vericallyTranslate(-5), anchor(1, 0));
   })
 
   it("can translate horizontally", () => {
-    assert.deepEqual(point(1, 5).horizontallyTranslate(4), point(5, 5));
-    assert.deepEqual(point(1, 5).horizontallyTranslate(-1), point(0, 5));
+    assert.deepEqual(anchor(1, 5).horizontallyTranslate(4), anchor(5, 5));
+    assert.deepEqual(anchor(1, 5).horizontallyTranslate(-1), anchor(0, 5));
   })
 
   it("can check proximity when ortogonally close", () => {
-    assert(point(0, 0).closeTo(point(0, 0), 2));
+    assert(anchor(0, 0).closeTo(anchor(0, 0), 2));
 
-    assert(point(0, 0).closeTo(point(0, 2), 2));
-    assert(point(0, 0).closeTo(point(0, 1), 2));
+    assert(anchor(0, 0).closeTo(anchor(0, 2), 2));
+    assert(anchor(0, 0).closeTo(anchor(0, 1), 2));
 
-    assert(point(0, 0).closeTo(point(0, -2), 2));
-    assert(point(0, 0).closeTo(point(0, -1), 2));
+    assert(anchor(0, 0).closeTo(anchor(0, -2), 2));
+    assert(anchor(0, 0).closeTo(anchor(0, -1), 2));
 
-    assert(point(0, 0).closeTo(point(2, 0), 2));
-    assert(point(0, 0).closeTo(point(-2, 0), 2));
+    assert(anchor(0, 0).closeTo(anchor(2, 0), 2));
+    assert(anchor(0, 0).closeTo(anchor(-2, 0), 2));
   })
 
   it("can check proximity when ortogonally away", () => {
-    assert(!point(0, 0).closeTo(point(0, 2), 1));
-    assert(!point(0, 0).closeTo(point(0, -2), 1));
-    assert(!point(0, 0).closeTo(point(2, 0), 1));
-    assert(!point(0, 0).closeTo(point(-2, 0), 1));
+    assert(!anchor(0, 0).closeTo(anchor(0, 2), 1));
+    assert(!anchor(0, 0).closeTo(anchor(0, -2), 1));
+    assert(!anchor(0, 0).closeTo(anchor(2, 0), 1));
+    assert(!anchor(0, 0).closeTo(anchor(-2, 0), 1));
   })
 
 })
@@ -326,8 +326,8 @@ describe("point", () => {
 describe("piece", () => {
   it("can create a piece and place it", () => {
     const piece = new Piece();
-    piece.placeAt(point(0, 0));
-    assert.deepEqual(piece.position, point(0, 0));
+    piece.placeAt(anchor(0, 0));
+    assert.deepEqual(piece.position, anchor(0, 0));
   })
 
   it("there are no inserts by default", () => {
@@ -426,10 +426,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(0, 0))
+    b.placeAt(anchor(0, 0))
 
     assert(!a.verticallyCloseTo(b));
     assert(!b.verticallyCloseTo(a));
@@ -440,10 +440,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(0, 0))
+    b.placeAt(anchor(0, 0))
 
     assert(!a.horizontallyCloseTo(b));
     assert(!b.horizontallyCloseTo(a));
@@ -453,10 +453,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(0, 20))
+    b.placeAt(anchor(0, 20))
 
     assert(!a.verticallyCloseTo(b));
     assert(!b.verticallyCloseTo(a));
@@ -466,10 +466,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(20, 0))
+    b.placeAt(anchor(20, 0))
 
     assert(!a.horizontallyCloseTo(b));
     assert(!b.horizontallyCloseTo(a));
@@ -479,10 +479,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(0, 2))
+    b.placeAt(anchor(0, 2))
 
     assert(!a.verticallyCloseTo(b));
     assert(!b.verticallyCloseTo(a));
@@ -492,10 +492,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(2, 0))
+    b.placeAt(anchor(2, 0))
 
     assert(!a.horizontallyCloseTo(b));
     assert(!b.horizontallyCloseTo(a));
@@ -505,10 +505,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(0, 3))
+    b.placeAt(anchor(0, 3))
 
     assert(a.verticallyCloseTo(b));
     assert(!b.verticallyCloseTo(a));
@@ -518,10 +518,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(point(0, 0))
+    a.placeAt(anchor(0, 0))
 
     const b = puzzle.newPiece();
-    b.placeAt(point(3, 0))
+    b.placeAt(anchor(3, 0))
 
     assert(a.horizontallyCloseTo(b));
     assert(!b.horizontallyCloseTo(a));
@@ -531,20 +531,20 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const piece = puzzle.newPiece();
-    piece.placeAt(point(0, 0))
+    piece.placeAt(anchor(0, 0))
 
-    assert.deepEqual(piece.downPosition, point(0, 2));
-    assert.deepEqual(piece.rightPosition, point(2, 0));
+    assert.deepEqual(piece.downPosition, anchor(0, 2));
+    assert.deepEqual(piece.rightPosition, anchor(2, 0));
   })
 
   it("knows its negative inserts positions", () => {
     const puzzle = new Puzzle();
 
     const piece = puzzle.newPiece();
-    piece.placeAt(point(0, 0))
+    piece.placeAt(anchor(0, 0))
 
-    assert.deepEqual(piece.upPosition, point(0, -2));
-    assert.deepEqual(piece.leftPosition, point(-2, 0));
+    assert.deepEqual(piece.upPosition, anchor(0, -2));
+    assert.deepEqual(piece.leftPosition, anchor(-2, 0));
   })
 
   it("checks if can connect horizontally", () => {
@@ -554,9 +554,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(point(0, 0))
-    b.placeAt(point(0, 3))
-    c.placeAt(point(3, 3))
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(0, 3))
+    c.placeAt(anchor(3, 3))
 
     assert(b.canConnectHorizontallyWith(c));
     assert(!a.canConnectHorizontallyWith(b));
@@ -572,9 +572,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(point(0, 0))
-    b.placeAt(point(0, 3))
-    c.placeAt(point(3, 3))
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(0, 3))
+    c.placeAt(anchor(3, 3))
 
     assert(a.canConnectVerticallyWith(b));
     assert(!b.canConnectVerticallyWith(a));
@@ -590,9 +590,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(point(0, 0))
-    b.placeAt(point(0, 3))
-    c.placeAt(point(3, 3))
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(0, 3))
+    c.placeAt(anchor(3, 3))
 
     a.connectVertically(b);
     assert.equal(a.downConnection, b);
@@ -606,9 +606,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(point(0, 0))
-    b.placeAt(point(0, 3))
-    c.placeAt(point(3, 3))
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(0, 3))
+    c.placeAt(anchor(3, 3))
 
     b.connectHorizontally(c);
     assert.equal(b.rightConnection, c);
