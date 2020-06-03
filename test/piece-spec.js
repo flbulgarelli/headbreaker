@@ -28,8 +28,14 @@ class Anchor {
    * @param {number} dx
    * @param {number} dy
    */
+  translated(dx, dy) {
+    return this.copy().translate(dx, dy);
+  }
+
   translate(dx, dy) {
-    return new Anchor(this.x + dx, this.y + dy);
+    this.x += dx;
+    this.y += dy;
+    return this;
   }
 
   /**
@@ -40,6 +46,10 @@ class Anchor {
    */
   closeTo(other, tolerance) {
     return between(this.x, other.x-tolerance, other.x + tolerance) && between(this.y, other.y-tolerance, other.y + tolerance)
+  }
+
+  copy() {
+    return new Anchor(this.x, this.y);
   }
 }
 
@@ -208,28 +218,28 @@ class Piece {
    * @return {Anchor}
    */
   get downPosition() {
-    return this.position.translate(0, this.size);
+    return this.position.translated(0, this.size);
   }
 
   /**
    * @return {Anchor}
    */
   get rightPosition() {
-    return this.position.translate(this.size, 0);
+    return this.position.translated(this.size, 0);
   }
 
   /**
    * @return {Anchor}
    */
   get upPosition() {
-    return this.position.translate(0, -this.size);
+    return this.position.translated(0, -this.size);
   }
 
   /**
    * @return {Anchor}
    */
   get leftPosition() {
-    return this.position.translate(-this.size, 0);
+    return this.position.translated(-this.size, 0);
   }
 
   /**
@@ -285,14 +295,14 @@ function anchor(x, y) {
 }
 
 describe("anchor", () => {
-  it("can translate vertically", () => {
-    assert.deepEqual(anchor(1, 5).translate(0, 4), anchor(1, 9));
-    assert.deepEqual(anchor(1, 5).translate(0, -5), anchor(1, 0));
+  it("can translated vertically", () => {
+    assert.deepEqual(anchor(1, 5).translated(0, 4), anchor(1, 9));
+    assert.deepEqual(anchor(1, 5).translated(0, -5), anchor(1, 0));
   })
 
-  it("can translate horizontally", () => {
-    assert.deepEqual(anchor(1, 5).translate(4, 0), anchor(5, 5));
-    assert.deepEqual(anchor(1, 5).translate(-1, 0), anchor(0, 5));
+  it("can translated horizontally", () => {
+    assert.deepEqual(anchor(1, 5).translated(4, 0), anchor(5, 5));
+    assert.deepEqual(anchor(1, 5).translated(-1, 0), anchor(0, 5));
   })
 
   it("can check proximity when ortogonally close", () => {
