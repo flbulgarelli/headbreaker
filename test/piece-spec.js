@@ -157,7 +157,17 @@ class Piece {
    * @param {Anchor} anchor
    */
   placeAt(anchor) {
-    this.position = anchor;
+    this.centralAnchor = anchor;
+  }
+
+
+  /**
+   *
+   * @param {number} dx
+   * @param {number} dy
+   */
+  translate(dx, dy) {
+    throw new Error("Method not implemented.");
   }
 
   /**
@@ -184,7 +194,7 @@ class Piece {
    * @returns {boolean}
    */
   verticallyCloseTo(other) {
-    return this.downPosition.closeTo(other.upPosition, this.proximityTolerance);
+    return this.downAnchor.closeTo(other.upAnchor, this.proximityTolerance);
   }
 
   /**
@@ -193,7 +203,7 @@ class Piece {
    * @returns {boolean}
    */
   horizontallyCloseTo(other) {
-    return this.rightPosition.closeTo(other.leftPosition, this.proximityTolerance);
+    return this.rightAnchor.closeTo(other.leftAnchor, this.proximityTolerance);
   }
 
 
@@ -218,29 +228,29 @@ class Piece {
   /**
    * @return {Anchor}
    */
-  get downPosition() {
-    return this.position.translated(0, this.size);
+  get downAnchor() {
+    return this.centralAnchor.translated(0, this.size);
   }
 
   /**
    * @return {Anchor}
    */
-  get rightPosition() {
-    return this.position.translated(this.size, 0);
+  get rightAnchor() {
+    return this.centralAnchor.translated(this.size, 0);
   }
 
   /**
    * @return {Anchor}
    */
-  get upPosition() {
-    return this.position.translated(0, -this.size);
+  get upAnchor() {
+    return this.centralAnchor.translated(0, -this.size);
   }
 
   /**
    * @return {Anchor}
    */
-  get leftPosition() {
-    return this.position.translated(-this.size, 0);
+  get leftAnchor() {
+    return this.centralAnchor.translated(-this.size, 0);
   }
 
   /**
@@ -332,7 +342,7 @@ describe("piece", () => {
   it("can create a piece and place it", () => {
     const piece = new Piece();
     piece.placeAt(anchor(0, 0));
-    assert.deepEqual(piece.position, anchor(0, 0));
+    assert.deepEqual(piece.centralAnchor, anchor(0, 0));
   })
 
   it("there are no inserts by default", () => {
@@ -538,8 +548,8 @@ describe("piece", () => {
     const piece = puzzle.newPiece();
     piece.placeAt(anchor(0, 0))
 
-    assert.deepEqual(piece.downPosition, anchor(0, 2));
-    assert.deepEqual(piece.rightPosition, anchor(2, 0));
+    assert.deepEqual(piece.downAnchor, anchor(0, 2));
+    assert.deepEqual(piece.rightAnchor, anchor(2, 0));
   })
 
   it("knows its negative inserts positions", () => {
@@ -548,8 +558,8 @@ describe("piece", () => {
     const piece = puzzle.newPiece();
     piece.placeAt(anchor(0, 0))
 
-    assert.deepEqual(piece.upPosition, anchor(0, -2));
-    assert.deepEqual(piece.leftPosition, anchor(-2, 0));
+    assert.deepEqual(piece.upAnchor, anchor(0, -2));
+    assert.deepEqual(piece.leftAnchor, anchor(-2, 0));
   })
 
   it("checks if can connect horizontally", () => {
@@ -617,6 +627,18 @@ describe("piece", () => {
 
     b.connectHorizontally(c);
     assert.equal(b.rightConnection, c);
+  })
+
+
+  it("translates", () => {
+    const puzzle = new Puzzle();
+    const piece = puzzle.newPiece({down: Tab});
+
+    piece.placeAt(anchor(0, 0));
+    piece.translate(10, 5);
+
+    assert.deepEqual(piece.centralAnchor, anchor(10, 5));
+
   })
 })
 
