@@ -165,14 +165,15 @@ class Piece {
    * @param {Piece} other
    * @returns {boolean}
    */
-  canConnectWith(other) {
-    return this.canConnectVerticallyWith(other) || this.canConnectHorizontallyWith(other);
-  }
-
   canConnectHorizontallyWith(other) {
     return this.horizontallyCloseTo(other) && this.horizontallyMatch(other);
   }
 
+  /**
+   *
+   * @param {Piece} other
+   * @returns {boolean}
+   */
   canConnectVerticallyWith(other) {
     return this.verticallyCloseTo(other) && this.verticallyMatch(other);
   }
