@@ -193,6 +193,44 @@ class Piece {
 
   /**
    *
+   * @param {number} dx
+   * @param {number} dy
+   */
+  drag(dx, dy) {
+    if (dx > 0) {
+      if (this.rightConnection) {
+        this.push(dx, 0);
+      } else {
+        // this.disconnectHorizontally()
+        this.translate(dx, 0);
+      }
+    } else if (dx < 0) {
+      if (this.leftConnection) {
+        this.push(dx, 0);
+      } else {
+        // this.rightConnection.disconnectHorizontally()
+        this.translate(dx, 0);
+      }
+    }
+    if (dy > 0) {
+      if (this.downConnection) {
+        this.push(0, dy);
+      } else {
+        // this.disconnectHorizontally()
+        this.translate(0, dy);
+      }
+    } else if (dy < 0) {
+      if (this.upConnection) {
+        this.push(0, dy);
+      } else {
+        // this.rightConnection.disconnectHorizontally()
+        this.translate(0, dy);
+      }
+    }
+  }
+
+  /**
+   *
    * @param {Piece} other
    * @returns {boolean}
    */
@@ -695,6 +733,19 @@ describe("piece", () => {
     assert.deepEqual(b.centralAnchor, anchor(4, 1));
     assert.deepEqual(c.centralAnchor, anchor(7, 1));
     assert.deepEqual(d.centralAnchor, anchor(7, 4));
+  })
+
+
+  it("drags when no connections", () => {
+    const puzzle = new Puzzle();
+    const piece = puzzle.newPiece({down: Tab});
+
+    piece.placeAt(anchor(0, 0));
+    piece.drag(10, 5);
+    piece.drag(-1, 0);
+    piece.drag(0, -2);
+
+    assert.deepEqual(piece.centralAnchor, anchor(9, 3));
   })
 })
 
