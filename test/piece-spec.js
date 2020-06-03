@@ -77,6 +77,8 @@ class Puzzle {
   }
 }
 
+
+
 class Piece {
 
   constructor({up = None, down = None, left = None, right = None} = {}) {
@@ -87,10 +89,63 @@ class Piece {
   }
 
   /**
+   * @returns {Piece[]}
+   */
+  get connections() {
+    return [
+      this.upConnection,
+      this.downConnection,
+      this.leftConnection,
+      this.rightConnection
+    ].filter(it => it);
+  }
+
+  /**
+   *
+   * @param {Piece} other
+   */
+  connectVertically(other) {
+    if (!this.canConnectVerticallyWith(other)) {
+      throw new Error("can not connect vertically!");
+    }
+    this.downConnection = other;
+    other.connectVerticallyBack(this);
+  }
+
+  /**
+   *
+   * @param {Piece} other
+   */
+  connectVerticallyBack(other) {
+    this.upConnection = other;
+  }
+
+  /**
+   *
+   * @param {Piece} other
+   */
+  connectHorizontally(other) {
+    if (!this.canConnectHorizontallyWith(other)) {
+      throw new Error("can not connect horizontally!");
+    }
+    this.rightConnection = other;
+    other.connectHorizontallyBack(this);
+  }
+
+  /**
+   *
+   * @param {Piece} other
+   */
+  connectHorizontallyBack(other) {
+    this.leftConnection = other;
+  }
+
+  /**
    * @param {Puzzle} puzzle
    */
   belongsTo(puzzle) {
     this.puzzle = puzzle;
+
   }
 
   /**
@@ -101,14 +156,21 @@ class Piece {
     this.position = point;
   }
 
-
   /**
    *
    * @param {Piece} other
    * @returns {boolean}
    */
   canConnectWith(other) {
-    return this.verticallyCloseTo(other) && this.verticallyMatch(other) || this.horizontallyCloseTo(other) && this.horizontallyMatch(other);
+    return this.canConnectVerticallyWith(other) || this.canConnectHorizontallyWith(other);
+  }
+
+  canConnectHorizontallyWith(other) {
+    return this.horizontallyCloseTo(other) && this.horizontallyMatch(other);
+  }
+
+  canConnectVerticallyWith(other) {
+    return this.verticallyCloseTo(other) && this.verticallyMatch(other);
   }
 
   /**
@@ -485,7 +547,7 @@ describe("piece", () => {
     assert.deepEqual(piece.leftPosition, point(-2, 0));
   })
 
-  it("checks if can connect", () => {
+  it("checks if can connect horizontally", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece({down: Tab});
@@ -496,11 +558,60 @@ describe("piece", () => {
     b.placeAt(point(0, 3))
     c.placeAt(point(3, 3))
 
-    assert(a.canConnectWith(b));
-    assert(b.canConnectWith(c));
+    assert(b.canConnectHorizontallyWith(c));
+    assert(!a.canConnectHorizontallyWith(b));
+    assert(!b.canConnectHorizontallyWith(a));
+    assert(!c.canConnectHorizontallyWith(b));
+  })
 
-    assert(!b.canConnectWith(a));
-    assert(!c.canConnectWith(b));
+
+  it("checks if can connect vertically", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot});
+
+    a.placeAt(point(0, 0))
+    b.placeAt(point(0, 3))
+    c.placeAt(point(3, 3))
+
+    assert(a.canConnectVerticallyWith(b));
+    assert(!b.canConnectVerticallyWith(a));
+    assert(!b.canConnectVerticallyWith(c));
+    assert(!c.canConnectVerticallyWith(b));
+  })
+
+
+  it("connects vertically", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot});
+
+    a.placeAt(point(0, 0))
+    b.placeAt(point(0, 3))
+    c.placeAt(point(3, 3))
+
+    a.connectVertically(b);
+    assert.equal(a.downConnection, b);
+  })
+
+
+  it("connects horizontally", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot});
+
+    a.placeAt(point(0, 0))
+    b.placeAt(point(0, 3))
+    c.placeAt(point(3, 3))
+
+    b.connectHorizontally(c);
+    assert.equal(b.rightConnection, c);
   })
 })
 
