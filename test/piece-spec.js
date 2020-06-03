@@ -1,3 +1,4 @@
+// @ts-ignore
 const assert = require('assert');
 
 
@@ -24,18 +25,11 @@ class Anchor {
 
   /**
    *
+   * @param {number} dx
    * @param {number} dy
    */
-  vericallyTranslate(dy) {
-    return new Anchor(this.x, this.y + dy);
-  }
-
-  /**
-   *
-   * @param {number} dx
-   */
-  horizontallyTranslate(dx) {
-    return new Anchor(this.x + dx, this.y);
+  translate(dx, dy) {
+    return new Anchor(this.x + dx, this.y + dy);
   }
 
   /**
@@ -214,28 +208,28 @@ class Piece {
    * @return {Anchor}
    */
   get downPosition() {
-    return this.position.vericallyTranslate(this.size);
+    return this.position.translate(0, this.size);
   }
 
   /**
    * @return {Anchor}
    */
   get rightPosition() {
-    return this.position.horizontallyTranslate(this.size);
+    return this.position.translate(this.size, 0);
   }
 
   /**
    * @return {Anchor}
    */
   get upPosition() {
-    return this.position.vericallyTranslate(-this.size);
+    return this.position.translate(0, -this.size);
   }
 
   /**
    * @return {Anchor}
    */
   get leftPosition() {
-    return this.position.horizontallyTranslate(-this.size);
+    return this.position.translate(-this.size, 0);
   }
 
   /**
@@ -292,13 +286,13 @@ function anchor(x, y) {
 
 describe("anchor", () => {
   it("can translate vertically", () => {
-    assert.deepEqual(anchor(1, 5).vericallyTranslate(4), anchor(1, 9));
-    assert.deepEqual(anchor(1, 5).vericallyTranslate(-5), anchor(1, 0));
+    assert.deepEqual(anchor(1, 5).translate(0, 4), anchor(1, 9));
+    assert.deepEqual(anchor(1, 5).translate(0, -5), anchor(1, 0));
   })
 
   it("can translate horizontally", () => {
-    assert.deepEqual(anchor(1, 5).horizontallyTranslate(4), anchor(5, 5));
-    assert.deepEqual(anchor(1, 5).horizontallyTranslate(-1), anchor(0, 5));
+    assert.deepEqual(anchor(1, 5).translate(4, 0), anchor(5, 5));
+    assert.deepEqual(anchor(1, 5).translate(-1, 0), anchor(0, 5));
   })
 
   it("can check proximity when ortogonally close", () => {
