@@ -307,7 +307,7 @@ describe("piece", () => {
     b.placeAt(anchor(0, 3))
     c.placeAt(anchor(3, 3))
 
-    a.connectVertically(b);
+    a.connectVerticallyWith(b);
     assert.equal(a.downConnection, b);
   })
 
@@ -323,7 +323,7 @@ describe("piece", () => {
     b.placeAt(anchor(0, 3))
     c.placeAt(anchor(3, 3))
 
-    b.connectHorizontally(c);
+    b.connectHorizontallyWith(c);
     assert.equal(b.rightConnection, c);
   })
 
@@ -362,9 +362,9 @@ describe("piece", () => {
     c.placeAt(anchor(6, 0))
     d.placeAt(anchor(6, 3))
 
-    a.connectHorizontally(b);
-    b.connectHorizontally(c);
-    c.connectVertically(d);
+    a.connectHorizontallyWith(b);
+    b.connectHorizontallyWith(c);
+    c.connectVerticallyWith(d);
 
     a.push(1, 1);
 
@@ -407,9 +407,9 @@ describe("piece", () => {
       // a > b > c
       //         v
       //         d
-      a.connectHorizontally(b);
-      b.connectHorizontally(c);
-      c.connectVertically(d);
+      a.connectHorizontallyWith(b);
+      b.connectHorizontallyWith(c);
+      c.connectVerticallyWith(d);
     });
 
 
@@ -516,5 +516,30 @@ describe("piece", () => {
     })
   })
 
+
 })
 
+it("autoconnects puzzle", () => {
+  const puzzle = new Puzzle();
+
+  puzzle
+    .newPiece({right: Tab})
+    .placeAt(anchor(0, 0));
+  puzzle
+    .newPiece({left: Slot, right: Tab})
+    .placeAt(anchor(3, 0));
+  puzzle
+    .newPiece({left: Slot, right: Tab, down: Slot})
+    .placeAt(anchor(6, 0));
+  puzzle
+    .newPiece({up: Tab})
+    .placeAt(anchor(6, 3));
+
+  puzzle.autoconnect();
+
+  const [a, b, c, d] = puzzle.pieces;
+
+  assert.equal(a.rightConnection, b);
+  assert.equal(b.rightConnection, c);
+  assert.equal(c.downConnection, d);
+})

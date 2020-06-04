@@ -73,22 +73,48 @@ class Puzzle {
   constructor(pieceSize = 2, proximityTolerance = 1) {
     this.pieceSize = pieceSize;
     this.proximityTolerance = proximityTolerance;
+    /** @type {Piece[]} */
+    this.pieces = [];
   }
 
   newPiece(options = {}) {
     const piece = new Piece(options);
+    this.pieces.push(piece);
     piece.belongsTo(this);
     return piece;
+  }
+
+  /**
+   * Tries to connect pieces in their current positions
+   * This method is O(n * (n-1))
+   */
+  autoconnect() {
+    this.pieces.forEach(a => {
+      this.pieces.filter(it => it !== a).forEach(b => {
+        a.tryConnectHorizontallyWith(b);
+        a.tryConnectVerticallyWith(b);
+      })
+    })
   }
 }
 
 
+
 class Piece {
+
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
     this.down = down;
     this.left = left;
     this.right = right;
+  }
+
+  /**
+   * @param {Puzzle} puzzle
+   */
+  belongsTo(puzzle) {
+    this.puzzle = puzzle;
+
   }
 
   /**
@@ -107,7 +133,7 @@ class Piece {
    *
    * @param {Piece} other
    */
-  connectVertically(other) {
+  connectVerticallyWith(other) {
     if (!this.canConnectVerticallyWith(other)) {
       throw new Error("can not connect vertically!");
     }
@@ -119,7 +145,7 @@ class Piece {
    *
    * @param {Piece} other
    */
-  connectHorizontally(other) {
+  connectHorizontallyWith(other) {
     if (!this.canConnectHorizontallyWith(other)) {
       throw new Error("can not connect horizontally!");
     }
@@ -127,9 +153,29 @@ class Piece {
     other.leftConnection = this;
   }
 
-  disconnectAll() {
+  /**
+   *
+   * @param {Piece} other
+   */
+  tryConnectHorizontallyWith(other) {
+    if (this.canConnectHorizontallyWith(other)) {
+      this.connectHorizontallyWith(other);
+    }
+  }
+  /**
+   *
+   * @param {Piece} other
+   */
+  tryConnectVerticallyWith(other) {
+    if (this.canConnectVerticallyWith(other)) {
+      this.connectVerticallyWith(other);
+    }
+  }
+
+  disconnect() {
     if (this.upConnection) {
       this.upConnection.downConnection = null;
+      /** @type {Piece} */
       this.upConnection = null;
     }
 
@@ -140,6 +186,7 @@ class Piece {
 
     if (this.leftConnection) {
       this.leftConnection.rightConnection = null;
+      /** @type {Piece} */
       this.leftConnection = null;
     }
 
@@ -147,14 +194,6 @@ class Piece {
       this.rightConnection.leftConnection = null;
       this.rightConnection = null;
     }
-  }
-
-  /**
-   * @param {Puzzle} puzzle
-   */
-  belongsTo(puzzle) {
-    this.puzzle = puzzle;
-
   }
 
   /**
@@ -198,7 +237,7 @@ class Piece {
     if (dx == 0 && dy == 0) return;
 
     if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
-      this.disconnectAll();
+      this.disconnect();
       this.translate(dx, dy);
     } else {
       this.push(dx, dy);
