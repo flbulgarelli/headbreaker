@@ -145,6 +145,29 @@ class Piece {
     this.leftConnection = other;
   }
 
+
+  disconnectAll() {
+    if (this.upConnection) {
+      this.upConnection.downConnection = null;
+      this.upConnection = null;
+    }
+
+    if (this.downConnection) {
+      this.downConnection.upConnection = null;
+      this.downConnection = null;
+    }
+
+    if (this.leftConnection) {
+      this.leftConnection.rightConnection = null;
+      this.leftConnection = null;
+    }
+
+    if (this.rightConnection) {
+      this.rightConnection.leftConnection = null;
+      this.rightConnection = null;
+    }
+  }
+
   /**
    * @param {Puzzle} puzzle
    */
@@ -193,35 +216,14 @@ class Piece {
    * @param {number} dy
    */
   drag(dx, dy) {
-    if (dx > 0) {
-      if (this.rightConnection) {
-        this.push(dx, 0);
-      } else {
-        // this.disconnectHorizontally()
-        this.translate(dx, 0);
-      }
-    } else if (dx < 0) {
-      if (this.leftConnection) {
-        this.push(dx, 0);
-      } else {
-        // this.rightConnection.disconnectHorizontally()
-        this.translate(dx, 0);
-      }
-    }
-    if (dy > 0) {
-      if (this.downConnection) {
-        this.push(0, dy);
-      } else {
-        // this.disconnectHorizontally()
-        this.translate(0, dy);
-      }
-    } else if (dy < 0) {
-      if (this.upConnection) {
-        this.push(0, dy);
-      } else {
-        // this.rightConnection.disconnectHorizontally()
-        this.translate(0, dy);
-      }
+    if (dx == 0 && dy == 0) return;
+
+    if (((dx > 0 && !this.rightConnection) || (dx < 0 && !this.leftConnection) || dx == 0) &&
+        ((dy > 0 && !this.downConnection)  || (dy < 0 && !this.upConnection) || dy == 0)) {
+      this.disconnectAll();
+      this.translate(dx, dy);
+    } else {
+      this.push(dx, dy);
     }
   }
 
