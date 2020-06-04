@@ -83,9 +83,7 @@ class Puzzle {
 }
 
 
-
 class Piece {
-
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
     this.down = down;
@@ -114,15 +112,7 @@ class Piece {
       throw new Error("can not connect vertically!");
     }
     this.downConnection = other;
-    other.connectVerticallyBack(this);
-  }
-
-  /**
-   *
-   * @param {Piece} other
-   */
-  connectVerticallyBack(other) {
-    this.upConnection = other;
+    other.upConnection = this;
   }
 
   /**
@@ -134,17 +124,8 @@ class Piece {
       throw new Error("can not connect horizontally!");
     }
     this.rightConnection = other;
-    other.connectHorizontallyBack(this);
+    other.leftConnection = this;
   }
-
-  /**
-   *
-   * @param {Piece} other
-   */
-  connectHorizontallyBack(other) {
-    this.leftConnection = other;
-  }
-
 
   disconnectAll() {
     if (this.upConnection) {
@@ -184,7 +165,6 @@ class Piece {
     this.centralAnchor = anchor;
   }
 
-
   /**
    *
    * @param {number} dx
@@ -193,7 +173,6 @@ class Piece {
   translate(dx, dy) {
     this.centralAnchor.translate(dx, dy);
   }
-
 
   /**
    *
@@ -218,13 +197,30 @@ class Piece {
   drag(dx, dy) {
     if (dx == 0 && dy == 0) return;
 
-    if (((dx > 0 && !this.rightConnection) || (dx < 0 && !this.leftConnection) || dx == 0) &&
-        ((dy > 0 && !this.downConnection)  || (dy < 0 && !this.upConnection) || dy == 0)) {
+    if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
       this.disconnectAll();
       this.translate(dx, dy);
     } else {
       this.push(dx, dy);
     }
+  }
+
+  /**
+   *
+   * @param {number} dy
+   * @returns {boolean}
+   */
+  vericallyOpenMovement(dy) {
+    return (dy > 0 && !this.downConnection) || (dy < 0 && !this.upConnection) || dy == 0;
+  }
+
+  /**
+   *
+   * @param {number} dx
+   * @returns {boolean}
+   */
+  horizontallyOpenMovement(dx) {
+    return (dx > 0 && !this.rightConnection) || (dx < 0 && !this.leftConnection) || dx == 0;
   }
 
   /**
