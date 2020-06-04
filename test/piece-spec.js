@@ -535,7 +535,7 @@ it("autoconnects puzzle", () => {
     .newPiece({up: Tab})
     .placeAt(anchor(6, 3));
 
-  puzzle.autoconnect();
+  puzzle.autoconnectAll();
 
   const [a, b, c, d] = puzzle.pieces;
 

@@ -65,6 +65,7 @@ function between(value, min, max) {
 }
 
 class Puzzle {
+
   /**
    *
    * @param {number} pieceSize
@@ -86,14 +87,21 @@ class Puzzle {
 
   /**
    * Tries to connect pieces in their current positions
-   * This method is O(n * (n-1))
+   * This method is O(n^2)
    */
-  autoconnect() {
-    this.pieces.forEach(a => {
-      this.pieces.filter(it => it !== a).forEach(b => {
-        a.tryConnectHorizontallyWith(b);
-        a.tryConnectVerticallyWith(b);
-      })
+  autoconnectAll() {
+    this.pieces.forEach(it => this.autoconnect(it));
+  }
+
+  /**
+   * Tries to connect the given piece to the rest of the set
+   * This method is O(n)
+   * @param {Piece} piece
+   */
+  autoconnect(piece) {
+    this.pieces.filter(it => it !== piece).forEach(other => {
+      piece.tryConnectHorizontallyWith(other);
+      piece.tryConnectVerticallyWith(other);
     })
   }
 }
