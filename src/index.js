@@ -108,9 +108,11 @@ class Puzzle {
 
 class Piece {
 
+
   /**
    * @typedef {function(number, number):void} TranslationListener
    * @typedef {function(Piece):void} ConnectListener
+   * @typedef {function():void} DisconnectListener
    */
 
   constructor({up = None, down = None, left = None, right = None} = {}) {
@@ -118,11 +120,16 @@ class Piece {
     this.down = down;
     this.left = left;
     this.right = right;
+    this._initializeListeners();
+  }
 
+  _initializeListeners() {
     /** @type {TranslationListener[]} */
     this.translateListeners = [];
     /** @type {ConnectListener[]} */
     this.connectListeners = [];
+    /** @type {DisconnectListener[]} */
+    this.disconnectListeners = [];
   }
 
   /**
@@ -154,8 +161,34 @@ class Piece {
   /**
    * @param {ConnectListener} f
    */
-  onConnecct(f) {
+  onConnect(f) {
     this.connectListeners.push(f);
+  }
+
+  /**
+   * @param {DisconnectListener} f
+   */
+  onDisconnect(f) {
+    this.disconnectListeners.push(f);
+  }
+
+  /**
+   * @param {number} dx
+   * @param {number} dy
+   */
+  fireOnTranslate(dx, dy) {
+    this.translateListeners.forEach(it => it(dx, dy))
+  }
+
+  /**
+   * @param {Piece} other
+   */
+  fireOnConnect(other) {
+    this.connectListeners.forEach(it => it(other))
+  }
+
+  fireOnDisconnect() {
+    this.disconnectListeners.forEach(it => it())
   }
 
   /**
@@ -168,6 +201,7 @@ class Piece {
     }
     this.downConnection = other;
     other.upConnection = this;
+    this.fireOnConnect(other);
   }
 
   /**
@@ -180,6 +214,7 @@ class Piece {
     }
     this.rightConnection = other;
     other.leftConnection = this;
+    this.fireOnConnect(other);
   }
 
   /**
@@ -202,6 +237,10 @@ class Piece {
   }
 
   disconnect() {
+    if (this.connected) {
+      this.fireOnDisconnect();
+    }
+
     if (this.upConnection) {
       this.upConnection.downConnection = null;
       /** @type {Piece} */
@@ -353,6 +392,10 @@ class Piece {
    */
   horizontallyMatch(other) {
     return this.right.match(other.left);
+  }
+
+  get connected() {
+    return this.upConnection || this.rightConnection || this.leftConnection || this.rightConnection;
   }
 
   /**
