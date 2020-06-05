@@ -10,6 +10,27 @@
     </div>
 
     <script>
+        function makePoints(model) {
+          return [
+              0, 0,
+              1, 0,
+              2, (model.up.isTab() ? -1 : model.up.isSlot() ? 1 : 0),
+              3, 0,
+              4, 0,
+              4, 1,
+              (model.right.isTab() ? 5 : model.right.isSlot() ? 3 : 4), 2,
+              4, 3,
+              4, 4,
+              3, 4,
+              2, (model.down.isTab() ? 5 : model.down.isSlot() ? 3 : 4),
+              1, 4,
+              0, 4,
+              0, 3,
+              (model.left.isTab() ? -1 : model.left.isSlot() ? 1 : 0), 2,
+              0, 1
+            ].map(it => it * 10 )
+        }
+
         function makePiece(layer, model) {
           var group = new Konva.Group({
             x: model.centralAnchor.x * 12.5,
@@ -17,23 +38,7 @@
           });
 
           var piece = new Konva.Line({
-            points: [
-              0, 0,
-              1, 0,
-              2, 1,
-              3, 0,
-              4, 0,
-              4, 1,
-              5, 2,
-              4, 3,
-              4, 4,
-              3, 4,
-              2, 5,
-              1, 4,
-              0, 4,
-              0, 3,
-              1, 2,
-              0, 1].map(it => it * 10 ),
+            points: makePoints(model),
             fill: '#00D2FF',
             stroke: 'black',
             strokeWidth: 3,
@@ -87,16 +92,16 @@
         const puzzle = new headbreaker.Puzzle();
 
         puzzle
-          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .newPiece({up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
           .placeAt(headbreaker.anchor(0, 0));
         puzzle
-          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .newPiece({up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
           .placeAt(headbreaker.anchor(4, 0));
         puzzle
-          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .newPiece({up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
           .placeAt(headbreaker.anchor(8, 0));
         puzzle
-          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .newPiece({up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot})
           .placeAt(headbreaker.anchor(8, 4));
 
         puzzle.autoconnectAll();
