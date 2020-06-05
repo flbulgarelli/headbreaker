@@ -10,6 +10,19 @@
     </div>
 
     <script>
+        function commitAnchors(model, group) {
+          model.payload.x = group.x();
+          model.payload.y = group.y();
+          console.log(['drag', model.payload.id, model.payload.x, model.payload.y, group.x(), group.y()]);
+        }
+
+        function anchorsDelta(model, group) {
+          return [
+            group.x() - model.payload.x,
+            group.y() - model.payload.y
+          ];
+        }
+
         function makePoint(insert, t, s, n) {
           return insert.isTab() ? t : insert.isSlot() ? s : n;
         }
@@ -59,18 +72,14 @@
             document.body.style.cursor = 'default';
           });
 
-          let x = group.x();
-          let y = group.y();
+          commitAnchors(model, group);
+
           group.on('dragmove', function () {
-            let dx = (group.x() - x);
-            let dy = (group.y() - y);
+            let [dx, dy] = anchorsDelta(model, group);
 
             if (!headbreaker.isNullVector(dx, dy)) {
-              model.drag(dx, dy)
-
-              x = group.x();
-              y = group.y();
-
+              model.drag(dx, dy, true)
+              commitAnchors(model, group);
               layer.draw();
             }
           });
@@ -83,6 +92,7 @@
           model.onTranslate((dx, dy) => {
             group.x(model.centralAnchor.x)
             group.y(model.centralAnchor.y)
+            commitAnchors(model, group);
           })
         }
 
@@ -114,10 +124,12 @@
 
 
         let [a, b, c, d] = puzzle.pieces;
-        a.payload = {color: 'red'}
+        a.payload = {color: 'red', id: 'a'}
+        b.payload = { id: 'b' }
+        c.payload = { id: 'c' }
+        d.payload = { id: 'd' }
 
         puzzle.pieces.forEach(it => {
-          it.payload = it.payload || {};
           console.log('creating piece...')
           makePiece(layer, it);
         })
