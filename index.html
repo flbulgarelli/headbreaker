@@ -1,0 +1,118 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/6.0.0/konva.js" integrity="sha256-F/REgXgQ84YI/OLq+RUNixRhAxFw/ShOx2A/cEpi3QA=" crossorigin="anonymous"></script>
+    <script src="dist/headbreaker.js"></script>
+  </head>
+  <body>
+
+    <div id="container">
+
+    </div>
+
+    <script>
+        function makePiece(layer, model) {
+          var group = new Konva.Group({
+            x: model.centralAnchor.x * 12.5,
+            y: model.centralAnchor.y * 12.5
+          });
+
+          var piece = new Konva.Line({
+            points: [
+              0, 0,
+              1, 0,
+              2, 1,
+              3, 0,
+              4, 0,
+              4, 1,
+              5, 2,
+              4, 3,
+              4, 4,
+              3, 4,
+              2, 5,
+              1, 4,
+              0, 4,
+              0, 3,
+              1, 2,
+              0, 1].map(it => it * 10 ),
+            fill: '#00D2FF',
+            stroke: 'black',
+            strokeWidth: 3,
+            closed: true,
+          });
+          group.add(piece);
+          layer.add(group);
+          group.draggable('true')
+
+          group.on('mouseover', function () {
+            document.body.style.cursor = 'pointer';
+          });
+          group.on('mouseout', function () {
+            document.body.style.cursor = 'default';
+          });
+
+          let x = group.x();
+          let y = group.y();
+          group.on('dragmove', function () {
+            let dx = (group.x() - x) / 12.5;
+            let dy = (group.y() - y) / 12.5;
+
+            model.drag(dx, dy)
+
+            x = group.x();
+            y = group.y();
+
+            layer.draw();
+          });
+
+          group.on('dragend', function () {
+            model.drop();
+            layer.draw();
+          })
+
+          model.onTranslate((dx, dy) => {
+            group.x(model.centralAnchor.x * 12.5)
+            group.y(model.centralAnchor.y * 12.5)
+          })
+        }
+
+        var stage = new Konva.Stage({
+          container: 'container',
+          width: 900,
+          height: 900
+        });
+
+        var layer = new Konva.Layer();
+        stage.add(layer);
+
+        const puzzle = new headbreaker.Puzzle();
+
+        puzzle
+          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .placeAt(headbreaker.anchor(0, 0));
+        puzzle
+          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .placeAt(headbreaker.anchor(4, 0));
+        puzzle
+          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .placeAt(headbreaker.anchor(8, 0));
+        puzzle
+          .newPiece({right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot, up: headbreaker.Slot})
+          .placeAt(headbreaker.anchor(8, 4));
+
+        puzzle.autoconnectAll();
+
+
+        puzzle.pieces.forEach(it => {
+          console.log('creating piece...')
+          makePiece(layer, it);
+        })
+
+
+        layer.draw()
+
+    </script>
+
+
+  </body>
+
+</html>
