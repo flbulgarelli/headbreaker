@@ -10,23 +10,27 @@
     </div>
 
     <script>
+        function makePoint(insert, t, s, n) {
+          return insert.isTab() ? t : insert.isSlot() ? s : n;
+        }
+
         function makePoints(model) {
           return [
               0, 0,
               1, 0,
-              2, (model.up.isTab() ? -1 : model.up.isSlot() ? 1 : 0),
+              2, makePoint(model.up, -1, 1, 0),
               3, 0,
               4, 0,
               4, 1,
-              (model.right.isTab() ? 5 : model.right.isSlot() ? 3 : 4), 2,
+              makePoint(model.right, 5, 3, 4), 2,
               4, 3,
               4, 4,
               3, 4,
-              2, (model.down.isTab() ? 5 : model.down.isSlot() ? 3 : 4),
+              2, makePoint(model.down, 5, 3, 4),
               1, 4,
               0, 4,
               0, 3,
-              (model.left.isTab() ? -1 : model.left.isSlot() ? 1 : 0), 2,
+              makePoint(model.left, -1, 1, 0), 2,
               0, 1
             ].map(it => it * 10 )
         }
