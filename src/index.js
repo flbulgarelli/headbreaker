@@ -106,15 +106,23 @@ class Puzzle {
   }
 }
 
-
-
 class Piece {
+
+  /**
+   * @typedef {function(number, number):void} TranslationListener
+   * @typedef {function(Piece):void} ConnectListener
+   */
 
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
     this.down = down;
     this.left = left;
     this.right = right;
+
+    /** @type {TranslationListener[]} */
+    this.translateListeners = [];
+    /** @type {ConnectListener[]} */
+    this.connectListeners = [];
   }
 
   /**
@@ -122,7 +130,6 @@ class Piece {
    */
   belongsTo(puzzle) {
     this.puzzle = puzzle;
-
   }
 
   /**
@@ -135,6 +142,20 @@ class Piece {
       this.leftConnection,
       this.rightConnection
     ].filter(it => it);
+  }
+
+  /**
+   * @param {TranslationListener} f
+   */
+  onTranslate(f) {
+    this.translateListeners.push(f);
+  }
+
+  /**
+   * @param {ConnectListener} f
+   */
+  onConnecct(f) {
+    this.connectListeners.push(f);
   }
 
   /**
