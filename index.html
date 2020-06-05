@@ -14,7 +14,7 @@
           return insert.isTab() ? t : insert.isSlot() ? s : n;
         }
 
-        function makePoints(model) {
+        function makePoints(model, size = 50) {
           return [
               0, 0,
               1, 0,
@@ -32,18 +32,18 @@
               0, 3,
               makePoint(model.left, -1, 1, 0), 2,
               0, 1
-            ].map(it => it * 10 )
+            ].map(it => it * size / 5)
         }
 
         function makePiece(layer, model) {
           var group = new Konva.Group({
-            x: model.centralAnchor.x * 12.5,
-            y: model.centralAnchor.y * 12.5
+            x: model.centralAnchor.x,
+            y: model.centralAnchor.y
           });
 
           var piece = new Konva.Line({
             points: makePoints(model),
-            fill: '#00D2FF',
+            fill: (model.payload.color || '#00D2FF'),
             stroke: 'black',
             strokeWidth: 3,
             closed: true,
@@ -62,8 +62,8 @@
           let x = group.x();
           let y = group.y();
           group.on('dragmove', function () {
-            let dx = (group.x() - x) / 12.5;
-            let dy = (group.y() - y) / 12.5;
+            let dx = (group.x() - x);
+            let dy = (group.y() - y);
 
             model.drag(dx, dy)
 
@@ -79,8 +79,8 @@
           })
 
           model.onTranslate((dx, dy) => {
-            group.x(model.centralAnchor.x * 12.5)
-            group.y(model.centralAnchor.y * 12.5)
+            group.x(model.centralAnchor.x)
+            group.y(model.centralAnchor.y)
           })
         }
 
@@ -93,25 +93,29 @@
         var layer = new Konva.Layer();
         stage.add(layer);
 
-        const puzzle = new headbreaker.Puzzle();
+        const puzzle = new headbreaker.Puzzle(25, 10);
 
         puzzle
           .newPiece({up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
           .placeAt(headbreaker.anchor(0, 0));
         puzzle
           .newPiece({up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
-          .placeAt(headbreaker.anchor(4, 0));
+          .placeAt(headbreaker.anchor(50, 0));
         puzzle
           .newPiece({up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
-          .placeAt(headbreaker.anchor(8, 0));
+          .placeAt(headbreaker.anchor(100, 0));
         puzzle
           .newPiece({up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot})
-          .placeAt(headbreaker.anchor(8, 4));
+          .placeAt(headbreaker.anchor(100, 50));
 
         puzzle.autoconnectAll();
 
 
+        let [a, b, c, d] = puzzle.pieces;
+        a.payload = {color: 'red'}
+
         puzzle.pieces.forEach(it => {
+          it.payload = it.payload || {};
           console.log('creating piece...')
           makePiece(layer, it);
         })
