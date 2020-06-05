@@ -277,10 +277,12 @@ class Piece {
    * @param {number} dx
    * @param {number} dy
    */
-  translate(dx, dy) {
+  translate(dx, dy, quiet = false) {
     if (!isNullVector(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
-      this.fireOnTranslate(dx, dy);
+      if (!quiet) {
+        this.fireOnTranslate(dx, dy);
+      }
     }
   }
 
@@ -288,15 +290,16 @@ class Piece {
    *
    * @param {number} dx
    * @param {number} dy
+   * @param {boolean?} quiet
    * @param {Piece[]} pushedPieces
    */
-  push(dx, dy, pushedPieces = []) {
+  push(dx, dy, quiet = false, pushedPieces = []) {
     const stationaries = this.connections.filter(it => pushedPieces.indexOf(it) === -1);
 
-    this.translate(dx, dy);
+    this.translate(dx, dy, quiet);
 
     pushedPieces.push(this);
-    stationaries.forEach(it =>it.push(dx, dy, pushedPieces));
+    stationaries.forEach(it =>it.push(dx, dy, false, pushedPieces));
   }
 
   /**
@@ -304,14 +307,14 @@ class Piece {
    * @param {number} dx
    * @param {number} dy
    */
-  drag(dx, dy) {
+  drag(dx, dy, quiet = false) {
     if (isNullVector(dx, dy)) return;
 
     if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
       this.disconnect();
-      this.translate(dx, dy);
+      this.translate(dx, dy, quiet);
     } else {
-      this.push(dx, dy);
+      this.push(dx, dy, quiet);
     }
   }
 
