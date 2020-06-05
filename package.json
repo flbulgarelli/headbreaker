@@ -1,7 +1,7 @@
 {
-  "name": "puzzle",
+  "name": "headbreaker",
   "version": "0.0.1",
-  "description": "Puzzles for js",
+  "description": "Jigsaw puzzles framework for js",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flbulgarelli/puzzlejs.git"
+    "url": "git+https://github.com/flbulgarelli/headbreaker.git"
   },
   "author": "Franco Leonardo Bulgarelli",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/flbulgarelli/puzzlejs/issues"
+    "url": "https://github.com/flbulgarelli/headbreaker/issues"
   },
-  "homepage": "https://github.com/flbulgarelli/puzzlejs#readme",
+  "homepage": "https://github.com/flbulgarelli/headbreaker#readme",
   "devDependencies": {
     "mocha": "^7.2.0",
     "clean-webpack-plugin": "^1.0.1",
