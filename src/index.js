@@ -278,7 +278,10 @@ class Piece {
    * @param {number} dy
    */
   translate(dx, dy) {
-    this.centralAnchor.translate(dx, dy);
+    if (!isNullVector(dx, dy)) {
+      this.centralAnchor.translate(dx, dy);
+      this.fireOnTranslate(dx, dy);
+    }
   }
 
   /**
@@ -302,7 +305,7 @@ class Piece {
    * @param {number} dy
    */
   drag(dx, dy) {
-    if (dx == 0 && dy == 0) return;
+    if (isNullVector(dx, dy)) return;
 
     if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
       this.disconnect();
@@ -466,6 +469,14 @@ const None = {
   isTab:  () => false,
   isNone:  () => true,
   match: (other) => false
+}
+
+/**
+ * @param {number} dx
+ * @param {number} dy
+ */
+function isNullVector(dx, dy) {
+  return dx === 0 && dy === 0;
 }
 
 /**
