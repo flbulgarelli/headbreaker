@@ -68,7 +68,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/6.0.0/konva.js" integrity="sha256-F/REgXgQ84YI/OLq+RUNixRhAxFw/ShOx2A/cEpi3QA=" crossorigin="anonymous"></script>
 
-<script src="../js/headbreaker.js"></script>
+<script src="js/headbreaker.js"></script>
 
 <div id="container">
 
@@ -115,49 +115,51 @@
 
     function renderPiece(layer, model) {
         var group = new Konva.Group({
-        x: model.centralAnchor.x,
-        y: model.centralAnchor.y
+            x: model.centralAnchor.x,
+            y: model.centralAnchor.y
         });
 
         var piece = new Konva.Line({
-        points: createPoints(model),
-        fill: (model.payload.color || '#00D2FF'),
-        stroke: 'black',
-        strokeWidth: 3,
-        closed: true,
+            points: createPoints(model),
+            fill: (model.payload.color || '#00D2FF'),
+            fillPatternImage: model.payload.image,
+            fillPatternOffset: { x: -220, y: 70 },
+            stroke: 'black',
+            strokeWidth: 3,
+            closed: true,
         });
         group.add(piece);
         layer.add(group);
         group.draggable('true')
 
         group.on('mouseover', function () {
-        document.body.style.cursor = 'pointer';
+            document.body.style.cursor = 'pointer';
         });
         group.on('mouseout', function () {
-        document.body.style.cursor = 'default';
+            document.body.style.cursor = 'default';
         });
 
         commitAnchors(model, group);
 
         group.on('dragmove', function () {
-        let [dx, dy] = anchorsDelta(model, group);
+            let [dx, dy] = anchorsDelta(model, group);
 
-        if (!headbreaker.isNullVector(dx, dy)) {
-            model.drag(dx, dy, true)
-            commitAnchors(model, group);
-            layer.draw();
-        }
+            if (!headbreaker.isNullVector(dx, dy)) {
+                model.drag(dx, dy, true)
+                commitAnchors(model, group);
+                layer.draw();
+            }
         });
 
         group.on('dragend', function () {
-        model.drop();
-        layer.draw();
+            model.drop();
+            layer.draw();
         })
 
         model.onTranslate((dx, dy) => {
-        group.x(model.centralAnchor.x)
-        group.y(model.centralAnchor.y)
-        commitAnchors(model, group);
+            group.x(model.centralAnchor.x)
+            group.y(model.centralAnchor.y)
+            commitAnchors(model, group);
         })
     }
 
@@ -205,6 +207,12 @@
         {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
         300, 200,
         {id: 'f', color: 'purple'});
+
+
+    createPiece(layer, puzzle,
+        {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
+        50, 180,
+        {id: 'e', image: '../vangogh.jpg'});
 
     puzzle.autoconnectAll();
     layer.draw()
@@ -293,5 +301,5 @@
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-06-05 17:13:45
+Build Date UTC : 2020-06-05 17:29:46
 -->
