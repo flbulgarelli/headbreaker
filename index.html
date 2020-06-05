@@ -23,39 +23,39 @@
           ];
         }
 
-        function makePoint(insert, t, s, n) {
+        function createPoint(insert, t, s, n) {
           return insert.isTab() ? t : insert.isSlot() ? s : n;
         }
 
-        function makePoints(model, size = 50) {
+        function createPoints(model, size = 50) {
           return [
               0, 0,
               1, 0,
-              2, makePoint(model.up, -1, 1, 0),
+              2, createPoint(model.up, -1, 1, 0),
               3, 0,
               4, 0,
               4, 1,
-              makePoint(model.right, 5, 3, 4), 2,
+              createPoint(model.right, 5, 3, 4), 2,
               4, 3,
               4, 4,
               3, 4,
-              2, makePoint(model.down, 5, 3, 4),
+              2, createPoint(model.down, 5, 3, 4),
               1, 4,
               0, 4,
               0, 3,
-              makePoint(model.left, -1, 1, 0), 2,
+              createPoint(model.left, -1, 1, 0), 2,
               0, 1
             ].map(it => it * size / 5)
         }
 
-        function makePiece(layer, model) {
+        function renderPiece(layer, model) {
           var group = new Konva.Group({
             x: model.centralAnchor.x,
             y: model.centralAnchor.y
           });
 
           var piece = new Konva.Line({
-            points: makePoints(model),
+            points: createPoints(model),
             fill: (model.payload.color || '#00D2FF'),
             stroke: 'black',
             strokeWidth: 3,
@@ -107,34 +107,31 @@
 
         const puzzle = new headbreaker.Puzzle(25, 10);
 
-        puzzle
-          .newPiece({up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
-          .placeAt(headbreaker.anchor(0, 0));
-        puzzle
-          .newPiece({up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
-          .placeAt(headbreaker.anchor(50, 0));
-        puzzle
-          .newPiece({up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot})
-          .placeAt(headbreaker.anchor(100, 0));
-        puzzle
-          .newPiece({up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot})
-          .placeAt(headbreaker.anchor(100, 50));
+        function createPiece(layer, puzzle, config, x, y, payload) {
+          let piece = puzzle.newPiece(config);
+          piece.payload = payload;
+          piece.placeAt(headbreaker.anchor(x, y));
+          renderPiece(layer, piece);
+        }
+
+        createPiece(layer, puzzle,
+          {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+          0, 0,
+          {id: 'a', color: 'red'});
+        createPiece(layer, puzzle,
+          {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+          50, 0,
+          {id: 'b'});
+        createPiece(layer, puzzle,
+          {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+          100, 0,
+          {id: 'c'});
+        createPiece(layer, puzzle,
+          {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+          100, 50,
+          {id: 'd'});
 
         puzzle.autoconnectAll();
-
-
-        let [a, b, c, d] = puzzle.pieces;
-        a.payload = {color: 'red', id: 'a'}
-        b.payload = { id: 'b' }
-        c.payload = { id: 'c' }
-        d.payload = { id: 'd' }
-
-        puzzle.pieces.forEach(it => {
-          console.log('creating piece...')
-          makePiece(layer, it);
-        })
-
-
         layer.draw()
 
     </script>
