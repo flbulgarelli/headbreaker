@@ -252,6 +252,15 @@ class Piece {
     }
   }
 
+  drop() {
+    this.puzzle.autoconnect(this);
+  }
+
+  dragAndDrop(dx, dy) {
+    this.drag(dx, dy);
+    this.drop();
+  }
+
   /**
    *
    * @param {number} dy
