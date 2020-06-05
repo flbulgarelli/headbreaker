@@ -491,6 +491,7 @@ function anchor(x, y) {
 
 // @ts-ignore
 module.exports = {
+  isNullVector,
   anchor,
   Anchor,
   None,

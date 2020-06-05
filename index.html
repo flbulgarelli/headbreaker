@@ -65,12 +65,14 @@
             let dx = (group.x() - x);
             let dy = (group.y() - y);
 
-            model.drag(dx, dy)
+            if (!headbreaker.isNullVector(dx, dy)) {
+              model.drag(dx, dy)
 
-            x = group.x();
-            y = group.y();
+              x = group.x();
+              y = group.y();
 
-            layer.draw();
+              layer.draw();
+            }
           });
 
           group.on('dragend', function () {
