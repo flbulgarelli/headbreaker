@@ -7,41 +7,12 @@
 
 <script>
     function commitAnchors(model, group) {
-      model.payload.x = group.x();
-      model.payload.y = group.y();
-      //console.log(['drag', model.payload.id, model.payload.x, model.payload.y, group.x(), group.y()]);
+      model.data.x = group.x();
+      model.data.y = group.y();
     }
 
     function anchorsDelta(model, group) {
-      return [
-        group.x() - model.payload.x,
-        group.y() - model.payload.y
-      ];
-    }
-
-    function createPoint(insert, t, s, n) {
-      return insert.isTab() ? t : insert.isSlot() ? s : n;
-    }
-
-    function createPoints(model, size = 50) {
-      return [
-        0, 0,
-        1, 0,
-        2, createPoint(model.up, -1, 1, 0),
-        3, 0,
-        4, 0,
-        4, 1,
-        createPoint(model.right, 5, 3, 4), 2,
-        4, 3,
-        4, 4,
-        3, 4,
-        2, createPoint(model.down, 5, 3, 4),
-        1, 4,
-        0, 4,
-        0, 3,
-        createPoint(model.left, -1, 1, 0), 2,
-        0, 1
-      ].map(it => it * size / 5)
+      return headbreaker.vector.diff(group.x(),group.y(), model.data.x, model.data.y);
     }
 
     function renderPiece(layer, model) {
@@ -51,9 +22,9 @@
       });
 
       var piece = new Konva.Line({
-        points: createPoints(model),
-        fill: model.payload.color,
-        fillPatternImage: model.payload.image,
+        points: headbreaker.ui.createPoints(model),
+        fill: model.data.color,
+        fillPatternImage: model.data.image,
         fillPatternOffset: { x: model.centralAnchor.x, y: model.centralAnchor.y },
         stroke: 'black',
         strokeWidth: 3,
@@ -93,7 +64,7 @@
         commitAnchors(model, group);
       })
 
-      model.onConnect((it) => console.log(`${model.payload.id} connected to ${it.payload.id}`))
+      model.onConnect((it) => console.log(`${model.data.id} connected to ${it.data.id}`))
     }
 
     var stage = new Konva.Stage({
@@ -107,9 +78,9 @@
 
     const puzzle = new headbreaker.Puzzle(25, 10);
 
-    function createPiece(layer, puzzle, config, x, y, payload) {
+    function createPiece(layer, puzzle, config, x, y, data) {
       let piece = puzzle.newPiece(config);
-      piece.payload = payload;
+      piece.data = data;
       piece.placeAt(headbreaker.anchor(x, y));
       renderPiece(layer, piece);
     }

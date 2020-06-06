@@ -1,6 +1,7 @@
 const vector = require('./vector')
 const {anchor, Anchor} = require('./anchor')
 const {Puzzle, Piece, Tab, Slot, None} = require('./puzzle');
+const ui = require('./ui')
 
 module.exports = {
   anchor,
@@ -10,5 +11,6 @@ module.exports = {
   Tab,
   Slot,
   None,
-  vector
+  vector,
+  ui
 }

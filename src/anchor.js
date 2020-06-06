@@ -1,4 +1,5 @@
 const between = require('./between');
+const vector = require('./vector')
 
 class Anchor {
 
@@ -64,7 +65,7 @@ class Anchor {
    * @returns {[number, number]}
    */
   diff(other) {
-    return [this.x - other.x, this.y - other.y]
+    return vector.diff(this.x, this.y, other.x, other.y)
   }
 }
 
