@@ -348,13 +348,12 @@ class Piece {
    * @param {boolean?} quiet
    * @param {Piece[]} pushedPieces
    */
-  push(dx, dy, quiet = false, pushedPieces = []) {
-    const stationaries = this.connections.filter(it => pushedPieces.indexOf(it) === -1);
-
+  push(dx, dy, quiet = false, pushedPieces = [this]) {
     this.translate(dx, dy, quiet);
 
-    pushedPieces.push(this);
-    stationaries.forEach(it =>it.push(dx, dy, false, pushedPieces));
+    const stationaries = this.connections.filter(it => pushedPieces.indexOf(it) === -1);
+    pushedPieces.push(...stationaries);
+    stationaries.forEach(it => it.push(dx, dy, false, pushedPieces));
   }
 
   /**

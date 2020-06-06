@@ -1,3 +1,4 @@
+require('mocha');
 // @ts-ignore
 const assert = require('assert');
 // @ts-ignore
@@ -311,7 +312,7 @@ describe("piece", () => {
     assert.equal(a.downConnection, b);
   })
 
-  it("connects vertically with fit", () => {
+  it("connects vertically with attracts", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece({down: Tab});
@@ -326,7 +327,7 @@ describe("piece", () => {
     assert.deepEqual(b.centralAnchor, anchor(0, 3));
   })
 
-  it("connects vertically with fit back", () => {
+  it("connects vertically with attracts back", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece({down: Tab});
@@ -341,7 +342,7 @@ describe("piece", () => {
     assert.deepEqual(b.centralAnchor, anchor(0, 4));
   })
 
-  it("connects vertically with fit, twice", () => {
+  it("connects vertically with attracts, twice", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece({down: Tab});
@@ -376,7 +377,7 @@ describe("piece", () => {
     assert.equal(b.rightConnection, c);
   })
 
-  it("connects horizontally with fit", () => {
+  it("connects horizontally with attracts", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece({right: Tab});
@@ -500,7 +501,7 @@ describe("piece", () => {
     assert.deepEqual(d.centralAnchor, anchor(9, 5));
   })
 
-  it("pushes when has connections and fits", () => {
+  it("pushes when has connections and attracts", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece({right: Tab});
@@ -523,6 +524,32 @@ describe("piece", () => {
     assert.deepEqual(b.centralAnchor, anchor(3, 0));
     assert.deepEqual(c.centralAnchor, anchor(7, 0));
     assert.deepEqual(d.centralAnchor, anchor(7, 4));
+  })
+
+  it("pushes with double connections", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({up: Slot, right: Slot, down: Tab, left: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Slot, down: Tab, left: Tab});
+    const c = puzzle.newPiece({up: Slot, right: Slot, down: Tab, left: Tab});
+    const d = puzzle.newPiece({up: Slot, right: Slot, down: Tab, left: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(4, 0))
+    c.placeAt(anchor(0, 4))
+    d.placeAt(anchor(4, 4))
+
+    a.connectHorizontallyWith(b);
+    c.connectHorizontallyWith(d);
+    a.connectVerticallyWith(c);
+    b.connectVerticallyWith(d);
+
+    a.push(1, 1);
+
+    assert.deepEqual(a.centralAnchor, anchor(1, 1));
+    assert.deepEqual(b.centralAnchor, anchor(5, 1));
+    assert.deepEqual(c.centralAnchor, anchor(1, 5));
+    assert.deepEqual(d.centralAnchor, anchor(5, 5));
   })
 
   it("drags when no connections", () => {
