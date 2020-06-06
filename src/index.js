@@ -52,6 +52,15 @@ class Anchor {
   copy() {
     return new Anchor(this.x, this.y);
   }
+
+  /**
+   *
+   * @param {Anchor} other
+   * @returns {[number, number]}
+   */
+  diff(other) {
+    return [this.x - other.x, this.y - other.y]
+  }
 }
 
 /**
@@ -62,6 +71,10 @@ class Anchor {
  */
 function between(value, min, max) {
   return min <= value && value <= max;
+}
+
+function pivot(one, other, back = false) {
+  return back ? [one, other] : [other, one];
 }
 
 class Puzzle {
@@ -100,8 +113,8 @@ class Puzzle {
    */
   autoconnect(piece) {
     this.pieces.filter(it => it !== piece).forEach(other => {
-      piece.tryConnectHorizontallyWith(other);
-      piece.tryConnectVerticallyWith(other);
+      piece.tryConnectWith(other);
+      other.tryConnectWith(piece, true);
     })
   }
 }
@@ -194,45 +207,87 @@ class Piece {
   /**
    *
    * @param {Piece} other
+   * @param {boolean?} back
    */
-  connectVerticallyWith(other) {
+  connectVerticallyWith(other, back = false) {
     if (!this.canConnectVerticallyWith(other)) {
       throw new Error("can not connect vertically!");
     }
+    other.attractVertically(this, back);
     this.downConnection = other;
     other.upConnection = this;
     this.fireOnConnect(other);
   }
 
   /**
-   *
    * @param {Piece} other
    */
-  connectHorizontallyWith(other) {
+  attractVertically(other, back = false) {
+    const [iron, magnet] = pivot(this, other, back);
+    let dx, dy;
+    if (magnet.centralAnchor.y > iron.centralAnchor.y) {
+      [dx, dy] = magnet.upAnchor.diff(iron.downAnchor)
+    } else {
+      [dx, dy] = magnet.downAnchor.diff(iron.upAnchor)
+    }
+    iron.push(dx, dy);
+  }
+
+  /**
+   * @param {Piece} other
+   * @param {boolean?} back
+   */
+  connectHorizontallyWith(other, back = false) {
     if (!this.canConnectHorizontallyWith(other)) {
       throw new Error("can not connect horizontally!");
     }
+    other.attractHorizontally(this, back);
     this.rightConnection = other;
     other.leftConnection = this;
     this.fireOnConnect(other);
   }
 
   /**
-   *
    * @param {Piece} other
    */
-  tryConnectHorizontallyWith(other) {
+  attractHorizontally(other, back = false) {
+    const [iron, magnet] = pivot(this, other, back);
+    let dx, dy;
+    if (magnet.centralAnchor.x > iron.centralAnchor.x) {
+      [dx, dy] = magnet.leftAnchor.diff(iron.rightAnchor)
+    } else {
+      [dx, dy] = magnet.rightAnchor.diff(iron.leftAnchor)
+    }
+    iron.push(dx, dy);
+  }
+
+  /**
+   * @param {Piece} other
+   * @param {boolean?} back
+   */
+  tryConnectWith(other, back = false) {
+    this.tryConnectHorizontallyWith(other, back);
+    this.tryConnectVerticallyWith(other, back);
+  }
+
+  /**
+   *
+   * @param {Piece} other
+   * @param {boolean?} back
+   */
+  tryConnectHorizontallyWith(other, back = false) {
     if (this.canConnectHorizontallyWith(other)) {
-      this.connectHorizontallyWith(other);
+      this.connectHorizontallyWith(other, back);
     }
   }
   /**
    *
    * @param {Piece} other
+   * @param {boolean?} back
    */
-  tryConnectVerticallyWith(other) {
+  tryConnectVerticallyWith(other, back = false) {
     if (this.canConnectVerticallyWith(other)) {
-      this.connectVerticallyWith(other);
+      this.connectVerticallyWith(other, back);
     }
   }
 

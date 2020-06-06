@@ -311,6 +311,55 @@ describe("piece", () => {
     assert.equal(a.downConnection, b);
   })
 
+  it("connects vertically with fit", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(0, 3))
+
+    a.connectVerticallyWith(b);
+
+    assert.deepEqual(a.centralAnchor, anchor(0, -1));
+    assert.deepEqual(b.centralAnchor, anchor(0, 3));
+  })
+
+  it("connects vertically with fit back", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(0, 3))
+
+    a.connectVerticallyWith(b, true);
+
+    assert.deepEqual(a.centralAnchor, anchor(0, 0));
+    assert.deepEqual(b.centralAnchor, anchor(0, 4));
+  })
+
+  it("connects vertically with fit, twice", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, down: Tab});
+    const c = puzzle.newPiece({up: Slot, down: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(0, 3))
+    c.placeAt(anchor(0, 6))
+
+    a.connectVerticallyWith(b);
+    b.connectVerticallyWith(c);
+
+    assert.deepEqual(a.centralAnchor, anchor(0, -2));
+    assert.deepEqual(b.centralAnchor, anchor(0, 2));
+    assert.deepEqual(c.centralAnchor, anchor(0, 6));
+  })
+
 
   it("connects horizontally", () => {
     const puzzle = new Puzzle();
@@ -325,6 +374,83 @@ describe("piece", () => {
 
     b.connectHorizontallyWith(c);
     assert.equal(b.rightConnection, c);
+  })
+
+  it("connects horizontally with fit", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({right: Tab});
+    const b = puzzle.newPiece({left: Slot, right: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(3, 0))
+
+    a.connectHorizontallyWith(b);
+
+    assert.deepEqual(a.centralAnchor, anchor(-1, 0));
+    assert.deepEqual(b.centralAnchor, anchor(3, 0));
+  })
+
+  it("attracts right to left", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({right: Tab});
+    const b = puzzle.newPiece({left: Slot});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(5, 1))
+
+    a.attractHorizontally(b);
+
+    assert.deepEqual(a.centralAnchor, anchor(0, 0));
+    assert.deepEqual(b.centralAnchor, anchor(4, 0));
+  })
+
+
+  it("attracts left to right", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({right: Tab});
+    const b = puzzle.newPiece({left: Slot});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(5, 1))
+
+    b.attractHorizontally(a);
+
+    assert.deepEqual(a.centralAnchor, anchor(1, 1));
+    assert.deepEqual(b.centralAnchor, anchor(5, 1));
+  })
+
+  it("attracts down to up", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(1, 5))
+
+    a.attractVertically(b);
+
+    assert.deepEqual(a.centralAnchor, anchor(0, 0));
+    assert.deepEqual(b.centralAnchor, anchor(0, 4));
+  })
+
+
+  it("attracts up to down", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(1, 5))
+
+    b.attractVertically(a);
+
+    assert.deepEqual(a.centralAnchor, anchor(1, 1));
+    assert.deepEqual(b.centralAnchor, anchor(1, 5));
   })
 
 
@@ -349,7 +475,32 @@ describe("piece", () => {
     assert.deepEqual(piece.centralAnchor, anchor(10, 5));
   })
 
-  it("pushes when no connections", () => {
+  it("pushes when has connections", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({right: Tab});
+    const b = puzzle.newPiece({left: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot, right: Tab, down: Slot});
+    const d = puzzle.newPiece({up: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(4, 0))
+    c.placeAt(anchor(8, 0))
+    d.placeAt(anchor(8, 4))
+
+    a.connectHorizontallyWith(b);
+    b.connectHorizontallyWith(c);
+    c.connectVerticallyWith(d);
+
+    a.push(1, 1);
+
+    assert.deepEqual(a.centralAnchor, anchor(1, 1));
+    assert.deepEqual(b.centralAnchor, anchor(5, 1));
+    assert.deepEqual(c.centralAnchor, anchor(9, 1));
+    assert.deepEqual(d.centralAnchor, anchor(9, 5));
+  })
+
+  it("pushes when has connections and fits", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece({right: Tab});
@@ -368,12 +519,11 @@ describe("piece", () => {
 
     a.push(1, 1);
 
-    assert.deepEqual(a.centralAnchor, anchor(1, 1));
-    assert.deepEqual(b.centralAnchor, anchor(4, 1));
-    assert.deepEqual(c.centralAnchor, anchor(7, 1));
+    assert.deepEqual(a.centralAnchor, anchor(-1, 0));
+    assert.deepEqual(b.centralAnchor, anchor(3, 0));
+    assert.deepEqual(c.centralAnchor, anchor(7, 0));
     assert.deepEqual(d.centralAnchor, anchor(7, 4));
   })
-
 
   it("drags when no connections", () => {
     const puzzle = new Puzzle();
@@ -400,9 +550,9 @@ describe("piece", () => {
       d = puzzle.newPiece({up: Tab});
 
       a.placeAt(anchor(0, 0))
-      b.placeAt(anchor(3, 0))
-      c.placeAt(anchor(6, 0))
-      d.placeAt(anchor(6, 3))
+      b.placeAt(anchor(4, 0))
+      c.placeAt(anchor(8, 0))
+      d.placeAt(anchor(8, 4))
 
       // a > b > c
       //         v
@@ -417,7 +567,7 @@ describe("piece", () => {
       a.drag(10, 0);
 
       assert.deepEqual(a.centralAnchor, anchor(10, 0));
-      assert.deepEqual(b.centralAnchor, anchor(13, 0));
+      assert.deepEqual(b.centralAnchor, anchor(14, 0));
 
       assert.equal(a.rightConnection, b);
       assert(!a.leftConnection);
@@ -429,7 +579,7 @@ describe("piece", () => {
       a.drag(-10, 0);
 
       assert.deepEqual(a.centralAnchor, anchor(-10, 0));
-      assert.deepEqual(b.centralAnchor, anchor(3, 0));
+      assert.deepEqual(b.centralAnchor, anchor(4, 0));
 
       assert(!a.rightConnection);
       assert(!a.leftConnection);
@@ -441,7 +591,7 @@ describe("piece", () => {
       a.drag(0, -10);
 
       assert.deepEqual(a.centralAnchor, anchor(0, -10));
-      assert.deepEqual(b.centralAnchor, anchor(3, 0));
+      assert.deepEqual(b.centralAnchor, anchor(4, 0));
 
       assert(!a.rightConnection);
       assert(!a.leftConnection);
@@ -454,7 +604,7 @@ describe("piece", () => {
       a.drag(0, 10);
 
       assert.deepEqual(a.centralAnchor, anchor(0, 10));
-      assert.deepEqual(b.centralAnchor, anchor(3, 0));
+      assert.deepEqual(b.centralAnchor, anchor(4, 0));
 
       assert(!a.rightConnection);
       assert(!a.leftConnection);
@@ -465,9 +615,9 @@ describe("piece", () => {
     it("drags multi-connection-piece to right releasing", () => {
       c.drag(10, 0);
 
-      assert.deepEqual(c.centralAnchor, anchor(16, 0));
-      assert.deepEqual(b.centralAnchor, anchor(3, 0));
-      assert.deepEqual(d.centralAnchor, anchor(6, 3));
+      assert.deepEqual(c.centralAnchor, anchor(18, 0));
+      assert.deepEqual(b.centralAnchor, anchor(4, 0));
+      assert.deepEqual(d.centralAnchor, anchor(8, 4));
 
       assert(!c.rightConnection);
       assert(!c.leftConnection);
@@ -478,9 +628,9 @@ describe("piece", () => {
     it("drags multi-connection-piece to left pushing", () => {
       c.drag(-10, 0);
 
-      assert.deepEqual(c.centralAnchor, anchor(-4, 0));
-      assert.deepEqual(b.centralAnchor, anchor(-7, 0));
-      assert.deepEqual(d.centralAnchor, anchor(-4, 3));
+      assert.deepEqual(c.centralAnchor, anchor(-2, 0));
+      assert.deepEqual(b.centralAnchor, anchor(-6, 0));
+      assert.deepEqual(d.centralAnchor, anchor(-2, 4));
 
       assert(!c.rightConnection);
       assert(c.leftConnection);
@@ -491,9 +641,9 @@ describe("piece", () => {
     it("drags multi-connection-piece up releasing", () => {
       c.drag(0, -10);
 
-      assert.deepEqual(c.centralAnchor, anchor(6, -10));
-      assert.deepEqual(b.centralAnchor, anchor(3, 0));
-      assert.deepEqual(d.centralAnchor, anchor(6, 3));
+      assert.deepEqual(c.centralAnchor, anchor(8, -10));
+      assert.deepEqual(b.centralAnchor, anchor(4, 0));
+      assert.deepEqual(d.centralAnchor, anchor(8, 4));
 
       assert(!c.rightConnection);
       assert(!c.leftConnection);
@@ -505,9 +655,9 @@ describe("piece", () => {
     it("drags multi-connection-piece down pushing", () => {
       c.drag(0, 10);
 
-      assert.deepEqual(c.centralAnchor, anchor(6, 10));
-      assert.deepEqual(b.centralAnchor, anchor(3, 10));
-      assert.deepEqual(d.centralAnchor, anchor(6, 13));
+      assert.deepEqual(c.centralAnchor, anchor(8, 10));
+      assert.deepEqual(b.centralAnchor, anchor(4, 10));
+      assert.deepEqual(d.centralAnchor, anchor(8, 14));
 
       assert(!c.rightConnection);
       assert(c.leftConnection);
