@@ -75,7 +75,7 @@
       group.on('dragmove', function () {
         let [dx, dy] = anchorsDelta(model, group);
 
-        if (!headbreaker.isNullVector(dx, dy)) {
+        if (!headbreaker.vector.isNull(dx, dy)) {
           model.drag(dx, dy, true)
           commitAnchors(model, group);
           layer.draw();

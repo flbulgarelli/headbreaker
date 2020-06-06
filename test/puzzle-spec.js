@@ -1,41 +1,7 @@
 require('mocha');
-// @ts-ignore
 const assert = require('assert');
-// @ts-ignore
-const {anchor, Puzzle, Anchor, Piece, Tab, Slot, None} = require('../src/index');
-
-describe("anchor", () => {
-  it("can translated vertically", () => {
-    assert.deepEqual(anchor(1, 5).translated(0, 4), anchor(1, 9));
-    assert.deepEqual(anchor(1, 5).translated(0, -5), anchor(1, 0));
-  })
-
-  it("can translated horizontally", () => {
-    assert.deepEqual(anchor(1, 5).translated(4, 0), anchor(5, 5));
-    assert.deepEqual(anchor(1, 5).translated(-1, 0), anchor(0, 5));
-  })
-
-  it("can check proximity when ortogonally close", () => {
-    assert(anchor(0, 0).closeTo(anchor(0, 0), 2));
-
-    assert(anchor(0, 0).closeTo(anchor(0, 2), 2));
-    assert(anchor(0, 0).closeTo(anchor(0, 1), 2));
-
-    assert(anchor(0, 0).closeTo(anchor(0, -2), 2));
-    assert(anchor(0, 0).closeTo(anchor(0, -1), 2));
-
-    assert(anchor(0, 0).closeTo(anchor(2, 0), 2));
-    assert(anchor(0, 0).closeTo(anchor(-2, 0), 2));
-  })
-
-  it("can check proximity when ortogonally away", () => {
-    assert(!anchor(0, 0).closeTo(anchor(0, 2), 1));
-    assert(!anchor(0, 0).closeTo(anchor(0, -2), 1));
-    assert(!anchor(0, 0).closeTo(anchor(2, 0), 1));
-    assert(!anchor(0, 0).closeTo(anchor(-2, 0), 1));
-  })
-
-})
+const {anchor, Anchor} = require('../src/anchor');
+const {Puzzle, Piece, Tab, Slot, None} = require('../src/puzzle');
 
 describe("piece", () => {
   it("can create a piece and place it", () => {
