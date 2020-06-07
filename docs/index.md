@@ -1,131 +1,117 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/konva/6.0.0/konva.js" integrity="sha256-F/REgXgQ84YI/OLq+RUNixRhAxFw/ShOx2A/cEpi3QA=" crossorigin="anonymous"></script>
 <script src="js/headbreaker.js"></script>
+<script src="js/layer.js"></script>
 
-<div id="container">
+## Basic example
 
+<div id="basic">
 </div>
 
 <script>
-    function commitAnchors(model, group) {
-      model.data.x = group.x();
-      model.data.y = group.y();
-    }
+  const basic = new headbreaker.Canvas(buildLayer('basic', 500, 500), {pieceSize: 50, proximityLevel: 10});
 
-    function anchorsDelta(model, group) {
-      return headbreaker.vector.diff(group.x(),group.y(), model.data.x, model.data.y);
-    }
-
-    function renderPiece(layer, model) {
-      var group = new Konva.Group({
-        x: model.centralAnchor.x,
-        y: model.centralAnchor.y
-      });
-
-      var piece = new Konva.Line({
-        points: headbreaker.ui.createPoints(model),
-        fill: model.data.color,
-        fillPatternImage: model.data.image,
-        fillPatternOffset: { x: model.centralAnchor.x, y: model.centralAnchor.y },
-        stroke: 'black',
-        strokeWidth: 3,
-        closed: true,
-      });
-      group.add(piece);
-      layer.add(group);
-      group.draggable('true')
-
-      group.on('mouseover', function () {
-        document.body.style.cursor = 'pointer';
-      });
-      group.on('mouseout', function () {
-        document.body.style.cursor = 'default';
-      });
-
-      commitAnchors(model, group);
-
-      group.on('dragmove', function () {
-        let [dx, dy] = anchorsDelta(model, group);
-
-        if (!headbreaker.vector.isNull(dx, dy)) {
-          model.drag(dx, dy, true)
-          commitAnchors(model, group);
-          layer.draw();
-        }
-      });
-
-      group.on('dragend', function () {
-        model.drop();
-        layer.draw();
-      })
-
-      model.onTranslate((dx, dy) => {
-        group.x(model.centralAnchor.x)
-        group.y(model.centralAnchor.y)
-        commitAnchors(model, group);
-      })
-
-      model.onConnect((it) => console.log(`${model.data.id} connected to ${it.data.id}`))
-    }
-
-    var stage = new Konva.Stage({
-      container: 'container',
-      width: 900,
-      height: 900
+  basic.newPiece({
+      structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+      x: 50,
+      y: 50,
+      data: {id: 'a', color: 'red'}
     });
-
-    var layer = new Konva.Layer();
-    stage.add(layer);
-
-    const puzzle = new headbreaker.Puzzle(25, 10);
-
-    function createPiece(layer, puzzle, config, x, y, data) {
-      let piece = puzzle.newPiece(config);
-      piece.data = data;
-      piece.placeAt(headbreaker.anchor(x, y));
-      renderPiece(layer, piece);
-    }
-
-    let vangogh = new Image();
-    vangogh.src = '/vangogh.jpg';
-    vangogh.onload = () => {
-    createPiece(layer, puzzle,
-      {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      0, 0,
-      {id: 'a', color: 'red'});
-    createPiece(layer, puzzle,
-      {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      50, 0,
-      {id: 'b', color: '#00D2FF'});
-    createPiece(layer, puzzle,
-      {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      100, 0,
-      {id: 'c', color: '#00D2FF'});
-    createPiece(layer, puzzle,
-      {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-      100, 50,
-      {id: 'd', color: '#00D2FF'});
-
-
-    createPiece(layer, puzzle,
-      {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      200, 150,
-      {id: 'e', color: 'green'});
-    createPiece(layer, puzzle,
-      {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
-      300, 200,
-      {id: 'f', color: 'purple'});
-      createPiece(layer, puzzle,
-        {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-        50, 180,
-        {id: 'g', image: vangogh});
-
-      puzzle.autoconnectAll();
-      layer.draw()
-    }
+  basic.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+    x: 100, y: 50,
+    data: {id: 'b', color: '#00D2FF'}
+  });
+  basic.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+    x: 150, y: 50,
+    data: {id: 'c', color: '#00D2FF'}
+  });
+  basic.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+    x: 150, y: 100,
+    data: {id: 'd', color: '#00D2FF'}
+  });
+  basic.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+    x: 250, y: 200,
+    data: {id: 'e', color: 'green'}
+  });
+  basic.newPiece({
+    structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
+    x: 350, y: 250,
+    data: {id: 'f', color: 'purple'}
+  });
+  basic.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
+    x: 100, y: 230,
+    data: {id: 'g', color: 'black'}
+  });
+  basic.draw();
+</script>
 
 
+## With background
 
+<div id="background">
+</div>
 
+<script>
+  const background = new headbreaker.Canvas(buildLayer('background', 500, 500), {pieceSize: 50, proximityLevel: 10});
 
+  let vangogh = new Image();
+  vangogh.src = '/vangogh.jpg';
+  vangogh.onload = () => {
+      background.newPiece({
+        structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
+        x: 50, y: 50,
+        data: {id: 'a', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+        x: 100, y: 50,
+        data: {id: 'b', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+        x: 150, y: 50,
+        data: {id: 'c', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+        x: 200, y: 50,
+        data: {id: 'c', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.None, right: headbreaker.None, down: headbreaker.Tab, left: headbreaker.Tab},
+        x: 250, y: 50,
+        data: {id: 'c', image: vangogh}
+      });
 
+      background.newPiece({
+        structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
+        x: 50, y: 100,
+        data: {id: 'a', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+        x: 100, y: 100,
+        data: {id: 'b', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+        x: 150, y: 100,
+        data: {id: 'c', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
+        x: 200, y: 100,
+        data: {id: 'c', image: vangogh}
+      });
+      background.newPiece({
+        structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+        x: 250, y: 100,
+        data: {id: 'c', image: vangogh}
+      });
+
+      background.draw();
+  }
 </script>

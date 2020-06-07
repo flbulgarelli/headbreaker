@@ -1,3 +1,4 @@
+// @ts-nocheck
 require('mocha');
 const assert = require('assert');
 const {anchor, Anchor} = require('../src/anchor');

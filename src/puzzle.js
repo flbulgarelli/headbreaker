@@ -2,6 +2,7 @@ const vector = require('./vector');
 const pivot = require('./pivot');
 const {Anchor} = require('./anchor');
 
+
 class Puzzle {
 
   /**
@@ -16,6 +17,9 @@ class Puzzle {
     this.pieces = [];
   }
 
+  /**
+   * @param {PieceStructure?} options
+   */
   newPiece(options = {}) {
     const piece = new Piece(options);
     this.pieces.push(piece);
@@ -48,8 +52,13 @@ class Puzzle {
  * @typedef {function(number, number):void} TranslationListener
  * @typedef {function(Piece):void} ConnectListener
  * @typedef {function():void} DisconnectListener
+ * @typedef {{up?: Insert, down?: Insert, left?: Insert, right?: Insert}} PieceStructure
  */
 class Piece {
+
+  /**
+   * @param {PieceStructure?} param0
+   */
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
     this.down = down;
@@ -65,6 +74,13 @@ class Piece {
     this.connectListeners = [];
     /** @type {DisconnectListener[]} */
     this.disconnectListeners = [];
+  }
+
+  /**
+   * @param {*} data
+   */
+  carry(data) {
+    this.data = data;
   }
 
   /**
@@ -450,6 +466,9 @@ const None = {
   match: (other) => false
 }
 
+/**
+ * @exports Puzzle
+ */
 module.exports = {
   None,
   Piece,
