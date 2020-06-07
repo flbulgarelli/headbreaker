@@ -176,4 +176,75 @@ describe("manufacturer", () => {
     assert.equal(f.down, None);
     assert.equal(f.left, Slot);
   })
+
+  it("fixed", () => {
+    const sequence = new InsertSequence(fixed);
+    assert.equal(Tab, sequence.next());
+    assert.equal(Tab, sequence.next());
+    assert.equal(Tab, sequence.next());
+    assert.equal(Tab, sequence.next());
+  })
+
+  it("flipflop", () => {
+    const sequence = new InsertSequence(flipflop);
+    assert.equal(Tab, sequence.next());
+    assert.equal(Slot, sequence.next());
+    assert.equal(Tab, sequence.next());
+    assert.equal(Slot, sequence.next());
+  })
+
+
+  it("two-and-two", () => {
+    const sequence = new InsertSequence(twoAndTwo);
+    assert.equal(Tab, sequence.next());
+    assert.equal(Tab, sequence.next());
+    assert.equal(Slot, sequence.next());
+    assert.equal(Slot, sequence.next());
+    assert.equal(Tab, sequence.next());
+    assert.equal(Tab, sequence.next());
+    assert.equal(Slot, sequence.next());
+    assert.equal(Slot, sequence.next());
+  })
 })
+
+/**
+ * @typedef {(index:number) => import('../src/puzzle').Insert} InsertGenerator
+ */
+
+/**
+ * @type {InsertGenerator}
+ */
+function fixed(_n) {
+  return Tab;
+}
+
+/**
+ * @type {InsertGenerator}
+ */
+function flipflop(n) {
+  return n % 2 === 0 ? Tab : Slot;
+}
+
+/**
+ * @type {InsertGenerator}
+ */
+function twoAndTwo(n) {
+  return n % 4 < 2 ? Tab : Slot;
+}
+
+class InsertSequence {
+  /**
+   * @param {InsertGenerator} generator
+   */
+  constructor(generator) {
+    this.generator = generator;
+    this.n = 0
+  }
+
+  /**
+   * @returns {import('../src/puzzle').Insert}
+   */
+  next() {
+    return this.generator(this.n++)
+  }
+}
