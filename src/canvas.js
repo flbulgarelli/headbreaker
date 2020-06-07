@@ -27,7 +27,7 @@ class PuzzleCanvas {
    * @param {*} layer
    * @param {object} options
    * @param {number} options.pieceSize
-   * @param {number} options.proximityLevel
+   * @param {number} options.proximity
    * @param {number} options.borderFill the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
    * @param {number?} options.strokeWidth
    * @param {string?} options.strokeColor
@@ -36,12 +36,12 @@ class PuzzleCanvas {
    *
    */
   constructor(layer, {
-      pieceSize, proximityLevel, borderFill = 0,
+      pieceSize, proximity, borderFill = 0,
       strokeWidth = 3, strokeColor = 'black',
       lineSoftness = 0, image = null}) {
     this.layer = layer;
     this.pieceSize = pieceSize;
-    this.puzzle = new Puzzle(pieceSize / 2, proximityLevel);
+    this.puzzle = new Puzzle({pieceSize: pieceSize / 2, proximity: proximity});
     this.borderFill = borderFill;
     this.image = image;
     this.strokeWidth = strokeWidth;

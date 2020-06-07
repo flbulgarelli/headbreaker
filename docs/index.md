@@ -7,7 +7,7 @@
 </div>
 
 <script>
-  const basic = new headbreaker.Canvas(buildLayer('basic', 500, 300), {pieceSize: 50, proximityLevel: 10});
+  const basic = new headbreaker.Canvas(buildLayer('basic', 500, 300), {pieceSize: 50, proximity: 10});
 
   basic.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
@@ -54,7 +54,7 @@
 </div>
 
 <script>
-  const soft = new headbreaker.Canvas(buildLayer('soft', 500, 300), {pieceSize: 50, proximityLevel: 10, lineSoftness: 0.2});
+  const soft = new headbreaker.Canvas(buildLayer('soft', 500, 300), {pieceSize: 50, proximity: 10, lineSoftness: 0.2});
 
   soft.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
@@ -105,7 +105,7 @@
 <script>
   const perfect = new headbreaker.Canvas(
     buildLayer('perfect', 800, 300),
-    {pieceSize: 100, proximityLevel: 20, borderFill: 10, strokeWidth: 2, strokeColor: '#00200B', lineSoftness: 0.02});
+    {pieceSize: 100, proximity: 20, borderFill: 10, strokeWidth: 2, strokeColor: '#00200B', lineSoftness: 0.02});
 
   perfect.newPiece({
     structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
@@ -150,7 +150,7 @@
     console.log(vangogh);
     const background = new headbreaker.Canvas(
       buildLayer('background', 800, 800),
-      {pieceSize: 100, proximityLevel: 20, borderFill: 10, image: vangogh, strokeWidth: 2, lineSoftness: 0.12});
+      {pieceSize: 100, proximity: 20, borderFill: 10, image: vangogh, strokeWidth: 2, lineSoftness: 0.12});
 
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},

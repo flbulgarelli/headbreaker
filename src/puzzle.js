@@ -2,17 +2,17 @@ const vector = require('./vector');
 const pivot = require('./pivot');
 const {Anchor} = require('./anchor');
 
-
+/**
+ * @typedef {{pieceSize?: number, proximity?: number}} PuzzleStructure
+ */
 class Puzzle {
 
   /**
-   *
-   * @param {number} pieceSize
-   * @param {number} proximityTolerance
+   * @param {PuzzleStructure?} options
    */
-  constructor(pieceSize = 2, proximityTolerance = 1) {
+  constructor({pieceSize = 2, proximity = 1} = {}) {
     this.pieceSize = pieceSize;
-    this.proximityTolerance = proximityTolerance;
+    this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
   }
@@ -365,7 +365,7 @@ class Piece {
    * @returns {boolean}
    */
   verticallyCloseTo(other) {
-    return this.downAnchor.closeTo(other.upAnchor, this.proximityTolerance);
+    return this.downAnchor.closeTo(other.upAnchor, this.proximity);
   }
 
   /**
@@ -374,7 +374,7 @@ class Piece {
    * @returns {boolean}
    */
   horizontallyCloseTo(other) {
-    return this.rightAnchor.closeTo(other.leftAnchor, this.proximityTolerance);
+    return this.rightAnchor.closeTo(other.leftAnchor, this.proximity);
   }
 
 
@@ -438,8 +438,8 @@ class Piece {
   /**
    * @returns {number}
    */
-  get proximityTolerance() {
-    return this.puzzle.proximityTolerance;
+  get proximity() {
+    return this.puzzle.proximity;
   }
 
 }
