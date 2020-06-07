@@ -145,7 +145,7 @@
 
 <script>
   let vangogh = new Image();
-  vangogh.src = '../vangogh.jpg';
+  vangogh.src = 'static/vangogh.jpg';
   vangogh.onload = () => {
     console.log(vangogh);
     const background = new headbreaker.Canvas(
