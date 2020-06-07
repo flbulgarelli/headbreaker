@@ -24,15 +24,27 @@ function anchorsDelta(model, group) {
 
 class PuzzleCanvas {
   /**
-   *
    * @param {*} layer
-   * @param {{pieceSize: number, proximityLevel: number, borderFill?: number}} options
+   * @param {object} options
+   * @param {number} options.pieceSize
+   * @param {number} options.proximityLevel
+   * @param {number} options.borderFill the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
+   * @param {Image?} options.image an optional background image for the puzzle that will be split across all pieces.
+   * @param {number?} options.strokeWidth
+   * @param {string?} options.strokeColor
+   *
    */
-  constructor(layer, {pieceSize, proximityLevel, borderFill = 0}) {
+  constructor(layer, {
+      pieceSize, proximityLevel, borderFill = 0,
+      strokeWidth = null, strokeColor = null,
+      image = null}) {
     this.layer = layer;
     this.pieceSize = pieceSize;
     this.puzzle = new Puzzle(pieceSize / 2, proximityLevel);
     this.borderFill = borderFill;
+    this.image = image;
+    this.strokeWidth = strokeWidth;
+    this.strokeColor = strokeColor;
   }
 
   /**
@@ -65,10 +77,10 @@ class PuzzleCanvas {
     var piece = new Konva.Line({
       points: outline.draw(model, this.pieceSize, this.borderFill),
       fill: model.data.color,
-      fillPatternImage: model.data.image,
-      fillPatternOffset: { x: model.centralAnchor.x, y: model.centralAnchor.y },
-      stroke: 'black',
-      strokeWidth: 3,
+      fillPatternImage: this.image || model.data.image,
+      fillPatternOffset: this._imageOffsetFor(model),
+      stroke: this.strokeColor || 'black',
+      strokeWidth: this.strokeWidth || 3,
       closed: true,
     });
 
@@ -105,6 +117,16 @@ class PuzzleCanvas {
       group.y(model.centralAnchor.y)
       commitAnchors(model, group);
     })
+  }
+  /**
+   * @param {Piece} model
+   */
+  _imageOffsetFor(model) {
+    if (this.image) {
+      return { x: model.centralAnchor.x, y: model.centralAnchor.y }
+    } else {
+      return model.data.imageOffset
+    }
   }
 }
 

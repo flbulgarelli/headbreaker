@@ -81,7 +81,7 @@ class Piece {
   }
 
   /**
-   * @param {*} data
+   * @param {object} data
    */
   carry(data) {
     this.data = data;
