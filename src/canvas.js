@@ -26,12 +26,13 @@ class PuzzleCanvas {
   /**
    *
    * @param {*} layer
-   * @param {{pieceSize: number, proximityLevel: number}} options
+   * @param {{pieceSize: number, proximityLevel: number, borderFill?: number}} options
    */
-  constructor(layer, {pieceSize, proximityLevel}) {
+  constructor(layer, {pieceSize, proximityLevel, borderFill = 0}) {
     this.layer = layer;
     this.pieceSize = pieceSize;
     this.puzzle = new Puzzle(pieceSize / 2, proximityLevel);
+    this.borderFill = borderFill;
   }
 
   /**
@@ -62,7 +63,7 @@ class PuzzleCanvas {
 
     // @ts-ignore
     var piece = new Konva.Line({
-      points: outline.draw(model, this.pieceSize),
+      points: outline.draw(model, this.pieceSize, this.borderFill),
       fill: model.data.color,
       fillPatternImage: model.data.image,
       fillPatternOffset: { x: model.centralAnchor.x, y: model.centralAnchor.y },

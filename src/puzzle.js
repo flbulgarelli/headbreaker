@@ -46,6 +46,10 @@ class Puzzle {
       other.tryConnectWith(piece, true);
     })
   }
+
+  get data() {
+    return this.pieces.map(it => it.data);
+  }
 }
 
 /**
@@ -57,7 +61,7 @@ class Puzzle {
 class Piece {
 
   /**
-   * @param {PieceStructure?} param0
+   * @param {PieceStructure?} options
    */
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
