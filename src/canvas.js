@@ -29,15 +29,16 @@ class PuzzleCanvas {
    * @param {number} options.pieceSize
    * @param {number} options.proximityLevel
    * @param {number} options.borderFill the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
-   * @param {Image?} options.image an optional background image for the puzzle that will be split across all pieces.
    * @param {number?} options.strokeWidth
    * @param {string?} options.strokeColor
+   * @param {number?} options.lineSoftness how soft the line will be
+   * @param {Image?} options.image an optional background image for the puzzle that will be split across all pieces.
    *
    */
   constructor(layer, {
       pieceSize, proximityLevel, borderFill = 0,
-      strokeWidth = null, strokeColor = null,
-      image = null}) {
+      strokeWidth = 3, strokeColor = 'black',
+      lineSoftness = 0, image = null}) {
     this.layer = layer;
     this.pieceSize = pieceSize;
     this.puzzle = new Puzzle(pieceSize / 2, proximityLevel);
@@ -45,6 +46,7 @@ class PuzzleCanvas {
     this.image = image;
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
+    this.lineSoftness = lineSoftness;
   }
 
   /**
@@ -77,10 +79,11 @@ class PuzzleCanvas {
     var piece = new Konva.Line({
       points: outline.draw(model, this.pieceSize, this.borderFill),
       fill: model.data.color,
+      tension: this.lineSoftness,
       fillPatternImage: this.image || model.data.image,
       fillPatternOffset: this._imageOffsetFor(model),
-      stroke: this.strokeColor || 'black',
-      strokeWidth: this.strokeWidth || 3,
+      stroke: this.strokeColor,
+      strokeWidth: this.strokeWidth,
       closed: true,
     });
 

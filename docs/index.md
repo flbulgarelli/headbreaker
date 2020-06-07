@@ -48,6 +48,54 @@
   basic.draw();
 </script>
 
+## Soft lines example
+
+<div id="soft">
+</div>
+
+<script>
+  const soft = new headbreaker.Canvas(buildLayer('soft', 500, 300), {pieceSize: 50, proximityLevel: 10, lineSoftness: 0.2});
+
+  soft.newPiece({
+      structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+      x: 50,
+      y: 50,
+      data: {id: 'a', color: 'red'}
+    });
+  soft.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+    x: 100, y: 50,
+    data: {id: 'b', color: '#00D2FF'}
+  });
+  soft.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+    x: 150, y: 50,
+    data: {id: 'c', color: '#00D2FF'}
+  });
+  soft.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+    x: 150, y: 100,
+    data: {id: 'd', color: '#00D2FF'}
+  });
+  soft.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+    x: 250, y: 200,
+    data: {id: 'e', color: 'green'}
+  });
+  soft.newPiece({
+    structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
+    x: 350, y: 250,
+    data: {id: 'f', color: 'purple'}
+  });
+  soft.newPiece({
+    structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
+    x: 100, y: 230,
+    data: {id: 'g', color: 'black'}
+  });
+  soft.draw();
+</script>
+
+
 
 ## With perfect match
 
@@ -57,7 +105,7 @@
 <script>
   const perfect = new headbreaker.Canvas(
     buildLayer('perfect', 800, 300),
-    {pieceSize: 100, proximityLevel: 20, borderFill: 10, strokeWidth: 2, strokeColor: '#00200B'});
+    {pieceSize: 100, proximityLevel: 20, borderFill: 10, strokeWidth: 2, strokeColor: '#00200B', lineSoftness: 0.02});
 
   perfect.newPiece({
     structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
@@ -102,7 +150,7 @@
     console.log(vangogh);
     const background = new headbreaker.Canvas(
       buildLayer('background', 800, 800),
-      {pieceSize: 100, proximityLevel: 20, borderFill: 10, image: vangogh});
+      {pieceSize: 100, proximityLevel: 20, borderFill: 10, image: vangogh, strokeWidth: 2, lineSoftness: 0.12});
 
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
