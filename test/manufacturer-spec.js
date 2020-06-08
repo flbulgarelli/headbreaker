@@ -4,6 +4,16 @@ const {Puzzle, Piece, Tab, Slot, None} = require('../src/puzzle');
 
 
 class Manufacturer {
+  constructor() {
+    this.insertsGenerator = fixed;
+  }
+
+  /**
+   * @param {InsertsGenerator} generator
+   */
+  configureInsertsGenerator(generator) {
+    this.insertsGenerator = generator || this.insertsGenerator;
+  }
 
   /**
    * If nothing is configured, default Puzzle structured is assumed
@@ -29,24 +39,39 @@ class Manufacturer {
    */
   build() {
     const puzzle = new Puzzle(this.structure);
+
+    let verticalSequence = this._newSequence();
+    let horizontalSequence;
+
     for (let y = 0; y < this.height; y++) {
+      horizontalSequence = this._newSequence();
+      verticalSequence.next();
+
       for (let x = 0; x < this.width; x++) {
-        this._buildPiece(puzzle, x, y);
+        horizontalSequence.next();
+        this._buildPiece(puzzle, horizontalSequence, verticalSequence);
       }
     }
     return puzzle;
   }
+
+  _newSequence() {
+    return new InsertSequence(this.insertsGenerator);
+  }
+
   /**
    * @param {Puzzle} puzzle
+   * @param {InsertSequence} horizontalSequence
+   * @param {InsertSequence} verticalSequence
    * @param {number} x
    * @param {number} y
    */
-  _buildPiece(puzzle, x, y) {
+  _buildPiece(puzzle, horizontalSequence, verticalSequence) {
     puzzle.newPiece({
-      up: y === 0 ? None : Slot,
-      right: x === (this.width - 1) ? None : Tab,
-      down: y === (this.height - 1) ? None : Tab,
-      left: x === 0 ? None : Slot
+      left: horizontalSequence.previousComplement(),
+      up: verticalSequence.previousComplement(),
+      right: horizontalSequence.current(this.width),
+      down: verticalSequence.current(this.height)
     });
   }
 }
@@ -177,12 +202,46 @@ describe("manufacturer", () => {
     assert.equal(f.left, Slot);
   })
 
+  it("create 6 x 1 with flip flop", () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.configureDimmensions(6, 1);
+    manufacturer.configureInsertsGenerator(flipflop);
+    const puzzle = manufacturer.build();
+    const [a, b, c, d, e, f, g] = puzzle.pieces;
+
+    assert.equal(puzzle.pieces.length, 6);
+
+    assert.equal(a.right, Tab);
+    assert.equal(b.right, Slot);
+    assert.equal(c.right, Tab);
+    assert.equal(d.right, Slot);
+    assert.equal(e.right, Tab);
+    assert.equal(f.right, None);
+
+    assert.equal(a.left, None);
+    assert.equal(b.left, Slot);
+    assert.equal(c.left, Tab);
+    assert.equal(d.left, Slot);
+    assert.equal(e.left, Tab);
+    assert.equal(f.left, Slot);
+  })
+})
+
+describe("InsertSequence", () => {
   it("fixed", () => {
     const sequence = new InsertSequence(fixed);
+
     assert.equal(Tab, sequence.next());
+    assert.equal(None, sequence.previousComplement());
+
     assert.equal(Tab, sequence.next());
+    assert.equal(Slot, sequence.previousComplement());
+
     assert.equal(Tab, sequence.next());
+    assert.equal(Slot, sequence.previousComplement());
+
     assert.equal(Tab, sequence.next());
+    assert.equal(Slot, sequence.previousComplement());
   })
 
   it("flipflop", () => {
@@ -206,27 +265,26 @@ describe("manufacturer", () => {
     assert.equal(Slot, sequence.next());
   })
 })
-
 /**
- * @typedef {(index:number) => import('../src/puzzle').Insert} InsertGenerator
+ * @typedef {(index:number) => import('../src/puzzle').Insert} InsertsGenerator;
  */
 
 /**
- * @type {InsertGenerator}
+ * @type {InsertsGenerator};
  */
 function fixed(_n) {
   return Tab;
 }
 
 /**
- * @type {InsertGenerator}
+ * @type {InsertsGenerator};
  */
 function flipflop(n) {
   return n % 2 === 0 ? Tab : Slot;
 }
 
 /**
- * @type {InsertGenerator}
+ * @type {InsertsGenerator};
  */
 function twoAndTwo(n) {
   return n % 4 < 2 ? Tab : Slot;
@@ -234,17 +292,41 @@ function twoAndTwo(n) {
 
 class InsertSequence {
   /**
-   * @param {InsertGenerator} generator
+   * @param {InsertsGenerator} generator;
    */
   constructor(generator) {
     this.generator = generator;
     this.n = 0
+    this._previous;
+    this._current = null;
   }
 
   /**
    * @returns {import('../src/puzzle').Insert}
    */
+  previousComplement() {
+    if (!this._previous) {
+      return None;
+    }
+    if (this._previous === Tab) {
+      return Slot;
+    }
+    return Tab;
+  }
+
+  /**
+   * @returns {import('../src/puzzle').Insert}
+   */
+  current(max) {
+    if (this.n == max) {
+      return None
+    }
+    return this._current;
+  }
+
   next() {
-    return this.generator(this.n++)
+    this._previous = this._current;
+    this._current = this.generator(this.n++);
+    return this._current;
   }
 }
