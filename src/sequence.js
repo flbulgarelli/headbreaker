@@ -36,20 +36,14 @@ class InsertSequence {
     this.generator = generator;
     this.n = 0
     this._previous;
-    this._current = null;
+    this._current = None;
   }
 
   /**
    * @returns {Insert}
    */
   previousComplement() {
-    if (!this._previous) {
-      return None;
-    }
-    if (this._previous === Tab) {
-      return Slot;
-    }
-    return Tab;
+    return this._previous.complement();
   }
 
   /**

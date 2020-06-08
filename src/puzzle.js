@@ -453,7 +453,8 @@ const Tab = {
   isTab:  () => true,
   isNone:  () => false,
   match: (other) => other.isSlot(),
-  toString: () => "Tab"
+  toString: () => "Tab",
+  complement: () => Slot,
 }
 
 const Slot = {
@@ -461,7 +462,9 @@ const Slot = {
   isTab:  () => false,
   isNone:  () => false,
   match: (other) => other.isTab(),
-  toString: () => "Slot"
+  toString: () => "Slot",
+  complement: () => Tab,
+
 }
 
 const None = {
@@ -469,7 +472,8 @@ const None = {
   isTab:  () => false,
   isNone:  () => true,
   match: (other) => false,
-  toString: () => "None"
+  toString: () => "None",
+  complement: () => None,
 }
 
 /**
