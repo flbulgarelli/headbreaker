@@ -9,19 +9,22 @@ const {anchor} = require('./anchor');
  * @param {Piece} model
  * @param {*} group
  */
-function commitAnchors(model, group) {
-  model.data.x = group.x();
-  model.data.y = group.y();
+function commitCurrentPosition(model, group) {
+  model.data.currentPosition.x = group.x();
+  model.data.currentPosition.y = group.y();
 }
 
 /**
  * @param {Piece} model
  * @param {*} group
  */
-function anchorsDelta(model, group) {
-  return vector.diff(group.x(),group.y(), model.data.x, model.data.y);
+function currentPositionDiff(model, group) {
+  return vector.diff(group.x(),group.y(), model.data.currentPosition.x, model.data.currentPosition.y);
 }
 
+/**
+ * @typedef {{x: number, y: number}} Position
+ */
 class PuzzleCanvas {
 
   /**
@@ -61,13 +64,18 @@ class PuzzleCanvas {
   }
 
   /**
-   * @param {{structure: import('./puzzle').PieceStructure, x: number, y: number, data: *}} options
+   * @param {object} options
+   * @param {import('./puzzle').PieceStructure} options.structure
+   * @param {object}     options.data
+   * @param {Position}   options.data.targetPosition
+   * @param {Position?}  options.data.currentPosition
+   * @param {Position?}  options.data.imageOffset
+   * @param {string?}    options.data.color
+   * @param {Image?}     options.data.image
    */
-  newPiece({structure, x, y, data}) {
-    let piece = this.puzzle.newPiece(structure);
-    piece.carry(data);
-    piece.placeAt(anchor(x, y));
-    this._renderPiece(piece);
+  newPiece({structure, data}) {
+    data.currentPosition = data.currentPosition || data.targetPosition;
+    this._renderPiece(this._createPiece(structure, data));
   }
 
   /**
@@ -83,70 +91,81 @@ class PuzzleCanvas {
   }
 
   /**
-   *
-   * @param {Piece} model
+   * @param {Piece} piece
    */
-  _renderPiece(model) {
+  _renderPiece(piece) {
     // @ts-ignore
     var group = new Konva.Group({
-      x: model.centralAnchor.x,
-      y: model.centralAnchor.y
+      x: piece.data.currentPosition.x,
+      y: piece.data.currentPosition.y
     });
-
     // @ts-ignore
-    var piece = new Konva.Line({
-      points: outline.draw(model, this.pieceSize, this.borderFill),
-      fill: model.data.color,
+    group.add(new Konva.Line({
+      points: outline.draw(piece, this.pieceSize, this.borderFill),
+      fill: piece.data.color,
       tension: this.lineSoftness,
-      fillPatternImage: this.image || model.data.image,
-      fillPatternOffset: this._imageOffsetFor(model),
+      fillPatternImage: this.image || piece.data.image,
+      fillPatternOffset: this._imageOffsetFor(piece),
       stroke: this.strokeColor,
       strokeWidth: this.strokeWidth,
       closed: true,
-    });
-
-    group.add(piece);
-    this.layer.add(group);
+    }));
     group.draggable('true')
 
+    this.layer.add(group);
+
+    this._bindGroupToPiece(group, piece);
+    this._bindPieceToGroup(piece, group);
+  }
+
+  /**
+   * Configures updates from piece into group
+   * @param {*} group
+   * @param {Piece} piece
+   */
+  _bindGroupToPiece(group, piece) {
+    piece.onTranslate((_dx, _dy) => {
+      group.x(piece.centralAnchor.x);
+      group.y(piece.centralAnchor.y);
+      commitCurrentPosition(piece, group);
+    });
+  }
+
+  /**
+   * * Configures updates from group into piece
+   * @param {Piece} piece
+   * @param {*} group
+   */
+  _bindPieceToGroup(piece, group) {
     group.on('mouseover', () => {
       document.body.style.cursor = 'pointer';
     });
     group.on('mouseout', () => {
       document.body.style.cursor = 'default';
     });
-
-    commitAnchors(model, group);
-
     group.on('dragmove', () => {
-      let [dx, dy] = anchorsDelta(model, group);
-
+      let [dx, dy] = currentPositionDiff(piece, group);
       if (!vector.isNull(dx, dy)) {
-        model.drag(dx, dy, true)
-        commitAnchors(model, group);
+        piece.drag(dx, dy, true);
+        commitCurrentPosition(piece, group);
         this.layer.draw();
       }
     });
-
     group.on('dragend', () => {
-      model.drop();
+      piece.drop();
       this.layer.draw();
-    })
-
-    model.onTranslate((_dx, _dy) => {
-      group.x(model.centralAnchor.x)
-      group.y(model.centralAnchor.y)
-      commitAnchors(model, group);
-    })
+    });
   }
+
   /**
    * @param {Piece} model
+   * @returns {Position}
    */
   _imageOffsetFor(model) {
     if (this.image) {
-      return { x: model.centralAnchor.x, y: model.centralAnchor.y }
+      return model.data.targetPosition;
     } else {
-      return model.data.imageOffset
+      return model.data.imageOffset;
     }
   }
 
@@ -173,6 +192,14 @@ class PuzzleCanvas {
   _initializePuzzle(proximity) {
     this.puzzle = new Puzzle({ pieceSize: this.pieceSize / 2, proximity: proximity });
   }
+
+  _createPiece(structure, data) {
+    let piece = this.puzzle.newPiece(structure);
+    piece.carry(data);
+    piece.placeAt(anchor(data.currentPosition.x, data.currentPosition.y));
+    return piece;
+  }
+
 }
 
 module.exports = PuzzleCanvas
