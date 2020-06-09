@@ -131,7 +131,6 @@
   let vangogh = new Image();
   vangogh.src = 'static/vangogh.jpg';
   vangogh.onload = () => {
-    console.log(vangogh);
     const background = new headbreaker.Canvas('background', {
       width: 800, height: 800,
       pieceSize: 100, proximity: 20,
@@ -258,7 +257,6 @@
   let dali = new Image();
   dali.src = 'static/dali.jpg';
   dali.onload = () => {
-    console.log(dali);
     const randomized = new headbreaker.Canvas('randomized', {
       width: 800, height: 800,
       pieceSize: 100, proximity: 20,
