@@ -204,7 +204,7 @@
       data: {id: 'c'}
     });
 
-      background.newPiece({
+    background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
       x: 100, y: 300,
       data: {id: 'a'}
@@ -284,5 +284,158 @@
 
 
     background.draw();
+  }
+</script>
+
+
+
+
+
+## Randomized positions
+
+<div id="randomized">
+</div>
+
+<script>
+  let dali = new Image();
+  dali.src = 'static/dali.jpg';
+  dali.onload = () => {
+    console.log(dali);
+    const randomized = new headbreaker.Canvas(
+      buildLayer('randomized', 800, 800),
+      {pieceSize: 100, proximity: 20, borderFill: 10, image: dali, strokeWidth: 2, lineSoftness: 0.12});
+
+    randomized.newPiece({
+      structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
+      x: 100, y: 100,
+      data: {id: 'a'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+      x: 200, y: 100,
+      data: {id: 'b'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+      x: 300, y: 100,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+      x: 400, y: 100,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.None, right: headbreaker.None, down: headbreaker.Tab, left: headbreaker.Tab},
+      x: 500, y: 100,
+      data: {id: 'c'}
+    });
+
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
+      x: 100, y: 200,
+      data: {id: 'a'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+      x: 200, y: 200,
+      data: {id: 'b'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+      x: 300, y: 200,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
+      x: 400, y: 200,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+      x: 500, y: 200,
+      data: {id: 'c'}
+    });
+
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
+      x: 100, y: 300,
+      data: {id: 'a'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
+      x: 200, y: 300,
+      data: {id: 'b'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Slot},
+      x: 300, y: 300,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
+      x: 400, y: 300,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+      x: 500, y: 300,
+      data: {id: 'c'}
+    });
+
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
+      x: 100, y: 400,
+      data: {id: 'a'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
+      x: 200, y: 400,
+      data: {id: 'b'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+      x: 300, y: 400,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+      x: 400, y: 400,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Tab},
+      x: 500, y: 400,
+      data: {id: 'c'}
+    });
+
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.None},
+      x: 100, y: 500,
+      data: {id: 'a'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
+      x: 200, y: 500,
+      data: {id: 'b'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
+      x: 300, y: 500,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot},
+      x: 400, y: 500,
+      data: {id: 'c'}
+    });
+    randomized.newPiece({
+      structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.Tab},
+      x: 500, y: 500,
+      data: {id: 'c'}
+    });
+
+    randomized.puzzle.shuffle(500, 500)
+    randomized.draw();
   }
 </script>

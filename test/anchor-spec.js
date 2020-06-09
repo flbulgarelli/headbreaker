@@ -34,4 +34,10 @@ describe("anchor", () => {
     assert(!anchor(0, 0).closeTo(anchor(-2, 0), 1));
   })
 
+  it("can create random anchors", () => {
+    assert(Anchor.atRandom(100, 100).x < 100);
+    assert(Anchor.atRandom(100, 100).x > 0);
+    assert(Anchor.atRandom(100, 50).y < 50);
+    assert(Anchor.atRandom(100, 50).y > 0);
+  })
 })

@@ -67,6 +67,16 @@ class Anchor {
   diff(other) {
     return vector.diff(this.x, this.y, other.x, other.y)
   }
+
+  /**
+   * @param {number} maxX
+   * @param {number} maxY
+   * @returns {Anchor}
+   */
+  static atRandom(maxX, maxY) {
+    return new Anchor(Math.random() * maxX, Math.random() * maxY);
+  }
+
 }
 
 /**

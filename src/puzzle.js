@@ -35,6 +35,10 @@ class Puzzle {
     this.pieces.forEach(it => this.autoconnect(it));
   }
 
+  disconnectAll() {
+    this.pieces.forEach(it => it.disconnect());
+  }
+
   /**
    * Tries to connect the given piece to the rest of the set
    * This method is O(n)
@@ -45,6 +49,15 @@ class Puzzle {
       piece.tryConnectWith(other);
       other.tryConnectWith(piece, true);
     })
+  }
+
+  /**
+   * @param {number} maxX
+   * @param {number} maxY
+   */
+  shuffle(maxX, maxY) {
+    this.disconnectAll();
+    this.pieces.forEach(it => it.placeAt(Anchor.atRandom(maxX, maxY)));
   }
 
   get data() {
@@ -266,7 +279,13 @@ class Piece {
    * @param {Anchor} anchor
    */
   placeAt(anchor) {
+    const previous = this.centralAnchor;
     this.centralAnchor = anchor;
+
+    if (previous) {
+      const delta = anchor.diff(previous);
+      this.fireOnTranslate(...delta);
+    }
   }
 
   /**

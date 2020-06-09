@@ -658,31 +658,29 @@ describe("piece", () => {
       assert(c.downConnection);
     })
   })
-
-
 })
 
-it("autoconnects puzzle", () => {
-  const puzzle = new Puzzle();
 
-  puzzle
-    .newPiece({right: Tab})
-    .placeAt(anchor(0, 0));
-  puzzle
-    .newPiece({left: Slot, right: Tab})
-    .placeAt(anchor(3, 0));
-  puzzle
-    .newPiece({left: Slot, right: Tab, down: Slot})
-    .placeAt(anchor(6, 0));
-  puzzle
-    .newPiece({up: Tab})
-    .placeAt(anchor(6, 3));
+describe("puzzle", () => {
+  it("shuffles puzzle", () => {
+    const puzzle = new Puzzle();
 
-  puzzle.autoconnectAll();
+    puzzle
+      .newPiece({right: Tab})
+      .placeAt(anchor(0, 0));
+    puzzle
+      .newPiece({left: Slot, right: Tab})
+      .placeAt(anchor(3, 0));
+    puzzle
+      .newPiece({left: Slot, right: Tab, down: Slot})
+      .placeAt(anchor(6, 0));
+    puzzle
+      .newPiece({up: Tab})
+      .placeAt(anchor(6, 3));
 
-  const [a, b, c, d] = puzzle.pieces;
+    puzzle.autoconnectAll();
+    puzzle.shuffle(100, 100);
 
-  assert.equal(a.rightConnection, b);
-  assert.equal(b.rightConnection, c);
-  assert.equal(c.downConnection, d);
+    assert.equal(puzzle.pieces.length, 4);
+  })
 })
