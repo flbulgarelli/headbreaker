@@ -2,7 +2,9 @@ const Konva = require('konva');
 const vector = require('./vector');
 const outline = require('./outline');
 const {Puzzle, Piece} = require('./puzzle');
+const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
+const {twoAndTwo} = require('./sequence');
 
 /**
  *
@@ -59,7 +61,7 @@ class PuzzleCanvas {
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
-    this._initializePuzzle(proximity);
+    this.proximity = proximity;
     this._initializeLayer(id);
   }
 
@@ -75,7 +77,20 @@ class PuzzleCanvas {
    */
   newPiece({structure, data}) {
     data.currentPosition = data.currentPosition || data.targetPosition;
-    this._renderPiece(this._createPiece(structure, data));
+    this._renderPiece(this._buildPiece(structure, data));
+  }
+
+  buildPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5}) {
+    const manufacturer = new Manufacturer();
+    manufacturer.configureDimmensions(horizontalPiecesCount, verticalPiecesCount);
+    manufacturer.configureStructure(this.puzzleStructure);
+    manufacturer.configureInsertsGenerator(twoAndTwo);
+    this._puzzle = manufacturer.build();
+    this.puzzle.pieces.forEach(it => {
+      const position = { x: it.centralAnchor.x, y: it.centralAnchor.y }
+      it.carry({targetPosition: position, currentPosition: position});
+      this._renderPiece(it);
+    });
   }
 
   /**
@@ -186,18 +201,29 @@ class PuzzleCanvas {
     this.layer = layer;
   }
 
-  /**
-   * @param {number} proximity
-   */
-  _initializePuzzle(proximity) {
-    this.puzzle = new Puzzle({ pieceSize: this.pieceSize / 2, proximity: proximity });
+  _initializeEmptyPuzzle() {
+    this._puzzle = new Puzzle(this.puzzleStructure);
   }
 
-  _createPiece(structure, data) {
+  _buildPiece(structure, data) {
     let piece = this.puzzle.newPiece(structure);
     piece.carry(data);
     piece.placeAt(anchor(data.currentPosition.x, data.currentPosition.y));
     return piece;
+  }
+
+  get puzzle() {
+    if (!this._puzzle) {
+      this._initializeEmptyPuzzle();
+    }
+    return this._puzzle;
+  }
+
+  /**
+   * @returns {import('./puzzle').PuzzleStructure}
+   */
+  get puzzleStructure() {
+    return {pieceSize: this.pieceSize / 2, proximity: this.proximity}
   }
 
 }

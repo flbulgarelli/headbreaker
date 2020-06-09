@@ -1,4 +1,5 @@
 const {Puzzle} = require('./puzzle');
+const {anchor} = require('./anchor');
 const {fixed, InsertSequence} = require('./sequence')
 
 class Manufacturer {
@@ -47,7 +48,8 @@ class Manufacturer {
 
       for (let x = 0; x < this.width; x++) {
         horizontalSequence.next();
-        this._buildPiece(puzzle, horizontalSequence, verticalSequence);
+        const piece = this._buildPiece(puzzle, horizontalSequence, verticalSequence);
+        piece.placeAt(anchor(x * puzzle.pieceSize * 2, y * puzzle.pieceSize * 2));
       }
     }
     return puzzle;
@@ -63,7 +65,7 @@ class Manufacturer {
    * @param {InsertSequence} verticalSequence
    */
   _buildPiece(puzzle, horizontalSequence, verticalSequence) {
-    puzzle.newPiece({
+    return puzzle.newPiece({
       left: horizontalSequence.previousComplement(),
       up: verticalSequence.previousComplement(),
       right: horizontalSequence.current(this.width),
