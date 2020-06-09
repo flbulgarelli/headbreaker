@@ -2,7 +2,6 @@ const between = require('./between');
 const vector = require('./vector')
 
 class Anchor {
-
   /**
    *
    * @param {number} x

@@ -23,9 +23,12 @@ function anchorsDelta(model, group) {
 }
 
 class PuzzleCanvas {
+
   /**
-   * @param {*} layer
+   * @param {string} id  the kanvas layer id
    * @param {object} options
+   * @param {number} options.width
+   * @param {number} options.height
    * @param {number} options.pieceSize
    * @param {number} options.proximity
    * @param {number} options.borderFill the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
@@ -35,18 +38,26 @@ class PuzzleCanvas {
    * @param {Image?} options.image an optional background image for the puzzle that will be split across all pieces.
    *
    */
-  constructor(layer, {
-      pieceSize, proximity, borderFill = 0,
-      strokeWidth = 3, strokeColor = 'black',
-      lineSoftness = 0, image = null}) {
-    this.layer = layer;
+  constructor(id, {
+      width,
+      height,
+      pieceSize,
+      proximity,
+      borderFill = 0,
+      strokeWidth = 3,
+      strokeColor = 'black',
+      lineSoftness = 0,
+      image = null}) {
+    this.width = width;
+    this.height = height;
     this.pieceSize = pieceSize;
-    this.puzzle = new Puzzle({pieceSize: pieceSize / 2, proximity: proximity});
     this.borderFill = borderFill;
     this.image = image;
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
+    this._initializePuzzle(proximity);
+    this._initializeLayer(id);
   }
 
   /**
@@ -57,6 +68,13 @@ class PuzzleCanvas {
     piece.carry(data);
     piece.placeAt(anchor(x, y));
     this._renderPiece(piece);
+  }
+
+  /**
+   * @param {number} farness from 0 to 1, how far pieces will be placed from x = 0, y = 0
+   */
+  shuffle(farness = 1) {
+    this.puzzle.shuffle(farness * this.width, farness * this.height)
   }
 
   draw() {
@@ -130,6 +148,30 @@ class PuzzleCanvas {
     } else {
       return model.data.imageOffset
     }
+  }
+
+  /**
+   * @param {string} id
+   */
+  _initializeLayer(id) {
+    // @ts-ignore
+    var stage = new Konva.Stage({
+      container: id,
+      width: this.width,
+      height: this.height
+    });
+
+    // @ts-ignore
+    var layer = new Konva.Layer();
+    stage.add(layer);
+    this.layer = layer;
+  }
+
+  /**
+   * @param {number} proximity
+   */
+  _initializePuzzle(proximity) {
+    this.puzzle = new Puzzle({ pieceSize: this.pieceSize / 2, proximity: proximity });
   }
 }
 

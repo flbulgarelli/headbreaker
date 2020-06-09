@@ -7,8 +7,7 @@
 </div>
 
 <script>
-  const basic = new headbreaker.Canvas(buildLayer('basic', 500, 300), {pieceSize: 50, proximity: 10});
-
+  const basic = new headbreaker.Canvas('basic', {width: 500, height: 300, pieceSize: 50, proximity: 10});
   basic.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
       x: 50,
@@ -54,7 +53,11 @@
 </div>
 
 <script>
-  const soft = new headbreaker.Canvas(buildLayer('soft', 500, 300), {pieceSize: 50, proximity: 10, lineSoftness: 0.2});
+  const soft = new headbreaker.Canvas('soft', {
+    width: 500, height: 300,
+    pieceSize: 50, proximity: 10,
+    lineSoftness: 0.2
+  });
 
   soft.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
@@ -97,15 +100,18 @@
 
 
 
-## With perfect match
+## Perfect match
 
 <div id="perfect">
 </div>
 
 <script>
-  const perfect = new headbreaker.Canvas(
-    buildLayer('perfect', 800, 300),
-    {pieceSize: 100, proximity: 20, borderFill: 10, strokeWidth: 2, strokeColor: '#00200B', lineSoftness: 0.02});
+  const perfect = new headbreaker.Canvas('perfect', {
+    width: 800, height: 300,
+    pieceSize: 100, proximity: 20,
+    borderFill: 10,
+    strokeWidth: 2, strokeColor: '#00200B',
+    lineSoftness: 0.0 });
 
   perfect.newPiece({
     structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
@@ -138,7 +144,7 @@
 
 
 
-## With background
+## Background
 
 <div id="background">
 </div>
@@ -148,9 +154,12 @@
   vangogh.src = 'static/vangogh.jpg';
   vangogh.onload = () => {
     console.log(vangogh);
-    const background = new headbreaker.Canvas(
-      buildLayer('background', 800, 800),
-      {pieceSize: 100, proximity: 20, borderFill: 10, image: vangogh, strokeWidth: 2, lineSoftness: 0.12});
+    const background = new headbreaker.Canvas('background', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, image: vangogh,
+    });
 
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
@@ -301,9 +310,12 @@
   dali.src = 'static/dali.jpg';
   dali.onload = () => {
     console.log(dali);
-    const randomized = new headbreaker.Canvas(
-      buildLayer('randomized', 800, 800),
-      {pieceSize: 100, proximity: 20, borderFill: 10, image: dali, strokeWidth: 2, lineSoftness: 0.12});
+    const randomized = new headbreaker.Canvas('randomized', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, image: dali
+    });
 
     randomized.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
@@ -435,7 +447,7 @@
       data: {id: 'c'}
     });
 
-    randomized.puzzle.shuffle(500, 500)
+    randomized.shuffle(0.7);
     randomized.draw();
   }
 </script>
