@@ -64,8 +64,8 @@
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#basic-example">Basic example</a></li>
         <li class="main "><a href="#soft-lines-example">Soft lines example</a></li>
-        <li class="main "><a href="#with-perfect-match">With perfect match</a></li>
-        <li class="main "><a href="#with-background">With background</a></li>
+        <li class="main "><a href="#perfect-match">Perfect match</a></li>
+        <li class="main "><a href="#background">Background</a></li>
         <li class="main "><a href="#randomized-positions">Randomized positions</a></li>
     </ul>
 </div></div>
@@ -73,50 +73,39 @@
 
 <script src="js/headbreaker.js"></script>
 
-<script src="js/layer.js"></script>
-
 <h2 id="basic-example">Basic example</h2>
 <div id="basic">
 </div>
 
 <script>
-  const basic = new headbreaker.Canvas(buildLayer('basic', 500, 300), {pieceSize: 50, proximity: 10});
-
+  const basic = new headbreaker.Canvas('basic', {width: 500, height: 300, pieceSize: 50, proximity: 10});
   basic.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      x: 50,
-      y: 50,
-      data: {id: 'a', color: 'red'}
+      data: {id: 'a', targetPosition: {x: 50, y: 50}, color: 'red'}
     });
   basic.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-    x: 100, y: 50,
-    data: {id: 'b', color: '#00D2FF'}
+    data: {id: 'b', targetPosition: {x: 100, y: 50}, color: '#00D2FF'}
   });
   basic.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-    x: 150, y: 50,
-    data: {id: 'c', color: '#00D2FF'}
+    data: {id: 'c', targetPosition: {x: 150, y: 50}, color: '#00D2FF'}
   });
   basic.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-    x: 150, y: 100,
-    data: {id: 'd', color: '#00D2FF'}
+    data: {id: 'd', targetPosition: {x: 150, y: 100}, color: '#00D2FF'}
   });
   basic.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-    x: 250, y: 200,
-    data: {id: 'e', color: 'green'}
+    data: {id: 'e', targetPosition: {x: 250, y: 200}, color: 'green'}
   });
   basic.newPiece({
     structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
-    x: 350, y: 250,
-    data: {id: 'f', color: 'purple'}
+    data: {id: 'f', targetPosition: {x: 350, y: 250}, color: 'purple'}
   });
   basic.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-    x: 100, y: 230,
-    data: {id: 'g', color: 'black'}
+    data: {id: 'g', targetPosition: {x: 100, y: 230}, color: 'black'}
   });
   basic.draw();
 </script>
@@ -126,86 +115,80 @@
 </div>
 
 <script>
-  const soft = new headbreaker.Canvas(buildLayer('soft', 500, 300), {pieceSize: 50, proximity: 10, lineSoftness: 0.2});
+  const soft = new headbreaker.Canvas('soft', {
+    width: 500, height: 300,
+    pieceSize: 50, proximity: 10,
+    lineSoftness: 0.2
+  });
 
   soft.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      x: 50,
-      y: 50,
-      data: {id: 'a', color: 'red'}
+      data: {id: 'a', targetPosition: {x: 50, y: 50}, color: 'red'}
     });
   soft.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-    x: 100, y: 50,
-    data: {id: 'b', color: '#00D2FF'}
+    data: {id: 'b', targetPosition: {x: 100, y: 50}, color: '#00D2FF'}
   });
   soft.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-    x: 150, y: 50,
-    data: {id: 'c', color: '#00D2FF'}
+    data: {id: 'c', targetPosition: {x: 150, y: 50}, color: '#00D2FF'}
   });
   soft.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-    x: 150, y: 100,
-    data: {id: 'd', color: '#00D2FF'}
+    data: {id: 'd', targetPosition: {x: 150, y: 100}, color: '#00D2FF'}
   });
   soft.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-    x: 250, y: 200,
-    data: {id: 'e', color: 'green'}
+    data: {id: 'e', targetPosition: {x: 250, y: 200}, color: 'green'}
   });
   soft.newPiece({
     structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
-    x: 350, y: 250,
-    data: {id: 'f', color: 'purple'}
+    data: {id: 'f', targetPosition: {x: 350, y: 250}, color: 'purple'}
   });
   soft.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-    x: 100, y: 230,
-    data: {id: 'g', color: 'black'}
+    data: {id: 'g', targetPosition: {x: 100, y: 230}, color: 'black'}
   });
   soft.draw();
 </script>
 
-<h2 id="with-perfect-match">With perfect match</h2>
+<h2 id="perfect-match">Perfect match</h2>
 <div id="perfect">
 </div>
 
 <script>
-  const perfect = new headbreaker.Canvas(
-    buildLayer('perfect', 800, 300),
-    {pieceSize: 100, proximity: 20, borderFill: 10, strokeWidth: 2, strokeColor: '#00200B', lineSoftness: 0.02});
+  const perfect = new headbreaker.Canvas('perfect', {
+    width: 800, height: 300,
+    pieceSize: 100, proximity: 20,
+    borderFill: 10,
+    strokeWidth: 2, strokeColor: '#00200B',
+    lineSoftness: 0.0 });
 
   perfect.newPiece({
     structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
-    x: 100, y: 100,
-    data: {id: 'a', color: '#0EC430'}
+    data: {id: 'a', targetPosition: {x: 100, y: 100}, color: '#0EC430'}
   });
   perfect.newPiece({
     structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot},
-    x: 200, y: 100,
-    data: {id: 'b', color: '#098520'}
+    data: {id: 'b', targetPosition: {x: 200, y: 100}, color: '#098520'}
   });
   perfect.newPiece({
     structure: {up: headbreaker.None, right: headbreaker.None, down: headbreaker.Tab, left: headbreaker.Tab},
-    x: 330, y: 80,
-    data: {id: 'c', color: '#04380D'}
+    data: {id: 'c', targetPosition: {x: 330, y: 80}, color: '#04380D'}
   });
   perfect.newPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.None, left: headbreaker.None},
-    x: 480, y: 130,
-    data: {id: 'c', color: '#054511'}
+    data: {id: 'c', targetPosition: {x: 480, y: 130}, color: '#054511'}
   });
   perfect.newPiece({
     structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.None},
-    x: 530, y: 80,
-    data: {id: 'c', color: '#04330C'}
+    data: {id: 'c', targetPosition: {x: 530, y: 80}, color: '#04330C'}
   });
 
   perfect.draw();
 </script>
 
-<h2 id="with-background">With background</h2>
+<h2 id="background">Background</h2>
 <div id="background">
 </div>
 
@@ -214,141 +197,117 @@
   vangogh.src = 'static/vangogh.jpg';
   vangogh.onload = () => {
     console.log(vangogh);
-    const background = new headbreaker.Canvas(
-      buildLayer('background', 800, 800),
-      {pieceSize: 100, proximity: 20, borderFill: 10, image: vangogh, strokeWidth: 2, lineSoftness: 0.12});
+    const background = new headbreaker.Canvas('background', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, image: vangogh,
+    });
 
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
-      x: 100, y: 100,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 100}},
     });
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 200, y: 100,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 100}},
     });
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 300, y: 100,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 100}},
     });
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 400, y: 100,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 100}},
     });
     background.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.None, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 500, y: 100,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 100}},
     });
 
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
-      x: 100, y: 200,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 200}},
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 200, y: 200,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 200}},
     });
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 300, y: 200,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 200}},
     });
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 400, y: 200,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 200}},
     });
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 500, y: 200,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 200}},
     });
 
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
-      x: 100, y: 300,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 300}},
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 200, y: 300,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 300}},
     });
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Slot},
-      x: 300, y: 300,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 300}},
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 400, y: 300,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 300}},
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 500, y: 300,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 300}},
     });
 
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
-      x: 100, y: 400,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 400}},
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 200, y: 400,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 400}},
     });
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      x: 300, y: 400,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 400}},
     });
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 400, y: 400,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 400}},
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 613, y: 386,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 400}, currentPosition: {x: 613, y: 386}}
     });
 
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.None},
-      x: 100, y: 500,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 500}}
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
-      x: 200, y: 500,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 500}}
     });
     background.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
-      x: 300, y: 500,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 500}}
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot},
-      x: 425, y: 530,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 500}, currentPosition: {x: 425, y: 530}}
     });
     background.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.Tab},
-      x: 570, y: 560,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 500}, currentPosition: {x: 570, y: 560}}
     });
-
-
     background.draw();
   }
 </script>
@@ -362,141 +321,119 @@
   dali.src = 'static/dali.jpg';
   dali.onload = () => {
     console.log(dali);
-    const randomized = new headbreaker.Canvas(
-      buildLayer('randomized', 800, 800),
-      {pieceSize: 100, proximity: 20, borderFill: 10, image: dali, strokeWidth: 2, lineSoftness: 0.12});
+    const randomized = new headbreaker.Canvas('randomized', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, image: dali
+    });
 
     randomized.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
-      x: 100, y: 100,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 100}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 200, y: 100,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 100}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 300, y: 100,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 100}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 400, y: 100,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 100}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.None, right: headbreaker.None, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 500, y: 100,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 100}}
     });
 
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
-      x: 100, y: 200,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 200}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 200, y: 200,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 200}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 300, y: 200,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 200}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 400, y: 200,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 200}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 500, y: 200,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 200}}
     });
 
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
-      x: 100, y: 300,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 300}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 200, y: 300,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 300}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Slot},
-      x: 300, y: 300,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 300}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
-      x: 400, y: 300,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 300}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 500, y: 300,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 300}}
     });
 
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
-      x: 100, y: 400,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 400}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 200, y: 400,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 400}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      x: 300, y: 400,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 400}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      x: 400, y: 400,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 400}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Tab},
-      x: 500, y: 400,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 400}}
     });
 
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.None},
-      x: 100, y: 500,
-      data: {id: 'a'}
+      data: {id: 'a', targetPosition: {x: 100, y: 500}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
-      x: 200, y: 500,
-      data: {id: 'b'}
+      data: {id: 'b', targetPosition: {x: 200, y: 500}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
-      x: 300, y: 500,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 300, y: 500}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot},
-      x: 400, y: 500,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 400, y: 500}}
     });
     randomized.newPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.Tab},
-      x: 500, y: 500,
-      data: {id: 'c'}
+      data: {id: 'c', targetPosition: {x: 500, y: 500}}
     });
 
-    randomized.puzzle.shuffle(500, 500)
+    randomized.shuffle(0.7);
     randomized.draw();
   }
 </script></div>
@@ -583,5 +520,5 @@
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-06-08 05:02:27
+Build Date UTC : 2020-06-09 01:22:49
 -->
