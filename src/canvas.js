@@ -80,13 +80,26 @@ class PuzzleCanvas {
     this._renderPiece(this._buildPiece(structure, data));
   }
 
+  /**
+   * @param {object} options
+   * @param {number?} options.horizontalPiecesCount
+   * @param {number?} options.verticalPiecesCount
+   */
   buildPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5}) {
     const manufacturer = new Manufacturer();
     manufacturer.configureDimmensions(horizontalPiecesCount, verticalPiecesCount);
-    manufacturer.configureStructure(this.puzzleStructure);
     manufacturer.configureInsertsGenerator(twoAndTwo);
+    this.buildPuzzleWithManufacturer(manufacturer);
+  }
+
+  /**
+   * @param {Manufacturer} manufacturer
+   */
+  buildPuzzleWithManufacturer(manufacturer) {
+    manufacturer.configureStructure(this.puzzleStructure);
+
     this._puzzle = manufacturer.build();
-    this.puzzle.pieces.forEach(it => {
+    this._puzzle.pieces.forEach(it => {
       const position = { x: it.centralAnchor.x, y: it.centralAnchor.y }
       it.carry({targetPosition: position, currentPosition: position});
       this._renderPiece(it);
