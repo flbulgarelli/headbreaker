@@ -395,3 +395,37 @@
     randomized.draw();
   }
 </script>
+
+
+## Sounds example
+
+<div id="sound">
+</div>
+
+<script>
+  var audio = new Audio('static/connect.wav');
+  let pettoruti = new Image();
+    pettoruti.src = 'static/pettoruti.jpg';
+    pettoruti.onload = () => {
+      const sound = new headbreaker.Canvas('sound', {
+        width: 800, height: 800,
+        pieceSize: 100, proximity: 20,
+        borderFill: 10, strokeWidth: 1.5,
+        lineSoftness: 0.18, image: pettoruti,
+      });
+
+      sound.buildPuzzle({horizontalPiecesCount: 6, verticalPiecesCount: 5});
+      sound.draw();
+
+      sound.puzzle.pieces.forEach(it => {
+        it.onConnect(() => {
+          audio.play();
+        })
+
+        it.onDisconnect(() => {
+          audio.play();
+        })
+      });
+    }
+
+</script>
