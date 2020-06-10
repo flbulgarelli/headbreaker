@@ -49,10 +49,20 @@ class Manufacturer {
       for (let x = 0; x < this.width; x++) {
         horizontalSequence.next();
         const piece = this._buildPiece(puzzle, horizontalSequence, verticalSequence);
-        piece.placeAt(anchor(x * puzzle.pieceSize * 2, y * puzzle.pieceSize * 2));
+        piece.placeAt(this._naturalAnchor(x, y, puzzle));
       }
     }
     return puzzle;
+  }
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @param {Puzzle} puzzle
+   */
+  _naturalAnchor(x, y, puzzle) {
+    const realSize = puzzle.pieceSize * 2;
+    return anchor((x + 1) * realSize, (y + 1) * realSize)
   }
 
   _newSequence() {

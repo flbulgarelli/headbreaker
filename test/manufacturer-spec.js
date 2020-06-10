@@ -22,7 +22,7 @@ describe("manufacturer", () => {
     assert.equal(first.size, 10);
     assert.equal(first.proximity, 1);
 
-    assert.deepEqual(first.centralAnchor, anchor(0, 0));
+    assert.deepEqual(first.centralAnchor, anchor(20, 20));
 
   })
 
@@ -47,8 +47,8 @@ describe("manufacturer", () => {
     assert.equal(second.down, None);
     assert.equal(second.left, Slot);
 
-    assert.deepEqual(first.centralAnchor, anchor(0, 0));
-    assert.deepEqual(second.centralAnchor, anchor(20, 0));
+    assert.deepEqual(first.centralAnchor, anchor(20, 20));
+    assert.deepEqual(second.centralAnchor, anchor(40, 20));
   })
 
   it("create 3 x 1", () => {
@@ -75,9 +75,9 @@ describe("manufacturer", () => {
     assert.equal(third.down, None);
     assert.equal(third.left, Slot);
 
-    assert.deepEqual(first.centralAnchor, anchor(0, 0));
-    assert.deepEqual(second.centralAnchor, anchor(4, 0));
-    assert.deepEqual(third.centralAnchor, anchor(8, 0));
+    assert.deepEqual(first.centralAnchor, anchor(4, 4));
+    assert.deepEqual(second.centralAnchor, anchor(8, 4));
+    assert.deepEqual(third.centralAnchor, anchor(12, 4));
   })
 
   it("create 1 x 2", () => {
@@ -99,8 +99,8 @@ describe("manufacturer", () => {
     assert.equal(second.down, None);
     assert.equal(second.left, None);
 
-    assert.deepEqual(first.centralAnchor, anchor(0, 0));
-    assert.deepEqual(second.centralAnchor, anchor(0, 4));
+    assert.deepEqual(first.centralAnchor, anchor(4, 4));
+    assert.deepEqual(second.centralAnchor, anchor(4, 8));
   })
 
   it("create 3 x 2", () => {
