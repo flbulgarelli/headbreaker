@@ -107,14 +107,19 @@ class PuzzleCanvas {
   }
 
   /**
-   * @param {number} farness from 0 to 1, how far pieces will be placed from x = 0, y = 0
+   * @param {number} farness from 0 to 1, how far pieces will be placed from x = pieceSize, y = pieceSize
    */
   shuffle(farness = 1) {
-    this.puzzle.shuffle(farness * this.width, farness * this.height)
+    const offset = this.pieceSize;
+    this.puzzle.shuffle(farness * (this.width - offset), farness * (this.height - offset))
+    this.puzzle.translate(offset, offset);
+    this.shuffled = true;
   }
 
   draw() {
-    this.puzzle.autoconnectAll();
+    if (!this.shuffled) {
+      this.puzzle.autoconnectAll();
+    }
     this.layer.draw();
   }
 
