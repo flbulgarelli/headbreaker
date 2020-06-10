@@ -662,9 +662,10 @@ describe("piece", () => {
 
 
 describe("puzzle", () => {
-  it("shuffles puzzle", () => {
-    const puzzle = new Puzzle();
+  let puzzle;
 
+  beforeEach(() => {
+    puzzle = new Puzzle();
     puzzle
       .newPiece({right: Tab})
       .placeAt(anchor(0, 0));
@@ -678,9 +679,50 @@ describe("puzzle", () => {
       .newPiece({up: Tab})
       .placeAt(anchor(6, 3));
 
+  })
+
+  it("autoconnects puzzle", () => {
+    puzzle.autoconnectAll();
+
+    const [a, b, c, d] = puzzle.pieces;
+
+    assert.equal(a.rightConnection, b);
+    assert.equal(b.rightConnection, c);
+    assert.equal(c.downConnection, d);
+  });
+
+  it("shuffles connected puzzle", () => {
     puzzle.autoconnectAll();
     puzzle.shuffle(100, 100);
 
     assert.equal(puzzle.pieces.length, 4);
+  })
+
+  it("shuffles disconnected puzzle", () => {
+    puzzle.shuffle(100, 100);
+    assert.equal(puzzle.pieces.length, 4);
+  })
+
+  it("translates connected puzzle", () => {
+    puzzle.autoconnectAll();
+    puzzle.translate(10, 10);
+
+    const [a, b, c, d] = puzzle.pieces;
+
+    assert.equal(puzzle.pieces.length, 4);
+    assert.equal(a.rightConnection, b);
+    assert.equal(b.rightConnection, c);
+    assert.equal(c.downConnection, d);
+  })
+
+  it("translates disconnected puzzle", () => {
+    puzzle.translate(10, 10);
+    assert.equal(puzzle.pieces.length, 4);
+
+    const [a, b, c, d] = puzzle.pieces;
+
+    assert(!a.rightConnection);
+    assert(!b.rightConnection);
+    assert(!c.downConnection);
   })
 })

@@ -58,6 +58,15 @@ class Puzzle {
   shuffle(maxX, maxY) {
     this.disconnectAll();
     this.pieces.forEach(it => it.placeAt(Anchor.atRandom(maxX, maxY)));
+    this.autoconnectAll();
+  }
+
+  /**
+   * @param {number} dx
+   * @param {number} dy
+   */
+  translate(dx, dy) {
+    this.pieces.forEach(it => it.translate(dx, dy));
   }
 
   get data() {
