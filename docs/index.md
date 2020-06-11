@@ -316,7 +316,7 @@
     data: {
       id: 'tree-kanji',
       color: '#23599E',
-      strokeColor: '#23599E',
+      strokeColor: '#18396B',
       label: { text: '木', fontSize: 70, x: -5, y: 5 }
     }
   });
@@ -326,8 +326,28 @@
     data: {
       id: 'fire-kanji',
       color: '#23599E',
-      strokeColor: '#23599E',
+      strokeColor: '#18396B',
       label: { text: '火', fontSize: 70, x: -5, y: 5 }
+    }
+  });
+
+  labels.withPiece({
+    structure: {right: headbreaker.Tab},
+    data: {
+      id: 'water-kanji',
+      color: '#23599E',
+      strokeColor: '#18396B',
+      label: { text: '水', fontSize: 70, x: -5, y: 5 }
+    }
+  });
+
+  labels.withPiece({
+    structure: {left: headbreaker.Slot},
+    data: {
+      id: 'water-emoji',
+      color: '#EBB34B',
+      strokeColor: '#695024',
+      label: { text: '💧', fontSize: 70, x: 5, y: 0 }
     }
   });
 
@@ -336,6 +356,7 @@
     data: {
       id: 'tree-emoji',
       color: '#EBB34B',
+      strokeColor: '#695024',
       label: { text: '🌳', fontSize: 70, x: 5, y: 0 }
     }
   });
@@ -345,6 +366,7 @@
     data: {
       id: 'fire-emoji',
       color: '#EBB34B',
+      strokeColor: '#695024',
       label: { text: '🔥', fontSize: 70, x: 5, y: 0 }
     }
   });

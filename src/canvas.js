@@ -74,6 +74,10 @@ class PuzzleCanvas {
    * @param {Position?}  options.data.imageOffset
    * @param {string?}    options.data.color
    * @param {Image?}     options.data.image
+   * @param {string?}    options.data.strokeColor
+   * @param {object}     options.data.label
+   * @param {string?}    options.data.label.text
+   * @param {number?}    options.data.label.fontSize
    */
   withPiece({structure, data}) {
     data.targetPosition = data.targetPosition || { x: 0, y: 0 };
@@ -141,14 +145,14 @@ class PuzzleCanvas {
       tension: this.lineSoftness,
       fillPatternImage: this.image || piece.data.image,
       fillPatternOffset: this._imageOffsetFor(piece),
-      stroke: this.strokeColor,
+      stroke: piece.data.strokeColor || this.strokeColor,
       strokeWidth: this.strokeWidth,
       closed: true,
     }));
     group.draggable('true')
 
 
-    if (piece.data.label) {
+    if (piece.data.label && piece.data.label.text) {
       // @ts-ignore
       const label = new Konva.Text({
         x: piece.data.label.x || (group.width() / 2),
