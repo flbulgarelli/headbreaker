@@ -710,6 +710,7 @@ describe("puzzle", () => {
     const [a, b, c, d] = puzzle.pieces;
 
     assert.equal(puzzle.pieces.length, 4);
+
     assert.equal(a.rightConnection, b);
     assert.equal(b.rightConnection, c);
     assert.equal(c.downConnection, d);

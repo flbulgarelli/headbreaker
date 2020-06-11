@@ -10,7 +10,7 @@ class Manufacturer {
   /**
    * @param {import('./sequence').InsertsGenerator} generator
    */
-  configureInsertsGenerator(generator) {
+  withInsertsGenerator(generator) {
     this.insertsGenerator = generator || this.insertsGenerator;
   }
 
@@ -19,7 +19,7 @@ class Manufacturer {
    *
    * @param {import('../src/puzzle').PuzzleStructure} structure
    */
-  configureStructure(structure) {
+  withStructure(structure) {
     this.structure = structure
   }
 
@@ -28,7 +28,7 @@ class Manufacturer {
    * @param {number} width
    * @param {number} height
    */
-  configureDimmensions(width, height) {
+  withDimmensions(width, height) {
     this.width = width;
     this.height = height;
   }

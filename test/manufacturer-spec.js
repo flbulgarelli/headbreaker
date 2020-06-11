@@ -7,8 +7,8 @@ const {flipflop} = require('../src/sequence');
 describe("manufacturer", () => {
   it("create 1 x 1", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.configureDimmensions(1, 1);
-    manufacturer.configureStructure({pieceSize: 10, proximity: 1});
+    manufacturer.withDimmensions(1, 1);
+    manufacturer.withStructure({pieceSize: 10, proximity: 1});
     const puzzle = manufacturer.build();
     const first = puzzle.pieces[0];
 
@@ -28,8 +28,8 @@ describe("manufacturer", () => {
 
   it("create 2 x 1", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.configureDimmensions(2, 1);
-    manufacturer.configureStructure({pieceSize: 10, proximity: 1});
+    manufacturer.withDimmensions(2, 1);
+    manufacturer.withStructure({pieceSize: 10, proximity: 1});
     const puzzle = manufacturer.build();
 
     const first = puzzle.pieces[0];
@@ -53,7 +53,7 @@ describe("manufacturer", () => {
 
   it("create 3 x 1", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.configureDimmensions(3, 1);
+    manufacturer.withDimmensions(3, 1);
     const puzzle = manufacturer.build();
 
     const [first, second, third] = puzzle.pieces;
@@ -82,7 +82,7 @@ describe("manufacturer", () => {
 
   it("create 1 x 2", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.configureDimmensions(1, 2);
+    manufacturer.withDimmensions(1, 2);
     const puzzle = manufacturer.build();
 
     const [first, second] = puzzle.pieces;
@@ -105,7 +105,7 @@ describe("manufacturer", () => {
 
   it("create 3 x 2", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.configureDimmensions(3, 2);
+    manufacturer.withDimmensions(3, 2);
     const puzzle = manufacturer.build();
 
     const [a, b, c, d, e, f] = puzzle.pieces;
@@ -145,8 +145,8 @@ describe("manufacturer", () => {
 
   it("create 6 x 1 with flip flop", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.configureDimmensions(6, 1);
-    manufacturer.configureInsertsGenerator(flipflop);
+    manufacturer.withDimmensions(6, 1);
+    manufacturer.withInsertsGenerator(flipflop);
     const puzzle = manufacturer.build();
     const [a, b, c, d, e, f, g] = puzzle.pieces;
 

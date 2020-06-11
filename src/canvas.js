@@ -75,28 +75,29 @@ class PuzzleCanvas {
    * @param {string?}    options.data.color
    * @param {Image?}     options.data.image
    */
-  newPiece({structure, data}) {
+  withPiece({structure, data}) {
     data.currentPosition = data.currentPosition || data.targetPosition;
-    this._renderPiece(this._buildPiece(structure, data));
+    this._renderPiece(this._newPiece(structure, data));
   }
 
   /**
    * @param {object} options
    * @param {number?} options.horizontalPiecesCount
    * @param {number?} options.verticalPiecesCount
+   * @param {import('./sequence').InsertsGenerator?} options.insertsGenerator
    */
-  buildPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5}) {
+  withPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo}) {
     const manufacturer = new Manufacturer();
-    manufacturer.configureDimmensions(horizontalPiecesCount, verticalPiecesCount);
-    manufacturer.configureInsertsGenerator(twoAndTwo);
-    this.buildPuzzleWithManufacturer(manufacturer);
+    manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
+    manufacturer.withInsertsGenerator(insertsGenerator);
+    this.withManufacturer(manufacturer);
   }
 
   /**
    * @param {Manufacturer} manufacturer
    */
-  buildPuzzleWithManufacturer(manufacturer) {
-    manufacturer.configureStructure(this.puzzleStructure);
+  withManufacturer(manufacturer) {
+    manufacturer.withStructure(this.puzzleStructure);
 
     this._puzzle = manufacturer.build();
     this._puzzle.pieces.forEach(it => {
@@ -223,7 +224,7 @@ class PuzzleCanvas {
     this._puzzle = new Puzzle(this.puzzleStructure);
   }
 
-  _buildPiece(structure, data) {
+  _newPiece(structure, data) {
     let piece = this.puzzle.newPiece(structure);
     piece.carry(data);
     piece.placeAt(anchor(data.currentPosition.x, data.currentPosition.y));
