@@ -9,31 +9,31 @@
   const basic = new headbreaker.Canvas('basic', {width: 500, height: 300, pieceSize: 50, proximity: 10});
   basic.withPiece({
       structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      data: {id: 'a', targetPosition: {x: 50, y: 50}, color: 'red'}
+      data: {id: 'a', currentPosition: {x: 50, y: 50}, color: 'red'}
     });
   basic.withPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-    data: {id: 'b', targetPosition: {x: 100, y: 50}, color: '#00D2FF'}
+    data: {id: 'b', currentPosition: {x: 100, y: 50}, color: '#00D2FF'}
   });
   basic.withPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-    data: {id: 'c', targetPosition: {x: 150, y: 50}, color: '#00D2FF'}
+    data: {id: 'c', currentPosition: {x: 150, y: 50}, color: '#00D2FF'}
   });
   basic.withPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-    data: {id: 'd', targetPosition: {x: 150, y: 100}, color: '#00D2FF'}
+    data: {id: 'd', currentPosition: {x: 150, y: 100}, color: '#00D2FF'}
   });
   basic.withPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-    data: {id: 'e', targetPosition: {x: 250, y: 200}, color: 'green'}
+    data: {id: 'e', currentPosition: {x: 250, y: 200}, color: 'green'}
   });
   basic.withPiece({
     structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
-    data: {id: 'f', targetPosition: {x: 350, y: 250}, color: 'purple'}
+    data: {id: 'f', currentPosition: {x: 350, y: 250}, color: 'purple'}
   });
   basic.withPiece({
     structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-    data: {id: 'g', targetPosition: {x: 100, y: 230}, color: 'black'}
+    data: {id: 'g', currentPosition: {x: 100, y: 230}, color: 'black'}
   });
   basic.draw();
 </script>

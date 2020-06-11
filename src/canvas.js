@@ -69,13 +69,14 @@ class PuzzleCanvas {
    * @param {object} options
    * @param {import('./puzzle').PieceStructure} options.structure
    * @param {object}     options.data
-   * @param {Position}   options.data.targetPosition
+   * @param {Position?}  options.data.targetPosition
    * @param {Position?}  options.data.currentPosition
    * @param {Position?}  options.data.imageOffset
    * @param {string?}    options.data.color
    * @param {Image?}     options.data.image
    */
   withPiece({structure, data}) {
+    data.targetPosition = data.targetPosition || { x: 0, y:0 };
     data.currentPosition = data.currentPosition || data.targetPosition;
     this._renderPiece(this._newPiece(structure, data));
   }
