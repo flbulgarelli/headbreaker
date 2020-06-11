@@ -69,6 +69,27 @@ class Puzzle {
     this.pieces.forEach(it => it.translate(dx, dy));
   }
 
+    /**
+   * @param {TranslationListener} f
+   */
+  onTranslate(f) {
+    this.pieces.forEach(it => it.onTranslate(f));
+  }
+
+  /**
+   * @param {ConnectListener} f
+   */
+  onConnect(f) {
+    this.pieces.forEach(it => it.onConnect(f));
+  }
+
+  /**
+   * @param {DisconnectListener} f
+   */
+  onDisconnect(f) {
+    this.pieces.forEach(it => it.onDisconnect(f));
+  }
+
   get data() {
     return this.pieces.map(it => it.data);
   }
