@@ -24,6 +24,12 @@ function twoAndTwo(n) {
   return n % 4 < 2 ? Tab : Slot;
 }
 
+/**
+ * @type {InsertsGenerator};
+ */
+function random(_) {
+  return Math.random() < 0.5 ? Tab : Slot;
+}
 
 /**
  * @typedef {(index:number) => Insert} InsertsGenerator;
@@ -67,5 +73,6 @@ module.exports = {
   InsertSequence,
   fixed,
   flipflop,
-  twoAndTwo
+  twoAndTwo,
+  random
 }
