@@ -76,7 +76,7 @@ class PuzzleCanvas {
    * @param {Image?}     options.data.image
    */
   withPiece({structure, data}) {
-    data.targetPosition = data.targetPosition || { x: 0, y:0 };
+    data.targetPosition = data.targetPosition || { x: 0, y: 0 };
     data.currentPosition = data.currentPosition || data.targetPosition;
     this._renderPiece(this._newPiece(structure, data));
   }
@@ -146,6 +146,20 @@ class PuzzleCanvas {
       closed: true,
     }));
     group.draggable('true')
+
+
+    if (piece.data.label) {
+      // @ts-ignore
+      const label = new Konva.Text({
+        x: piece.data.label.x || (group.width() / 2),
+        y: piece.data.label.y || (group.height() / 2),
+        text:     piece.data.label.text,
+        fontSize: piece.data.label.fontSize,
+        fontFamily: piece.data.label.fontFamily || 'Sans Serif',
+        fill: piece.data.label.color || 'white',
+      });
+      group.add(label);
+    }
 
     this.layer.add(group);
 

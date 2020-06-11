@@ -298,6 +298,63 @@
 </script>
 
 
+## Labels example
+
+<div id="labels">
+</div>
+
+<script>
+  const labels = new headbreaker.Canvas('labels', {
+    width: 400, height: 400,
+    pieceSize: 80, proximity: 25,
+    borderFill: 10, strokeWidth: 2,
+    lineSoftness: 0.18,
+  });
+
+  labels.withPiece({
+    structure: {right: headbreaker.Tab},
+    data: {
+      id: 'tree-kanji',
+      color: '#23599E',
+      strokeColor: '#23599E',
+      label: { text: '木', fontSize: 70, x: -5, y: 5 }
+    }
+  });
+
+  labels.withPiece({
+    structure: {right: headbreaker.Tab},
+    data: {
+      id: 'fire-kanji',
+      color: '#23599E',
+      strokeColor: '#23599E',
+      label: { text: '火', fontSize: 70, x: -5, y: 5 }
+    }
+  });
+
+  labels.withPiece({
+    structure: {left: headbreaker.Slot},
+    data: {
+      id: 'tree-emoji',
+      color: '#EBB34B',
+      label: { text: '🌳', fontSize: 70, x: 5, y: 0 }
+    }
+  });
+
+  labels.withPiece({
+    structure: {left: headbreaker.Slot},
+    data: {
+      id: 'fire-emoji',
+      color: '#EBB34B',
+      label: { text: '🔥', fontSize: 70, x: 5, y: 0 }
+    }
+  });
+
+  labels.shuffle(0.6);
+  labels.draw();
+</script>
+
+
+
 ## Sounds example
 
 <div id="sound">
