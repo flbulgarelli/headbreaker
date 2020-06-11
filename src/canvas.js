@@ -26,6 +26,10 @@ function currentPositionDiff(model, group) {
 
 /**
  * @typedef {{x: number, y: number}} Position
+ * @typedef {object} Shape
+ * @typedef {object} Group
+ * @typedef {object} Label
+ * @typedef {{shape: Shape, group: Group, label?: Label}} Figure
  */
 class PuzzleCanvas {
 
@@ -63,6 +67,9 @@ class PuzzleCanvas {
     this.lineSoftness = lineSoftness;
     this.proximity = proximity;
     this._initializeLayer(id);
+
+    /** @type {Object<string, Figure>} */
+    this.figures = {};
   }
 
   /**
@@ -105,9 +112,9 @@ class PuzzleCanvas {
     manufacturer.withStructure(this.puzzleStructure);
 
     this._puzzle = manufacturer.build();
-    this._puzzle.pieces.forEach(it => {
+    this._puzzle.pieces.forEach((it, index) => {
       const position = { x: it.centralAnchor.x, y: it.centralAnchor.y }
-      it.carry({targetPosition: position, currentPosition: position});
+      it.carry({targetPosition: position, currentPosition: position, id: index + 1});
       this._renderPiece(it);
     });
   }
@@ -119,27 +126,44 @@ class PuzzleCanvas {
     const offset = this.pieceSize;
     this.puzzle.shuffle(farness * (this.width - offset), farness * (this.height - offset))
     this.puzzle.translate(offset, offset);
-    this.shuffled = true;
+    this.autconnected = true;
   }
 
   draw() {
-    if (!this.shuffled) {
+    if (!this.autconnected) {
+      this.autconnected = true;
       this.puzzle.autoconnectAll();
     }
+    this.redraw();
+  }
+
+  redraw() {
     this.layer.draw();
+  }
+
+  /**
+   * @param {Piece} piece
+   * @returns {Figure}
+   */
+  getFigure(piece) {
+    return this.figures[piece.data.id];
   }
 
   /**
    * @param {Piece} piece
    */
   _renderPiece(piece) {
+    /** @type {Figure} */
+    const figure = {};
+    this.figures[piece.data.id] = figure;
+
     // @ts-ignore
-    var group = new Konva.Group({
+    figure.group = new Konva.Group({
       x: piece.data.currentPosition.x,
       y: piece.data.currentPosition.y
     });
     // @ts-ignore
-    group.add(new Konva.Line({
+    figure.shape = new Konva.Line({
       points: outline.draw(piece, this.pieceSize, this.borderFill),
       fill: piece.data.color,
       tension: this.lineSoftness,
@@ -148,32 +172,32 @@ class PuzzleCanvas {
       stroke: piece.data.strokeColor || this.strokeColor,
       strokeWidth: this.strokeWidth,
       closed: true,
-    }));
-    group.draggable('true')
-
+    });
+    figure.group.add(figure.shape);
+    figure.group.draggable('true');
 
     if (piece.data.label && piece.data.label.text) {
       // @ts-ignore
-      const label = new Konva.Text({
-        x: piece.data.label.x || (group.width() / 2),
-        y: piece.data.label.y || (group.height() / 2),
+      figure.label = new Konva.Text({
+        x: piece.data.label.x || (figure.group.width() / 2),
+        y: piece.data.label.y || (figure.group.height() / 2),
         text:     piece.data.label.text,
         fontSize: piece.data.label.fontSize,
         fontFamily: piece.data.label.fontFamily || 'Sans Serif',
         fill: piece.data.label.color || 'white',
       });
-      group.add(label);
+      figure.group.add(figure.label);
     }
 
-    this.layer.add(group);
+    this.layer.add(figure.group);
 
-    this._bindGroupToPiece(group, piece);
-    this._bindPieceToGroup(piece, group);
+    this._bindGroupToPiece(figure.group, piece);
+    this._bindPieceToGroup(piece, figure.group);
   }
 
   /**
    * Configures updates from piece into group
-   * @param {*} group
+   * @param {Group} group
    * @param {Piece} piece
    */
   _bindGroupToPiece(group, piece) {
@@ -187,7 +211,7 @@ class PuzzleCanvas {
   /**
    * * Configures updates from group into piece
    * @param {Piece} piece
-   * @param {*} group
+   * @param {Group} group
    */
   _bindPieceToGroup(piece, group) {
     group.on('mouseover', () => {
@@ -201,12 +225,12 @@ class PuzzleCanvas {
       if (!vector.isNull(dx, dy)) {
         piece.drag(dx, dy, true);
         commitCurrentPosition(piece, group);
-        this.layer.draw();
+        this.redraw();
       }
     });
     group.on('dragend', () => {
       piece.drop();
-      this.layer.draw();
+      this.redraw();
     });
   }
 

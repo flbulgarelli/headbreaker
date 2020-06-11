@@ -1,6 +1,8 @@
 <script src="js/headbreaker.js"></script>
 
-## Basic example
+# Samples
+
+## Basic
 
 <div id="basic">
 </div>
@@ -8,7 +10,7 @@
 <script>
   const basic = new headbreaker.Canvas('basic', {width: 500, height: 300, pieceSize: 50, proximity: 10});
   basic.withPiece({
-      structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+      structure: {right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
       data: {id: 'a', currentPosition: {x: 50, y: 50}, color: 'red'}
     });
   basic.withPiece({
@@ -20,7 +22,7 @@
     data: {id: 'c', currentPosition: {x: 150, y: 50}, color: '#00D2FF'}
   });
   basic.withPiece({
-    structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+    structure: {up: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
     data: {id: 'd', currentPosition: {x: 150, y: 100}, color: '#00D2FF'}
   });
   basic.withPiece({
@@ -38,7 +40,7 @@
   basic.draw();
 </script>
 
-## Soft lines example
+## Soft lines
 
 <div id="soft">
 </div>
@@ -51,7 +53,7 @@
   });
 
   soft.withPiece({
-      structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
+      structure: {right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
       data: {id: 'a', targetPosition: {x: 50, y: 50}, color: 'red'}
     });
   soft.withPiece({
@@ -63,7 +65,7 @@
     data: {id: 'c', targetPosition: {x: 150, y: 50}, color: '#00D2FF'}
   });
   soft.withPiece({
-    structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
+    structure: {up: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
     data: {id: 'd', targetPosition: {x: 150, y: 100}, color: '#00D2FF'}
   });
   soft.withPiece({
@@ -83,7 +85,7 @@
 
 
 
-## Perfect match example
+## Perfect match
 
 <div id="perfect">
 </div>
@@ -97,31 +99,31 @@
     lineSoftness: 0.0 });
 
   perfect.withPiece({
-    structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
+    structure: {right: headbreaker.Tab, down: headbreaker.Slot},
     data: {id: 'a', targetPosition: {x: 100, y: 100}, color: '#0EC430'}
   });
   perfect.withPiece({
-    structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot},
+    structure: {right: headbreaker.Slot, left: headbreaker.Slot},
     data: {id: 'b', targetPosition: {x: 200, y: 100}, color: '#098520'}
   });
   perfect.withPiece({
-    structure: {up: headbreaker.None, right: headbreaker.None, down: headbreaker.Tab, left: headbreaker.Tab},
+    structure: {down: headbreaker.Tab, left: headbreaker.Tab},
     data: {id: 'c', targetPosition: {x: 330, y: 80}, color: '#04380D'}
   });
   perfect.withPiece({
-    structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.None, left: headbreaker.None},
-    data: {id: 'c', targetPosition: {x: 480, y: 130}, color: '#054511'}
+    structure: {up: headbreaker.Slot},
+    data: {id: 'd', targetPosition: {x: 480, y: 130}, color: '#054511'}
   });
   perfect.withPiece({
-    structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.None},
-    data: {id: 'c', targetPosition: {x: 530, y: 80}, color: '#04330C'}
+    structure: {up: headbreaker.Tab},
+    data: {id: 'e', targetPosition: {x: 530, y: 80}, color: '#04330C'}
   });
 
   perfect.draw();
 </script>
 
 
-## Background example
+## Background
 
 
 <div id="background">
@@ -139,115 +141,115 @@
     });
 
     background.withPiece({
-      structure: {up: headbreaker.None, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
+      structure: {right: headbreaker.Tab, down: headbreaker.Slot},
       data: {id: 'a', targetPosition: {x: 100, y: 100}},
     });
     background.withPiece({
-      structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
+      structure: {right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
       data: {id: 'b', targetPosition: {x: 200, y: 100}},
     });
     background.withPiece({
-      structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+      structure: {right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
       data: {id: 'c', targetPosition: {x: 300, y: 100}},
     });
     background.withPiece({
-      structure: {up: headbreaker.None, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      data: {id: 'c', targetPosition: {x: 400, y: 100}},
+      structure: {right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
+      data: {id: 'd', targetPosition: {x: 400, y: 100}},
     });
     background.withPiece({
-      structure: {up: headbreaker.None, right: headbreaker.None, down: headbreaker.Tab, left: headbreaker.Tab},
-      data: {id: 'c', targetPosition: {x: 500, y: 100}},
+      structure: {down: headbreaker.Tab, left: headbreaker.Tab},
+      data: {id: 'e', targetPosition: {x: 500, y: 100}},
     });
 
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None},
-      data: {id: 'a', targetPosition: {x: 100, y: 200}},
+      data: {id: 'f', targetPosition: {x: 100, y: 200}},
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      data: {id: 'b', targetPosition: {x: 200, y: 200}},
+      data: {id: 'g', targetPosition: {x: 200, y: 200}},
     });
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab},
-      data: {id: 'c', targetPosition: {x: 300, y: 200}},
+      data: {id: 'h', targetPosition: {x: 300, y: 200}},
     });
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      data: {id: 'c', targetPosition: {x: 400, y: 200}},
+      data: {id: 'i', targetPosition: {x: 400, y: 200}},
     });
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-      data: {id: 'c', targetPosition: {x: 500, y: 200}},
+      data: {id: 'j', targetPosition: {x: 500, y: 200}},
     });
 
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
-      data: {id: 'a', targetPosition: {x: 100, y: 300}},
+      data: {id: 'k', targetPosition: {x: 100, y: 300}},
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      data: {id: 'b', targetPosition: {x: 200, y: 300}},
+      data: {id: 'l', targetPosition: {x: 200, y: 300}},
     });
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Slot},
-      data: {id: 'c', targetPosition: {x: 300, y: 300}},
+      data: {id: 'm', targetPosition: {x: 300, y: 300}},
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab},
-      data: {id: 'c', targetPosition: {x: 400, y: 300}},
+      data: {id: 'n', targetPosition: {x: 400, y: 300}},
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot},
-      data: {id: 'c', targetPosition: {x: 500, y: 300}},
+      data: {id: 'o', targetPosition: {x: 500, y: 300}},
     });
 
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None},
-      data: {id: 'a', targetPosition: {x: 100, y: 400}},
+      data: {id: 'p', targetPosition: {x: 100, y: 400}},
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab},
-      data: {id: 'b', targetPosition: {x: 200, y: 400}},
+      data: {id: 'q', targetPosition: {x: 200, y: 400}},
     });
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot},
-      data: {id: 'c', targetPosition: {x: 300, y: 400}},
+      data: {id: 'r', targetPosition: {x: 300, y: 400}},
     });
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot},
-      data: {id: 'c', targetPosition: {x: 400, y: 400}},
+      data: {id: 's', targetPosition: {x: 400, y: 400}},
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Tab},
-      data: {id: 'c', targetPosition: {x: 500, y: 400}, currentPosition: {x: 613, y: 386}}
+      data: {id: 't', targetPosition: {x: 500, y: 400}, currentPosition: {x: 613, y: 386}}
     });
 
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.None},
-      data: {id: 'a', targetPosition: {x: 100, y: 500}}
+      data: {id: 'u', targetPosition: {x: 100, y: 500}}
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
-      data: {id: 'b', targetPosition: {x: 200, y: 500}}
+      data: {id: 'v', targetPosition: {x: 200, y: 500}}
     });
     background.withPiece({
       structure: {up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot},
-      data: {id: 'c', targetPosition: {x: 300, y: 500}}
+      data: {id: 'w', targetPosition: {x: 300, y: 500}}
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot},
-      data: {id: 'c', targetPosition: {x: 400, y: 500}, currentPosition: {x: 425, y: 530}}
+      data: {id: 'x', targetPosition: {x: 400, y: 500}, currentPosition: {x: 425, y: 530}}
     });
     background.withPiece({
       structure: {up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.Tab},
-      data: {id: 'c', targetPosition: {x: 500, y: 500}, currentPosition: {x: 570, y: 560}}
+      data: {id: 'y', targetPosition: {x: 500, y: 500}, currentPosition: {x: 570, y: 560}}
     });
     background.draw();
   }
 </script>
 
 
-## Autogenerated example
+## Autogenerated
 
 <div id="autogen">
 </div>
@@ -273,7 +275,7 @@
 
 
 
-## Randomized positions example
+## Randomized positions
 
 <div id="randomized">
 </div>
@@ -298,7 +300,7 @@
 </script>
 
 
-## Labels example
+## Labels
 
 <div id="labels">
 </div>
@@ -377,7 +379,7 @@
 
 
 
-## Sounds example
+## Sound and visual feedback
 
 <div id="sound">
 </div>
@@ -392,6 +394,7 @@
         pieceSize: 100, proximity: 20,
         borderFill: 10, strokeWidth: 1.5,
         lineSoftness: 0.18, image: pettoruti,
+        strokeColor: 'black'
       });
 
       sound.withPuzzle({
@@ -402,7 +405,13 @@
       sound.draw();
 
       sound.puzzle.onConnect((it) => {
+        sound.getFigure(it).shape.stroke('yellow');
         audio.play();
+        sound.redraw();
+        setTimeout(() => {
+          sound.getFigure(it).shape.stroke('black');
+          sound.redraw();
+        }, 200);
       });
 
       sound.puzzle.onDisconnect((it) => {
