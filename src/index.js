@@ -3,6 +3,8 @@ const {anchor, Anchor} = require('./anchor')
 const {Puzzle, Piece, Tab, Slot, None} = require('./puzzle');
 const outline = require('./outline');
 const Canvas = require('./canvas');
+const Manufacturer = require('./manufacturer');
+const sequence = require('./sequence');
 
 module.exports = {
   anchor,
@@ -10,9 +12,11 @@ module.exports = {
   Puzzle,
   Piece,
   Canvas,
+  Manufacturer,
   Tab,
   Slot,
   None,
   vector,
-  outline
+  outline,
+  sequence
 }
