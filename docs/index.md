@@ -292,7 +292,7 @@
     });
 
     randomized.withPuzzle({
-      insertSequence: headbreaker.sequence.flipflop
+      insertsGenerator: headbreaker.sequence.flipflop
     });
     randomized.shuffle(0.7);
     randomized.draw();
@@ -300,7 +300,7 @@
 </script>
 
 
-## Labels
+## Labels and custom stroke colors
 
 <div id="labels">
 </div>
@@ -399,7 +399,7 @@
 
       sound.withPuzzle({
         horizontalPiecesCount: 6,
-        insertSequence: headbreaker.sequence.random
+        insertsGenerator: headbreaker.sequence.random
       });
 
       sound.draw();

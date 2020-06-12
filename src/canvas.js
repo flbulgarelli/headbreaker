@@ -1,30 +1,20 @@
-const Konva = require('konva');
 const vector = require('./vector');
-const outline = require('./outline');
 const {Puzzle, Piece} = require('./puzzle');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
 
 /**
- *
- * @param {Piece} model
- * @param {*} group
- */
-function commitCurrentPosition(model, group) {
-  model.data.currentPosition.x = group.x();
-  model.data.currentPosition.y = group.y();
-}
-
-/**
- * @param {Piece} model
- * @param {*} group
- */
-function currentPositionDiff(model, group) {
-  return vector.diff(group.x(),group.y(), model.data.currentPosition.x, model.data.currentPosition.y);
-}
-
-/**
+ * @typedef {{
+ *  initialize(canvas: PuzzleCanvas, id: string): void,
+ *  draw(canvas: PuzzleCanvas): void,
+ *  sketch(canvas: PuzzleCanvas, piece: Piece, figure: Figure): void,
+ *  label(canvas: PuzzleCanvas, piece: Piece, figure: Figure): void,
+ *  physicalTranslate(canvas: PuzzleCanvas, group: Group, piece: Piece),
+ *  logicalTranslate(canvas: PuzzleCanvas, piece: Piece, group: Group): void,
+ *  onDrag(canvas: PuzzleCanvas, piece: Piece, group: Group, f:(dx: number, dy: number) => void): void,
+ *  onDragEnd(canvas: PuzzleCanvas, piece: Piece, group: Group, f:() => void): void
+ * }} Painter
  * @typedef {{x: number, y: number}} Position
  * @typedef {object} Shape
  * @typedef {object} Group
@@ -34,7 +24,7 @@ function currentPositionDiff(model, group) {
 class PuzzleCanvas {
 
   /**
-   * @param {string} id  the kanvas layer id
+   * @param {string} id  the html id of the element where to place the canvas
    * @param {object} options
    * @param {number} options.width
    * @param {number} options.height
@@ -44,7 +34,8 @@ class PuzzleCanvas {
    * @param {number?} options.strokeWidth
    * @param {string?} options.strokeColor
    * @param {number?} options.lineSoftness how soft the line will be
-   * @param {Image?} options.image an optional background image for the puzzle that will be split across all pieces.
+   * @param {Image?}  options.image an optional background image for the puzzle that will be split across all pieces.
+   * @param {Painter?} options.painter the Painter object used to actually draw figures in canvas
    *
    */
   constructor(id, {
@@ -56,7 +47,8 @@ class PuzzleCanvas {
       strokeWidth = 3,
       strokeColor = 'black',
       lineSoftness = 0,
-      image = null}) {
+      image = null,
+      painter = null }) {
     this.width = width;
     this.height = height;
     this.pieceSize = pieceSize;
@@ -66,8 +58,9 @@ class PuzzleCanvas {
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
     this.proximity = proximity;
-    this._initializeLayer(id);
-
+    /** @type {Painter} */
+    this._painter = painter || new window['headbreaker']['painters']['Konva']();
+    this._painter.initialize(this, id);
     /** @type {Object<string, Figure>} */
     this.figures = {};
   }
@@ -76,6 +69,7 @@ class PuzzleCanvas {
    * @param {object} options
    * @param {import('./puzzle').PieceStructure} options.structure
    * @param {object}     options.data
+   * @param {string?}    options.data.id
    * @param {Position?}  options.data.targetPosition
    * @param {Position?}  options.data.currentPosition
    * @param {Position?}  options.data.imageOffset
@@ -138,7 +132,7 @@ class PuzzleCanvas {
   }
 
   redraw() {
-    this.layer.draw();
+    this._painter.draw(this);
   }
 
   /**
@@ -154,42 +148,14 @@ class PuzzleCanvas {
    */
   _renderPiece(piece) {
     /** @type {Figure} */
-    const figure = {};
+    const figure = {label: null, group: null, shape: null};
     this.figures[piece.data.id] = figure;
 
-    // @ts-ignore
-    figure.group = new Konva.Group({
-      x: piece.data.currentPosition.x,
-      y: piece.data.currentPosition.y
-    });
-    // @ts-ignore
-    figure.shape = new Konva.Line({
-      points: outline.draw(piece, this.pieceSize, this.borderFill),
-      fill: piece.data.color,
-      tension: this.lineSoftness,
-      fillPatternImage: this.image || piece.data.image,
-      fillPatternOffset: this._imageOffsetFor(piece),
-      stroke: piece.data.strokeColor || this.strokeColor,
-      strokeWidth: this.strokeWidth,
-      closed: true,
-    });
-    figure.group.add(figure.shape);
-    figure.group.draggable('true');
+    this._painter.sketch(this, piece, figure);
 
     if (piece.data.label && piece.data.label.text) {
-      // @ts-ignore
-      figure.label = new Konva.Text({
-        x: piece.data.label.x || (figure.group.width() / 2),
-        y: piece.data.label.y || (figure.group.height() / 2),
-        text:     piece.data.label.text,
-        fontSize: piece.data.label.fontSize,
-        fontFamily: piece.data.label.fontFamily || 'Sans Serif',
-        fill: piece.data.label.color || 'white',
-      });
-      figure.group.add(figure.label);
+      this._painter.label(this, piece, figure);
     }
-
-    this.layer.add(figure.group);
 
     this._bindGroupToPiece(figure.group, piece);
     this._bindPieceToGroup(piece, figure.group);
@@ -202,9 +168,8 @@ class PuzzleCanvas {
    */
   _bindGroupToPiece(group, piece) {
     piece.onTranslate((_dx, _dy) => {
-      group.x(piece.centralAnchor.x);
-      group.y(piece.centralAnchor.y);
-      commitCurrentPosition(piece, group);
+      this._painter.physicalTranslate(this, group, piece);
+      this._painter.logicalTranslate(this, piece, group);
     });
   }
 
@@ -214,24 +179,17 @@ class PuzzleCanvas {
    * @param {Group} group
    */
   _bindPieceToGroup(piece, group) {
-    group.on('mouseover', () => {
-      document.body.style.cursor = 'pointer';
-    });
-    group.on('mouseout', () => {
-      document.body.style.cursor = 'default';
-    });
-    group.on('dragmove', () => {
-      let [dx, dy] = currentPositionDiff(piece, group);
+    this._painter.onDrag(this, piece, group, (dx, dy) => {
       if (!vector.isNull(dx, dy)) {
         piece.drag(dx, dy, true);
-        commitCurrentPosition(piece, group);
+        this._painter.logicalTranslate(this, piece, group);
         this.redraw();
       }
     });
-    group.on('dragend', () => {
+    this._painter.onDragEnd(this, piece, group, () => {
       piece.drop();
       this.redraw();
-    });
+    })
   }
 
   /**
@@ -244,23 +202,6 @@ class PuzzleCanvas {
     } else {
       return model.data.imageOffset;
     }
-  }
-
-  /**
-   * @param {string} id
-   */
-  _initializeLayer(id) {
-    // @ts-ignore
-    var stage = new Konva.Stage({
-      container: id,
-      width: this.width,
-      height: this.height
-    });
-
-    // @ts-ignore
-    var layer = new Konva.Layer();
-    stage.add(layer);
-    this.layer = layer;
   }
 
   _initializeEmptyPuzzle() {

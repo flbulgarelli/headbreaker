@@ -18,5 +18,9 @@ module.exports = {
   None,
   vector,
   outline,
-  sequence
+  sequence,
+  painters: {
+    Dummy: require('./dummy-painter'),
+    Konva: require('./konva-painter')
+  }
 }
