@@ -526,7 +526,7 @@ const None = {
 }
 
 /**
- * @exports Puzzle
+ * @module Puzzle
  */
 module.exports = {
   None,

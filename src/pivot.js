@@ -9,4 +9,7 @@ function pivot(one, other, back = false) {
   return back ? [one, other] : [other, one];
 }
 
+/**
+ * @module pivot
+ */
 module.exports = pivot;

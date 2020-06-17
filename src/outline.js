@@ -38,6 +38,9 @@ function draw(piece, size = 50, borderFill = 0) {
   ].map(it => it * size / 5)
 }
 
+/**
+ * @module outline
+ */
 module.exports = {
   draw
 }

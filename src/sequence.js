@@ -69,6 +69,10 @@ class InsertSequence {
   }
 }
 
+
+/**
+ * @module sequence
+ */
 module.exports = {
   InsertSequence,
   fixed,

@@ -75,4 +75,7 @@ class DummyPainter {
   }
 }
 
+/**
+ * @module DummyPainter
+ */
 module.exports = DummyPainter;

@@ -89,6 +89,9 @@ function anchor(x, y) {
 }
 
 
+/**
+ * @module
+ */
 module.exports = {
   anchor,
   Anchor

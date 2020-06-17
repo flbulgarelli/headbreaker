@@ -231,4 +231,7 @@ class PuzzleCanvas {
 
 }
 
+/**
+ * @module PuzzleCanvas
+ */
 module.exports = PuzzleCanvas

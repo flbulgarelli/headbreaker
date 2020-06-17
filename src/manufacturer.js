@@ -84,4 +84,7 @@ class Manufacturer {
   }
 }
 
+/**
+ * @module Manufacturer
+ */
 module.exports = Manufacturer;

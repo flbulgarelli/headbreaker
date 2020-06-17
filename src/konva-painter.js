@@ -13,7 +13,7 @@ function currentPositionDiff(model, group) {
   return vector.diff(group.x(),group.y(), model.data.currentPosition.x, model.data.currentPosition.y);
 }
 
-class KonvasPainter {
+class KonvaPainter {
   /** @typedef {import('./canvas').Figure} Figure */
   /** @typedef {import('./canvas').Group} Group */
 
@@ -143,5 +143,7 @@ class KonvasPainter {
   }
 }
 
-
-module.exports = KonvasPainter;
+/**
+ * @module KonvaPainter
+ */
+module.exports = KonvaPainter;
