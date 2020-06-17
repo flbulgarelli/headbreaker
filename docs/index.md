@@ -132,10 +132,69 @@ xul.onload = () => {
 
 ## Randomized positions
 
+### Code
+
+```javascript
+let dali = new Image();
+dali.src = 'static/dali.jpg';
+dali.onload = () => {
+  const randomized = new headbreaker.Canvas('randomized-canvas', {
+    width: 800, height: 800,
+    pieceSize: 100, proximity: 20,
+    borderFill: 10, strokeWidth: 2,
+    lineSoftness: 0.12, image: dali
+  });
+  randomized.withPuzzle({
+    insertsGenerator: headbreaker.sequence.flipflop
+  });
+  randomized.shuffle(0.7);
+  randomized.draw();
+}
+```
+
+### Demo
+
 <div id="randomized-canvas">
 </div>
 
 ## Labels
+
+### Code
+
+```javascript
+const labels = new headbreaker.Canvas('labels-canvas', {
+  width: 400, height: 400,
+  pieceSize: 80, proximity: 25,
+  borderFill: 10, strokeWidth: 2,
+  lineSoftness: 0.18,
+});
+
+labels.withPiece({
+  structure: { right: headbreaker.Tab },
+  data: {
+    id: 'tree-kanji',
+    color: '#23599E',
+    strokeColor: '#18396B',
+    label: { text: '木', fontSize: 70, x: -5, y: 5 }
+  }
+});
+
+labels.withPiece({
+  structure: { left: headbreaker.Slot },
+  data: {
+    id: 'tree-emoji',
+    color: '#EBB34B',
+    strokeColor: '#695024',
+    label: { text: '🌳', fontSize: 70, x: 5, y: 0 }
+  }
+});
+
+// ... more pieces ...
+labels.shuffle(0.6);
+labels.draw();
+```
+
+### Demo
 
 <div id="labels-canvas">
 </div>
