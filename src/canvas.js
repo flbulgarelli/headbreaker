@@ -153,7 +153,10 @@ class PuzzleCanvas {
 
     this._painter.sketch(this, piece, figure);
 
-    if (piece.data.label && piece.data.label.text) {
+    const label = piece.data.label;
+    if (label && label.text) {
+      label.fontSize = label.fontSize || this.pieceSize * 0.55;
+      label.y = label.y || (this.pieceSize - label.fontSize) / 2;
       this._painter.label(this, piece, figure);
     }
 
