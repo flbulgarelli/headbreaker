@@ -207,10 +207,63 @@ xul.onload = () =&gt; {
 </div>
 
 <h2 id="randomized-positions">Randomized positions</h2>
+<h3 id="code_4">Code</h3>
+<pre><code class="javascript">let dali = new Image();
+dali.src = 'static/dali.jpg';
+dali.onload = () =&gt; {
+  const randomized = new headbreaker.Canvas('randomized-canvas', {
+    width: 800, height: 800,
+    pieceSize: 100, proximity: 20,
+    borderFill: 10, strokeWidth: 2,
+    lineSoftness: 0.12, image: dali
+  });
+  randomized.withPuzzle({
+    insertsGenerator: headbreaker.sequence.flipflop
+  });
+  randomized.shuffle(0.7);
+  randomized.draw();
+}
+</code></pre>
+
+<h3 id="demo_4">Demo</h3>
 <div id="randomized-canvas">
 </div>
 
 <h2 id="labels">Labels</h2>
+<h3 id="code_5">Code</h3>
+<pre><code class="javascript">const labels = new headbreaker.Canvas('labels-canvas', {
+  width: 400, height: 400,
+  pieceSize: 80, proximity: 25,
+  borderFill: 10, strokeWidth: 2,
+  lineSoftness: 0.18,
+});
+
+labels.withPiece({
+  structure: { right: headbreaker.Tab },
+  data: {
+    id: 'tree-kanji',
+    color: '#23599E',
+    strokeColor: '#18396B',
+    label: { text: '木', fontSize: 70, x: -5, y: 5 }
+  }
+});
+
+labels.withPiece({
+  structure: { left: headbreaker.Slot },
+  data: {
+    id: 'tree-emoji',
+    color: '#EBB34B',
+    strokeColor: '#695024',
+    label: { text: '🌳', fontSize: 70, x: 5, y: 0 }
+  }
+});
+
+// ... more pieces ...
+labels.shuffle(0.6);
+labels.draw();
+</code></pre>
+
+<h3 id="demo_5">Demo</h3>
 <div id="labels-canvas">
 </div>
 
@@ -306,5 +359,5 @@ xul.onload = () =&gt; {
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-06-17 15:30:06
+Build Date UTC : 2020-06-17 21:23:47
 -->
