@@ -77,14 +77,14 @@ class Puzzle {
   }
 
   /**
-   * @param {ConnectListener} f
+   * @param {ConnectionListener} f
    */
   onConnect(f) {
     this.pieces.forEach(it => it.onConnect(f));
   }
 
   /**
-   * @param {DisconnectListener} f
+   * @param {ConnectionListener} f
    */
   onDisconnect(f) {
     this.pieces.forEach(it => it.onDisconnect(f));
@@ -97,8 +97,7 @@ class Puzzle {
 
 /**
  * @typedef {(piece: Piece, dx: number, dy: number) => void} TranslationListener
- * @typedef {(piece: Piece, target: Piece) => void} ConnectListener
- * @typedef {(piece: Piece) => void} DisconnectListener
+ * @typedef {(piece: Piece, target: Piece) => void} ConnectionListener
  * @typedef {{up?: Insert, down?: Insert, left?: Insert, right?: Insert}} PieceStructure
  */
 class Piece {
@@ -117,9 +116,9 @@ class Piece {
   _initializeListeners() {
     /** @type {TranslationListener[]} */
     this.translateListeners = [];
-    /** @type {ConnectListener[]} */
+    /** @type {ConnectionListener[]} */
     this.connectListeners = [];
-    /** @type {DisconnectListener[]} */
+    /** @type {ConnectionListener[]} */
     this.disconnectListeners = [];
   }
 
@@ -157,14 +156,14 @@ class Piece {
   }
 
   /**
-   * @param {ConnectListener} f
+   * @param {ConnectionListener} f
    */
   onConnect(f) {
     this.connectListeners.push(f);
   }
 
   /**
-   * @param {DisconnectListener} f
+   * @param {ConnectionListener} f
    */
   onDisconnect(f) {
     this.disconnectListeners.push(f);
@@ -174,19 +173,24 @@ class Piece {
    * @param {number} dx
    * @param {number} dy
    */
-  fireOnTranslate(dx, dy) {
+  fireTranslate(dx, dy) {
     this.translateListeners.forEach(it => it(this, dx, dy))
   }
 
   /**
    * @param {Piece} other
    */
-  fireOnConnect(other) {
+  fireConnect(other) {
     this.connectListeners.forEach(it => it(this, other))
   }
 
-  fireOnDisconnect() {
-    this.disconnectListeners.forEach(it => it(this))
+    /**
+   * @param {Piece[]} others
+   */
+  fireDisconnect(others) {
+    others.forEach(other => {
+      this.disconnectListeners.forEach(it => it(this, other))
+    });
   }
 
   /**
@@ -201,7 +205,7 @@ class Piece {
     other.attractVertically(this, back);
     this.downConnection = other;
     other.upConnection = this;
-    this.fireOnConnect(other);
+    this.fireConnect(other);
   }
 
   /**
@@ -229,7 +233,7 @@ class Piece {
     other.attractHorizontally(this, back);
     this.rightConnection = other;
     other.leftConnection = this;
-    this.fireOnConnect(other);
+    this.fireConnect(other);
   }
 
   /**
@@ -280,6 +284,7 @@ class Piece {
     if (!this.connected) {
       return;
     }
+    const connections = this.connections;
 
     if (this.upConnection) {
       this.upConnection.downConnection = null;
@@ -303,7 +308,7 @@ class Piece {
       this.rightConnection = null;
     }
 
-    this.fireOnDisconnect();
+    this.fireDisconnect(connections);
   }
 
   /**
@@ -316,7 +321,7 @@ class Piece {
 
     if (previous) {
       const delta = anchor.diff(previous);
-      this.fireOnTranslate(...delta);
+      this.fireTranslate(...delta);
     }
   }
 
@@ -329,7 +334,7 @@ class Piece {
     if (!vector.isNull(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
       if (!quiet) {
-        this.fireOnTranslate(dx, dy);
+        this.fireTranslate(dx, dy);
       }
     }
   }

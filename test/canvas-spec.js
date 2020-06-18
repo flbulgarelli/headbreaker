@@ -115,13 +115,13 @@ describe("PuzzleCanvas", () => {
     });
 
     canvas.withPuzzle({
-      verticalPiecesCount: 2,
+      verticalPiecesCount: 1,
       horizontalPiecesCount: 2,
       insertsGenerator: flipflop
     });
     canvas.draw();
 
-    assert.equal(canvas['__nullLayer__'].figures, 4);
+    assert.equal(canvas['__nullLayer__'].figures, 2);
     assert.equal(canvas['__nullLayer__'].drawn, true);
 
     const [first, second] = canvas.puzzle.pieces;
@@ -134,5 +134,36 @@ describe("PuzzleCanvas", () => {
 
     first.connectHorizontallyWith(second);
     first.disconnect();
+  })
+
+  it("can listen to multiple disconnect events with figures", (done) => {
+    const canvas = new PuzzleCanvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, strokeColor: 'red',
+      image: null, painter: painter
+    });
+
+    canvas.withPuzzle({
+      verticalPiecesCount: 3,
+      horizontalPiecesCount: 3,
+      insertsGenerator: flipflop
+    });
+    canvas.draw();
+
+    assert.equal(canvas['__nullLayer__'].figures, 9);
+    assert.equal(canvas['__nullLayer__'].drawn, true);
+
+    const center = canvas.puzzle.pieces[4];
+
+    let count = 0;
+    canvas.onDisconnect(() => {
+      count++;
+      if (count === 4) {
+        done();
+      }
+    })
+    center.disconnect();
   })
 });

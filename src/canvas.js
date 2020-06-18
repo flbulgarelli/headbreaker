@@ -20,6 +20,8 @@ const {twoAndTwo} = require('./sequence');
  * @typedef {object} Group
  * @typedef {object} Label
  * @typedef {{shape: Shape, group: Group, label?: Label}} Figure
+ * @typedef {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} CanvasConnectionListener
+ * @typedef {(piece: Piece, figure: Figure, dx: number, dy: number) => void} CanvasTranslationListener
  */
 class PuzzleCanvas {
 
@@ -136,7 +138,7 @@ class PuzzleCanvas {
   }
 
   /**
-   * @param {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} f
+   * @param {CanvasConnectionListener} f
    */
   onConnect(f) {
     this.puzzle.onConnect((piece, target) => {
@@ -145,16 +147,16 @@ class PuzzleCanvas {
   }
 
   /**
-   * @param {(piece: Piece, figure: Figure) => void} f
+   * @param {CanvasConnectionListener} f
    */
   onDisconnect(f) {
-    this.puzzle.onDisconnect((piece) => {
-      f(piece, this.getFigure(piece));
+    this.puzzle.onDisconnect((piece, target) => {
+      f(piece, this.getFigure(piece), target, this.getFigure(target));
     });
   }
 
   /**
-   * @param {(piece: Piece, figure: Figure, dx: number, dy: number) => void} f
+   * @param {CanvasTranslationListener} f
    */
   onTranslate(f) {
     this.puzzle.onTranslate((piece, dx, dy) => {
