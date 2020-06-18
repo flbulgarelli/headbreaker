@@ -201,6 +201,55 @@ labels.draw();
 
 ## Sound and visual feedback
 
+#### Code
+
+```javascript
+var audio = new Audio('static/connect.wav');
+let berni = new Image();
+berni.src = 'static/berni.jpg';
+berni.onload = () => {
+  const sound = new headbreaker.Canvas('sound-canvas', {
+    width: 800, height: 800,
+    pieceSize: 100, proximity: 20,
+    borderFill: 10, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: berni,
+    strokeColor: 'black'
+  });
+
+  sound.withPuzzle({
+    horizontalPiecesCount: 6,
+    insertsGenerator: headbreaker.sequence.random
+  });
+
+  sound.draw();
+
+  sound.onConnect((_piece, figure, _target, targetFigure) => {
+    // play sound
+    audio.play();
+
+    // paint borders on click
+    // of conecting and conected figures
+    figure.shape.stroke('yellow');
+    targetFigure.shape.stroke('yellow');
+    sound.redraw();
+
+    setTimeout(() => {
+      // restore border colors
+      // later
+      figure.shape.stroke('black');
+      targetFigure.shape.stroke('black');
+      sound.redraw();
+    }, 200);
+  });
+
+  sound.onDisconnect((it) => {
+    audio.play();
+  });
+}
+```
+
+### Demo
+
 <div id="sound-canvas">
 </div>
 

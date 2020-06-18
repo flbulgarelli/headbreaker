@@ -277,8 +277,8 @@ class Piece {
   }
 
   disconnect() {
-    if (this.connected) {
-      this.fireOnDisconnect();
+    if (!this.connected) {
+      return;
     }
 
     if (this.upConnection) {
@@ -302,6 +302,8 @@ class Piece {
       this.rightConnection.leftConnection = null;
       this.rightConnection = null;
     }
+
+    this.fireOnDisconnect();
   }
 
   /**
