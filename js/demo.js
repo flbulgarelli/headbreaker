@@ -404,15 +404,17 @@ dynamic.withPiece({
 });
 dynamic.draw();
 
-dynamic.onConnect((piece, _figure, _target, _targetFigure) => {
-  piece.data.label.text = Number(piece.data.label.text) + 1
+dynamic.onConnect((piece, figure, _target, _targetFigure) => {
+  piece.data.label.text = Number(piece.data.label.text) + 1;
+  figure.label.text(piece.data.label.text);
   console.log(piece.data);
   dynamic.redraw();
 });
 
-dynamic.puzzle.onDisconnect((piece, _figure) => {
+dynamic.puzzle.onDisconnect((piece, figure) => {
   console.log(piece);
-  piece.data.label.text = Number(piece.data.label.text) + 1
+  piece.data.label.text = Number(piece.data.label.text) - 1
+  figure.label.text(piece.data.label.text);
   console.log(piece.data);
   dynamic.redraw();
 });
