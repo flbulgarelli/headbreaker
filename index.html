@@ -268,6 +268,52 @@ labels.draw();
 </div>
 
 <h2 id="sound-and-visual-feedback">Sound and visual feedback</h2>
+<h4 id="code_6">Code</h4>
+<pre><code class="javascript">var audio = new Audio('static/connect.wav');
+let berni = new Image();
+berni.src = 'static/berni.jpg';
+berni.onload = () =&gt; {
+  const sound = new headbreaker.Canvas('sound-canvas', {
+    width: 800, height: 800,
+    pieceSize: 100, proximity: 20,
+    borderFill: 10, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: berni,
+    strokeColor: 'black'
+  });
+
+  sound.withPuzzle({
+    horizontalPiecesCount: 6,
+    insertsGenerator: headbreaker.sequence.random
+  });
+
+  sound.draw();
+
+  sound.onConnect((_piece, figure, _target, targetFigure) =&gt; {
+    // play sound
+    audio.play();
+
+    // paint borders on click
+    // of conecting and conected figures
+    figure.shape.stroke('yellow');
+    targetFigure.shape.stroke('yellow');
+    sound.redraw();
+
+    setTimeout(() =&gt; {
+      // restore border colors
+      // later
+      figure.shape.stroke('black');
+      targetFigure.shape.stroke('black');
+      sound.redraw();
+    }, 200);
+  });
+
+  sound.onDisconnect((it) =&gt; {
+    audio.play();
+  });
+}
+</code></pre>
+
+<h3 id="demo_6">Demo</h3>
 <div id="sound-canvas">
 </div>
 
@@ -359,5 +405,5 @@ labels.draw();
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-06-17 21:23:47
+Build Date UTC : 2020-06-18 01:47:31
 -->
