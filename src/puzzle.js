@@ -96,9 +96,9 @@ class Puzzle {
 }
 
 /**
- * @typedef {function(number, number):void} TranslationListener
- * @typedef {function(Piece):void} ConnectListener
- * @typedef {function():void} DisconnectListener
+ * @typedef {(piece: Piece, dx: number, dy: number) => void} TranslationListener
+ * @typedef {(piece: Piece, target: Piece) => void} ConnectListener
+ * @typedef {(piece: Piece) => void} DisconnectListener
  * @typedef {{up?: Insert, down?: Insert, left?: Insert, right?: Insert}} PieceStructure
  */
 class Piece {
@@ -175,18 +175,18 @@ class Piece {
    * @param {number} dy
    */
   fireOnTranslate(dx, dy) {
-    this.translateListeners.forEach(it => it(dx, dy))
+    this.translateListeners.forEach(it => it(this, dx, dy))
   }
 
   /**
    * @param {Piece} other
    */
   fireOnConnect(other) {
-    this.connectListeners.forEach(it => it(other))
+    this.connectListeners.forEach(it => it(this, other))
   }
 
   fireOnDisconnect() {
-    this.disconnectListeners.forEach(it => it())
+    this.disconnectListeners.forEach(it => it(this))
   }
 
   /**

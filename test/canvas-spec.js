@@ -71,4 +71,68 @@ describe("PuzzleCanvas", () => {
 
     assert.equal(canvas.puzzle.pieces.length, 16);
   })
+
+  it("can listen to connect events with figures", (done) => {
+    const canvas = new PuzzleCanvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, strokeColor: 'red',
+      image: null, painter: painter
+    });
+
+    canvas.withPuzzle({
+      verticalPiecesCount: 2,
+      horizontalPiecesCount: 2,
+      insertsGenerator: flipflop
+    });
+    canvas.draw();
+
+    assert.equal(canvas['__nullLayer__'].figures, 4);
+    assert.equal(canvas['__nullLayer__'].drawn, true);
+
+    const [first, second] = canvas.puzzle.pieces;
+
+    canvas.onConnect((piece, figure, target, targetFigure) => {
+      assert.equal(canvas.getFigure(piece), figure);
+      assert.equal(first, piece);
+
+      assert.equal(canvas.getFigure(target), targetFigure);
+      assert.equal(second, target);
+      done();
+    })
+
+    first.connectHorizontallyWith(second);
+  })
+
+  it("can listen to disconnect events with figures", (done) => {
+    const canvas = new PuzzleCanvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, strokeColor: 'red',
+      image: null, painter: painter
+    });
+
+    canvas.withPuzzle({
+      verticalPiecesCount: 2,
+      horizontalPiecesCount: 2,
+      insertsGenerator: flipflop
+    });
+    canvas.draw();
+
+    assert.equal(canvas['__nullLayer__'].figures, 4);
+    assert.equal(canvas['__nullLayer__'].drawn, true);
+
+    const [first, second] = canvas.puzzle.pieces;
+
+    canvas.onDisconnect((piece, figure) => {
+      assert.equal(canvas.getFigure(piece), figure);
+      assert.equal(first, piece);
+      done();
+    })
+
+    first.connectHorizontallyWith(second);
+    first.disconnect();
+  })
 });

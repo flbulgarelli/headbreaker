@@ -136,6 +136,33 @@ class PuzzleCanvas {
   }
 
   /**
+   * @param {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} f
+   */
+  onConnect(f) {
+    this.puzzle.onConnect((piece, target) => {
+      f(piece, this.getFigure(piece), target, this.getFigure(target));
+    });
+  }
+
+  /**
+   * @param {(piece: Piece, figure: Figure) => void} f
+   */
+  onDisconnect(f) {
+    this.puzzle.onDisconnect((piece) => {
+      f(piece, this.getFigure(piece));
+    });
+  }
+
+  /**
+   * @param {(piece: Piece, figure: Figure, dx: number, dy: number) => void} f
+   */
+  onTranslate(f) {
+    this.puzzle.onTranslate((piece, dx, dy) => {
+      f(piece, this.getFigure(piece), dx, dy);
+    });
+  }
+
+  /**
    * @param {Piece} piece
    * @returns {Figure}
    */

@@ -370,17 +370,19 @@ berni.onload = () => {
 
   sound.draw();
 
-  sound.puzzle.onConnect((it) => {
-    sound.getFigure(it).shape.stroke('yellow');
+  sound.onConnect((_piece, figure, _target, targetFigure) => {
+    figure.shape.stroke('yellow');
+    targetFigure.shape.stroke('yellow');
     audio.play();
     sound.redraw();
     setTimeout(() => {
-      sound.getFigure(it).shape.stroke('black');
+      figure.shape.stroke('black');
+      targetFigure.shape.stroke('black');
       sound.redraw();
     }, 200);
   });
 
-  sound.puzzle.onDisconnect((it) => {
+  sound.onDisconnect((it) => {
     audio.play();
   });
 }
@@ -402,15 +404,15 @@ dynamic.withPiece({
 });
 dynamic.draw();
 
-dynamic.puzzle.onConnect((it) => {
-  it.data.label.text = Number(it.data.label.text) + 1
-  console.log(it.data);
+dynamic.onConnect((piece, _figure, _target, _targetFigure) => {
+  piece.data.label.text = Number(piece.data.label.text) + 1
+  console.log(piece.data);
   dynamic.redraw();
 });
 
-dynamic.puzzle.onDisconnect((it) => {
-  console.log(it);
-  it.data.label.text = Number(it.data.label.text) + 1
-  console.log(it.data);
+dynamic.puzzle.onDisconnect((piece, _figure) => {
+  console.log(piece);
+  piece.data.label.text = Number(piece.data.label.text) + 1
+  console.log(piece.data);
   dynamic.redraw();
 });
