@@ -392,29 +392,39 @@ berni.onload = () => {
 // Dynamic Canvas
 // ============
 
+function updateLabel(piece, figure, delta) {
+  piece.data.label.text = Number(piece.data.label.text) + delta;
+  figure.label.text(piece.data.label.text);
+}
 
-const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 500, height: 300, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
+const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
 dynamic.withPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', currentPosition: { x: 50, y: 50 }, label: { text: '0', x: 22 }, color: '#A83E83' }
+  data: { id: 'a', label: { text: '0', x: 22 }, color: '#A83E83' }
 });
 dynamic.withPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', currentPosition: { x: 150, y: 150 }, label: { text: '0', x: 22 }, color: '#3AA82D' }
+  data: { id: 'b', label: { text: '0', x: 22 }, color: '#3AA82D' }
 });
+dynamic.withPiece({
+  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  data: { id: 'c', label: { text: '0', x: 22 }, color: '#3AA82D' }
+});
+dynamic.withPiece({
+  structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  data: { id: 'd', label: { text: '0', x: 22 }, color: '#A83E83' }
+});
+dynamic.shuffle(0.7);
 dynamic.draw();
 
-dynamic.onConnect((piece, figure, _target, _targetFigure) => {
-  piece.data.label.text = Number(piece.data.label.text) + 1;
-  figure.label.text(piece.data.label.text);
-  console.log(piece.data);
+dynamic.onConnect((piece, figure, target, targetFigure) => {
+  updateLabel(piece, figure, 1);
+  updateLabel(target, targetFigure, 1);
   dynamic.redraw();
 });
 
-dynamic.puzzle.onDisconnect((piece, figure) => {
-  console.log(piece);
-  piece.data.label.text = Number(piece.data.label.text) - 1
-  figure.label.text(piece.data.label.text);
-  console.log(piece.data);
+dynamic.onDisconnect((piece, figure, target, targetFigure) => {
+  updateLabel(piece, figure, -1);
+  updateLabel(target, targetFigure, -1);
   dynamic.redraw();
 });
