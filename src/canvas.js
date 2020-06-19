@@ -65,6 +65,8 @@ class PuzzleCanvas {
     this._painter.initialize(this, id);
     /** @type {Object<string, Figure>} */
     this.figures = {};
+    /** @type {Object<string, any>} */
+    this.templates = {};
   }
 
   /**
@@ -113,6 +115,32 @@ class PuzzleCanvas {
       it.carry({targetPosition: position, currentPosition: position, id: index + 1});
       this._renderPiece(it);
     });
+  }
+
+  /**
+   * Creates a name piece template, that can be later instantiated using withPieceFromTemplate
+   *
+   * @param {string} name
+   * @param {*} options
+   */
+  withTemplate(name, options) {
+    this.templates[name] = options;
+  }
+
+  /**
+   * Creates a new Piece with given id using a named template
+   *
+   * @param {string} id
+   * @param {string} templateName
+   */
+  withPieceFromTemplate(id, templateName) {
+    const options = this.templates[templateName];
+    if (!options) {
+      throw new Error(`Unknown template ${id}`);
+    }
+    const data = Object.assign({}, options.data);
+    data.id = id;
+    this.withPiece({structure: options.structure, data: data})
   }
 
   /**
@@ -264,6 +292,8 @@ class PuzzleCanvas {
 }
 
 /**
+ * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
+ * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to `Painter`
  * @module PuzzleCanvas
  */
 module.exports = PuzzleCanvas

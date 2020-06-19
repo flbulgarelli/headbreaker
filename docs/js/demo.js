@@ -388,47 +388,53 @@ berni.onload = () => {
 }
 
 
-// ============
+// ==============
 // Dynamic Canvas
-// ============
+// ==============
 
-function syncLabel(piece, figure) {
+function updateLabel(piece, figure, delta) {
+  piece.data.label.text = Number(piece.data.label.text) + delta;
   figure.label.text(piece.data.label.text);
 }
 
 const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
-dynamic.withPiece({
-  structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', label: { text: '0', x: 22 }, color: '#A83E83' }
-});
-dynamic.withPiece({
+dynamic.withTemplate('A', {
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', label: { text: '0', x: 22 }, color: '#3AA82D' }
+  data: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
 });
-dynamic.withPiece({
-  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'c', label: { text: '0', x: 22 }, color: '#3AA82D' }
+dynamic.withTemplate('B', {
+  structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
+  data: { label: { text: '0', x: 22 }, color: '#438D8F' }
 });
-dynamic.withPiece({
-  structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'd', label: { text: '0', x: 22 }, color: '#A83E83' }
+dynamic.withTemplate('C', {
+  structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
+  data: { label: { text: '0', x: 22 }, color: '#DBC967' }
 });
+dynamic.withTemplate('D', {
+  structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
+  data: { label: { text: '0', x: 22 }, color: '#8F844A' }
+});
+dynamic.withTemplate('E', {
+  structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Tab },
+  data: { label: { text: '0', x: 22 }, color: '#7DDADB' }
+});
+
+dynamic.withPieceFromTemplate('a', 'A');
+dynamic.withPieceFromTemplate('b', 'A');
+dynamic.withPieceFromTemplate('c', 'B');
+dynamic.withPieceFromTemplate('d', 'C');
+dynamic.withPieceFromTemplate('e', 'C');
+dynamic.withPieceFromTemplate('f', 'D');
+dynamic.withPieceFromTemplate('g', 'E');
 dynamic.shuffle(0.7);
-dynamic.draw();
-
-
-
 dynamic.onConnect((piece, figure, target, targetFigure) => {
-  piece.data.label.text = Number(piece.data.label.text) + 1;
-  syncLabel(piece, figure);
-
-  target.data.label.text = Number(target.data.label.text) + 1;
-  syncLabel(target, targetFigure);
+  updateLabel(piece, figure, 1);
+  updateLabel(target, targetFigure, 1);
   dynamic.redraw();
 });
-
-dynamic.onDisconnect((piece, figure) => {
-  piece.data.label.text = Number(piece.data.label.text) - 1
-  syncLabel(piece, figure);
+dynamic.onDisconnect((piece, figure, target, targetFigure) => {
+  updateLabel(piece, figure, -1);
+  updateLabel(target, targetFigure, -1);
   dynamic.redraw();
 });
+dynamic.draw();

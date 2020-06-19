@@ -255,6 +255,54 @@ berni.onload = () => {
 
 ## Dynamic
 
+### Code
+
+```javascript
+function updateLabel(piece, figure, delta) {
+  piece.data.label.text = Number(piece.data.label.text) + delta;
+  figure.label.text(piece.data.label.text);
+}
+
+const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
+dynamic.withTemplate('A', {
+  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  data: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
+});
+dynamic.withTemplate('B', {
+  structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
+  data: { label: { text: '0', x: 22 }, color: '#438D8F' }
+});
+dynamic.withTemplate('C', {
+  structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
+  data: { label: { text: '0', x: 22 }, color: '#DBC967' }
+});
+// ... more templates ...
+
+dynamic.withPieceFromTemplate('a', 'A');
+dynamic.withPieceFromTemplate('b', 'A');
+dynamic.withPieceFromTemplate('c', 'B');
+dynamic.withPieceFromTemplate('d', 'C');
+dynamic.withPieceFromTemplate('e', 'C');
+dynamic.withPieceFromTemplate('f', 'D');
+dynamic.withPieceFromTemplate('g', 'E');
+dynamic.shuffle(0.7);
+
+dynamic.onConnect((piece, figure, target, targetFigure) => {
+  updateLabel(piece, figure, 1);
+  updateLabel(target, targetFigure, 1);
+  dynamic.redraw();
+});
+dynamic.onDisconnect((piece, figure, target, targetFigure) => {
+  updateLabel(piece, figure, -1);
+  updateLabel(target, targetFigure, -1);
+  dynamic.redraw();
+});
+dynamic.draw();
+```
+
+### Demo
+
+
 <div id="dynamic-canvas">
 </div>
 
