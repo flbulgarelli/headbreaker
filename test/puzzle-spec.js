@@ -1,7 +1,6 @@
 // @ts-nocheck
 const assert = require('assert');
-const {anchor, Anchor} = require('../src/anchor');
-const {Puzzle, Piece, Tab, Slot, None} = require('../src/puzzle');
+const {Puzzle, Piece, Tab, Slot, None, anchor, Anchor} = require('../src/index');
 
 describe("piece", () => {
   it("can create a piece and place it", () => {

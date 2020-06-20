@@ -1,7 +1,7 @@
 const {Piece} = require('./puzzle');
 
 /**
- * @param {import('./puzzle').Insert} insert
+ * @param {import('./structure').Insert} insert
  * @param {number} t
  * @param {number} s
  * @param {number} n

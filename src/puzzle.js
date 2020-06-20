@@ -1,14 +1,16 @@
 const vector = require('./vector');
 const pivot = require('./pivot');
 const {Anchor} = require('./anchor');
+const {None} = require('./structure')
 
 /**
- * @typedef {{pieceSize?: number, proximity?: number}} PuzzleStructure
+ * @typedef {{pieceSize?: number, proximity?: number}} Settings
+ * @typedef {import('./../src/structure').Structure} Structure
  */
 class Puzzle {
 
   /**
-   * @param {PuzzleStructure?} options
+   * @param {Settings?} options
    */
   constructor({pieceSize = 2, proximity = 1} = {}) {
     this.pieceSize = pieceSize;
@@ -18,7 +20,7 @@ class Puzzle {
   }
 
   /**
-   * @param {PieceStructure?} options
+   * @param {Structure?} options
    */
   newPiece(options = {}) {
     const piece = new Piece(options);
@@ -98,12 +100,11 @@ class Puzzle {
 /**
  * @typedef {(piece: Piece, dx: number, dy: number) => void} TranslationListener
  * @typedef {(piece: Piece, target: Piece) => void} ConnectionListener
- * @typedef {{up?: Insert, down?: Insert, left?: Insert, right?: Insert}} PieceStructure
  */
 class Piece {
 
   /**
-   * @param {PieceStructure?} options
+   * @param {Structure?} options
    */
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
@@ -501,44 +502,9 @@ class Piece {
 }
 
 /**
- * @typedef {(Tab|Slot|None)} Insert
- */
-
-const Tab = {
-  isSlot: () => false,
-  isTab:  () => true,
-  isNone:  () => false,
-  match: (other) => other.isSlot(),
-  toString: () => "Tab",
-  complement: () => Slot,
-}
-
-const Slot = {
-  isSlot: () => true,
-  isTab:  () => false,
-  isNone:  () => false,
-  match: (other) => other.isTab(),
-  toString: () => "Slot",
-  complement: () => Tab,
-
-}
-
-const None = {
-  isSlot: () => false,
-  isTab:  () => false,
-  isNone:  () => true,
-  match: (other) => false,
-  toString: () => "None",
-  complement: () => None,
-}
-
-/**
  * @module Puzzle
  */
 module.exports = {
-  None,
   Piece,
-  Puzzle,
-  Slot,
-  Tab
+  Puzzle
 }

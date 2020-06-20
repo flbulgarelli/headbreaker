@@ -1,6 +1,6 @@
 const assert = require('assert');
-const {Tab, Slot, None} = require('../src/puzzle');
-const {InsertSequence, flipflop, fixed, twoAndTwo} = require('../src/sequence');
+const {Tab, Slot, None, sequence} = require('../src/index');
+const {InsertSequence, flipflop, fixed, twoAndTwo} = sequence;
 
 describe("InsertSequence", () => {
   it("fixed", () => {

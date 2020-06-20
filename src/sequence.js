@@ -1,7 +1,7 @@
-const {Tab, Slot, None} = require('../src/puzzle');
+const {Tab, Slot, None} = require('../src/structure');
 
 
-/** @typedef {import('./puzzle').Insert} Insert */
+/** @typedef {import('./structure').Insert} Insert */
 
 /**
  * @type {InsertsGenerator};

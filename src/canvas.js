@@ -1,5 +1,6 @@
 const vector = require('./vector');
 const {Puzzle, Piece} = require('./puzzle');
+const {parse} = require('./structure');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
@@ -22,6 +23,7 @@ const {twoAndTwo} = require('./sequence');
  * @typedef {{shape: Shape, group: Group, label?: Label}} Figure
  * @typedef {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} CanvasConnectionListener
  * @typedef {(piece: Piece, figure: Figure, dx: number, dy: number) => void} CanvasTranslationListener
+ * @typedef {import('./puzzle').Structure|string} StructureLike
  */
 class PuzzleCanvas {
 
@@ -71,7 +73,7 @@ class PuzzleCanvas {
 
   /**
    * @param {object} options
-   * @param {import('./puzzle').PieceStructure} options.structure
+   * @param {StructureLike}  options.structure
    * @param {object}     options.data
    * @param {string?}    options.data.id
    * @param {Position?}  options.data.targetPosition
@@ -107,7 +109,7 @@ class PuzzleCanvas {
    * @param {Manufacturer} manufacturer
    */
   withManufacturer(manufacturer) {
-    manufacturer.withStructure(this.puzzleStructure);
+    manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
     this._puzzle.pieces.forEach((it, index) => {
@@ -265,10 +267,19 @@ class PuzzleCanvas {
   }
 
   _initializeEmptyPuzzle() {
-    this._puzzle = new Puzzle(this.puzzleStructure);
+    this._puzzle = new Puzzle(this.settings);
   }
 
+
+  /**
+   *
+   * @param {StructureLike} structure
+   * @param {*} data
+   */
   _newPiece(structure, data) {
+    if (typeof(structure) === 'string') {
+      structure = parse(structure);
+    }
     let piece = this.puzzle.newPiece(structure);
     piece.carry(data);
     piece.placeAt(anchor(data.currentPosition.x, data.currentPosition.y));
@@ -283,9 +294,9 @@ class PuzzleCanvas {
   }
 
   /**
-   * @returns {import('./puzzle').PuzzleStructure}
+   * @returns {import('./puzzle').Settings}
    */
-  get puzzleStructure() {
+  get settings() {
     return {pieceSize: this.pieceSize / 2, proximity: this.proximity}
   }
 
