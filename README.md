@@ -1,4 +1,10 @@
+[![Build Status](https://travis-ci.com/flbulgarelli/headbreaker.svg?branch=master)](https://travis-ci.com/flbulgarelli/headbreaker)
+[![Code Climate](https://codeclimate.com/github/flbulgarelli/headbreaker/badges/gpa.svg)](https://codeclimate.com/github/flbulgarelli/headbreaker)
+[![Test Coverage](https://codeclimate.com/github/flbulgarelli/headbreaker/badges/coverage.svg)](https://codeclimate.com/github/flbulgarelli/headbreaker)
+
 # :jigsaw: :exploding_head: Headbreaker
+
+> Jigsaw Puzzles Framework for JavaScript
 
 `headbreaker` - a spanish pun for _rompecabezas_ - is a JavaScript framework for building all kind of jigsaw puzzles.
 
