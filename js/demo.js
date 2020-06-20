@@ -399,24 +399,19 @@ function updateLabel(piece, figure, delta) {
 
 const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
 dynamic.withTemplate('A', {
-  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
+  structure: 'TTSS', data: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
 });
 dynamic.withTemplate('B', {
-  structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
-  data: { label: { text: '0', x: 22 }, color: '#438D8F' }
+  structure: 'TTTT', data: { label: { text: '0', x: 22 }, color: '#438D8F' }
 });
 dynamic.withTemplate('C', {
-  structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-  data: { label: { text: '0', x: 22 }, color: '#DBC967' }
+  structure: 'SSSS', data: { label: { text: '0', x: 22 }, color: '#DBC967' }
 });
 dynamic.withTemplate('D', {
-  structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
-  data: { label: { text: '0', x: 22 }, color: '#8F844A' }
+  structure: 'STTT', data: { label: { text: '0', x: 22 }, color: '#8F844A' }
 });
 dynamic.withTemplate('E', {
-  structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Tab },
-  data: { label: { text: '0', x: 22 }, color: '#7DDADB' }
+  structure: 'SSTT', data: { label: { text: '0', x: 22 }, color: '#7DDADB' }
 });
 
 dynamic.withPieceFromTemplate('a', 'A');
