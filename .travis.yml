@@ -1,0 +1,8 @@
+sudo: false
+language: node_js
+node_js:
+- 12.16
+script:
+- npm install
+- npm test
+- npm run build
