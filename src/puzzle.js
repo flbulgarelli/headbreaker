@@ -31,11 +31,11 @@ class Puzzle {
    * Tries to connect pieces in their current positions
    * This method is O(n^2)
    */
-  autoconnectAll() {
-    this.pieces.forEach(it => this.autoconnect(it));
+  autoconnect() {
+    this.pieces.forEach(it => this.autoconnectWith(it));
   }
 
-  disconnectAll() {
+  disconnect() {
     this.pieces.forEach(it => it.disconnect());
   }
 
@@ -44,7 +44,7 @@ class Puzzle {
    * This method is O(n)
    * @param {Piece} piece
    */
-  autoconnect(piece) {
+  autoconnectWith(piece) {
     this.pieces.filter(it => it !== piece).forEach(other => {
       piece.tryConnectWith(other);
       other.tryConnectWith(piece, true);
@@ -56,9 +56,9 @@ class Puzzle {
    * @param {number} maxY
    */
   shuffle(maxX, maxY) {
-    this.disconnectAll();
+    this.disconnect();
     this.pieces.forEach(it => it.placeAt(Anchor.atRandom(maxX, maxY)));
-    this.autoconnectAll();
+    this.autoconnect();
   }
 
   /**
@@ -371,7 +371,7 @@ class Piece {
   }
 
   drop() {
-    this.puzzle.autoconnect(this);
+    this.puzzle.autoconnectWith(this);
   }
 
   dragAndDrop(dx, dy) {

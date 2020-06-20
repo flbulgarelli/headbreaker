@@ -156,7 +156,7 @@ class PuzzleCanvas {
   draw() {
     if (!this.autconnected) {
       this.autconnected = true;
-      this.puzzle.autoconnectAll();
+      this.puzzle.autoconnect();
     }
     this.redraw();
   }

@@ -682,7 +682,7 @@ describe("puzzle", () => {
   })
 
   it("autoconnects puzzle", () => {
-    puzzle.autoconnectAll();
+    puzzle.autoconnect();
 
     const [a, b, c, d] = puzzle.pieces;
 
@@ -692,7 +692,7 @@ describe("puzzle", () => {
   });
 
   it("shuffles connected puzzle", () => {
-    puzzle.autoconnectAll();
+    puzzle.autoconnect();
     puzzle.shuffle(100, 100);
 
     assert.equal(puzzle.pieces.length, 4);
@@ -704,7 +704,7 @@ describe("puzzle", () => {
   })
 
   it("translates connected puzzle", () => {
-    puzzle.autoconnectAll();
+    puzzle.autoconnect();
     puzzle.translate(10, 10);
 
     const [a, b, c, d] = puzzle.pieces;
