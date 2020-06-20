@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: pivot</title>
+    <title>JSDoc: Source: structure.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,52 +17,103 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: pivot</h1>
+    <h1 class="page-title">Source: structure.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {(Tab|Slot|None)} Insert
+ */
+const Tab = {
+  isSlot: () => false,
+  isTab:  () => true,
+  isNone:  () => false,
+  match: (other) => other.isSlot(),
+  toString: () => "Tab",
+  complement: () => Slot,
+  dump: () => 'T'
+}
 
-<article>
-    <div class="container-overview">
-    
-        
+const Slot = {
+  isSlot: () => true,
+  isTab:  () => false,
+  isNone:  () => false,
+  match: (other) => other.isTab(),
+  toString: () => "Slot",
+  complement: () => Tab,
+  dump: () => 'S'
+}
 
-        
-    
-    </div>
+const None = {
+  isSlot: () => false,
+  isTab:  () => false,
+  isNone:  () => true,
+  match: (other) => false,
+  toString: () => "None",
+  complement: () => None,
+  dump: () => '-'
+}
 
-    
+/**
+ * @param {string} insert
+ * @returns {Insert}
+ */
+function parseInsert(insert) {
+  return insert === 'S' ? Slot : insert === 'T' ? Tab : None;
+}
 
-    
+/**
+ * @typedef {{up?: Insert, down?: Insert, left?: Insert, right?: Insert}} Structure
+ */
 
-    
+/**
+ *
+ * @param {Structure} structure
+ * @returns {string}
+ */
+function dump(structure) {
+  return [structure.right, structure.down, structure.left, structure.up].map(it => (it || None).dump()).join('');
+}
 
-    
+/**
+ *
+ * @param {string} string
+ * @returns {Structure}
+ */
+function parse(string) {
 
-    
+  if (string.length !== 4) {
+    throw new Error("structure string must be 4-chars long");
+  }
 
-    
+  return {
+    right: parseInsert(string[0]),
+    down: parseInsert(string[1]),
+    left: parseInsert(string[2]),
+    up: parseInsert(string[3]),
+  };
+}
 
-    
+/**
+ * @module structure
+ */
+module.exports = {
+  None,
+  Slot,
+  Tab,
+  dump,
+  parse
+};
 
-    
 
-    
-
-    
-</article>
-
-</section>
+</code></pre>
+        </article>
+    </section>
 
 
 

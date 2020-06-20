@@ -28,13 +28,12 @@
         <article>
             <pre class="prettyprint source linenums"><code>const vector = require('./vector');
 const {Puzzle, Piece} = require('./puzzle');
+const {parse} = require('./structure');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
 
 /**
-
- *
  * @typedef {{
  *  initialize(canvas: PuzzleCanvas, id: string): void,
  *  draw(canvas: PuzzleCanvas): void,
@@ -50,6 +49,9 @@ const {twoAndTwo} = require('./sequence');
  * @typedef {object} Group
  * @typedef {object} Label
  * @typedef {{shape: Shape, group: Group, label?: Label}} Figure
+ * @typedef {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} CanvasConnectionListener
+ * @typedef {(piece: Piece, figure: Figure, dx: number, dy: number) => void} CanvasTranslationListener
+ * @typedef {import('./puzzle').Structure|string} StructureLike
  */
 class PuzzleCanvas {
 
@@ -93,11 +95,13 @@ class PuzzleCanvas {
     this._painter.initialize(this, id);
     /** @type {Object&lt;string, Figure>} */
     this.figures = {};
+    /** @type {Object&lt;string, any>} */
+    this.templates = {};
   }
 
   /**
    * @param {object} options
-   * @param {import('./puzzle').PieceStructure} options.structure
+   * @param {StructureLike}  options.structure
    * @param {object}     options.data
    * @param {string?}    options.data.id
    * @param {Position?}  options.data.targetPosition
@@ -133,7 +137,7 @@ class PuzzleCanvas {
    * @param {Manufacturer} manufacturer
    */
   withManufacturer(manufacturer) {
-    manufacturer.withStructure(this.puzzleStructure);
+    manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
     this._puzzle.pieces.forEach((it, index) => {
@@ -141,6 +145,32 @@ class PuzzleCanvas {
       it.carry({targetPosition: position, currentPosition: position, id: index + 1});
       this._renderPiece(it);
     });
+  }
+
+  /**
+   * Creates a name piece template, that can be later instantiated using withPieceFromTemplate
+   *
+   * @param {string} name
+   * @param {*} options
+   */
+  withTemplate(name, options) {
+    this.templates[name] = options;
+  }
+
+  /**
+   * Creates a new Piece with given id using a named template
+   *
+   * @param {string} id
+   * @param {string} templateName
+   */
+  withPieceFromTemplate(id, templateName) {
+    const options = this.templates[templateName];
+    if (!options) {
+      throw new Error(`Unknown template ${id}`);
+    }
+    const data = Object.assign({}, options.data);
+    data.id = id;
+    this.withPiece({structure: options.structure, data: data})
   }
 
   /**
@@ -156,13 +186,40 @@ class PuzzleCanvas {
   draw() {
     if (!this.autconnected) {
       this.autconnected = true;
-      this.puzzle.autoconnectAll();
+      this.puzzle.autoconnect();
     }
     this.redraw();
   }
 
   redraw() {
     this._painter.draw(this);
+  }
+
+  /**
+   * @param {CanvasConnectionListener} f
+   */
+  onConnect(f) {
+    this.puzzle.onConnect((piece, target) => {
+      f(piece, this.getFigure(piece), target, this.getFigure(target));
+    });
+  }
+
+  /**
+   * @param {CanvasConnectionListener} f
+   */
+  onDisconnect(f) {
+    this.puzzle.onDisconnect((piece, target) => {
+      f(piece, this.getFigure(piece), target, this.getFigure(target));
+    });
+  }
+
+  /**
+   * @param {CanvasTranslationListener} f
+   */
+  onTranslate(f) {
+    this.puzzle.onTranslate((piece, dx, dy) => {
+      f(piece, this.getFigure(piece), dx, dy);
+    });
   }
 
   /**
@@ -238,10 +295,19 @@ class PuzzleCanvas {
   }
 
   _initializeEmptyPuzzle() {
-    this._puzzle = new Puzzle(this.puzzleStructure);
+    this._puzzle = new Puzzle(this.settings);
   }
 
+
+  /**
+   *
+   * @param {StructureLike} structure
+   * @param {*} data
+   */
   _newPiece(structure, data) {
+    if (typeof(structure) === 'string') {
+      structure = parse(structure);
+    }
     let piece = this.puzzle.newPiece(structure);
     piece.carry(data);
     piece.placeAt(anchor(data.currentPosition.x, data.currentPosition.y));
@@ -256,9 +322,9 @@ class PuzzleCanvas {
   }
 
   /**
-   * @returns {import('./puzzle').PuzzleStructure}
+   * @returns {import('./puzzle').Settings}
    */
-  get puzzleStructure() {
+  get settings() {
     return {pieceSize: this.pieceSize / 2, proximity: this.proximity}
   }
 
@@ -280,13 +346,13 @@ module.exports = PuzzleCanvas
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-PuzzleCanvas.html">PuzzleCanvas</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleCanvas.html">PuzzleCanvas</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#pieces">pieces</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-PuzzleCanvas.html">PuzzleCanvas</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleCanvas.html">PuzzleCanvas</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pieces">pieces</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jun 17 2020 12:03:37 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Jun 20 2020 20:38:02 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

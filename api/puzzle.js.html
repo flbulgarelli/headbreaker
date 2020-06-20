@@ -29,14 +29,16 @@
             <pre class="prettyprint source linenums"><code>const vector = require('./vector');
 const pivot = require('./pivot');
 const {Anchor} = require('./anchor');
+const {None} = require('./structure')
 
 /**
- * @typedef {{pieceSize?: number, proximity?: number}} PuzzleStructure
+ * @typedef {{pieceSize?: number, proximity?: number}} Settings
+ * @typedef {import('./../src/structure').Structure} Structure
  */
 class Puzzle {
 
   /**
-   * @param {PuzzleStructure?} options
+   * @param {Settings?} options
    */
   constructor({pieceSize = 2, proximity = 1} = {}) {
     this.pieceSize = pieceSize;
@@ -46,7 +48,7 @@ class Puzzle {
   }
 
   /**
-   * @param {PieceStructure?} options
+   * @param {Structure?} options
    */
   newPiece(options = {}) {
     const piece = new Piece(options);
@@ -59,11 +61,11 @@ class Puzzle {
    * Tries to connect pieces in their current positions
    * This method is O(n^2)
    */
-  autoconnectAll() {
-    this.pieces.forEach(it => this.autoconnect(it));
+  autoconnect() {
+    this.pieces.forEach(it => this.autoconnectWith(it));
   }
 
-  disconnectAll() {
+  disconnect() {
     this.pieces.forEach(it => it.disconnect());
   }
 
@@ -72,7 +74,7 @@ class Puzzle {
    * This method is O(n)
    * @param {Piece} piece
    */
-  autoconnect(piece) {
+  autoconnectWith(piece) {
     this.pieces.filter(it => it !== piece).forEach(other => {
       piece.tryConnectWith(other);
       other.tryConnectWith(piece, true);
@@ -84,9 +86,9 @@ class Puzzle {
    * @param {number} maxY
    */
   shuffle(maxX, maxY) {
-    this.disconnectAll();
+    this.disconnect();
     this.pieces.forEach(it => it.placeAt(Anchor.atRandom(maxX, maxY)));
-    this.autoconnectAll();
+    this.autoconnect();
   }
 
   /**
@@ -105,14 +107,14 @@ class Puzzle {
   }
 
   /**
-   * @param {ConnectListener} f
+   * @param {ConnectionListener} f
    */
   onConnect(f) {
     this.pieces.forEach(it => it.onConnect(f));
   }
 
   /**
-   * @param {DisconnectListener} f
+   * @param {ConnectionListener} f
    */
   onDisconnect(f) {
     this.pieces.forEach(it => it.onDisconnect(f));
@@ -124,15 +126,13 @@ class Puzzle {
 }
 
 /**
- * @typedef {function(number, number):void} TranslationListener
- * @typedef {function(Piece):void} ConnectListener
- * @typedef {function():void} DisconnectListener
- * @typedef {{up?: Insert, down?: Insert, left?: Insert, right?: Insert}} PieceStructure
+ * @typedef {(piece: Piece, dx: number, dy: number) => void} TranslationListener
+ * @typedef {(piece: Piece, target: Piece) => void} ConnectionListener
  */
 class Piece {
 
   /**
-   * @param {PieceStructure?} options
+   * @param {Structure?} options
    */
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
@@ -145,9 +145,9 @@ class Piece {
   _initializeListeners() {
     /** @type {TranslationListener[]} */
     this.translateListeners = [];
-    /** @type {ConnectListener[]} */
+    /** @type {ConnectionListener[]} */
     this.connectListeners = [];
-    /** @type {DisconnectListener[]} */
+    /** @type {ConnectionListener[]} */
     this.disconnectListeners = [];
   }
 
@@ -185,14 +185,14 @@ class Piece {
   }
 
   /**
-   * @param {ConnectListener} f
+   * @param {ConnectionListener} f
    */
   onConnect(f) {
     this.connectListeners.push(f);
   }
 
   /**
-   * @param {DisconnectListener} f
+   * @param {ConnectionListener} f
    */
   onDisconnect(f) {
     this.disconnectListeners.push(f);
@@ -202,19 +202,24 @@ class Piece {
    * @param {number} dx
    * @param {number} dy
    */
-  fireOnTranslate(dx, dy) {
-    this.translateListeners.forEach(it => it(dx, dy))
+  fireTranslate(dx, dy) {
+    this.translateListeners.forEach(it => it(this, dx, dy))
   }
 
   /**
    * @param {Piece} other
    */
-  fireOnConnect(other) {
-    this.connectListeners.forEach(it => it(other))
+  fireConnect(other) {
+    this.connectListeners.forEach(it => it(this, other))
   }
 
-  fireOnDisconnect() {
-    this.disconnectListeners.forEach(it => it())
+    /**
+   * @param {Piece[]} others
+   */
+  fireDisconnect(others) {
+    others.forEach(other => {
+      this.disconnectListeners.forEach(it => it(this, other))
+    });
   }
 
   /**
@@ -229,7 +234,7 @@ class Piece {
     other.attractVertically(this, back);
     this.downConnection = other;
     other.upConnection = this;
-    this.fireOnConnect(other);
+    this.fireConnect(other);
   }
 
   /**
@@ -257,7 +262,7 @@ class Piece {
     other.attractHorizontally(this, back);
     this.rightConnection = other;
     other.leftConnection = this;
-    this.fireOnConnect(other);
+    this.fireConnect(other);
   }
 
   /**
@@ -305,9 +310,10 @@ class Piece {
   }
 
   disconnect() {
-    if (this.connected) {
-      this.fireOnDisconnect();
+    if (!this.connected) {
+      return;
     }
+    const connections = this.connections;
 
     if (this.upConnection) {
       this.upConnection.downConnection = null;
@@ -330,6 +336,8 @@ class Piece {
       this.rightConnection.leftConnection = null;
       this.rightConnection = null;
     }
+
+    this.fireDisconnect(connections);
   }
 
   /**
@@ -342,7 +350,7 @@ class Piece {
 
     if (previous) {
       const delta = anchor.diff(previous);
-      this.fireOnTranslate(...delta);
+      this.fireTranslate(...delta);
     }
   }
 
@@ -355,7 +363,7 @@ class Piece {
     if (!vector.isNull(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
       if (!quiet) {
-        this.fireOnTranslate(dx, dy);
+        this.fireTranslate(dx, dy);
       }
     }
   }
@@ -392,7 +400,7 @@ class Piece {
   }
 
   drop() {
-    this.puzzle.autoconnect(this);
+    this.puzzle.autoconnectWith(this);
   }
 
   dragAndDrop(dx, dy) {
@@ -522,46 +530,11 @@ class Piece {
 }
 
 /**
- * @typedef {(Tab|Slot|None)} Insert
- */
-
-const Tab = {
-  isSlot: () => false,
-  isTab:  () => true,
-  isNone:  () => false,
-  match: (other) => other.isSlot(),
-  toString: () => "Tab",
-  complement: () => Slot,
-}
-
-const Slot = {
-  isSlot: () => true,
-  isTab:  () => false,
-  isNone:  () => false,
-  match: (other) => other.isTab(),
-  toString: () => "Slot",
-  complement: () => Tab,
-
-}
-
-const None = {
-  isSlot: () => false,
-  isTab:  () => false,
-  isNone:  () => true,
-  match: (other) => false,
-  toString: () => "None",
-  complement: () => None,
-}
-
-/**
  * @module Puzzle
  */
 module.exports = {
-  None,
   Piece,
-  Puzzle,
-  Slot,
-  Tab
+  Puzzle
 }
 </code></pre>
         </article>
@@ -573,13 +546,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-PuzzleCanvas.html">PuzzleCanvas</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleCanvas.html">PuzzleCanvas</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#pieces">pieces</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-PuzzleCanvas.html">PuzzleCanvas</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleCanvas.html">PuzzleCanvas</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pieces">pieces</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jun 17 2020 12:03:37 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Jun 20 2020 20:38:02 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>
