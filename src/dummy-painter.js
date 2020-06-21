@@ -1,9 +1,9 @@
-const PuzzleCanvas = require('./canvas');
+const Canvas = require('./canvas');
 const {Piece} = require('./puzzle');
 
 class DummyPainter {
   /**
-   * @param {PuzzleCanvas} canvas
+   * @param {Canvas} canvas
    * @param {string} id
    */
   initialize(canvas, id) {
@@ -11,7 +11,7 @@ class DummyPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} canvas
+   * @param {Canvas} canvas
    */
   draw(canvas) {
     canvas['__nullLayer__'].drawn = true;
@@ -19,7 +19,7 @@ class DummyPainter {
 
   /**
    *
-   * @param {PuzzleCanvas} canvas
+   * @param {Canvas} canvas
    * @param {Piece} _piece
    * @param {import('./canvas').Figure} _figure
    */
@@ -29,7 +29,7 @@ class DummyPainter {
 
   /**
    *
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {import('./canvas').Figure} _figure
    */
@@ -38,7 +38,7 @@ class DummyPainter {
 
   /**
    *
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {import('./canvas').Group} _group
    * @param {Piece} _piece
    */
@@ -46,7 +46,7 @@ class DummyPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {*} _group
    */
@@ -54,7 +54,7 @@ class DummyPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {import('./canvas').Group} _group
    * @param {(dx: number, dy: number) => void} f
@@ -63,7 +63,7 @@ class DummyPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {import('./canvas').Group} _group
    * @param {() => void} _f

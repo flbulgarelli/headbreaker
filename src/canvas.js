@@ -7,14 +7,14 @@ const {twoAndTwo} = require('./sequence');
 
 /**
  * @typedef {object} Painter
- * @property {(canvas: PuzzleCanvas, id: string) => void} initialize
- * @property {(canvas: PuzzleCanvas) => void} draw
- * @property {(canvas: PuzzleCanvas, piece: Piece, figure: Figure) => void} sketch
- * @property {(canvas: PuzzleCanvas, piece: Piece, figure: Figure) => void} label
- * @property {(canvas: PuzzleCanvas, group: Group, piece: Piece) => void} physicalTranslate
- * @property {(canvas: PuzzleCanvas, piece: Piece, group: Group) => void} logicalTranslate
- * @property {(canvas: PuzzleCanvas, piece: Piece, group: Group, f:(dx: number, dy: number) => void) => void} onDrag
- * @property {(canvas: PuzzleCanvas, piece: Piece, group: Group, f:() => void) => void} onDragEnd
+ * @property {(canvas: Canvas, id: string) => void} initialize
+ * @property {(canvas: Canvas) => void} draw
+ * @property {(canvas: Canvas, piece: Piece, figure: Figure) => void} sketch
+ * @property {(canvas: Canvas, piece: Piece, figure: Figure) => void} label
+ * @property {(canvas: Canvas, group: Group, piece: Piece) => void} physicalTranslate
+ * @property {(canvas: Canvas, piece: Piece, group: Group) => void} logicalTranslate
+ * @property {(canvas: Canvas, piece: Piece, group: Group, f:(dx: number, dy: number) => void) => void} onDrag
+ * @property {(canvas: Canvas, piece: Piece, group: Group, f:() => void) => void} onDragEnd
  *
  * @typedef {object} Position
  * @property {number} x
@@ -52,7 +52,7 @@ const {twoAndTwo} = require('./sequence');
  * @property {StructureLike} structure
  * @property {CanvasMetadata} metadata
  */
-class PuzzleCanvas {
+class Canvas {
 
   /**
    * @param {string} id  the html id of the element where to place the canvas
@@ -116,18 +116,18 @@ class PuzzleCanvas {
    * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
    * @param {CanvasMetadata[]} [options.metadataList] optional list of metadata that will be attached to each generated piece
    */
-  autogeneratePuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadataList = []}) {
+  autogenerate({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadataList = []}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);
-    this.autogeneratePuzzleWithManufacturer(manufacturer, metadataList);
+    this.autogenerateWithManufacturer(manufacturer, metadataList);
   }
 
   /**
    * @param {Manufacturer} manufacturer
    * @param {CanvasMetadata[]} [metadataList]
    */
-  autogeneratePuzzleWithManufacturer(manufacturer, metadataList = []) {
+  autogenerateWithManufacturer(manufacturer, metadataList = []) {
     manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
@@ -337,6 +337,6 @@ class PuzzleCanvas {
 /**
  * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
  * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to `Painter`
- * @module PuzzleCanvas
+ * @module Canvas
  */
-module.exports = PuzzleCanvas
+module.exports = Canvas

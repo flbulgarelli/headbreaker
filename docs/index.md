@@ -117,7 +117,7 @@ xul.onload = () => {
     lineSoftness: 0.18, image: xul,
   });
 
-  autogen.autogeneratePuzzle({
+  autogen.autogenerate({
     horizontalPiecesCount: 6,
     verticalPiecesCount: 5
   });
@@ -144,7 +144,7 @@ dali.onload = () => {
     borderFill: 10, strokeWidth: 2,
     lineSoftness: 0.12, image: dali
   });
-  randomized.autogeneratePuzzle({
+  randomized.autogenerate({
     insertsGenerator: headbreaker.sequence.flipflop
   });
   randomized.shuffle(0.7);
@@ -216,7 +216,7 @@ berni.onload = () => {
     strokeColor: 'black'
   });
 
-  sound.autogeneratePuzzle({
+  sound.autogenerate({
     horizontalPiecesCount: 6,
     insertsGenerator: headbreaker.sequence.random
   });

@@ -12,7 +12,7 @@ try {
   };
 }
 
-const PuzzleCanvas = require('./canvas');
+const Canvas = require('./canvas');
 const outline = require('./outline');
 const {Piece} = require('./puzzle');
 const vector = require('./vector');
@@ -31,7 +31,7 @@ class KonvaPainter {
   /** @typedef {import('./canvas').Group} Group */
 
   /**
-   * @param {PuzzleCanvas} canvas
+   * @param {Canvas} canvas
    * @param {string} id
    */
   initialize(canvas, id) {
@@ -47,7 +47,7 @@ class KonvaPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} canvas
+   * @param {Canvas} canvas
    */
   draw(canvas) {
     canvas['__konvaLayer__'].draw();
@@ -55,7 +55,7 @@ class KonvaPainter {
 
   /**
    *
-   * @param {PuzzleCanvas} canvas
+   * @param {Canvas} canvas
    * @param {Piece} piece
    * @param {Figure} figure
    */
@@ -83,7 +83,7 @@ class KonvaPainter {
 
   /**
    *
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} piece
    * @param {Figure} figure
    */
@@ -101,7 +101,7 @@ class KonvaPainter {
 
   /**
    *
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Group} group
    * @param {Piece} piece
    */
@@ -111,7 +111,7 @@ class KonvaPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} piece
    * @param {*} group
    */
@@ -121,7 +121,7 @@ class KonvaPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} piece
    * @param {Group} group
    * @param {(dx: number, dy: number) => void} f
@@ -140,7 +140,7 @@ class KonvaPainter {
   }
 
   /**
-   * @param {PuzzleCanvas} _canvas
+   * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {Group} group
    * @param {() => void} f
