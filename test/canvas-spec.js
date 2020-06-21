@@ -115,7 +115,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 2,
       horizontalPiecesCount: 2,
-      metadataList: [{label:{text: 'a'}}, {label:{text: 'b'}}, {label:{text: 'c'}}, {label:{text: 'd'}}]
+      metadata: [{label:{text: 'a'}}, {label:{text: 'b'}}, {label:{text: 'c'}}, {label:{text: 'd'}}]
     });
     canvas.draw();
 

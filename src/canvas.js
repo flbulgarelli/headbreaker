@@ -114,25 +114,25 @@ class Canvas {
    * @param {number} [options.horizontalPiecesCount]
    * @param {number} [options.verticalPiecesCount]
    * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
-   * @param {CanvasMetadata[]} [options.metadataList] optional list of metadata that will be attached to each generated piece
+   * @param {CanvasMetadata[]} [options.metadata] optional list of metadata that will be attached to each generated piece
    */
-  autogenerate({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadataList = []}) {
+  autogenerate({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadata = []}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);
-    this.autogenerateWithManufacturer(manufacturer, metadataList);
+    manufacturer.withMetadata(metadata);
+    this.autogenerateWithManufacturer(manufacturer);
   }
 
   /**
    * @param {Manufacturer} manufacturer
-   * @param {CanvasMetadata[]} [metadataList]
    */
-  autogenerateWithManufacturer(manufacturer, metadataList = []) {
+  autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
-    this._puzzle.pieces.forEach((it, index) => {
-      this._annotatePiece(it, metadataList, index);
+    this._puzzle.pieces.forEach((it) => {
+      this._annotatePiecePosition(it);
       this._renderPiece(it);
     });
   }
@@ -222,16 +222,11 @@ class Canvas {
 
   /**
    * @param {Piece} piece
-   * @param {CanvasMetadata[]} metadataList
-   * @param {number} index
    */
-  _annotatePiece(piece, metadataList, index) {
+  _annotatePiecePosition(piece) {
     const position = { x: piece.centralAnchor.x, y: piece.centralAnchor.y };
-    const metadata = metadataList[index] ? metadataList[index] : {};
-    metadata.targetPosition = position;
-    metadata.currentPosition = position;
-    metadata.id = String(index + 1);
-    piece.annotate(metadata);
+    piece.metadata.targetPosition = position;
+    piece.metadata.currentPosition = position;
   }
 
   /**

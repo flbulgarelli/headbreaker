@@ -163,4 +163,36 @@ describe("manufacturer", () => {
     assert.equal(e.left, Tab);
     assert.equal(f.left, Slot);
   })
+
+
+  it("create 2 x 2 without metadata", () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimmensions(2, 2);
+    const puzzle = manufacturer.build();
+
+    const [a, b, c, d] = puzzle.pieces;
+
+    assert.equal(a.metadata.id, 1);
+    assert.equal(b.metadata.id, 2);
+    assert.equal(c.metadata.id, 3);
+    assert.equal(d.metadata.id, 4);
+  })
+
+  it("create 2 x 2 with metadata", () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimmensions(2, 2);
+    manufacturer.withMetadata([{foo: 'a'}, {foo: 'b'}, {foo: 'c'}, {id: 'X'}]);
+    const puzzle = manufacturer.build();
+
+    const [a, b, c, d] = puzzle.pieces;
+
+    assert.equal(a.metadata.id, 1);
+    assert.equal(a.metadata.foo,  'a');
+    assert.equal(b.metadata.id, 2);
+    assert.equal(b.metadata.foo, 'b');
+    assert.equal(c.metadata.id, 3);
+    assert.equal(c.metadata.foo, 'c');
+    assert.equal(d.metadata.id, 'X');
+    assert.equal(d.metadata.foo, null);
+  })
 })

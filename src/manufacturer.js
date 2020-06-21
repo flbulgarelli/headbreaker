@@ -1,10 +1,24 @@
-const {Puzzle} = require('./puzzle');
+const {Piece, Puzzle} = require('./puzzle');
 const {anchor} = require('./anchor');
 const {fixed, InsertSequence} = require('./sequence')
 
+/**
+ * A manufacturer allows to create rectangular
+ * puzzles by automatically generating inserts
+ */
 class Manufacturer {
   constructor() {
     this.insertsGenerator = fixed;
+    this.metadata = [];
+  }
+
+  /**
+   * Attach metadata to each piece
+   *
+   * @param {object[]} metadata list of metadata that will be attached to each generated piece
+   */
+  withMetadata(metadata) {
+    this.metadata = metadata;
   }
 
   /**
@@ -52,7 +66,26 @@ class Manufacturer {
         piece.placeAt(this._naturalAnchor(x, y, puzzle));
       }
     }
+    this._annotateAll(puzzle.pieces);
     return puzzle;
+  }
+
+  /**
+   * @param {Piece[]} pieces
+   */
+  _annotateAll(pieces) {
+    pieces.forEach((piece, index) => this._annotate(piece, index));
+  }
+
+  /**
+   * @param {Piece} piece
+   * @param {number} index
+   */
+  _annotate(piece, index) {
+    const baseMetadata = this.metadata[index];
+    const metadata = baseMetadata ? Object.assign({}, baseMetadata) : {};
+    metadata.id = metadata.id || String(index + 1);
+    piece.annotate(metadata);
   }
 
   /**
