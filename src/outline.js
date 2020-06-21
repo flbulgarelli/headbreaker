@@ -13,7 +13,7 @@ function select(insert, t, s, n) {
 /**
  *
  * @param {Piece} piece
- * @param {number?} size
+ * @param {number} [size]
  * @returns {number[]}
  */
 function draw(piece, size = 50, borderFill = 0) {

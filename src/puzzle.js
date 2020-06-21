@@ -4,13 +4,14 @@ const {Anchor} = require('./anchor');
 const {None} = require('./structure')
 
 /**
- * @typedef {{pieceSize?: number, proximity?: number}} Settings
- * @typedef {import('./../src/structure').Structure} Structure
+ * @typedef {object} Settings
+ * @property {number} [pieceSize]
+ * @property {number} [proximity]
  */
 class Puzzle {
 
   /**
-   * @param {Settings?} options
+   * @param {Settings} [options]
    */
   constructor({pieceSize = 2, proximity = 1} = {}) {
     this.pieceSize = pieceSize;
@@ -20,7 +21,7 @@ class Puzzle {
   }
 
   /**
-   * @param {Structure?} options
+   * @param {import('./../src/structure').Structure} [options]
    */
   newPiece(options = {}) {
     const piece = new Piece(options);
@@ -104,7 +105,7 @@ class Puzzle {
 class Piece {
 
   /**
-   * @param {Structure?} options
+   * @param {import('./../src/structure').Structure} [options]
    */
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
@@ -197,7 +198,7 @@ class Piece {
   /**
    *
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   connectVerticallyWith(other, back = false) {
     if (!this.canConnectVerticallyWith(other)) {
@@ -225,7 +226,7 @@ class Piece {
 
   /**
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   connectHorizontallyWith(other, back = false) {
     if (!this.canConnectHorizontallyWith(other)) {
@@ -253,7 +254,7 @@ class Piece {
 
   /**
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   tryConnectWith(other, back = false) {
     this.tryConnectHorizontallyWith(other, back);
@@ -263,7 +264,7 @@ class Piece {
   /**
    *
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   tryConnectHorizontallyWith(other, back = false) {
     if (this.canConnectHorizontallyWith(other)) {
@@ -273,7 +274,7 @@ class Piece {
   /**
    *
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   tryConnectVerticallyWith(other, back = false) {
     if (this.canConnectVerticallyWith(other)) {
@@ -344,8 +345,8 @@ class Piece {
    *
    * @param {number} dx
    * @param {number} dy
-   * @param {boolean?} quiet
-   * @param {Piece[]} pushedPieces
+   * @param {boolean} [quiet]
+   * @param {Piece[]} [pushedPieces]
    */
   push(dx, dy, quiet = false, pushedPieces = [this]) {
     this.translate(dx, dy, quiet);

@@ -40,7 +40,11 @@ function parseInsert(insert) {
 }
 
 /**
- * @typedef {{up?: Insert, down?: Insert, left?: Insert, right?: Insert}} Structure
+ * @typedef {object} Structure
+ * @property {Insert} [up]
+ * @property {Insert} [left]
+ * @property {Insert} [down]
+ * @property {Insert} [right]
  */
 
 /**

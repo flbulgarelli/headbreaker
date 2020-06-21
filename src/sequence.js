@@ -1,8 +1,6 @@
 const {Tab, Slot, None} = require('../src/structure');
 
 
-/** @typedef {import('./structure').Insert} Insert */
-
 /**
  * @type {InsertsGenerator};
  */
@@ -32,7 +30,7 @@ function random(_) {
 }
 
 /**
- * @typedef {(index:number) => Insert} InsertsGenerator;
+ * @typedef {(index:number) => import('./structure').Insert} InsertsGenerator;
  */
 class InsertSequence {
   /**
@@ -46,14 +44,14 @@ class InsertSequence {
   }
 
   /**
-   * @returns {Insert}
+   * @returns {import('./structure').Insert}
    */
   previousComplement() {
     return this._previous.complement();
   }
 
   /**
-   * @returns {Insert}
+   * @returns {import('./structure').Insert}
    */
   current(max) {
     if (this.n == max) {

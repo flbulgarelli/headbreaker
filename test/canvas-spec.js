@@ -21,13 +21,8 @@ describe("PuzzleCanvas", () => {
       structure: {right: Tab, down: Tab, left: Slot},
       data: {
         id: 'a',
-        imageOffset: null,
-        image: null,
-        strokeColor: null,
-        targetPosition: null,
         currentPosition: {x: 50, y: 50},
-        color: 'red',
-        label: null
+        color: 'red'
       }
     });
 
@@ -57,13 +52,8 @@ describe("PuzzleCanvas", () => {
       structure: "STS-",
       data: {
         id: 'a',
-        imageOffset: null,
-        image: null,
-        strokeColor: null,
-        targetPosition: null,
         currentPosition: {x: 50, y: 50},
-        color: 'red',
-        label: null
+        color: 'red'
       }
     });
 
@@ -97,7 +87,7 @@ describe("PuzzleCanvas", () => {
     canvas.withPuzzle({
       verticalPiecesCount: 4,
       horizontalPiecesCount: 4,
-      insertsGenerator: flipflop
+      insertsGenerator: flipflop,
     });
     canvas.shuffle(0.7);
     canvas.draw();
@@ -119,7 +109,7 @@ describe("PuzzleCanvas", () => {
       pieceSize: 100, proximity: 20,
       borderFill: 10, strokeWidth: 2,
       lineSoftness: 0.12, strokeColor: 'red',
-      image: null, painter: painter
+      painter: painter
     });
 
     canvas.withPuzzle({
