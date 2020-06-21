@@ -114,25 +114,25 @@ class PuzzleCanvas {
    * @param {number} [options.horizontalPiecesCount]
    * @param {number} [options.verticalPiecesCount]
    * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
-   * @param {CanvasMetadata[]} [options.dataList] optional list of metadata that will be attached to each generated piece
+   * @param {CanvasMetadata[]} [options.metadataList] optional list of metadata that will be attached to each generated piece
    */
-  withPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, dataList = []}) {
+  withPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadataList = []}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);
-    this.withManufacturer(manufacturer, dataList);
+    this.withManufacturer(manufacturer, metadataList);
   }
 
   /**
    * @param {Manufacturer} manufacturer
-   * @param {CanvasMetadata[]} [dataList]
+   * @param {CanvasMetadata[]} [metadataList]
    */
-  withManufacturer(manufacturer, dataList = []) {
+  withManufacturer(manufacturer, metadataList = []) {
     manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
     this._puzzle.pieces.forEach((it, index) => {
-      this._annotatePiece(it, dataList, index);
+      this._annotatePiece(it, metadataList, index);
       this._renderPiece(it);
     });
   }
@@ -222,12 +222,12 @@ class PuzzleCanvas {
 
   /**
    * @param {Piece} piece
-   * @param {CanvasMetadata[]} dataList
+   * @param {CanvasMetadata[]} metadataList
    * @param {number} index
    */
-  _annotatePiece(piece, dataList, index) {
+  _annotatePiece(piece, metadataList, index) {
     const position = { x: piece.centralAnchor.x, y: piece.centralAnchor.y };
-    const metadata = dataList[index] ? dataList[index] : {};
+    const metadata = metadataList[index] ? metadataList[index] : {};
     metadata.targetPosition = position;
     metadata.currentPosition = position;
     metadata.id = String(index + 1);
