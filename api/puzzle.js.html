@@ -32,13 +32,14 @@ const {Anchor} = require('./anchor');
 const {None} = require('./structure')
 
 /**
- * @typedef {{pieceSize?: number, proximity?: number}} Settings
- * @typedef {import('./../src/structure').Structure} Structure
+ * @typedef {object} Settings
+ * @property {number} [pieceSize]
+ * @property {number} [proximity]
  */
 class Puzzle {
 
   /**
-   * @param {Settings?} options
+   * @param {Settings} [options]
    */
   constructor({pieceSize = 2, proximity = 1} = {}) {
     this.pieceSize = pieceSize;
@@ -48,12 +49,12 @@ class Puzzle {
   }
 
   /**
-   * @param {Structure?} options
+   * @param {import('./../src/structure').Structure} [options]
    */
   newPiece(options = {}) {
     const piece = new Piece(options);
     this.pieces.push(piece);
-    piece.belongsTo(this);
+    piece.belongTo(this);
     return piece;
   }
 
@@ -120,8 +121,8 @@ class Puzzle {
     this.pieces.forEach(it => it.onDisconnect(f));
   }
 
-  get data() {
-    return this.pieces.map(it => it.data);
+  get metadata() {
+    return this.pieces.map(it => it.metadata);
   }
 }
 
@@ -132,7 +133,7 @@ class Puzzle {
 class Piece {
 
   /**
-   * @param {Structure?} options
+   * @param {import('./../src/structure').Structure} [options]
    */
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
@@ -152,16 +153,18 @@ class Piece {
   }
 
   /**
-   * @param {object} data
+   * Sets unestructured user-defined metadata on this piece
+   *
+   * @param {object} metadata
    */
-  carry(data) {
-    this.data = data;
+  annotate(metadata) {
+    this.metadata = metadata;
   }
 
   /**
    * @param {Puzzle} puzzle
    */
-  belongsTo(puzzle) {
+  belongTo(puzzle) {
     this.puzzle = puzzle;
   }
 
@@ -225,7 +228,7 @@ class Piece {
   /**
    *
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   connectVerticallyWith(other, back = false) {
     if (!this.canConnectVerticallyWith(other)) {
@@ -253,7 +256,7 @@ class Piece {
 
   /**
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   connectHorizontallyWith(other, back = false) {
     if (!this.canConnectHorizontallyWith(other)) {
@@ -281,7 +284,7 @@ class Piece {
 
   /**
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   tryConnectWith(other, back = false) {
     this.tryConnectHorizontallyWith(other, back);
@@ -291,7 +294,7 @@ class Piece {
   /**
    *
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   tryConnectHorizontallyWith(other, back = false) {
     if (this.canConnectHorizontallyWith(other)) {
@@ -301,7 +304,7 @@ class Piece {
   /**
    *
    * @param {Piece} other
-   * @param {boolean?} back
+   * @param {boolean} [back]
    */
   tryConnectVerticallyWith(other, back = false) {
     if (this.canConnectVerticallyWith(other)) {
@@ -372,8 +375,8 @@ class Piece {
    *
    * @param {number} dx
    * @param {number} dy
-   * @param {boolean?} quiet
-   * @param {Piece[]} pushedPieces
+   * @param {boolean} [quiet]
+   * @param {Piece[]} [pushedPieces]
    */
   push(dx, dy, quiet = false, pushedPieces = [this]) {
     this.translate(dx, dy, quiet);
@@ -546,13 +549,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-PuzzleCanvas.html">PuzzleCanvas</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleCanvas.html">PuzzleCanvas</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pieces">pieces</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-PuzzleCanvas.html">PuzzleCanvas</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleCanvas.html">PuzzleCanvas</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Jun 20 2020 20:38:02 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jun 21 2020 13:08:47 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

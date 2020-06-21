@@ -101,17 +101,17 @@
 <h2 id="basic">Basic</h2>
 <h3 id="code">Code</h3>
 <pre><code class="javascript">const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
-basic.withPiece({
+basic.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
+  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-  data: { id: 'g', currentPosition: { x: 100, y: 230 } }
+  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
 // ... more pieces ...
 basic.draw();.
@@ -128,17 +128,17 @@ basic.draw();.
   pieceSize: 50, proximity: 10,
   lineSoftness: 0.2
 });
-soft.withPiece({
+soft.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
+  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-  data: { id: 'g', currentPosition: { x: 100, y: 230 } }
+  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
 // ... more pieces ...
 soft.draw();
@@ -158,17 +158,17 @@ soft.draw();
   lineSoftness: 0.0
 });
 
-perfect.withPiece({
+perfect.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Slot },
-  data: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
+  metadata: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { right: headbreaker.Slot, left: headbreaker.Slot },
-  data: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
+  metadata: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { down: headbreaker.Tab, left: headbreaker.Tab },
-  data: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
+  metadata: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
 });
 // ... more pieces ...
 perfect.draw();
@@ -194,7 +194,7 @@ xul.onload = () =&gt; {
     lineSoftness: 0.18, image: xul,
   });
 
-  autogen.withPuzzle({
+  autogen.autogeneratePuzzle({
     horizontalPiecesCount: 6,
     verticalPiecesCount: 5
   });
@@ -217,7 +217,7 @@ dali.onload = () =&gt; {
     borderFill: 10, strokeWidth: 2,
     lineSoftness: 0.12, image: dali
   });
-  randomized.withPuzzle({
+  randomized.autogeneratePuzzle({
     insertsGenerator: headbreaker.sequence.flipflop
   });
   randomized.shuffle(0.7);
@@ -238,9 +238,9 @@ dali.onload = () =&gt; {
   lineSoftness: 0.18,
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { right: headbreaker.Tab },
-  data: {
+  metadata: {
     id: 'tree-kanji',
     color: '#23599E',
     strokeColor: '#18396B',
@@ -248,9 +248,9 @@ labels.withPiece({
   }
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { left: headbreaker.Slot },
-  data: {
+  metadata: {
     id: 'tree-emoji',
     color: '#EBB34B',
     strokeColor: '#695024',
@@ -281,7 +281,7 @@ berni.onload = () =&gt; {
     strokeColor: 'black'
   });
 
-  sound.withPuzzle({
+  sound.autogeneratePuzzle({
     horizontalPiecesCount: 6,
     insertsGenerator: headbreaker.sequence.random
   });
@@ -320,29 +320,29 @@ berni.onload = () =&gt; {
 <h2 id="dynamic">Dynamic</h2>
 <h3 id="code_7">Code</h3>
 <pre><code class="javascript">function updateLabel(piece, figure, delta) {
-  piece.data.label.text = Number(piece.data.label.text) + delta;
-  figure.label.text(piece.data.label.text);
+  piece.metadata.label.text = Number(piece.metadata.label.text) + delta;
+  figure.label.text(piece.metadata.label.text);
 }
 
 const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
-dynamic.withTemplate('A', {
-  structure: 'TTSS', data: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
+dynamic.defineTemplate('A', {
+  structure: 'TTSS', metadata: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
 });
-dynamic.withTemplate('B', {
-  structure: 'TTTT', data: { label: { text: '0', x: 22 }, color: '#438D8F' }
+dynamic.defineTemplate('B', {
+  structure: 'TTTT', metadata: { label: { text: '0', x: 22 }, color: '#438D8F' }
 });
-dynamic.withTemplate('C', {
-  structure: 'SSSS', data: { label: { text: '0', x: 22 }, color: '#DBC967' }
+dynamic.defineTemplate('C', {
+  structure: 'SSSS', metadata: { label: { text: '0', x: 22 }, color: '#DBC967' }
 });
 // ... more templates ...
 
-dynamic.withPieceFromTemplate('a', 'A');
-dynamic.withPieceFromTemplate('b', 'A');
-dynamic.withPieceFromTemplate('c', 'B');
-dynamic.withPieceFromTemplate('d', 'C');
-dynamic.withPieceFromTemplate('e', 'C');
-dynamic.withPieceFromTemplate('f', 'D');
-dynamic.withPieceFromTemplate('g', 'E');
+dynamic.createPieceFromTemplate('a', 'A');
+dynamic.createPieceFromTemplate('b', 'A');
+dynamic.createPieceFromTemplate('c', 'B');
+dynamic.createPieceFromTemplate('d', 'C');
+dynamic.createPieceFromTemplate('e', 'C');
+dynamic.createPieceFromTemplate('f', 'D');
+dynamic.createPieceFromTemplate('g', 'E');
 dynamic.shuffle(0.7);
 dynamic.onConnect((piece, figure, target, targetFigure) =&gt; {
   updateLabel(piece, figure, 1);
@@ -446,5 +446,5 @@ dynamic.draw();
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-06-20 23:39:40
+Build Date UTC : 2020-06-21 16:09:10
 -->

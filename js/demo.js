@@ -4,33 +4,33 @@
 // ============
 
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
-basic.withPiece({
+basic.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
+  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-  data: { id: 'g', currentPosition: { x: 100, y: 230 } }
+  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'c', currentPosition: { x: 150, y: 50 }, color: '#B83361' }
+  metadata: { id: 'c', currentPosition: { x: 150, y: 50 }, color: '#B83361' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-  data: { id: 'd', currentPosition: { x: 150, y: 100 }, color: '#37AB8C' }
+  metadata: { id: 'd', currentPosition: { x: 150, y: 100 }, color: '#37AB8C' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-  data: { id: 'e', currentPosition: { x: 250, y: 200 }, color: '#3934C2' }
+  metadata: { id: 'e', currentPosition: { x: 250, y: 200 }, color: '#3934C2' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
-  data: { id: 'f', currentPosition: { x: 350, y: 250 }, color: '#A4C234' }
+  metadata: { id: 'f', currentPosition: { x: 350, y: 250 }, color: '#A4C234' }
 });
 basic.draw();
 
@@ -43,33 +43,33 @@ const soft = new headbreaker.Canvas('soft-canvas', {
   pieceSize: 50, proximity: 10,
   lineSoftness: 0.2
 });
-soft.withPiece({
+soft.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
+  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-  data: { id: 'g', currentPosition: { x: 100, y: 230 } }
+  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'c', currentPosition: { x: 150, y: 50 }, color: '#B83361' }
+  metadata: { id: 'c', currentPosition: { x: 150, y: 50 }, color: '#B83361' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-  data: { id: 'd', currentPosition: { x: 150, y: 100 }, color: '#37AB8C' }
+  metadata: { id: 'd', currentPosition: { x: 150, y: 100 }, color: '#37AB8C' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-  data: { id: 'e', currentPosition: { x: 250, y: 200 }, color: '#3934C2' }
+  metadata: { id: 'e', currentPosition: { x: 250, y: 200 }, color: '#3934C2' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
-  data: { id: 'f', currentPosition: { x: 350, y: 250 }, color: '#A4C234' }
+  metadata: { id: 'f', currentPosition: { x: 350, y: 250 }, color: '#A4C234' }
 });
 soft.draw();
 
@@ -85,25 +85,25 @@ const perfect = new headbreaker.Canvas('perfect-canvas', {
   lineSoftness: 0.0
 });
 
-perfect.withPiece({
+perfect.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Slot },
-  data: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
+  metadata: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { right: headbreaker.Slot, left: headbreaker.Slot },
-  data: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
+  metadata: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { down: headbreaker.Tab, left: headbreaker.Tab },
-  data: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
+  metadata: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { up: headbreaker.Slot },
-  data: { id: 'd', targetPosition: { x: 480, y: 130 }, color: '#054511' }
+  metadata: { id: 'd', targetPosition: { x: 480, y: 130 }, color: '#054511' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { up: headbreaker.Tab },
-  data: { id: 'e', targetPosition: { x: 530, y: 80 }, color: '#04330C' }
+  metadata: { id: 'e', targetPosition: { x: 530, y: 80 }, color: '#04330C' }
 });
 
 perfect.draw();
@@ -122,109 +122,109 @@ vangogh.onload = () => {
     lineSoftness: 0.12, image: vangogh,
   });
 
-  background.withPiece({
+  background.createPiece({
     structure: { right: headbreaker.Tab, down: headbreaker.Slot },
-    data: { id: 'a', targetPosition: { x: 100, y: 100 } },
+    metadata: { id: 'a', targetPosition: { x: 100, y: 100 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-    data: { id: 'b', targetPosition: { x: 200, y: 100 } },
+    metadata: { id: 'b', targetPosition: { x: 200, y: 100 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
-    data: { id: 'c', targetPosition: { x: 300, y: 100 } },
+    metadata: { id: 'c', targetPosition: { x: 300, y: 100 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
-    data: { id: 'd', targetPosition: { x: 400, y: 100 } },
+    metadata: { id: 'd', targetPosition: { x: 400, y: 100 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { down: headbreaker.Tab, left: headbreaker.Tab },
-    data: { id: 'e', targetPosition: { x: 500, y: 100 } },
+    metadata: { id: 'e', targetPosition: { x: 500, y: 100 } },
   });
 
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None },
-    data: { id: 'f', targetPosition: { x: 100, y: 200 } },
+    metadata: { id: 'f', targetPosition: { x: 100, y: 200 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-    data: { id: 'g', targetPosition: { x: 200, y: 200 } },
+    metadata: { id: 'g', targetPosition: { x: 200, y: 200 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
-    data: { id: 'h', targetPosition: { x: 300, y: 200 } },
+    metadata: { id: 'h', targetPosition: { x: 300, y: 200 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-    data: { id: 'i', targetPosition: { x: 400, y: 200 } },
+    metadata: { id: 'i', targetPosition: { x: 400, y: 200 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot },
-    data: { id: 'j', targetPosition: { x: 500, y: 200 } },
+    metadata: { id: 'j', targetPosition: { x: 500, y: 200 } },
   });
 
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None },
-    data: { id: 'k', targetPosition: { x: 100, y: 300 } },
+    metadata: { id: 'k', targetPosition: { x: 100, y: 300 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-    data: { id: 'l', targetPosition: { x: 200, y: 300 } },
+    metadata: { id: 'l', targetPosition: { x: 200, y: 300 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Slot },
-    data: { id: 'm', targetPosition: { x: 300, y: 300 } },
+    metadata: { id: 'm', targetPosition: { x: 300, y: 300 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
-    data: { id: 'n', targetPosition: { x: 400, y: 300 } },
+    metadata: { id: 'n', targetPosition: { x: 400, y: 300 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot },
-    data: { id: 'o', targetPosition: { x: 500, y: 300 } },
+    metadata: { id: 'o', targetPosition: { x: 500, y: 300 } },
   });
 
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None },
-    data: { id: 'p', targetPosition: { x: 100, y: 400 } },
+    metadata: { id: 'p', targetPosition: { x: 100, y: 400 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-    data: { id: 'q', targetPosition: { x: 200, y: 400 } },
+    metadata: { id: 'q', targetPosition: { x: 200, y: 400 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-    data: { id: 'r', targetPosition: { x: 300, y: 400 } },
+    metadata: { id: 'r', targetPosition: { x: 300, y: 400 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
-    data: { id: 's', targetPosition: { x: 400, y: 400 } },
+    metadata: { id: 's', targetPosition: { x: 400, y: 400 } },
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Tab },
-    data: { id: 't', targetPosition: { x: 500, y: 400 }, currentPosition: { x: 613, y: 386 } }
+    metadata: { id: 't', targetPosition: { x: 500, y: 400 }, currentPosition: { x: 613, y: 386 } }
   });
 
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.None },
-    data: { id: 'u', targetPosition: { x: 100, y: 500 } }
+    metadata: { id: 'u', targetPosition: { x: 100, y: 500 } }
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot },
-    data: { id: 'v', targetPosition: { x: 200, y: 500 } }
+    metadata: { id: 'v', targetPosition: { x: 200, y: 500 } }
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot },
-    data: { id: 'w', targetPosition: { x: 300, y: 500 } }
+    metadata: { id: 'w', targetPosition: { x: 300, y: 500 } }
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot },
-    data: { id: 'x', targetPosition: { x: 400, y: 500 }, currentPosition: { x: 425, y: 530 } }
+    metadata: { id: 'x', targetPosition: { x: 400, y: 500 }, currentPosition: { x: 425, y: 530 } }
   });
-  background.withPiece({
+  background.createPiece({
     structure: { up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.Tab },
-    data: { id: 'y', targetPosition: { x: 500, y: 500 }, currentPosition: { x: 570, y: 560 } }
+    metadata: { id: 'y', targetPosition: { x: 500, y: 500 }, currentPosition: { x: 570, y: 560 } }
   });
   background.draw();
 }
@@ -244,7 +244,7 @@ xul.onload = () => {
     lineSoftness: 0.18, image: xul,
   });
 
-  autogen.withPuzzle({
+  autogen.autogeneratePuzzle({
     horizontalPiecesCount: 6,
     verticalPiecesCount: 5
   });
@@ -265,7 +265,7 @@ dali.onload = () => {
     lineSoftness: 0.12, image: dali
   });
 
-  randomized.withPuzzle({
+  randomized.autogeneratePuzzle({
     insertsGenerator: headbreaker.sequence.flipflop
   });
   randomized.shuffle(0.7);
@@ -284,9 +284,9 @@ const labels = new headbreaker.Canvas('labels-canvas', {
   lineSoftness: 0.18,
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { right: headbreaker.Tab },
-  data: {
+  metadata: {
     id: 'tree-kanji',
     color: '#23599E',
     strokeColor: '#18396B',
@@ -294,9 +294,9 @@ labels.withPiece({
   }
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { right: headbreaker.Tab },
-  data: {
+  metadata: {
     id: 'fire-kanji',
     color: '#23599E',
     strokeColor: '#18396B',
@@ -304,9 +304,9 @@ labels.withPiece({
   }
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { right: headbreaker.Tab },
-  data: {
+  metadata: {
     id: 'water-kanji',
     color: '#23599E',
     strokeColor: '#18396B',
@@ -314,9 +314,9 @@ labels.withPiece({
   }
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { left: headbreaker.Slot },
-  data: {
+  metadata: {
     id: 'water-emoji',
     color: '#EBB34B',
     strokeColor: '#695024',
@@ -324,9 +324,9 @@ labels.withPiece({
   }
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { left: headbreaker.Slot },
-  data: {
+  metadata: {
     id: 'tree-emoji',
     color: '#EBB34B',
     strokeColor: '#695024',
@@ -334,9 +334,9 @@ labels.withPiece({
   }
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { left: headbreaker.Slot },
-  data: {
+  metadata: {
     id: 'fire-emoji',
     color: '#EBB34B',
     strokeColor: '#695024',
@@ -363,7 +363,7 @@ berni.onload = () => {
     strokeColor: 'black'
   });
 
-  sound.withPuzzle({
+  sound.autogeneratePuzzle({
     horizontalPiecesCount: 6,
     insertsGenerator: headbreaker.sequence.random
   });
@@ -393,34 +393,34 @@ berni.onload = () => {
 // ==============
 
 function updateLabel(piece, figure, delta) {
-  piece.data.label.text = Number(piece.data.label.text) + delta;
-  figure.label.text(piece.data.label.text);
+  piece.metadata.label.text = Number(piece.metadata.label.text) + delta;
+  figure.label.text(piece.metadata.label.text);
 }
 
 const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
-dynamic.withTemplate('A', {
-  structure: 'TTSS', data: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
+dynamic.defineTemplate('A', {
+  structure: 'TTSS', metadata: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
 });
-dynamic.withTemplate('B', {
-  structure: 'TTTT', data: { label: { text: '0', x: 22 }, color: '#438D8F' }
+dynamic.defineTemplate('B', {
+  structure: 'TTTT', metadata: { label: { text: '0', x: 22 }, color: '#438D8F' }
 });
-dynamic.withTemplate('C', {
-  structure: 'SSSS', data: { label: { text: '0', x: 22 }, color: '#DBC967' }
+dynamic.defineTemplate('C', {
+  structure: 'SSSS', metadata: { label: { text: '0', x: 22 }, color: '#DBC967' }
 });
-dynamic.withTemplate('D', {
-  structure: 'STTT', data: { label: { text: '0', x: 22 }, color: '#8F844A' }
+dynamic.defineTemplate('D', {
+  structure: 'STTT', metadata: { label: { text: '0', x: 22 }, color: '#8F844A' }
 });
-dynamic.withTemplate('E', {
-  structure: 'SSTT', data: { label: { text: '0', x: 22 }, color: '#7DDADB' }
+dynamic.defineTemplate('E', {
+  structure: 'SSTT', metadata: { label: { text: '0', x: 22 }, color: '#7DDADB' }
 });
 
-dynamic.withPieceFromTemplate('a', 'A');
-dynamic.withPieceFromTemplate('b', 'A');
-dynamic.withPieceFromTemplate('c', 'B');
-dynamic.withPieceFromTemplate('d', 'C');
-dynamic.withPieceFromTemplate('e', 'C');
-dynamic.withPieceFromTemplate('f', 'D');
-dynamic.withPieceFromTemplate('g', 'E');
+dynamic.createPieceFromTemplate('a', 'A');
+dynamic.createPieceFromTemplate('b', 'A');
+dynamic.createPieceFromTemplate('c', 'B');
+dynamic.createPieceFromTemplate('d', 'C');
+dynamic.createPieceFromTemplate('e', 'C');
+dynamic.createPieceFromTemplate('f', 'D');
+dynamic.createPieceFromTemplate('g', 'E');
 dynamic.shuffle(0.7);
 dynamic.onConnect((piece, figure, target, targetFigure) => {
   updateLabel(piece, figure, 1);
