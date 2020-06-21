@@ -1,4 +1,17 @@
-const Konva = require('konva');
+let Konva;
+try {
+  // @ts-ignore
+  Konva = require('konva');
+} catch (e) {
+  Konva = {
+    Stage: class {
+      constructor(_options) {
+        throw new Error("Konva not loaded");
+      }
+    }
+  };
+}
+
 const PuzzleCanvas = require('./canvas');
 const outline = require('./outline');
 const {Piece} = require('./puzzle');
@@ -22,14 +35,12 @@ class KonvaPainter {
    * @param {string} id
    */
   initialize(canvas, id) {
-    // @ts-ignore
     var stage = new Konva.Stage({
       container: id,
       width: canvas.width,
       height: canvas.height
     });
 
-    // @ts-ignore
     var layer = new Konva.Layer();
     stage.add(layer);
     canvas['__konvaLayer__'] = layer;
@@ -49,13 +60,11 @@ class KonvaPainter {
    * @param {Figure} figure
    */
   sketch(canvas, piece, figure) {
-    // @ts-ignore
     figure.group = new Konva.Group({
       x: piece.metadata.currentPosition.x,
       y: piece.metadata.currentPosition.y
     });
     const image = canvas.image || piece.metadata.image;
-    // @ts-ignore
     figure.shape = new Konva.Line({
       points: outline.draw(piece, canvas.pieceSize, canvas.borderFill),
       fill: !image ? piece.metadata.color || 'black' : null,
@@ -79,7 +88,6 @@ class KonvaPainter {
    * @param {Figure} figure
    */
   label(_canvas, piece, figure) {
-    // @ts-ignore
     figure.label = new Konva.Text({
       x: piece.metadata.label.x || (figure.group.width() / 2),
       y: piece.metadata.label.y || (figure.group.height() / 2),

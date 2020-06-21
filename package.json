@@ -29,7 +29,7 @@
     "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.2.1"
   },
-  "dependencies": {
+  "optionalDependencies": {
     "konva": "^6.0.0"
   }
 }

@@ -16,15 +16,16 @@
  * Highligh customizable puzzle-pieces domain-model
  * Zero-dependencies - although Konva.js is used a a rendering backed, it is an optional dependency which can be replaced be custom code
 
+## Installing
+
+```bash
+npm install --save headbreaker
+
+# optional: manually add konva to your project if you want to use
+# it as rendering backend
+npm install --save konva
+```
+
 ## 👀 Docs
 
 See https://flbulgarelli.github.io/headbreaker/
-
-
-
-
-
-
-
-
-
