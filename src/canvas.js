@@ -101,7 +101,7 @@ class PuzzleCanvas {
   /**
    * @param {Template} options
    */
-  withPiece({structure, metadata}) {
+  createPiece({structure, metadata}) {
     metadata.targetPosition = metadata.targetPosition || { x: 0, y: 0 };
     metadata.currentPosition = metadata.currentPosition || metadata.targetPosition;
     this._renderPiece(this._newPiece(structure, metadata));
@@ -116,18 +116,18 @@ class PuzzleCanvas {
    * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
    * @param {CanvasMetadata[]} [options.metadataList] optional list of metadata that will be attached to each generated piece
    */
-  withPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadataList = []}) {
+  autogeneratePuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadataList = []}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);
-    this.withManufacturer(manufacturer, metadataList);
+    this.autogeneratePuzzleWithManufacturer(manufacturer, metadataList);
   }
 
   /**
    * @param {Manufacturer} manufacturer
    * @param {CanvasMetadata[]} [metadataList]
    */
-  withManufacturer(manufacturer, metadataList = []) {
+  autogeneratePuzzleWithManufacturer(manufacturer, metadataList = []) {
     manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
@@ -138,12 +138,12 @@ class PuzzleCanvas {
   }
 
   /**
-   * Creates a name piece template, that can be later instantiated using withPieceFromTemplate
+   * Creates a name piece template, that can be later instantiated using createPieceFromTemplate
    *
    * @param {string} name
    * @param {Template} template
    */
-  withTemplate(name, template) {
+  defineTemplate(name, template) {
     this.templates[name] = template;
   }
 
@@ -153,14 +153,14 @@ class PuzzleCanvas {
    * @param {string} id
    * @param {string} templateName
    */
-  withPieceFromTemplate(id, templateName) {
+  createPieceFromTemplate(id, templateName) {
     const options = this.templates[templateName];
     if (!options) {
       throw new Error(`Unknown template ${id}`);
     }
     const metadata = Object.assign({}, options.metadata);
     metadata.id = id;
-    this.withPiece({structure: options.structure, metadata: metadata})
+    this.createPiece({structure: options.structure, metadata: metadata})
   }
 
   /**

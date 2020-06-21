@@ -8,15 +8,15 @@
 
 ```javascript
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
-basic.withPiece({
+basic.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-basic.withPiece({
+basic.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
   metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
@@ -40,15 +40,15 @@ const soft = new headbreaker.Canvas('soft-canvas', {
   pieceSize: 50, proximity: 10,
   lineSoftness: 0.2
 });
-soft.withPiece({
+soft.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-soft.withPiece({
+soft.createPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
   metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
@@ -75,15 +75,15 @@ const perfect = new headbreaker.Canvas('perfect-canvas', {
   lineSoftness: 0.0
 });
 
-perfect.withPiece({
+perfect.createPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Slot },
   metadata: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { right: headbreaker.Slot, left: headbreaker.Slot },
   metadata: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
 });
-perfect.withPiece({
+perfect.createPiece({
   structure: { down: headbreaker.Tab, left: headbreaker.Tab },
   metadata: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
 });
@@ -117,7 +117,7 @@ xul.onload = () => {
     lineSoftness: 0.18, image: xul,
   });
 
-  autogen.withPuzzle({
+  autogen.autogeneratePuzzle({
     horizontalPiecesCount: 6,
     verticalPiecesCount: 5
   });
@@ -144,7 +144,7 @@ dali.onload = () => {
     borderFill: 10, strokeWidth: 2,
     lineSoftness: 0.12, image: dali
   });
-  randomized.withPuzzle({
+  randomized.autogeneratePuzzle({
     insertsGenerator: headbreaker.sequence.flipflop
   });
   randomized.shuffle(0.7);
@@ -169,7 +169,7 @@ const labels = new headbreaker.Canvas('labels-canvas', {
   lineSoftness: 0.18,
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { right: headbreaker.Tab },
   metadata: {
     id: 'tree-kanji',
@@ -179,7 +179,7 @@ labels.withPiece({
   }
 });
 
-labels.withPiece({
+labels.createPiece({
   structure: { left: headbreaker.Slot },
   metadata: {
     id: 'tree-emoji',
@@ -216,7 +216,7 @@ berni.onload = () => {
     strokeColor: 'black'
   });
 
-  sound.withPuzzle({
+  sound.autogeneratePuzzle({
     horizontalPiecesCount: 6,
     insertsGenerator: headbreaker.sequence.random
   });
@@ -264,24 +264,24 @@ function updateLabel(piece, figure, delta) {
 }
 
 const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
-dynamic.withTemplate('A', {
+dynamic.defineTemplate('A', {
   structure: 'TTSS', metadata: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
 });
-dynamic.withTemplate('B', {
+dynamic.defineTemplate('B', {
   structure: 'TTTT', metadata: { label: { text: '0', x: 22 }, color: '#438D8F' }
 });
-dynamic.withTemplate('C', {
+dynamic.defineTemplate('C', {
   structure: 'SSSS', metadata: { label: { text: '0', x: 22 }, color: '#DBC967' }
 });
 // ... more templates ...
 
-dynamic.withPieceFromTemplate('a', 'A');
-dynamic.withPieceFromTemplate('b', 'A');
-dynamic.withPieceFromTemplate('c', 'B');
-dynamic.withPieceFromTemplate('d', 'C');
-dynamic.withPieceFromTemplate('e', 'C');
-dynamic.withPieceFromTemplate('f', 'D');
-dynamic.withPieceFromTemplate('g', 'E');
+dynamic.createPieceFromTemplate('a', 'A');
+dynamic.createPieceFromTemplate('b', 'A');
+dynamic.createPieceFromTemplate('c', 'B');
+dynamic.createPieceFromTemplate('d', 'C');
+dynamic.createPieceFromTemplate('e', 'C');
+dynamic.createPieceFromTemplate('f', 'D');
+dynamic.createPieceFromTemplate('g', 'E');
 dynamic.shuffle(0.7);
 dynamic.onConnect((piece, figure, target, targetFigure) => {
   updateLabel(piece, figure, 1);

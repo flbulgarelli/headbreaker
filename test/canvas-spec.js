@@ -17,7 +17,7 @@ describe("PuzzleCanvas", () => {
       painter: painter
     })
 
-    canvas.withPiece({
+    canvas.createPiece({
       structure: {right: Tab, down: Tab, left: Slot},
       metadata: {
         id: 'a',
@@ -48,7 +48,7 @@ describe("PuzzleCanvas", () => {
       painter: painter
     })
 
-    canvas.withPiece({
+    canvas.createPiece({
       structure: "STS-",
       metadata: {
         id: 'a',
@@ -84,7 +84,7 @@ describe("PuzzleCanvas", () => {
       painter: painter
     });
 
-    canvas.withPuzzle({
+    canvas.autogeneratePuzzle({
       verticalPiecesCount: 4,
       horizontalPiecesCount: 4,
       insertsGenerator: flipflop,
@@ -112,7 +112,7 @@ describe("PuzzleCanvas", () => {
       painter: painter
     });
 
-    canvas.withPuzzle({
+    canvas.autogeneratePuzzle({
       verticalPiecesCount: 2,
       horizontalPiecesCount: 2,
       metadataList: [{label:{text: 'a'}}, {label:{text: 'b'}}, {label:{text: 'c'}}, {label:{text: 'd'}}]
@@ -135,7 +135,7 @@ describe("PuzzleCanvas", () => {
       painter: painter
     });
 
-    canvas.withPuzzle({
+    canvas.autogeneratePuzzle({
       verticalPiecesCount: 2,
       horizontalPiecesCount: 2,
       insertsGenerator: flipflop
@@ -168,7 +168,7 @@ describe("PuzzleCanvas", () => {
       painter: painter
     });
 
-    canvas.withPuzzle({
+    canvas.autogeneratePuzzle({
       verticalPiecesCount: 1,
       horizontalPiecesCount: 2,
       insertsGenerator: flipflop
@@ -199,7 +199,7 @@ describe("PuzzleCanvas", () => {
       painter: painter
     });
 
-    canvas.withPuzzle({
+    canvas.autogeneratePuzzle({
       verticalPiecesCount: 3,
       horizontalPiecesCount: 3,
       insertsGenerator: flipflop

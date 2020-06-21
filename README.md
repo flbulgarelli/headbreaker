@@ -16,7 +16,7 @@
  * Highligh customizable puzzle-pieces domain-model
  * Zero-dependencies - although Konva.js is used a a rendering backed, it is an optional dependency which can be replaced be custom code
 
-## Installing
+## 📦 Installing
 
 ```bash
 npm install --save headbreaker
