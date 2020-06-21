@@ -34,11 +34,11 @@ const {twoAndTwo} = require('./sequence');
  *
  * @typedef {import('./../src/structure').Structure|string} StructureLike
  *
- * @typedef {object} LabelData
+ * @typedef {object} LabelMetadata
  * @property {string} [text]
  * @property {number} [fontSize]
  *
- * @typedef {object} CanvasData
+ * @typedef {object} CanvasMetadata
  * @property {string} [id]
  * @property {Position} [targetPosition]
  * @property {Position} [currentPosition]
@@ -46,11 +46,11 @@ const {twoAndTwo} = require('./sequence');
  * @property {string} [color]
  * @property {Image} [image]
  * @property {string} [strokeColor]
- * @property {LabelData} [label]
+ * @property {LabelMetadata} [label]
  *
  * @typedef {object} Template
  * @property {StructureLike} structure
- * @property {CanvasData} data
+ * @property {CanvasMetadata} metadata
  */
 class PuzzleCanvas {
 
@@ -101,37 +101,38 @@ class PuzzleCanvas {
   /**
    * @param {Template} options
    */
-  withPiece({structure, data}) {
-    data.targetPosition = data.targetPosition || { x: 0, y: 0 };
-    data.currentPosition = data.currentPosition || data.targetPosition;
-    this._renderPiece(this._newPiece(structure, data));
+  withPiece({structure, metadata}) {
+    metadata.targetPosition = metadata.targetPosition || { x: 0, y: 0 };
+    metadata.currentPosition = metadata.currentPosition || metadata.targetPosition;
+    this._renderPiece(this._newPiece(structure, metadata));
   }
 
   /**
+   * Automatically generates puzzle's pieces given some configuration paramters
+   *
    * @param {object} options
    * @param {number} [options.horizontalPiecesCount]
    * @param {number} [options.verticalPiecesCount]
    * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
-   * @param {CanvasData[]} [options.data]
+   * @param {CanvasMetadata[]} [options.dataList] optional list of metadata that will be attached to each generated piece
    */
-  withPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, data = []}) {
+  withPuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, dataList = []}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);
-    this.withManufacturer(manufacturer, data);
+    this.withManufacturer(manufacturer, dataList);
   }
 
   /**
    * @param {Manufacturer} manufacturer
-   * @param {CanvasData[]} [data]
+   * @param {CanvasMetadata[]} [dataList]
    */
-  withManufacturer(manufacturer, data = []) {
+  withManufacturer(manufacturer, dataList = []) {
     manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
     this._puzzle.pieces.forEach((it, index) => {
-      const position = { x: it.centralAnchor.x, y: it.centralAnchor.y }
-      it.carry({targetPosition: position, currentPosition: position, id: index + 1});
+      this._annotatePiece(it, dataList, index);
       this._renderPiece(it);
     });
   }
@@ -157,9 +158,9 @@ class PuzzleCanvas {
     if (!options) {
       throw new Error(`Unknown template ${id}`);
     }
-    const data = Object.assign({}, options.data);
-    data.id = id;
-    this.withPiece({structure: options.structure, data: data})
+    const metadata = Object.assign({}, options.metadata);
+    metadata.id = id;
+    this.withPiece({structure: options.structure, metadata: metadata})
   }
 
   /**
@@ -216,7 +217,21 @@ class PuzzleCanvas {
    * @returns {Figure}
    */
   getFigure(piece) {
-    return this.figures[piece.data.id];
+    return this.figures[piece.metadata.id];
+  }
+
+  /**
+   * @param {Piece} piece
+   * @param {CanvasMetadata[]} dataList
+   * @param {number} index
+   */
+  _annotatePiece(piece, dataList, index) {
+    const position = { x: piece.centralAnchor.x, y: piece.centralAnchor.y };
+    const metadata = dataList[index] ? dataList[index] : {};
+    metadata.targetPosition = position;
+    metadata.currentPosition = position;
+    metadata.id = String(index + 1);
+    piece.annotate(metadata);
   }
 
   /**
@@ -225,11 +240,11 @@ class PuzzleCanvas {
   _renderPiece(piece) {
     /** @type {Figure} */
     const figure = {label: null, group: null, shape: null};
-    this.figures[piece.data.id] = figure;
+    this.figures[piece.metadata.id] = figure;
 
     this._painter.sketch(this, piece, figure);
 
-    const label = piece.data.label;
+    const label = piece.metadata.label;
     if (label && label.text) {
       label.fontSize = label.fontSize || this.pieceSize * 0.55;
       label.y = label.y || (this.pieceSize - label.fontSize) / 2;
@@ -277,9 +292,9 @@ class PuzzleCanvas {
    */
   _imageOffsetFor(model) {
     if (this.image) {
-      return model.data.targetPosition;
+      return model.metadata.targetPosition;
     } else {
-      return model.data.imageOffset;
+      return model.metadata.imageOffset;
     }
   }
 
@@ -291,15 +306,15 @@ class PuzzleCanvas {
   /**
    *
    * @param {StructureLike} structure
-   * @param {*} data
+   * @param {CanvasMetadata} metadata
    */
-  _newPiece(structure, data) {
+  _newPiece(structure, metadata) {
     if (typeof(structure) === 'string') {
       structure = parse(structure);
     }
     let piece = this.puzzle.newPiece(structure);
-    piece.carry(data);
-    piece.placeAt(anchor(data.currentPosition.x, data.currentPosition.y));
+    piece.annotate(metadata);
+    piece.placeAt(anchor(metadata.currentPosition.x, metadata.currentPosition.y));
     return piece;
   }
 

@@ -10,15 +10,15 @@
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
 basic.withPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
 basic.withPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
+  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
 basic.withPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-  data: { id: 'g', currentPosition: { x: 100, y: 230 } }
+  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
 // ... more pieces ...
 basic.draw();.
@@ -42,15 +42,15 @@ const soft = new headbreaker.Canvas('soft-canvas', {
 });
 soft.withPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
 soft.withPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  data: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
+  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
 soft.withPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-  data: { id: 'g', currentPosition: { x: 100, y: 230 } }
+  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
 // ... more pieces ...
 soft.draw();
@@ -77,15 +77,15 @@ const perfect = new headbreaker.Canvas('perfect-canvas', {
 
 perfect.withPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Slot },
-  data: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
+  metadata: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
 });
 perfect.withPiece({
   structure: { right: headbreaker.Slot, left: headbreaker.Slot },
-  data: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
+  metadata: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
 });
 perfect.withPiece({
   structure: { down: headbreaker.Tab, left: headbreaker.Tab },
-  data: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
+  metadata: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
 });
 // ... more pieces ...
 perfect.draw();
@@ -171,7 +171,7 @@ const labels = new headbreaker.Canvas('labels-canvas', {
 
 labels.withPiece({
   structure: { right: headbreaker.Tab },
-  data: {
+  metadata: {
     id: 'tree-kanji',
     color: '#23599E',
     strokeColor: '#18396B',
@@ -181,7 +181,7 @@ labels.withPiece({
 
 labels.withPiece({
   structure: { left: headbreaker.Slot },
-  data: {
+  metadata: {
     id: 'tree-emoji',
     color: '#EBB34B',
     strokeColor: '#695024',
@@ -259,19 +259,19 @@ berni.onload = () => {
 
 ```javascript
 function updateLabel(piece, figure, delta) {
-  piece.data.label.text = Number(piece.data.label.text) + delta;
-  figure.label.text(piece.data.label.text);
+  piece.metadata.label.text = Number(piece.metadata.label.text) + delta;
+  figure.label.text(piece.metadata.label.text);
 }
 
 const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
 dynamic.withTemplate('A', {
-  structure: 'TTSS', data: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
+  structure: 'TTSS', metadata: { label: { text: '0', x: 22 }, color: '#DB7BBF' }
 });
 dynamic.withTemplate('B', {
-  structure: 'TTTT', data: { label: { text: '0', x: 22 }, color: '#438D8F' }
+  structure: 'TTTT', metadata: { label: { text: '0', x: 22 }, color: '#438D8F' }
 });
 dynamic.withTemplate('C', {
-  structure: 'SSSS', data: { label: { text: '0', x: 22 }, color: '#DBC967' }
+  structure: 'SSSS', metadata: { label: { text: '0', x: 22 }, color: '#DBC967' }
 });
 // ... more templates ...
 

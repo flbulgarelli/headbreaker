@@ -19,7 +19,7 @@ describe("PuzzleCanvas", () => {
 
     canvas.withPiece({
       structure: {right: Tab, down: Tab, left: Slot},
-      data: {
+      metadata: {
         id: 'a',
         currentPosition: {x: 50, y: 50},
         color: 'red'
@@ -50,7 +50,7 @@ describe("PuzzleCanvas", () => {
 
     canvas.withPiece({
       structure: "STS-",
-      data: {
+      metadata: {
         id: 'a',
         currentPosition: {x: 50, y: 50},
         color: 'red'

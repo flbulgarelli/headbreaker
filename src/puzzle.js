@@ -26,7 +26,7 @@ class Puzzle {
   newPiece(options = {}) {
     const piece = new Piece(options);
     this.pieces.push(piece);
-    piece.belongsTo(this);
+    piece.belongTo(this);
     return piece;
   }
 
@@ -93,8 +93,8 @@ class Puzzle {
     this.pieces.forEach(it => it.onDisconnect(f));
   }
 
-  get data() {
-    return this.pieces.map(it => it.data);
+  get metadata() {
+    return this.pieces.map(it => it.metadata);
   }
 }
 
@@ -125,16 +125,18 @@ class Piece {
   }
 
   /**
-   * @param {object} data
+   * Sets unestructured user-defined metadata on this piece
+   *
+   * @param {object} metadata
    */
-  carry(data) {
-    this.data = data;
+  annotate(metadata) {
+    this.metadata = metadata;
   }
 
   /**
    * @param {Puzzle} puzzle
    */
-  belongsTo(puzzle) {
+  belongTo(puzzle) {
     this.puzzle = puzzle;
   }
 

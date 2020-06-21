@@ -10,7 +10,7 @@ const vector = require('./vector');
  * @param {*} group
  */
 function currentPositionDiff(model, group) {
-  return vector.diff(group.x(),group.y(), model.data.currentPosition.x, model.data.currentPosition.y);
+  return vector.diff(group.x(),group.y(), model.metadata.currentPosition.x, model.metadata.currentPosition.y);
 }
 
 class KonvaPainter {
@@ -51,18 +51,18 @@ class KonvaPainter {
   sketch(canvas, piece, figure) {
     // @ts-ignore
     figure.group = new Konva.Group({
-      x: piece.data.currentPosition.x,
-      y: piece.data.currentPosition.y
+      x: piece.metadata.currentPosition.x,
+      y: piece.metadata.currentPosition.y
     });
-    const image = canvas.image || piece.data.image;
+    const image = canvas.image || piece.metadata.image;
     // @ts-ignore
     figure.shape = new Konva.Line({
       points: outline.draw(piece, canvas.pieceSize, canvas.borderFill),
-      fill: !image ? piece.data.color || 'black' : null,
+      fill: !image ? piece.metadata.color || 'black' : null,
       tension: canvas.lineSoftness,
       fillPatternImage: image,
       fillPatternOffset: canvas._imageOffsetFor(piece),
-      stroke: piece.data.strokeColor || canvas.strokeColor,
+      stroke: piece.metadata.strokeColor || canvas.strokeColor,
       strokeWidth: canvas.strokeWidth,
       closed: true,
     });
@@ -81,12 +81,12 @@ class KonvaPainter {
   label(_canvas, piece, figure) {
     // @ts-ignore
     figure.label = new Konva.Text({
-      x: piece.data.label.x || (figure.group.width() / 2),
-      y: piece.data.label.y || (figure.group.height() / 2),
-      text:     piece.data.label.text,
-      fontSize: piece.data.label.fontSize,
-      fontFamily: piece.data.label.fontFamily || 'Sans Serif',
-      fill: piece.data.label.color || 'white',
+      x: piece.metadata.label.x || (figure.group.width() / 2),
+      y: piece.metadata.label.y || (figure.group.height() / 2),
+      text:     piece.metadata.label.text,
+      fontSize: piece.metadata.label.fontSize,
+      fontFamily: piece.metadata.label.fontFamily || 'Sans Serif',
+      fill: piece.metadata.label.color || 'white',
     });
     figure.group.add(figure.label);
   }
@@ -108,8 +108,8 @@ class KonvaPainter {
    * @param {*} group
    */
   logicalTranslate(_canvas, piece, group) {
-    piece.data.currentPosition.x = group.x();
-    piece.data.currentPosition.y = group.y();
+    piece.metadata.currentPosition.x = group.x();
+    piece.metadata.currentPosition.y = group.y();
   }
 
   /**
