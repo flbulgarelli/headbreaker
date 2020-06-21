@@ -2,6 +2,7 @@ const vector = require('./vector');
 const pivot = require('./pivot');
 const {Anchor} = require('./anchor');
 const {None} = require('./structure')
+const connector = require('./connector')
 
 /**
  * @typedef {object} Settings
@@ -216,14 +217,7 @@ class Piece {
    * @param {Piece} other
    */
   attractVertically(other, back = false) {
-    const [iron, magnet] = pivot(this, other, back);
-    let dx, dy;
-    if (magnet.centralAnchor.y > iron.centralAnchor.y) {
-      [dx, dy] = magnet.upAnchor.diff(iron.downAnchor)
-    } else {
-      [dx, dy] = magnet.downAnchor.diff(iron.upAnchor)
-    }
-    iron.push(dx, dy);
+    connector.vertical.attract(this, other, back);
   }
 
   /**
@@ -244,14 +238,7 @@ class Piece {
    * @param {Piece} other
    */
   attractHorizontally(other, back = false) {
-    const [iron, magnet] = pivot(this, other, back);
-    let dx, dy;
-    if (magnet.centralAnchor.x > iron.centralAnchor.x) {
-      [dx, dy] = magnet.leftAnchor.diff(iron.rightAnchor)
-    } else {
-      [dx, dy] = magnet.rightAnchor.diff(iron.leftAnchor)
-    }
-    iron.push(dx, dy);
+    connector.horizontal.attract(this, other, back);
   }
 
   /**
@@ -389,7 +376,7 @@ class Piece {
    * @returns {boolean}
    */
   vericallyOpenMovement(dy) {
-    return (dy > 0 && !this.downConnection) || (dy < 0 && !this.upConnection) || dy == 0;
+    return connector.vertical.openMovement(this, dy);
   }
 
   /**
@@ -398,7 +385,7 @@ class Piece {
    * @returns {boolean}
    */
   horizontallyOpenMovement(dx) {
-    return (dx > 0 && !this.rightConnection) || (dx < 0 && !this.leftConnection) || dx == 0;
+    return connector.horizontal.openMovement(this, dx);
   }
 
   /**
@@ -407,7 +394,7 @@ class Piece {
    * @returns {boolean}
    */
   canConnectHorizontallyWith(other) {
-    return this.horizontallyCloseTo(other) && this.horizontallyMatch(other);
+    return connector.horizontal.canConnectWith(this, other, this.proximity);
   }
 
   /**
@@ -416,7 +403,7 @@ class Piece {
    * @returns {boolean}
    */
   canConnectVerticallyWith(other) {
-    return this.verticallyCloseTo(other) && this.verticallyMatch(other);
+    return connector.vertical.canConnectWith(this, other, this.proximity);
   }
 
   /**
@@ -425,7 +412,7 @@ class Piece {
    * @returns {boolean}
    */
   verticallyCloseTo(other) {
-    return this.downAnchor.closeTo(other.upAnchor, this.proximity);
+    return connector.vertical.closeTo(this, other, this.proximity);
   }
 
   /**
@@ -434,7 +421,7 @@ class Piece {
    * @returns {boolean}
    */
   horizontallyCloseTo(other) {
-    return this.rightAnchor.closeTo(other.leftAnchor, this.proximity);
+    return connector.horizontal.closeTo(this, other, this.proximity);
   }
 
 
@@ -444,7 +431,7 @@ class Piece {
    * @returns {boolean}
    */
   verticallyMatch(other) {
-    return this.down.match(other.up);
+    return connector.vertical.match(this, other);
   }
 
   /**
@@ -453,7 +440,7 @@ class Piece {
    * @returns {boolean}
    */
   horizontallyMatch(other) {
-    return this.right.match(other.left);
+    return connector.horizontal.match(this, other);
   }
 
   get connected() {
