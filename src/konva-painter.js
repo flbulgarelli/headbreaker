@@ -64,13 +64,14 @@ class KonvaPainter {
       x: piece.metadata.currentPosition.x,
       y: piece.metadata.currentPosition.y
     });
-    const image = canvas.image || piece.metadata.image;
+    const image = canvas._imageMetadataFor(piece);
     figure.shape = new Konva.Line({
       points: outline.draw(piece, canvas.pieceSize, canvas.borderFill),
       fill: !image ? piece.metadata.color || 'black' : null,
       tension: canvas.lineSoftness,
-      fillPatternImage: image,
-      fillPatternOffset: canvas._imageOffsetFor(piece),
+      fillPatternImage: image.content,
+      fillPatternScale: image.scale,
+      fillPatternOffset: image.offset,
       stroke: piece.metadata.strokeColor || canvas.strokeColor,
       strokeWidth: canvas.strokeWidth,
       closed: true,

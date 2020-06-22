@@ -37,20 +37,28 @@ const {twoAndTwo} = require('./sequence');
  * @typedef {object} LabelMetadata
  * @property {string} [text]
  * @property {number} [fontSize]
+ * @property {number} [x]
+ * @property {number} [y]
  *
  * @typedef {object} CanvasMetadata
  * @property {string} [id]
  * @property {Position} [targetPosition]
  * @property {Position} [currentPosition]
- * @property {Position} [imageOffset]
  * @property {string} [color]
- * @property {Image} [image]
  * @property {string} [strokeColor]
+ * @property {ImageLike} [image]
  * @property {LabelMetadata} [label]
+ *
+ * @typedef {object} ImageMetadata
+ * @property {Image}    content
+ * @property {Position} [offset]
+ * @property {number}   [scale]
  *
  * @typedef {object} Template
  * @property {StructureLike} structure
  * @property {CanvasMetadata} metadata
+ *
+ * @typedef {Image|ImageMetadata} ImageLike
  */
 class Canvas {
 
@@ -65,7 +73,7 @@ class Canvas {
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
-   * @param {Image}  [options.image] an optional background image for the puzzle that will be split across all pieces.
+   * @param {ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
    *
    */
@@ -84,7 +92,7 @@ class Canvas {
     this.height = height;
     this.pieceSize = pieceSize;
     this.borderFill = borderFill;
-    this.image = image;
+    this.imageMetadata = this._asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
@@ -217,7 +225,14 @@ class Canvas {
    * @returns {Figure}
    */
   getFigure(piece) {
-    return this.figures[piece.metadata.id];
+    return this.getFigureById(piece.metadata.id);
+  }
+
+  /**
+   * @param {string} id
+   */
+  getFigureById(id) {
+    return this.figures[id];
   }
 
   /**
@@ -239,6 +254,7 @@ class Canvas {
 
     this._painter.sketch(this, piece, figure);
 
+    /** @type {LabelMetadata} */
     const label = piece.metadata.label;
     if (label && label.text) {
       label.fontSize = label.fontSize || this.pieceSize * 0.55;
@@ -283,13 +299,17 @@ class Canvas {
 
   /**
    * @param {Piece} model
-   * @returns {Position}
+   * @returns {ImageMetadata}
    */
-  _imageOffsetFor(model) {
-    if (this.image) {
-      return model.metadata.targetPosition;
+  _imageMetadataFor(model) {
+    if (this.imageMetadata) {
+      return {
+        content: this.imageMetadata.content,
+        offset: this.imageMetadata.offset || model.metadata.targetPosition,
+        scale: this.imageMetadata.scale
+      };
     } else {
-      return model.metadata.imageOffset;
+      return model.metadata.image;
     }
   }
 
@@ -297,6 +317,23 @@ class Canvas {
     this._puzzle = new Puzzle(this.settings);
   }
 
+  /**
+   *
+   * @param {ImageLike} imageLike
+   * @returns {ImageMetadata}
+   */
+  _asImageMetadata(imageLike) {
+    if (imageLike instanceof Image) {
+      return {
+        // @ts-ignore
+        content: imageLike,
+        offset: {x: 1, y: 1},
+        scale: 1
+      };
+    }
+    // @ts-ignore
+    return imageLike;
+  }
 
   /**
    *
