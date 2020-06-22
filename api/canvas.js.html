@@ -28,21 +28,21 @@
         <article>
             <pre class="prettyprint source linenums"><code>const vector = require('./vector');
 const {Puzzle, Piece} = require('./puzzle');
-const {parse} = require('./structure');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
+const structureLike = require('./structure-like');
 
 /**
  * @typedef {object} Painter
- * @property {(canvas: PuzzleCanvas, id: string) => void} initialize
- * @property {(canvas: PuzzleCanvas) => void} draw
- * @property {(canvas: PuzzleCanvas, piece: Piece, figure: Figure) => void} sketch
- * @property {(canvas: PuzzleCanvas, piece: Piece, figure: Figure) => void} label
- * @property {(canvas: PuzzleCanvas, group: Group, piece: Piece) => void} physicalTranslate
- * @property {(canvas: PuzzleCanvas, piece: Piece, group: Group) => void} logicalTranslate
- * @property {(canvas: PuzzleCanvas, piece: Piece, group: Group, f:(dx: number, dy: number) => void) => void} onDrag
- * @property {(canvas: PuzzleCanvas, piece: Piece, group: Group, f:() => void) => void} onDragEnd
+ * @property {(canvas: Canvas, id: string) => void} initialize
+ * @property {(canvas: Canvas) => void} draw
+ * @property {(canvas: Canvas, piece: Piece, figure: Figure) => void} sketch
+ * @property {(canvas: Canvas, piece: Piece, figure: Figure) => void} label
+ * @property {(canvas: Canvas, group: Group, piece: Piece) => void} physicalTranslate
+ * @property {(canvas: Canvas, piece: Piece, group: Group) => void} logicalTranslate
+ * @property {(canvas: Canvas, piece: Piece, group: Group, f:(dx: number, dy: number) => void) => void} onDrag
+ * @property {(canvas: Canvas, piece: Piece, group: Group, f:() => void) => void} onDragEnd
  *
  * @typedef {object} Position
  * @property {number} x
@@ -60,27 +60,33 @@ const {twoAndTwo} = require('./sequence');
  * @typedef {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} CanvasConnectionListener
  * @typedef {(piece: Piece, figure: Figure, dx: number, dy: number) => void} CanvasTranslationListener
  *
- * @typedef {import('./../src/structure').Structure|string} StructureLike
- *
  * @typedef {object} LabelMetadata
  * @property {string} [text]
  * @property {number} [fontSize]
+ * @property {number} [x]
+ * @property {number} [y]
  *
  * @typedef {object} CanvasMetadata
  * @property {string} [id]
  * @property {Position} [targetPosition]
  * @property {Position} [currentPosition]
- * @property {Position} [imageOffset]
  * @property {string} [color]
- * @property {Image} [image]
  * @property {string} [strokeColor]
+ * @property {ImageLike} [image]
  * @property {LabelMetadata} [label]
  *
+ * @typedef {object} ImageMetadata
+ * @property {HTMLImageElement}    content
+ * @property {Position} [offset]
+ * @property {number}   [scale]
+ *
  * @typedef {object} Template
- * @property {StructureLike} structure
+ * @property {import('./structure-like').StructureLike} structure
  * @property {CanvasMetadata} metadata
+ *
+ * @typedef {HTMLImageElement|ImageMetadata} ImageLike
  */
-class PuzzleCanvas {
+class Canvas {
 
   /**
    * @param {string} id  the html id of the element where to place the canvas
@@ -93,7 +99,7 @@ class PuzzleCanvas {
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
-   * @param {Image}  [options.image] an optional background image for the puzzle that will be split across all pieces.
+   * @param {ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
    *
    */
@@ -112,7 +118,7 @@ class PuzzleCanvas {
     this.height = height;
     this.pieceSize = pieceSize;
     this.borderFill = borderFill;
-    this.image = image;
+    this.imageMetadata = this._asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
@@ -129,7 +135,7 @@ class PuzzleCanvas {
   /**
    * @param {Template} options
    */
-  createPiece({structure, metadata}) {
+  sketchPiece({structure, metadata}) {
     metadata.targetPosition = metadata.targetPosition || { x: 0, y: 0 };
     metadata.currentPosition = metadata.currentPosition || metadata.targetPosition;
     this._renderPiece(this._newPiece(structure, metadata));
@@ -142,31 +148,31 @@ class PuzzleCanvas {
    * @param {number} [options.horizontalPiecesCount]
    * @param {number} [options.verticalPiecesCount]
    * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
-   * @param {CanvasMetadata[]} [options.metadataList] optional list of metadata that will be attached to each generated piece
+   * @param {CanvasMetadata[]} [options.metadata] optional list of metadata that will be attached to each generated piece
    */
-  autogeneratePuzzle({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadataList = []}) {
+  autogenerate({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadata = []}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);
-    this.autogeneratePuzzleWithManufacturer(manufacturer, metadataList);
+    manufacturer.withMetadata(metadata);
+    this.autogenerateWithManufacturer(manufacturer);
   }
 
   /**
    * @param {Manufacturer} manufacturer
-   * @param {CanvasMetadata[]} [metadataList]
    */
-  autogeneratePuzzleWithManufacturer(manufacturer, metadataList = []) {
+  autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
 
     this._puzzle = manufacturer.build();
-    this._puzzle.pieces.forEach((it, index) => {
-      this._annotatePiece(it, metadataList, index);
+    this._puzzle.pieces.forEach((it) => {
+      this._annotatePiecePosition(it);
       this._renderPiece(it);
     });
   }
 
   /**
-   * Creates a name piece template, that can be later instantiated using createPieceFromTemplate
+   * Creates a name piece template, that can be later instantiated using sketchPieceUsingTemplate
    *
    * @param {string} name
    * @param {Template} template
@@ -181,14 +187,14 @@ class PuzzleCanvas {
    * @param {string} id
    * @param {string} templateName
    */
-  createPieceFromTemplate(id, templateName) {
+  sketchPieceUsingTemplate(id, templateName) {
     const options = this.templates[templateName];
     if (!options) {
       throw new Error(`Unknown template ${id}`);
     }
     const metadata = Object.assign({}, options.metadata);
     metadata.id = id;
-    this.createPiece({structure: options.structure, metadata: metadata})
+    this.sketchPiece({structure: options.structure, metadata: metadata})
   }
 
   /**
@@ -245,21 +251,23 @@ class PuzzleCanvas {
    * @returns {Figure}
    */
   getFigure(piece) {
-    return this.figures[piece.metadata.id];
+    return this.getFigureById(piece.metadata.id);
+  }
+
+  /**
+   * @param {string} id
+   */
+  getFigureById(id) {
+    return this.figures[id];
   }
 
   /**
    * @param {Piece} piece
-   * @param {CanvasMetadata[]} metadataList
-   * @param {number} index
    */
-  _annotatePiece(piece, metadataList, index) {
+  _annotatePiecePosition(piece) {
     const position = { x: piece.centralAnchor.x, y: piece.centralAnchor.y };
-    const metadata = metadataList[index] ? metadataList[index] : {};
-    metadata.targetPosition = position;
-    metadata.currentPosition = position;
-    metadata.id = String(index + 1);
-    piece.annotate(metadata);
+    piece.metadata.targetPosition = position;
+    piece.metadata.currentPosition = position;
   }
 
   /**
@@ -272,6 +280,7 @@ class PuzzleCanvas {
 
     this._painter.sketch(this, piece, figure);
 
+    /** @type {LabelMetadata} */
     const label = piece.metadata.label;
     if (label &amp;&amp; label.text) {
       label.fontSize = label.fontSize || this.pieceSize * 0.55;
@@ -316,13 +325,17 @@ class PuzzleCanvas {
 
   /**
    * @param {Piece} model
-   * @returns {Position}
+   * @returns {ImageMetadata}
    */
-  _imageOffsetFor(model) {
-    if (this.image) {
-      return model.metadata.targetPosition;
+  _imageMetadataFor(model) {
+    if (this.imageMetadata) {
+      return {
+        content: this.imageMetadata.content,
+        offset: model.metadata.targetPosition || this.imageMetadata.offset,
+        scale: model.metadata.scale || this.imageMetadata.scale
+      };
     } else {
-      return model.metadata.imageOffset;
+      return this._asImageMetadata(model.metadata.image);
     }
   }
 
@@ -330,17 +343,29 @@ class PuzzleCanvas {
     this._puzzle = new Puzzle(this.settings);
   }
 
+  /**
+   *
+   * @param {ImageLike} imageLike
+   * @returns {ImageMetadata}
+   */
+  _asImageMetadata(imageLike) {
+    if (imageLike instanceof HTMLImageElement) {
+      return {
+        content: imageLike,
+        offset: {x: 1, y: 1},
+        scale: 1
+      };
+    }
+    return imageLike;
+  }
 
   /**
    *
-   * @param {StructureLike} structure
+   * @param {import('./structure-like').StructureLike} structure
    * @param {CanvasMetadata} metadata
    */
   _newPiece(structure, metadata) {
-    if (typeof(structure) === 'string') {
-      structure = parse(structure);
-    }
-    let piece = this.puzzle.newPiece(structure);
+    let piece = this.puzzle.newPiece(structureLike.asStructure(structure));
     piece.annotate(metadata);
     piece.placeAt(anchor(metadata.currentPosition.x, metadata.currentPosition.y));
     return piece;
@@ -365,9 +390,9 @@ class PuzzleCanvas {
 /**
  * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
  * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to `Painter`
- * @module PuzzleCanvas
+ * @module Canvas
  */
-module.exports = PuzzleCanvas
+module.exports = Canvas
 </code></pre>
         </article>
     </section>
@@ -378,13 +403,13 @@ module.exports = PuzzleCanvas
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-PuzzleCanvas.html">PuzzleCanvas</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleCanvas.html">PuzzleCanvas</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jun 21 2020 13:08:47 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 22 2020 20:40:10 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

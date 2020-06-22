@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: pivot</title>
+    <title>JSDoc: Source: structure-like.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,52 +17,38 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: pivot</h1>
+    <h1 class="page-title">Source: structure-like.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const {parse} = require('./structure');
 
-<article>
-    <div class="container-overview">
-    
-        
+/**
+ * @typedef {import('./structure').Structure|string} StructureLike
+ */
 
-        
-    
-    </div>
+/**
+ * @param {StructureLike} structureLike
+ * @returns {import('./structure').Structure}
+ */
+function asStructure(structureLike) {
+  if (typeof(structureLike) === 'string') {
+    return parse(structureLike);
+  }
+  return structureLike;
+}
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+module.exports = {
+  asStructure
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
