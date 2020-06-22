@@ -4,31 +4,31 @@
 // ============
 
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
   metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'c', currentPosition: { x: 150, y: 50 }, color: '#B83361' }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
   metadata: { id: 'd', currentPosition: { x: 150, y: 100 }, color: '#37AB8C' }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
   metadata: { id: 'e', currentPosition: { x: 250, y: 200 }, color: '#3934C2' }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
   metadata: { id: 'f', currentPosition: { x: 350, y: 250 }, color: '#A4C234' }
 });
@@ -43,31 +43,31 @@ const soft = new headbreaker.Canvas('soft-canvas', {
   pieceSize: 50, proximity: 10,
   lineSoftness: 0.2
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
   metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'c', currentPosition: { x: 150, y: 50 }, color: '#B83361' }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
   metadata: { id: 'd', currentPosition: { x: 150, y: 100 }, color: '#37AB8C' }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
   metadata: { id: 'e', currentPosition: { x: 250, y: 200 }, color: '#3934C2' }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
   metadata: { id: 'f', currentPosition: { x: 350, y: 250 }, color: '#A4C234' }
 });
@@ -85,23 +85,23 @@ const perfect = new headbreaker.Canvas('perfect-canvas', {
   lineSoftness: 0.0
 });
 
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Slot },
   metadata: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
 });
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { right: headbreaker.Slot, left: headbreaker.Slot },
   metadata: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
 });
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { down: headbreaker.Tab, left: headbreaker.Tab },
   metadata: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
 });
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { up: headbreaker.Slot },
   metadata: { id: 'd', targetPosition: { x: 480, y: 130 }, color: '#054511' }
 });
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { up: headbreaker.Tab },
   metadata: { id: 'e', targetPosition: { x: 530, y: 80 }, color: '#04330C' }
 });
@@ -122,108 +122,104 @@ vangogh.onload = () => {
     lineSoftness: 0.12, image: vangogh,
   });
 
-  background.createPiece({
-    structure: { right: headbreaker.Tab, down: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'TS--',
     metadata: { id: 'a', targetPosition: { x: 100, y: 100 } },
   });
-  background.createPiece({
-    structure: { right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'SSS-',
     metadata: { id: 'b', targetPosition: { x: 200, y: 100 } },
   });
-  background.createPiece({
-    structure: { right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: 'STT-',
     metadata: { id: 'c', targetPosition: { x: 300, y: 100 } },
   });
-  background.createPiece({
-    structure: { right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: 'STT-',
     metadata: { id: 'd', targetPosition: { x: 400, y: 100 } },
   });
-  background.createPiece({
-    structure: { down: headbreaker.Tab, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: '-TT-',
     metadata: { id: 'e', targetPosition: { x: 500, y: 100 } },
   });
-
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.None },
+  background.sketchPiece({
+    structure: 'TS-T',
     metadata: { id: 'f', targetPosition: { x: 100, y: 200 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'SSST',
     metadata: { id: 'g', targetPosition: { x: 200, y: 200 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: 'STTS',
     metadata: { id: 'h', targetPosition: { x: 300, y: 200 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: 'TSTS',
     metadata: { id: 'i', targetPosition: { x: 400, y: 200 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: '-SSS',
     metadata: { id: 'j', targetPosition: { x: 500, y: 200 } },
   });
-
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None },
+  background.sketchPiece({
+    structure: 'ST-T',
     metadata: { id: 'k', targetPosition: { x: 100, y: 300 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: 'TSTT',
     metadata: { id: 'l', targetPosition: { x: 200, y: 300 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'STSS',
     metadata: { id: 'm', targetPosition: { x: 300, y: 300 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: 'TTTT',
     metadata: { id: 'n', targetPosition: { x: 400, y: 300 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: '-SST',
     metadata: { id: 'o', targetPosition: { x: 500, y: 300 } },
   });
-
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.None },
+  background.sketchPiece({
+    structure: 'ST-S',
     metadata: { id: 'p', targetPosition: { x: 100, y: 400 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: 'TSTT',
     metadata: { id: 'q', targetPosition: { x: 200, y: 400 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'TTSS',
     metadata: { id: 'r', targetPosition: { x: 300, y: 400 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'SSSS',
     metadata: { id: 's', targetPosition: { x: 400, y: 400 } },
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.Slot, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: '-STT',
     metadata: { id: 't', targetPosition: { x: 500, y: 400 }, currentPosition: { x: 613, y: 386 } }
   });
-
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.None },
+  background.sketchPiece({
+    structure: 'T--S',
     metadata: { id: 'u', targetPosition: { x: 100, y: 500 } }
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'T-ST',
     metadata: { id: 'v', targetPosition: { x: 200, y: 500 } }
   });
-  background.createPiece({
-    structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.None, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'T-SS',
     metadata: { id: 'w', targetPosition: { x: 300, y: 500 } }
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.Slot, down: headbreaker.None, left: headbreaker.Slot },
+  background.sketchPiece({
+    structure: 'S-ST',
     metadata: { id: 'x', targetPosition: { x: 400, y: 500 }, currentPosition: { x: 425, y: 530 } }
   });
-  background.createPiece({
-    structure: { up: headbreaker.Tab, right: headbreaker.None, down: headbreaker.None, left: headbreaker.Tab },
+  background.sketchPiece({
+    structure: '--TT',
     metadata: { id: 'y', targetPosition: { x: 500, y: 500 }, currentPosition: { x: 570, y: 560 } }
   });
   background.draw();
@@ -284,7 +280,7 @@ const labels = new headbreaker.Canvas('labels-canvas', {
   lineSoftness: 0.18,
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { right: headbreaker.Tab },
   metadata: {
     id: 'tree-kanji',
@@ -294,7 +290,7 @@ labels.createPiece({
   }
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { right: headbreaker.Tab },
   metadata: {
     id: 'fire-kanji',
@@ -304,7 +300,7 @@ labels.createPiece({
   }
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { right: headbreaker.Tab },
   metadata: {
     id: 'water-kanji',
@@ -314,7 +310,7 @@ labels.createPiece({
   }
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { left: headbreaker.Slot },
   metadata: {
     id: 'water-emoji',
@@ -324,7 +320,7 @@ labels.createPiece({
   }
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { left: headbreaker.Slot },
   metadata: {
     id: 'tree-emoji',
@@ -334,7 +330,7 @@ labels.createPiece({
   }
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { left: headbreaker.Slot },
   metadata: {
     id: 'fire-emoji',
@@ -414,13 +410,13 @@ dynamic.defineTemplate('E', {
   structure: 'SSTT', metadata: { label: { text: '0', x: 22 }, color: '#7DDADB' }
 });
 
-dynamic.createPieceFromTemplate('a', 'A');
-dynamic.createPieceFromTemplate('b', 'A');
-dynamic.createPieceFromTemplate('c', 'B');
-dynamic.createPieceFromTemplate('d', 'C');
-dynamic.createPieceFromTemplate('e', 'C');
-dynamic.createPieceFromTemplate('f', 'D');
-dynamic.createPieceFromTemplate('g', 'E');
+dynamic.sketchPieceUsingTemplate('a', 'A');
+dynamic.sketchPieceUsingTemplate('b', 'A');
+dynamic.sketchPieceUsingTemplate('c', 'B');
+dynamic.sketchPieceUsingTemplate('d', 'C');
+dynamic.sketchPieceUsingTemplate('e', 'C');
+dynamic.sketchPieceUsingTemplate('f', 'D');
+dynamic.sketchPieceUsingTemplate('g', 'E');
 dynamic.shuffle(0.7);
 dynamic.onConnect((piece, figure, target, targetFigure) => {
   updateLabel(piece, figure, 1);

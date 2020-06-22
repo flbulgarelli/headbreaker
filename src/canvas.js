@@ -1,9 +1,9 @@
 const vector = require('./vector');
 const {Puzzle, Piece} = require('./puzzle');
-const {parse} = require('./structure');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
+const structureLike = require('./structure-like');
 
 /**
  * @typedef {object} Painter
@@ -32,8 +32,6 @@ const {twoAndTwo} = require('./sequence');
  * @typedef {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} CanvasConnectionListener
  * @typedef {(piece: Piece, figure: Figure, dx: number, dy: number) => void} CanvasTranslationListener
  *
- * @typedef {import('./../src/structure').Structure|string} StructureLike
- *
  * @typedef {object} LabelMetadata
  * @property {string} [text]
  * @property {number} [fontSize]
@@ -50,15 +48,15 @@ const {twoAndTwo} = require('./sequence');
  * @property {LabelMetadata} [label]
  *
  * @typedef {object} ImageMetadata
- * @property {Image}    content
+ * @property {HTMLImageElement}    content
  * @property {Position} [offset]
  * @property {number}   [scale]
  *
  * @typedef {object} Template
- * @property {StructureLike} structure
+ * @property {import('./structure-like').StructureLike} structure
  * @property {CanvasMetadata} metadata
  *
- * @typedef {Image|ImageMetadata} ImageLike
+ * @typedef {HTMLImageElement|ImageMetadata} ImageLike
  */
 class Canvas {
 
@@ -109,7 +107,7 @@ class Canvas {
   /**
    * @param {Template} options
    */
-  createPiece({structure, metadata}) {
+  sketchPiece({structure, metadata}) {
     metadata.targetPosition = metadata.targetPosition || { x: 0, y: 0 };
     metadata.currentPosition = metadata.currentPosition || metadata.targetPosition;
     this._renderPiece(this._newPiece(structure, metadata));
@@ -146,7 +144,7 @@ class Canvas {
   }
 
   /**
-   * Creates a name piece template, that can be later instantiated using createPieceFromTemplate
+   * Creates a name piece template, that can be later instantiated using sketchPieceUsingTemplate
    *
    * @param {string} name
    * @param {Template} template
@@ -161,14 +159,14 @@ class Canvas {
    * @param {string} id
    * @param {string} templateName
    */
-  createPieceFromTemplate(id, templateName) {
+  sketchPieceUsingTemplate(id, templateName) {
     const options = this.templates[templateName];
     if (!options) {
       throw new Error(`Unknown template ${id}`);
     }
     const metadata = Object.assign({}, options.metadata);
     metadata.id = id;
-    this.createPiece({structure: options.structure, metadata: metadata})
+    this.sketchPiece({structure: options.structure, metadata: metadata})
   }
 
   /**
@@ -305,11 +303,11 @@ class Canvas {
     if (this.imageMetadata) {
       return {
         content: this.imageMetadata.content,
-        offset: this.imageMetadata.offset || model.metadata.targetPosition,
-        scale: this.imageMetadata.scale
+        offset: model.metadata.targetPosition || this.imageMetadata.offset,
+        scale: model.metadata.scale || this.imageMetadata.scale
       };
     } else {
-      return model.metadata.image;
+      return this._asImageMetadata(model.metadata.image);
     }
   }
 
@@ -323,28 +321,23 @@ class Canvas {
    * @returns {ImageMetadata}
    */
   _asImageMetadata(imageLike) {
-    if (imageLike instanceof Image) {
+    if (imageLike instanceof HTMLImageElement) {
       return {
-        // @ts-ignore
         content: imageLike,
         offset: {x: 1, y: 1},
         scale: 1
       };
     }
-    // @ts-ignore
     return imageLike;
   }
 
   /**
    *
-   * @param {StructureLike} structure
+   * @param {import('./structure-like').StructureLike} structure
    * @param {CanvasMetadata} metadata
    */
   _newPiece(structure, metadata) {
-    if (typeof(structure) === 'string') {
-      structure = parse(structure);
-    }
-    let piece = this.puzzle.newPiece(structure);
+    let piece = this.puzzle.newPiece(structureLike.asStructure(structure));
     piece.annotate(metadata);
     piece.placeAt(anchor(metadata.currentPosition.x, metadata.currentPosition.y));
     return piece;

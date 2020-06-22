@@ -8,15 +8,15 @@
 
 ```javascript
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-basic.createPiece({
+basic.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
   metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
@@ -40,15 +40,15 @@ const soft = new headbreaker.Canvas('soft-canvas', {
   pieceSize: 50, proximity: 10,
   lineSoftness: 0.2
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-soft.createPiece({
+soft.sketchPiece({
   structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
   metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
@@ -75,15 +75,15 @@ const perfect = new headbreaker.Canvas('perfect-canvas', {
   lineSoftness: 0.0
 });
 
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Slot },
   metadata: { id: 'a', targetPosition: { x: 100, y: 100 }, color: '#0EC430' }
 });
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { right: headbreaker.Slot, left: headbreaker.Slot },
   metadata: { id: 'b', targetPosition: { x: 200, y: 100 }, color: '#098520' }
 });
-perfect.createPiece({
+perfect.sketchPiece({
   structure: { down: headbreaker.Tab, left: headbreaker.Tab },
   metadata: { id: 'c', targetPosition: { x: 330, y: 80 }, color: '#04380D' }
 });
@@ -169,7 +169,7 @@ const labels = new headbreaker.Canvas('labels-canvas', {
   lineSoftness: 0.18,
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { right: headbreaker.Tab },
   metadata: {
     id: 'tree-kanji',
@@ -179,7 +179,7 @@ labels.createPiece({
   }
 });
 
-labels.createPiece({
+labels.sketchPiece({
   structure: { left: headbreaker.Slot },
   metadata: {
     id: 'tree-emoji',
@@ -275,13 +275,13 @@ dynamic.defineTemplate('C', {
 });
 // ... more templates ...
 
-dynamic.createPieceFromTemplate('a', 'A');
-dynamic.createPieceFromTemplate('b', 'A');
-dynamic.createPieceFromTemplate('c', 'B');
-dynamic.createPieceFromTemplate('d', 'C');
-dynamic.createPieceFromTemplate('e', 'C');
-dynamic.createPieceFromTemplate('f', 'D');
-dynamic.createPieceFromTemplate('g', 'E');
+dynamic.sketchPieceUsingTemplate('a', 'A');
+dynamic.sketchPieceUsingTemplate('b', 'A');
+dynamic.sketchPieceUsingTemplate('c', 'B');
+dynamic.sketchPieceUsingTemplate('d', 'C');
+dynamic.sketchPieceUsingTemplate('e', 'C');
+dynamic.sketchPieceUsingTemplate('f', 'D');
+dynamic.sketchPieceUsingTemplate('g', 'E');
 dynamic.shuffle(0.7);
 dynamic.onConnect((piece, figure, target, targetFigure) => {
   updateLabel(piece, figure, 1);

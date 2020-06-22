@@ -5,6 +5,9 @@ const {Slot, Tab, None} = require('../src/structure');
 const NullPainter = require('../src/dummy-painter');
 const {flipflop} = require('../src/sequence');
 
+// @ts-ignore
+HTMLImageElement = function(){};
+
 describe("Canvas", () => {
   const painter = new NullPainter();
 
@@ -17,7 +20,7 @@ describe("Canvas", () => {
       painter: painter
     })
 
-    canvas.createPiece({
+    canvas.sketchPiece({
       structure: {right: Tab, down: Tab, left: Slot},
       metadata: {
         id: 'a',
@@ -48,7 +51,7 @@ describe("Canvas", () => {
       painter: painter
     })
 
-    canvas.createPiece({
+    canvas.sketchPiece({
       structure: "STS-",
       metadata: {
         id: 'a',
