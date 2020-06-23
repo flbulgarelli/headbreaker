@@ -3,7 +3,9 @@ const {Puzzle, Piece} = require('./puzzle');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
-const structureLike = require('./structure-like');
+const structure = require('./structure');
+const imageLike = require('./image-metadata');
+const position = require('./position');
 
 /**
  * @typedef {object} Painter
@@ -15,48 +17,60 @@ const structureLike = require('./structure-like');
  * @property {(canvas: Canvas, piece: Piece, group: Group) => void} logicalTranslate
  * @property {(canvas: Canvas, piece: Piece, group: Group, f:(dx: number, dy: number) => void) => void} onDrag
  * @property {(canvas: Canvas, piece: Piece, group: Group, f:() => void) => void} onDragEnd
- *
- * @typedef {object} Position
- * @property {number} x
- * @property {number} y
- *
+ */
+
+/**
  * @typedef {object} Shape
  * @typedef {object} Group
  * @typedef {object} Label
- *
+ */
+
+/**
  * @typedef {object} Figure
  * @property {Shape} shape
  * @property {Group} group
  * @property {Label} [label]
- *
- * @typedef {(piece: Piece, figure: Figure, targetPiece: Piece, targetFigure: Figure) => void} CanvasConnectionListener
- * @typedef {(piece: Piece, figure: Figure, dx: number, dy: number) => void} CanvasTranslationListener
- *
+ */
+
+/**
+ * @callback CanvasConnectionListener
+ * @param {Piece} piece the connecting piece
+ * @param {Figure} figure the visual representation of the connecting piece
+ * @param {Piece} targetPiece the target connected piece
+ * @param {Figure} targetFigure the visual representation of the target connected
+ */
+
+/**
+ * @callback CanvasTranslationListener
+ * @param {Piece} piece the translated piece
+ * @param {Figure} figure the visual representation of the translated piece
+ * @param {number} dx the horizontal displacement
+ * @param {number} dy the vertical displacement
+*/
+
+/**
  * @typedef {object} LabelMetadata
  * @property {string} [text]
  * @property {number} [fontSize]
  * @property {number} [x]
  * @property {number} [y]
- *
+ */
+
+/**
  * @typedef {object} CanvasMetadata
  * @property {string} [id]
- * @property {Position} [targetPosition]
- * @property {Position} [currentPosition]
+ * @property {import('./position').Position} [targetPosition]
+ * @property {import('./position').Position} [currentPosition]
  * @property {string} [color]
  * @property {string} [strokeColor]
  * @property {ImageLike} [image]
  * @property {LabelMetadata} [label]
- *
- * @typedef {object} ImageMetadata
- * @property {HTMLImageElement}    content
- * @property {Position} [offset]
- * @property {number}   [scale]
- *
+ */
+
+/**
  * @typedef {object} Template
- * @property {import('./structure-like').StructureLike} structure
+ * @property {import('./structure').StructureLike} structure
  * @property {CanvasMetadata} metadata
- *
- * @typedef {HTMLImageElement|ImageMetadata} ImageLike
  */
 class Canvas {
 
@@ -71,9 +85,8 @@ class Canvas {
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
-   * @param {ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
+   * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
-   *
    */
   constructor(id, {
       width,
@@ -90,7 +103,7 @@ class Canvas {
     this.height = height;
     this.pieceSize = pieceSize;
     this.borderFill = borderFill;
-    this.imageMetadata = this._asImageMetadata(image);
+    this.imageMetadata = imageLike.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
@@ -105,10 +118,12 @@ class Canvas {
   }
 
   /**
+   * Creates a piece, that is ready to be rendered by calling {@link Canvas#draw}
+   * 
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    metadata.targetPosition = metadata.targetPosition || { x: 0, y: 0 };
+    metadata.targetPosition = metadata.targetPosition || position.null();
     metadata.currentPosition = metadata.currentPosition || metadata.targetPosition;
     this._renderPiece(this._newPiece(structure, metadata));
   }
@@ -144,7 +159,7 @@ class Canvas {
   }
 
   /**
-   * Creates a name piece template, that can be later instantiated using sketchPieceUsingTemplate
+   * Creates a name piece template, that can be later instantiated using {@link Canvas#sketchPieceUsingTemplate}
    *
    * @param {string} name
    * @param {Template} template
@@ -155,6 +170,7 @@ class Canvas {
 
   /**
    * Creates a new Piece with given id using a named template
+   * defined with {@link Canvas#defineTemplate}
    *
    * @param {string} id
    * @param {string} templateName
@@ -179,6 +195,9 @@ class Canvas {
     this.autconnected = true;
   }
 
+  /**
+   * Draws this canvas for the first time
+   */
   draw() {
     if (!this.autconnected) {
       this.autconnected = true;
@@ -187,11 +206,18 @@ class Canvas {
     this.redraw();
   }
 
+  /**
+   * Re-draws this canvas. This method is useful when the canvas {@link Figure}s have
+   * being modified and you need changes to become visible
+   *
+   */
   redraw() {
     this._painter.draw(this);
   }
 
   /**
+   * Registers a listener for connect events
+   *
    * @param {CanvasConnectionListener} f
    */
   onConnect(f) {
@@ -201,6 +227,8 @@ class Canvas {
   }
 
   /**
+   * Registers a listener for disconnect events
+   *
    * @param {CanvasConnectionListener} f
    */
   onDisconnect(f) {
@@ -219,6 +247,9 @@ class Canvas {
   }
 
   /**
+   * Answers the visual representation for the given piece.
+   * This method uses piece's id.
+   *
    * @param {Piece} piece
    * @returns {Figure}
    */
@@ -227,7 +258,10 @@ class Canvas {
   }
 
   /**
+   * Answers the visual representation for the given piece id.
+   *
    * @param {string} id
+   * @returns {Figure}
    */
   getFigureById(id) {
     return this.figures[id];
@@ -237,9 +271,9 @@ class Canvas {
    * @param {Piece} piece
    */
   _annotatePiecePosition(piece) {
-    const position = { x: piece.centralAnchor.x, y: piece.centralAnchor.y };
-    piece.metadata.targetPosition = position;
-    piece.metadata.currentPosition = position;
+    const p = position(piece.centralAnchor.x, piece.centralAnchor.y);
+    piece.metadata.targetPosition = p;
+    piece.metadata.currentPosition = p;
   }
 
   /**
@@ -297,7 +331,7 @@ class Canvas {
 
   /**
    * @param {Piece} model
-   * @returns {ImageMetadata}
+   * @returns {import('./image-metadata').ImageMetadata}
    */
   _imageMetadataFor(model) {
     if (this.imageMetadata) {
@@ -307,7 +341,7 @@ class Canvas {
         scale: model.metadata.scale || this.imageMetadata.scale
       };
     } else {
-      return this._asImageMetadata(model.metadata.image);
+      return imageLike.asImageMetadata(model.metadata.image);
     }
   }
 
@@ -317,27 +351,11 @@ class Canvas {
 
   /**
    *
-   * @param {ImageLike} imageLike
-   * @returns {ImageMetadata}
-   */
-  _asImageMetadata(imageLike) {
-    if (imageLike instanceof HTMLImageElement) {
-      return {
-        content: imageLike,
-        offset: {x: 1, y: 1},
-        scale: 1
-      };
-    }
-    return imageLike;
-  }
-
-  /**
-   *
-   * @param {import('./structure-like').StructureLike} structure
+   * @param {import('./structure').StructureLike} structureLike
    * @param {CanvasMetadata} metadata
    */
-  _newPiece(structure, metadata) {
-    let piece = this.puzzle.newPiece(structureLike.asStructure(structure));
+  _newPiece(structureLike, metadata) {
+    let piece = this.puzzle.newPiece(structure.asStructure(structureLike));
     piece.annotate(metadata);
     piece.placeAt(anchor(metadata.currentPosition.x, metadata.currentPosition.y));
     return piece;

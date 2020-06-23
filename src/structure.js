@@ -76,6 +76,22 @@ function parse(string) {
 }
 
 /**
+ * @typedef {Structure|string} StructureLike
+ */
+
+/**
+ * @param {StructureLike} structureLike
+ * @returns {Structure}
+ */
+function asStructure(structureLike) {
+  if (typeof(structureLike) === 'string') {
+    return parse(structureLike);
+  }
+  return structureLike;
+}
+
+
+/**
  * @module structure
  */
 module.exports = {
@@ -83,7 +99,8 @@ module.exports = {
   Slot,
   Tab,
   dump,
-  parse
+  parse,
+  asStructure
 };
 
 

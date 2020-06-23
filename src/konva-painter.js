@@ -155,6 +155,8 @@ class KonvaPainter {
 }
 
 /**
+ * A {@link Painter} that uses Konvajs as rendering backend
+ *
  * @module KonvaPainter
  */
 module.exports = KonvaPainter;

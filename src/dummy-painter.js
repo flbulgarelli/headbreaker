@@ -73,6 +73,8 @@ class DummyPainter {
 }
 
 /**
+ * A {@link Painter} for testing purpouses that does not perform rendering
+ *
  * @module DummyPainter
  */
 module.exports = DummyPainter;

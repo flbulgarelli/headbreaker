@@ -26,5 +26,3 @@ module.exports = {
   isNull,
   diff
 }
-
-

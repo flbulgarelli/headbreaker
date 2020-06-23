@@ -1,5 +1,4 @@
 const vector = require('./vector');
-const pivot = require('./pivot');
 const {Anchor} = require('./anchor');
 const {None} = require('./structure')
 const connector = require('./connector')
@@ -100,9 +99,21 @@ class Puzzle {
 }
 
 /**
- * @typedef {(piece: Piece, dx: number, dy: number) => void} TranslationListener
- * @typedef {(piece: Piece, target: Piece) => void} ConnectionListener
+ * @callback TranslationListener
+ * @param {Piece} piece
+ * @param {number} dx
+ * @param {number} dy
  */
+
+/**
+ * @callback ConnectionListener
+ * @param {Piece} piece
+ * @param {Piece} target
+ */
+
+ /**
+  * A jigsaw piece
+  */
 class Piece {
 
   /**
@@ -154,21 +165,21 @@ class Piece {
   }
 
   /**
-   * @param {TranslationListener} f
+   * @param {TranslationListener} f the callback
    */
   onTranslate(f) {
     this.translateListeners.push(f);
   }
 
   /**
-   * @param {ConnectionListener} f
+   * @param {ConnectionListener} f the callback
    */
   onConnect(f) {
     this.connectListeners.push(f);
   }
 
   /**
-   * @param {ConnectionListener} f
+   * @param {ConnectionListener} f the callback
    */
   onDisconnect(f) {
     this.disconnectListeners.push(f);

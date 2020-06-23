@@ -1,6 +1,10 @@
 const between = require('./between');
 const vector = require('./vector')
 
+/**
+ * An Anchor is a mutable 2D point that
+ * is used to locate pieces and pieces inserts
+ */
 class Anchor {
   /**
    *
@@ -22,6 +26,8 @@ class Anchor {
   }
 
   /**
+   * Creates a translated copy of this Anchor
+   * according to a vector
    *
    * @param {number} dx
    * @param {number} dy
@@ -31,6 +37,7 @@ class Anchor {
   }
 
   /**
+   * Translates this anchor given to a vector
    *
    * @param {number} dx
    * @param {number} dy
@@ -42,9 +49,10 @@ class Anchor {
   }
 
   /**
+   * Answers wether this Anchor is near to another given a tolerance
    *
    * @param {Anchor} other
-   * @param {number} tolerance
+   * @param {number} tolerance the max distance within its radius is considered to be "close"
    * @returns {boolean}
    */
   closeTo(other, tolerance) {
@@ -59,6 +67,7 @@ class Anchor {
   }
 
   /**
+   * Calculates the distance between this anchor and another
    *
    * @param {Anchor} other
    * @returns {[number, number]}
@@ -79,6 +88,7 @@ class Anchor {
 }
 
 /**
+ * Creates a new {@link Anchor}
  *
  * @param {number} x
  * @param {number} y
@@ -90,7 +100,9 @@ function anchor(x, y) {
 
 
 /**
- * @module
+ * This module exposes the {@link Anchor} class and the {@link anchor} constructor
+ *
+ * @module Anchor
  */
 module.exports = {
   anchor,
