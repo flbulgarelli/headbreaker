@@ -29,6 +29,10 @@
             <pre class="prettyprint source linenums"><code>const between = require('./between');
 const vector = require('./vector')
 
+/**
+ * An Anchor is a mutable 2D point that
+ * is used to locate pieces and pieces inserts
+ */
 class Anchor {
   /**
    *
@@ -50,6 +54,8 @@ class Anchor {
   }
 
   /**
+   * Creates a translated copy of this Anchor
+   * according to a vector
    *
    * @param {number} dx
    * @param {number} dy
@@ -59,6 +65,7 @@ class Anchor {
   }
 
   /**
+   * Translates this anchor given to a vector
    *
    * @param {number} dx
    * @param {number} dy
@@ -70,9 +77,10 @@ class Anchor {
   }
 
   /**
+   * Answers wether this Anchor is near to another given a tolerance
    *
    * @param {Anchor} other
-   * @param {number} tolerance
+   * @param {number} tolerance the max distance within its radius is considered to be "close"
    * @returns {boolean}
    */
   closeTo(other, tolerance) {
@@ -87,6 +95,7 @@ class Anchor {
   }
 
   /**
+   * Calculates the distance between this anchor and another
    *
    * @param {Anchor} other
    * @returns {[number, number]}
@@ -107,6 +116,7 @@ class Anchor {
 }
 
 /**
+ * Creates a new {@link Anchor}
  *
  * @param {number} x
  * @param {number} y
@@ -118,7 +128,9 @@ function anchor(x, y) {
 
 
 /**
- * @module
+ * This module exposes the {@link Anchor} class and the {@link anchor} constructor
+ *
+ * @module Anchor
  */
 module.exports = {
   anchor,
@@ -134,13 +146,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-anchor.html">anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-outline.html">outline</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-structure.html">structure</a></li><li><a href="module-vector.html">vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#diff">diff</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#isNull">isNull</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#select">select</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 22 2020 20:40:10 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 23 2020 19:57:35 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

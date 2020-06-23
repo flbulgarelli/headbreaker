@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: vector.js</title>
+    <title>JSDoc: Source: image-metadata.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: vector.js</h1>
+    <h1 class="page-title">Source: image-metadata.js</h1>
 
     
 
@@ -26,33 +26,39 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @param {number} dx
- * @param {number} dy
- * @returns {boolean}
- */
-function isNull(dx, dy) {
-  return dx === 0 &amp;&amp; dy === 0;
-}
+            <pre class="prettyprint source linenums"><code>const position = require('./position');
 
 /**
+ * @typedef {object} ImageMetadata
+ * @property {HTMLImageElement}    content
+ * @property {import('./position').Position} [offset]
+ * @property {number}   [scale]
+ */
+
+/**
+ * @typedef {HTMLImageElement|ImageMetadata} ImageLike
+ */
+
+/**
+ * Converts an image-like object into a true {@link ImageMetadata} object
  *
- * @param {number} x1
- * @param {number} y1
- * @param {number} x2
- * @param {number} y2
- * @returns {[number, number]}
+ * @param {ImageLike} imageLike
+ * @returns {ImageMetadata}
  */
-function diff(x1, y1, x2, y2) {
-  return [x1 - x2, y1 - y2];
+function asImageMetadata(imageLike) {
+  if (imageLike instanceof HTMLImageElement) {
+    return {
+      content: imageLike,
+      offset: position(1, 1),
+      scale: 1
+    };
+  }
+  return imageLike;
 }
 
-/**
- * @module vector
- */
+
 module.exports = {
-  isNull,
-  diff
+  asImageMetadata
 }
 </code></pre>
         </article>

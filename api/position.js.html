@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: vector.js</title>
+    <title>JSDoc: Source: position.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: vector.js</h1>
+    <h1 class="page-title">Source: position.js</h1>
 
     
 
@@ -27,33 +27,26 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @param {number} dx
- * @param {number} dy
- * @returns {boolean}
+ * @typedef {object} Position
+ * @property {number} x
+ * @property {number} y
  */
-function isNull(dx, dy) {
-  return dx === 0 &amp;&amp; dy === 0;
-}
+
 
 /**
  *
- * @param {number} x1
- * @param {number} y1
- * @param {number} x2
- * @param {number} y2
- * @returns {[number, number]}
+ * @param {number} x
+ * @param {number} y
+ *
+ * @returns {Position}
  */
-function diff(x1, y1, x2, y2) {
-  return [x1 - x2, y1 - y2];
+function position(x, y) {
+  return { x, y };
 }
 
-/**
- * @module vector
- */
-module.exports = {
-  isNull,
-  diff
-}
+position.null = () => position(0, 0);
+
+module.exports = position;
 </code></pre>
         </article>
     </section>
