@@ -69,7 +69,7 @@ class Connector {
   }
 
   /**
-   * @param {*} one
+   * @param {import('./piece')} one
    * @param {*} other
    * @param {number} proximity
    * @param {boolean} back

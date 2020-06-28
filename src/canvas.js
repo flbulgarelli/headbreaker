@@ -1,5 +1,6 @@
 const vector = require('./vector');
-const {Puzzle, Piece} = require('./puzzle');
+const Piece = require('./piece');
+const Puzzle = require('./puzzle');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
@@ -51,14 +52,20 @@ Painter.prototype.logicalTranslate = (canvas, piece, group) => {};
  * @param {Canvas} canvas
  * @param {Piece} piece
  * @param {Group} group
- * @param {(dx: number, dy: number) => void} f
+ * @param {VectorAction} f
+ *
+ * @callback VectorAction
+ * @param {number} dx
+ * @param {number} dy
  */
 Painter.prototype.onDrag = (canvas, piece, group, f) => {};
 /**
  * @param {Canvas} canvas
  * @param {Piece} piece
  * @param {Group} group
- * @param {() => void} f
+ * @param {Action} f
+ *
+ * @callback Action
  */
 Painter.prototype.onDragEnd = (canvas, piece, group, f) => {};
 

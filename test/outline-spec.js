@@ -1,6 +1,6 @@
 // @ts-nocheck
 const assert = require('assert');
-const {Piece} = require('../src/puzzle');
+const Piece = require('../src/piece');
 const outline = require('../src/outline');
 
 describe("draw", () => {

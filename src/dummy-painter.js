@@ -1,8 +1,8 @@
 const Canvas = require('./canvas');
-const {Piece} = require('./puzzle');
+const Piece = require('./piece');
 
 /**
- * @implements {import('./canvas').Painter}
+ * @implements {Painter}
  */
 class DummyPainter {
   /**
@@ -60,7 +60,7 @@ class DummyPainter {
    * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {import('./canvas').Group} _group
-   * @param {(dx: number, dy: number) => void} f
+   * @param {import('./canvas').VectorAction} f
    */
   onDrag(_canvas, _piece, _group, f) {
   }
@@ -69,7 +69,7 @@ class DummyPainter {
    * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {import('./canvas').Group} _group
-   * @param {() => void} _f
+   * @param {import('./canvas').Action} _f
    */
   onDragEnd(_canvas, _piece, _group, _f) {
   }

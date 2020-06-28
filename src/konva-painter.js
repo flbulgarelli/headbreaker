@@ -14,7 +14,7 @@ try {
 
 const Canvas = require('./canvas');
 const outline = require('./outline');
-const {Piece} = require('./puzzle');
+const Piece = require('./piece');
 const vector = require('./vector');
 
 
@@ -130,7 +130,7 @@ class KonvaPainter {
    * @param {Canvas} _canvas
    * @param {Piece} piece
    * @param {Group} group
-   * @param {(dx: number, dy: number) => void} f
+   * @param {import('./canvas').VectorAction} f
    */
   onDrag(_canvas, piece, group, f) {
     group.on('mouseover', () => {
@@ -149,7 +149,7 @@ class KonvaPainter {
    * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {Group} group
-   * @param {() => void} f
+   * @param {import('./canvas').Action} f
    */
   onDragEnd(_canvas, _piece, group, f) {
     group.on('dragend', () => {

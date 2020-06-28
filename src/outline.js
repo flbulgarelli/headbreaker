@@ -1,4 +1,4 @@
-const {Piece} = require('./puzzle');
+const Piece = require('./piece');
 
 /**
  * @param {import('./structure').Insert} insert

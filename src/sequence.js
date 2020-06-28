@@ -2,7 +2,7 @@ const {Tab, Slot, None} = require('../src/structure');
 
 
 /**
- * @type {InsertsGenerator};
+ * @type {InsertsGenerator}
  */
 function fixed(_n) {
   return Tab;
@@ -11,7 +11,7 @@ function fixed(_n) {
 /**
  * Generates slots and tabs alternately
  *
- * @type {InsertsGenerator};
+ * @type {InsertsGenerator}
  */
 function flipflop(n) {
   return n % 2 === 0 ? Tab : Slot;
@@ -20,7 +20,7 @@ function flipflop(n) {
 /**
  * Generates sequences of two slots and then two tabs
  *
- * @type {InsertsGenerator};
+ * @type {InsertsGenerator}
  */
 function twoAndTwo(n) {
   return n % 4 < 2 ? Tab : Slot;
@@ -29,7 +29,7 @@ function twoAndTwo(n) {
 /**
  * Generates tabs and slots in a psuedo-random way
  *
- * @type {InsertsGenerator};
+ * @type {InsertsGenerator}
  */
 function random(_) {
   return Math.random() < 0.5 ? Tab : Slot;

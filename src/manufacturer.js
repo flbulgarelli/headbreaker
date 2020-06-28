@@ -1,4 +1,5 @@
-const {Piece, Puzzle} = require('./puzzle');
+const Puzzle = require('./puzzle');
+const Piece = require('./piece');
 const {anchor} = require('./anchor');
 const {fixed, InsertSequence} = require('./sequence')
 

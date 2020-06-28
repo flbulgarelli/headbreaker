@@ -1,6 +1,7 @@
 const vector = require('./vector')
 const {anchor, Anchor} = require('./anchor')
-const {Puzzle, Piece} = require('./puzzle');
+const Puzzle = require('./puzzle');
+const Piece = require('./piece');
 const {Tab, Slot, None, dump, parse} = require('./structure');
 const outline = require('./outline');
 const Canvas = require('./canvas');
