@@ -1,6 +1,9 @@
 const Canvas = require('./canvas');
 const {Piece} = require('./puzzle');
 
+/**
+ * @implements {import('./canvas').Painter}
+ */
 class DummyPainter {
   /**
    * @param {Canvas} canvas

@@ -8,16 +8,59 @@ const imageLike = require('./image-metadata');
 const position = require('./position');
 
 /**
- * @typedef {object} Painter
- * @property {(canvas: Canvas, id: string) => void} initialize
- * @property {(canvas: Canvas) => void} draw
- * @property {(canvas: Canvas, piece: Piece, figure: Figure) => void} sketch
- * @property {(canvas: Canvas, piece: Piece, figure: Figure) => void} label
- * @property {(canvas: Canvas, group: Group, piece: Piece) => void} physicalTranslate
- * @property {(canvas: Canvas, piece: Piece, group: Group) => void} logicalTranslate
- * @property {(canvas: Canvas, piece: Piece, group: Group, f:(dx: number, dy: number) => void) => void} onDrag
- * @property {(canvas: Canvas, piece: Piece, group: Group, f:() => void) => void} onDragEnd
+ * An interface for a a rendering backend
+ * for puzzle's canvas
+ *
+ * @interface Painter
  */
+function Painter() {}
+/**
+ * @param {Canvas} canvas
+ * @param {string} id
+ */
+Painter.prototype.initialize = (canvas, id) => {};
+/**
+ * @param {Canvas} canvas
+ */
+Painter.prototype.draw = (canvas) => {};
+/**
+ * @param {Canvas} canvas
+ * @param {Piece} piece
+ * @param {Figure} figure
+ */
+Painter.prototype.sketch = (canvas, piece, figure) => {};
+/**
+ * @param {Canvas} canvas
+ * @param {Piece} piece
+ * @param {Figure} figure
+ */
+Painter.prototype.label = (canvas, piece, figure) => {};
+/**
+ * @param {Canvas} canvas
+ * @param {Group} group
+ * @param {Piece} piece
+ */
+Painter.prototype.physicalTranslate = (canvas, group, piece) => {};
+/**
+ * @param {Canvas} canvas
+ * @param {Piece} piece
+ * @param {Group} group
+ */
+Painter.prototype.logicalTranslate = (canvas, piece, group) => {};
+/**
+ * @param {Canvas} canvas
+ * @param {Piece} piece
+ * @param {Group} group
+ * @param {(dx: number, dy: number) => void} f
+ */
+Painter.prototype.onDrag = (canvas, piece, group, f) => {};
+/**
+ * @param {Canvas} canvas
+ * @param {Piece} piece
+ * @param {Group} group
+ * @param {() => void} f
+ */
+Painter.prototype.onDragEnd = (canvas, piece, group, f) => {};
 
 /**
  * @typedef {object} Shape
@@ -119,7 +162,7 @@ class Canvas {
 
   /**
    * Creates a piece, that is ready to be rendered by calling {@link Canvas#draw}
-   * 
+   *
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
@@ -379,7 +422,7 @@ class Canvas {
 
 /**
  * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
- * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to `Painter`
+ * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to {@link Painter}
  * @module Canvas
  */
 module.exports = Canvas

@@ -26,6 +26,10 @@ function currentPositionDiff(model, group) {
   return vector.diff(group.x(),group.y(), model.metadata.currentPosition.x, model.metadata.currentPosition.y);
 }
 
+/**
+ * A {@link Painter} that uses Konva
+ * @implements {Painter}
+ */
 class KonvaPainter {
   /** @typedef {import('./canvas').Figure} Figure */
   /** @typedef {import('./canvas').Group} Group */
