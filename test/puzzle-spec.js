@@ -277,6 +277,18 @@ describe("piece", () => {
     assert.equal(a.downConnection, b);
   })
 
+  it("does not connect vertically when too away", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(10, 30))
+
+    assert.throws(() => a.connectVerticallyWith(b), /can not connect down!/);
+  })
+
   it("connects vertically with attracts", () => {
     const puzzle = new Puzzle();
 
@@ -340,6 +352,18 @@ describe("piece", () => {
 
     b.connectHorizontallyWith(c);
     assert.equal(b.rightConnection, c);
+  })
+
+  it("does not connect horizontally when too away", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+
+    a.placeAt(anchor(0, 0))
+    b.placeAt(anchor(10, 30))
+
+    assert.throws(() => a.connectHorizontallyWith(b), /can not connect right!/);
   })
 
   it("connects horizontally with attracts", () => {

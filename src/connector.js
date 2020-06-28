@@ -67,6 +67,21 @@ class Connector {
   match(one, other) {
     return one[this.forward].match(other[this.backward]);
   }
+
+  /**
+   * @param {*} one
+   * @param {*} other
+   * @param {number} proximity
+   * @param {boolean} back
+   */
+  connectWith(one, other, proximity, back) {
+    if (!this.canConnectWith(one, other, proximity)) {
+      throw new Error(`can not connect ${this.forward}!`);
+    }
+    this.attract(other, one, back);
+    one[this.forwardConnection] = other;
+    other[this.backwardConnection] = one;
+  }
 }
 
 module.exports = {

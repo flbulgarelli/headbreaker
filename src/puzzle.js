@@ -215,12 +215,7 @@ class Piece {
    * @param {boolean} [back]
    */
   connectVerticallyWith(other, back = false) {
-    if (!this.canConnectVerticallyWith(other)) {
-      throw new Error("can not connect vertically!");
-    }
-    other.attractVertically(this, back);
-    this.downConnection = other;
-    other.upConnection = this;
+    connector.vertical.connectWith(this, other, this.proximity, back);
     this.fireConnect(other);
   }
 
@@ -236,12 +231,7 @@ class Piece {
    * @param {boolean} [back]
    */
   connectHorizontallyWith(other, back = false) {
-    if (!this.canConnectHorizontallyWith(other)) {
-      throw new Error("can not connect horizontally!");
-    }
-    other.attractHorizontally(this, back);
-    this.rightConnection = other;
-    other.leftConnection = this;
+    connector.horizontal.connectWith(this, other, this.proximity, back);
     this.fireConnect(other);
   }
 
