@@ -78,9 +78,12 @@ class Connector {
     if (!this.canConnectWith(one, other, proximity)) {
       throw new Error(`can not connect ${this.forward}!`);
     }
-    this.attract(other, one, back);
-    one[this.forwardConnection] = other;
-    other[this.backwardConnection] = one;
+    if (one[this.forwardConnection] !== other) {
+      this.attract(other, one, back);
+      one[this.forwardConnection] = other;
+      other[this.backwardConnection] = one;
+    }
+    one.fireConnect(other);
   }
 }
 

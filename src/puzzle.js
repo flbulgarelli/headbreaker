@@ -216,7 +216,6 @@ class Piece {
    */
   connectVerticallyWith(other, back = false) {
     connector.vertical.connectWith(this, other, this.proximity, back);
-    this.fireConnect(other);
   }
 
   /**
@@ -232,7 +231,6 @@ class Piece {
    */
   connectHorizontallyWith(other, back = false) {
     connector.horizontal.connectWith(this, other, this.proximity, back);
-    this.fireConnect(other);
   }
 
   /**
