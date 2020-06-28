@@ -2,7 +2,6 @@
 // ============
 // Basic Canvas
 // ============
-
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
 basic.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
@@ -389,8 +388,12 @@ berni.onload = () => {
 // ==============
 
 function updateLabel(piece, figure, delta) {
+  console.log(`BEFORE: ${piece.metadata.id}: ${piece.metadata.label.text} - ${figure.label.text()}`);
+
   piece.metadata.label.text = Number(piece.metadata.label.text) + delta;
   figure.label.text(piece.metadata.label.text);
+
+  console.log(`AFTER: ${piece.metadata.id}: ${piece.metadata.label.text} - ${figure.label.text()}`);
 }
 
 const dynamic = new headbreaker.Canvas('dynamic-canvas', { width: 700, height: 700, pieceSize: 100, proximity: 20,  borderFill: 10, lineSoftness: 0.2, strokeWidth: 0 });
@@ -417,15 +420,19 @@ dynamic.sketchPieceUsingTemplate('d', 'C');
 dynamic.sketchPieceUsingTemplate('e', 'C');
 dynamic.sketchPieceUsingTemplate('f', 'D');
 dynamic.sketchPieceUsingTemplate('g', 'E');
-dynamic.shuffle(0.7);
+
 dynamic.onConnect((piece, figure, target, targetFigure) => {
-  updateLabel(piece, figure, 1);
+  console.log("connecting")
+    updateLabel(piece, figure, 1);
   updateLabel(target, targetFigure, 1);
   dynamic.redraw();
 });
 dynamic.onDisconnect((piece, figure, target, targetFigure) => {
+  console.log("disconnecting")
   updateLabel(piece, figure, -1);
   updateLabel(target, targetFigure, -1);
   dynamic.redraw();
 });
+
+dynamic.shuffle(0.7);
 dynamic.draw();
