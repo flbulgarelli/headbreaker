@@ -159,6 +159,7 @@ describe("Canvas", () => {
       done();
     })
 
+    first.disconnect();
     first.connectHorizontallyWith(second);
   })
 

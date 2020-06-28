@@ -82,8 +82,8 @@ class Connector {
       this.attract(other, one, back);
       one[this.forwardConnection] = other;
       other[this.backwardConnection] = one;
+      one.fireConnect(other);
     }
-    one.fireConnect(other);
   }
 }
 
