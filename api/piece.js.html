@@ -30,7 +30,8 @@
 const {Anchor} = require('./anchor');
 const {None} = require('./insert')
 const connector = require('./connector')
-
+const Structure = require('./structure');
+const {itself, orthogonalTransform} = require('./prelude');
 
 /**
  * @callback TranslationListener
@@ -58,6 +59,8 @@ const connector = require('./connector')
     this.down = down;
     this.left = left;
     this.right = right;
+    this.metadata = {};
+    this.centralAnchor = null;
     this._initializeListeners();
   }
 
@@ -71,7 +74,9 @@ const connector = require('./connector')
   }
 
   /**
-   * Sets unestructured user-defined metadata on this piece
+   * Sets unestructured user-defined metadata on this piece.
+   * This object has no strong requirement, but it is recommended to have an
+   * id property.
    *
    * @param {object} metadata
    */
@@ -89,13 +94,26 @@ const connector = require('./connector')
   /**
    * @returns {Piece[]}
    */
+  get presentConnections() {
+    return this.connections.filter(itself);
+  }
+
   get connections() {
     return [
-      this.upConnection,
+      this.rightConnection,
       this.downConnection,
       this.leftConnection,
-      this.rightConnection
-    ].filter(it => it);
+      this.upConnection
+    ];
+  }
+
+  get inserts() {
+    return [
+      this.right,
+      this.down,
+      this.left,
+      this.up
+    ];
   }
 
   /**
@@ -208,7 +226,7 @@ const connector = require('./connector')
     if (!this.connected) {
       return;
     }
-    const connections = this.connections;
+    const connections = this.presentConnections;
 
     if (this.upConnection) {
       this.upConnection.downConnection = null;
@@ -273,7 +291,7 @@ const connector = require('./connector')
   push(dx, dy, quiet = false, pushedPieces = [this]) {
     this.translate(dx, dy, quiet);
 
-    const stationaries = this.connections.filter(it => pushedPieces.indexOf(it) === -1);
+    const stationaries = this.presentConnections.filter(it => pushedPieces.indexOf(it) === -1);
     pushedPieces.push(...stationaries);
     stationaries.forEach(it => it.push(dx, dy, false, pushedPieces));
   }
@@ -377,7 +395,7 @@ const connector = require('./connector')
   }
 
   get connected() {
-    return this.upConnection || this.rightConnection || this.leftConnection || this.rightConnection;
+    return this.upConnection || this.downConnection || this.leftConnection || this.rightConnection;
   }
 
   /**
@@ -421,6 +439,28 @@ const connector = require('./connector')
   get proximity() {
     return this.puzzle.proximity;
   }
+
+  /**
+   * This piece id. It is extracted from metadata
+   *
+   * @returns {string}
+   */
+  get id() {
+    return this.metadata.id;
+  }
+
+  /**
+   * Converts this piece into a plain, stringify-ready object.
+   * Connections should have ids
+   */
+  export() {
+    return {
+      centralAnchor: this.centralAnchor,
+      structure: Structure.serialize(orthogonalTransform(this.inserts, itself)),
+      connections: orthogonalTransform(this.connections, it => ({id: it.id})),
+      metadata: this.metadata
+    };
+  }
 }
 
 /**
@@ -437,13 +477,13 @@ module.exports = Piece;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#itself">itself</a></li><li><a href="global.html#orthogonalMap">orthogonalMap</a></li><li><a href="global.html#orthogonalTransform">orthogonalTransform</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jun 28 2020 23:27:58 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 29 2020 20:27:49 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

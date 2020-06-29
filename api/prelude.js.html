@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Canvas</title>
+    <title>JSDoc: Source: prelude.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,133 +17,91 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Canvas</h1>
+    <h1 class="page-title">Source: prelude.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
-and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to <a href="Painter.html">Painter</a></div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line431">line 431</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @template T
+ * @param {T} one
+ * @param {T} other
+ * @param {boolean} [back]
+ * @returns {[T, T]}
+ */
+function pivot(one, other, back = false) {
+  return back ? [one, other] : [other, one];
+}
+
+/**
+ * @template A
+ * @typedef {Object} Orthogonal
+ * @property {A} up
+ * @property {A} down
+ * @property {A} left
+ * @property {A} right
+ */
+
+/**
+ * @template A
+ * @template B
+ *
+ * @callback Mapper
+ * @param {A} value
+ * @returns {B}
+ */
+
+/**
+ * @template A
+ * @template B
+ *
+ * @param {A[]} values
+ * @param {Mapper&lt;A, B>} mapper
+ * @param {A} replacement
+ * @returns {B[]}
+ */
+function orthogonalMap(values, mapper, replacement = null) {
+  return values.map(it => {
+    const value = it || replacement;
+    return value &amp;&amp; mapper(value)
+  });
+}
+
+/**
+ * @template A
+ * @template B
+ * @param {A[]} values
+ * @param {Mapper&lt;A, B>} mapper
+ * @param {A} replacement
+ * @returns {Orthogonal&lt;B>}
+ */
+function orthogonalTransform(values, mapper, replacement = null) {
+  const [right, down, left, up] = orthogonalMap(values, mapper, replacement)
+  return {right, down, left, up};
+}
+
+/**
+ * @template A
+ * @param {A} arg
+ * @returns {A}
+ */
+function itself(arg) {
+  return arg;
+}
+
+module.exports = {
+  pivot,
+  itself,
+  orthogonalMap,
+  orthogonalTransform
+};
+</code></pre>
+        </article>
+    </section>
 
 
 

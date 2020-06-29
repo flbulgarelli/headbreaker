@@ -66,7 +66,68 @@
 # it as rendering backend
 npm install --save konva
 </code></pre>
-<h2>👀 Docs</h2>
+<h2>🏁 Quick start</h2>
+<h3>HTML Puzzle</h3>
+<pre class="prettyprint source lang-html"><code>&lt;!-- just add a div with an id... -->
+&lt;div id=&quot;my-canvas&quot;>
+&lt;/div>
+
+&lt;script>
+  // ...and a script with the following code:
+  let dali = new Image();
+  dali.src = 'static/dali.jpg';
+  dali.onload = () => {
+    const canvas = new headbreaker.Canvas('my-canvas', {
+      width: 800, height: 800, image: dali
+    });
+    canvas.autogenerate();
+    canvas.shuffle(0.7);
+    canvas.draw();
+  }
+&lt;/script>
+</code></pre>
+<h3>Headless Puzzle</h3>
+<pre class="prettyprint source lang-javascript"><code>// headbreaker can also be loaded on the server, which allows to
+// fully manipulate its model
+const headbreaker = require('headbreaker');
+
+// Create a puzzle
+const puzzle = new headbreaker.Puzzle();
+puzzle
+  .newPiece({right: Tab})
+  .placeAt(anchor(0, 0));
+puzzle
+  .newPiece({left: Slot, right: Tab})
+  .placeAt(anchor(3, 0));
+puzzle
+  .newPiece({left: Slot, right: Tab, down: Slot})
+  .placeAt(anchor(6, 0));
+puzzle
+  .newPiece({up: Tab})
+  .placeAt(anchor(6, 3));
+
+// Connect puzzle's near pieces
+puzzle.autoconnect();
+
+// Translate puzzle
+puzzle.translate(10, 10);
+
+// Export puzzle
+puzzle.export();
+
+// Shuffle pieces
+puzzle.shuffle(100, 100);
+
+// Directly manipulate pieces
+const [a, b, c, d] = puzzle.pieces;
+
+// Drag a piece 10 steps right and 5 steps down
+a.drag(10, 5);
+
+// Connect two pieces (if possible)
+a.tryConnectWith(b);
+</code></pre>
+<h2>👀 Demo and API Docs</h2>
 <p>See https://flbulgarelli.github.io/headbreaker/</p></article>
     </section>
 
@@ -78,13 +139,13 @@ npm install --save konva
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#itself">itself</a></li><li><a href="global.html#orthogonalMap">orthogonalMap</a></li><li><a href="global.html#orthogonalTransform">orthogonalTransform</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jun 28 2020 23:27:58 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 29 2020 20:27:49 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>
