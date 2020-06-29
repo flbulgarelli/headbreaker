@@ -8,7 +8,7 @@ const Tab = {
   match: (other) => other.isSlot(),
   toString: () => "Tab",
   complement: () => Slot,
-  dump: () => 'T'
+  serialize: () => 'T'
 }
 
 const Slot = {
@@ -18,7 +18,7 @@ const Slot = {
   match: (other) => other.isTab(),
   toString: () => "Slot",
   complement: () => Tab,
-  dump: () => 'S'
+  serialize: () => 'S'
 }
 
 const None = {
@@ -28,7 +28,7 @@ const None = {
   match: (other) => false,
   toString: () => "None",
   complement: () => None,
-  dump: () => '-'
+  serialize: () => '-'
 }
 
 /**

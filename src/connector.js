@@ -1,4 +1,4 @@
-const pivot = require('./pivot');
+const {pivot} = require('./prelude');
 
 class Connector {
 

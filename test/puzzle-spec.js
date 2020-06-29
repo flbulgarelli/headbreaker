@@ -685,6 +685,86 @@ describe("piece", () => {
       assert(c.downConnection);
     })
   })
+
+  describe("export", () => {
+    it("can export piece without anchor", () => {
+      const piece = new Piece({up: Slot, left: Tab});
+
+      assert.deepEqual(piece.export(),  {
+        centralAnchor: null,
+        structure: "--TS",
+        connections: {right:null, down:null, left:null, up:null},
+        metadata: {}
+      });
+    })
+
+    it("can export piece without metadata", () => {
+      const piece = new Piece({up: Slot, left: Tab});
+      piece.placeAt(anchor(10, 0));
+
+      assert.deepEqual(piece.export(),  {
+        centralAnchor: {x: 10, y: 0},
+        structure: "--TS",
+        connections: {right:null, down:null, left:null, up:null},
+        metadata: {}
+      });
+    })
+
+    it("can export piece with metadata and anchor", () => {
+      const piece = new Piece({up: Slot, left: Tab});
+      piece.placeAt(anchor(10, 0));
+      piece.annotate({foo: 2})
+
+      assert.deepEqual(piece.export(),  {
+        centralAnchor: {x: 10, y: 0},
+        structure: "--TS",
+        connections: {right:null, down:null, left:null, up:null},
+        metadata: {foo: 2}
+      });
+    })
+
+
+    it("can export a piece with connections without metadata", () => {
+      const puzzle = new Puzzle();
+
+      a = puzzle.newPiece({right: Tab});
+      b = puzzle.newPiece({left: Slot, right: Tab});
+
+      a.placeAt(anchor(0, 0))
+      b.placeAt(anchor(4, 0))
+
+      a.connectHorizontallyWith(b);
+
+      assert.deepEqual(a.export(),  {
+        centralAnchor: {x: 0, y: 0},
+        structure: "T---",
+        connections: {right: {id: null}, down:null, left:null, up:null},
+        metadata: {}
+      });
+    })
+
+    it("can export a piece with connections with metadata", () => {
+      const puzzle = new Puzzle();
+
+      a = puzzle.newPiece({right: Tab});
+      a.annotate({id: 1});
+
+      b = puzzle.newPiece({left: Slot, right: Tab});
+      b.annotate({id: 2});
+
+      a.placeAt(anchor(0, 0))
+      b.placeAt(anchor(4, 0))
+
+      a.connectHorizontallyWith(b);
+
+      assert.deepEqual(a.export(),  {
+        centralAnchor: {x: 0, y: 0},
+        structure: "T---",
+        connections: {right: {id: 2}, down:null, left:null, up:null},
+        metadata: {id: 1}
+      });
+    })
+  });
 })
 
 
@@ -752,5 +832,71 @@ describe("puzzle", () => {
     assert(!a.rightConnection);
     assert(!b.rightConnection);
     assert(!c.downConnection);
+  })
+
+  it("exports", () => {
+    assert.deepEqual(puzzle.export(), {
+      pieceSize: 2,
+      proximity: 1,
+      pieces: [
+        {
+          centralAnchor: {
+            x: 0,
+            y: 0
+          },
+          connections: {
+            down: null,
+            left: null,
+            right: null,
+            up: null,
+          },
+          metadata: {},
+          structure: "T---"
+        },
+        {
+          centralAnchor: {
+            x: 3,
+            y: 0
+          },
+          connections: {
+            down: null,
+            left: null,
+            right: null,
+            up: null,
+          },
+          metadata: {},
+          structure: "T-S-"
+        },
+        {
+          centralAnchor: {
+            x: 6,
+            y: 0
+          },
+          connections: {
+            down: null,
+            left: null,
+            right: null,
+            up: null,
+          },
+          metadata: {},
+          structure: "TSS-"
+        },
+        {
+          centralAnchor: {
+            x: 6,
+            y: 3
+          },
+          connections: {
+            down: null,
+            left: null,
+            right: null,
+            up: null,
+          },
+          metadata: {},
+          structure: "---T"
+        },
+      ]
+
+    });
   })
 })

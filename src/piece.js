@@ -2,7 +2,8 @@ const Vector = require('./vector');
 const {Anchor} = require('./anchor');
 const {None} = require('./insert')
 const connector = require('./connector')
-
+const Structure = require('./structure');
+const {itself, orthogonalTransform} = require('./prelude');
 
 /**
  * @callback TranslationListener
@@ -30,6 +31,8 @@ const connector = require('./connector')
     this.down = down;
     this.left = left;
     this.right = right;
+    this.metadata = {};
+    this.centralAnchor = null;
     this._initializeListeners();
   }
 
@@ -43,7 +46,9 @@ const connector = require('./connector')
   }
 
   /**
-   * Sets unestructured user-defined metadata on this piece
+   * Sets unestructured user-defined metadata on this piece.
+   * This object has no strong requirement, but it is recommended to have an
+   * id property.
    *
    * @param {object} metadata
    */
@@ -61,13 +66,26 @@ const connector = require('./connector')
   /**
    * @returns {Piece[]}
    */
+  get presentConnections() {
+    return this.connections.filter(itself);
+  }
+
   get connections() {
     return [
-      this.upConnection,
+      this.rightConnection,
       this.downConnection,
       this.leftConnection,
-      this.rightConnection
-    ].filter(it => it);
+      this.upConnection
+    ];
+  }
+
+  get inserts() {
+    return [
+      this.right,
+      this.down,
+      this.left,
+      this.up
+    ];
   }
 
   /**
@@ -180,7 +198,7 @@ const connector = require('./connector')
     if (!this.connected) {
       return;
     }
-    const connections = this.connections;
+    const connections = this.presentConnections;
 
     if (this.upConnection) {
       this.upConnection.downConnection = null;
@@ -245,7 +263,7 @@ const connector = require('./connector')
   push(dx, dy, quiet = false, pushedPieces = [this]) {
     this.translate(dx, dy, quiet);
 
-    const stationaries = this.connections.filter(it => pushedPieces.indexOf(it) === -1);
+    const stationaries = this.presentConnections.filter(it => pushedPieces.indexOf(it) === -1);
     pushedPieces.push(...stationaries);
     stationaries.forEach(it => it.push(dx, dy, false, pushedPieces));
   }
@@ -392,6 +410,28 @@ const connector = require('./connector')
    */
   get proximity() {
     return this.puzzle.proximity;
+  }
+
+  /**
+   * This piece id. It is extracted from metadata
+   *
+   * @returns {string}
+   */
+  get id() {
+    return this.metadata.id;
+  }
+
+  /**
+   * Converts this piece into a plain, stringify-ready object.
+   * Connections should have ids
+   */
+  export() {
+    return {
+      centralAnchor: this.centralAnchor,
+      structure: Structure.serialize(orthogonalTransform(this.inserts, itself)),
+      connections: orthogonalTransform(this.connections, it => ({id: it.id})),
+      metadata: this.metadata
+    };
   }
 }
 

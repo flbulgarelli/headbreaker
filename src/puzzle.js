@@ -94,6 +94,14 @@ class Puzzle {
   get metadata() {
     return this.pieces.map(it => it.metadata);
   }
+
+  export() {
+    return {
+      pieceSize: this.pieceSize,
+      proximity: this.proximity,
+      pieces: this.pieces.map(it => it.export())
+    }
+  }
 }
 
 /**

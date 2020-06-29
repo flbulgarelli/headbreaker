@@ -1,4 +1,5 @@
 const {Slot, Tab, None} = require('./insert');
+const {orthogonalMap} = require('./prelude');
 
 /**
  * @param {string} insert
@@ -21,8 +22,8 @@ function parseInsert(insert) {
  * @param {Structure} structure
  * @returns {string}
  */
-function dump(structure) {
-  return [structure.right, structure.down, structure.left, structure.up].map(it => (it || None).dump()).join('');
+function serialize(structure) {
+  return orthogonalMap([structure.right, structure.down, structure.left, structure.up], it => it.serialize(), None).join('');
 }
 
 /**
@@ -30,7 +31,7 @@ function dump(structure) {
  * @param {string} string
  * @returns {Structure}
  */
-function parse(string) {
+function deserialize(string) {
 
   if (string.length !== 4) {
     throw new Error("structure string must be 4-chars long");
@@ -54,7 +55,7 @@ function parse(string) {
  */
 function asStructure(structureLike) {
   if (typeof(structureLike) === 'string') {
-    return parse(structureLike);
+    return deserialize(structureLike);
   }
   return structureLike;
 }
@@ -63,8 +64,8 @@ function asStructure(structureLike) {
  * @module Structure
  */
 module.exports = {
-  dump,
-  parse,
+  serialize,
+  deserialize,
   asStructure
 };
 
