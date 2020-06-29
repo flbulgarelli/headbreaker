@@ -7,6 +7,7 @@ const outline = require('./outline');
 const Canvas = require('./canvas');
 const Manufacturer = require('./manufacturer');
 const sequence = require('./sequence');
+const Metadata = require('./metadata');
 
 module.exports = {
   anchor,
@@ -19,6 +20,7 @@ module.exports = {
   Slot,
   None,
   vector,
+  Metadata,
   outline,
   sequence,
   structure: {

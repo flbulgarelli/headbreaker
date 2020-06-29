@@ -2,6 +2,7 @@ const Puzzle = require('./puzzle');
 const Piece = require('./piece');
 const {anchor} = require('./anchor');
 const {fixed, InsertSequence} = require('./sequence')
+const Metadata = require('./metadata');
 
 /**
  * A manufacturer allows to create rectangular
@@ -84,7 +85,7 @@ class Manufacturer {
    */
   _annotate(piece, index) {
     const baseMetadata = this.metadata[index];
-    const metadata = baseMetadata ? Object.assign({}, baseMetadata) : {};
+    const metadata = baseMetadata ? Metadata.clone(baseMetadata) : {};
     metadata.id = metadata.id || String(index + 1);
     piece.annotate(metadata);
   }

@@ -417,7 +417,7 @@ dynamic.sketchPieceUsingTemplate('d', 'C');
 dynamic.sketchPieceUsingTemplate('e', 'C');
 dynamic.sketchPieceUsingTemplate('f', 'D');
 dynamic.sketchPieceUsingTemplate('g', 'E');
-dynamic.shuffle(0.7);
+
 dynamic.onConnect((piece, figure, target, targetFigure) => {
   updateLabel(piece, figure, 1);
   updateLabel(target, targetFigure, 1);
@@ -428,4 +428,6 @@ dynamic.onDisconnect((piece, figure, target, targetFigure) => {
   updateLabel(target, targetFigure, -1);
   dynamic.redraw();
 });
+
+dynamic.shuffle(0.7);
 dynamic.draw();

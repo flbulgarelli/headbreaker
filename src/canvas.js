@@ -7,6 +7,7 @@ const {twoAndTwo} = require('./sequence');
 const structure = require('./structure');
 const imageLike = require('./image-metadata');
 const position = require('./position');
+const Metadata = require('./metadata');
 
 /**
  * An interface for a a rendering backend
@@ -230,7 +231,7 @@ class Canvas {
     if (!options) {
       throw new Error(`Unknown template ${id}`);
     }
-    const metadata = Object.assign({}, options.metadata);
+    const metadata = Metadata.clone(options.metadata);
     metadata.id = id;
     this.sketchPiece({structure: options.structure, metadata: metadata})
   }
