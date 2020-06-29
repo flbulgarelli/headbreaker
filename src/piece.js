@@ -349,7 +349,7 @@ const connector = require('./connector')
   }
 
   get connected() {
-    return this.upConnection || this.rightConnection || this.leftConnection || this.rightConnection;
+    return this.upConnection || this.downConnection || this.leftConnection || this.rightConnection;
   }
 
   /**

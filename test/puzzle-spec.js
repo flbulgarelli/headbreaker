@@ -275,6 +275,8 @@ describe("piece", () => {
 
     a.connectVerticallyWith(b);
     assert.equal(a.downConnection, b);
+    assert(a.connected);
+    assert(b.connected);
   })
 
   it("does not connect vertically when too away", () => {
@@ -352,6 +354,8 @@ describe("piece", () => {
 
     b.connectHorizontallyWith(c);
     assert.equal(b.rightConnection, c);
+    assert(b.connected);
+    assert(c.connected);
   })
 
   it("does not connect horizontally when too away", () => {
