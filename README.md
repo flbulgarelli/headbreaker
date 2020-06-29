@@ -26,6 +26,75 @@ npm install --save headbreaker
 npm install --save konva
 ```
 
-## 👀 Docs
+## 🏁 Quick start
+
+### HTML Puzzle
+
+```html
+<!-- just add a div with an id... -->
+<div id="my-canvas">
+</div>
+
+<script>
+  // ...and a script with the following code:
+  let dali = new Image();
+  dali.src = 'static/dali.jpg';
+  dali.onload = () => {
+    const canvas = new headbreaker.Canvas('my-canvas', {
+      width: 800, height: 800, image: dali
+    });
+    canvas.autogenerate();
+    canvas.shuffle(0.7);
+    canvas.draw();
+  }
+</script>
+```
+
+### Headless Puzzle
+
+```javascript
+// headbreaker can also be loaded on the server, which allows to
+// fully manipulate its model
+const headbreaker = require('headbreaker');
+
+// Create a puzzle
+const puzzle = new headbreaker.Puzzle();
+puzzle
+  .newPiece({right: Tab})
+  .placeAt(anchor(0, 0));
+puzzle
+  .newPiece({left: Slot, right: Tab})
+  .placeAt(anchor(3, 0));
+puzzle
+  .newPiece({left: Slot, right: Tab, down: Slot})
+  .placeAt(anchor(6, 0));
+puzzle
+  .newPiece({up: Tab})
+  .placeAt(anchor(6, 3));
+
+// Connect puzzle's near pieces
+puzzle.autoconnect();
+
+// Translate puzzle
+puzzle.translate(10, 10);
+
+// Export puzzle
+puzzle.export();
+
+// Shuffle pieces
+puzzle.shuffle(100, 100);
+
+// Directly manipulate pieces
+const [a, b, c, d] = puzzle.pieces;
+
+// Drag a piece 10 steps right and 5 steps down
+a.drag(10, 5);
+
+// Connect two pieces (if possible)
+a.tryConnectWith(b);
+```
+
+## 👀 Demo and API Docs
 
 See https://flbulgarelli.github.io/headbreaker/
+

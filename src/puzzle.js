@@ -95,6 +95,10 @@ class Puzzle {
     return this.pieces.map(it => it.metadata);
   }
 
+  /**
+   * Converts this piece into a plain, stringify-ready object.
+   * Pieces should have ids
+   */
   export() {
     return {
       pieceSize: this.pieceSize,

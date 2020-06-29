@@ -1,8 +1,4 @@
 /**
- * @module pivot
- */
-
-/**
  * @template T
  * @param {T} one
  * @param {T} other
