@@ -1,4 +1,8 @@
 /**
+ * @module pivot
+ */
+
+/**
  * @template T
  * @param {T} one
  * @param {T} other
@@ -9,7 +13,4 @@ function pivot(one, other, back = false) {
   return back ? [one, other] : [other, one];
 }
 
-/**
- * @module pivot
- */
 module.exports = pivot;

@@ -1,6 +1,6 @@
-const vector = require('./vector');
+const Vector = require('./vector');
 const {Anchor} = require('./anchor');
-const {None} = require('./structure')
+const {None} = require('./insert')
 const connector = require('./connector')
 
 
@@ -23,7 +23,7 @@ const connector = require('./connector')
  class Piece {
 
   /**
-   * @param {import('./../src/structure').Structure} [options]
+   * @param {import('./structure').Structure} [options]
    */
   constructor({up = None, down = None, left = None, right = None} = {}) {
     this.up = up;
@@ -227,7 +227,7 @@ const connector = require('./connector')
    * @param {number} dy
    */
   translate(dx, dy, quiet = false) {
-    if (!vector.isNull(dx, dy)) {
+    if (!Vector.isNull(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
       if (!quiet) {
         this.fireTranslate(dx, dy);
@@ -256,7 +256,7 @@ const connector = require('./connector')
    * @param {number} dy
    */
   drag(dx, dy, quiet = false) {
-    if (vector.isNull(dx, dy)) return;
+    if (Vector.isNull(dx, dy)) return;
 
     if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
       this.disconnect();

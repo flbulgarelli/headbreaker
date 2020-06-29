@@ -19,7 +19,7 @@ class Puzzle {
   }
 
   /**
-   * @param {import('./../src/structure').Structure} [options]
+   * @param {import('./structure').Structure} [options]
    */
   newPiece(options = {}) {
     const piece = new Piece(options);

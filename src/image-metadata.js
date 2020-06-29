@@ -28,7 +28,9 @@ function asImageMetadata(imageLike) {
   return imageLike;
 }
 
-
+/**
+ * @module ImageMetadata
+ */
 module.exports = {
   asImageMetadata
 }

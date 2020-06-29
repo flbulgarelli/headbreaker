@@ -1,15 +1,12 @@
 require('mocha');
 const assert = require('assert');
-const Canvas = require('../src/canvas');
-const {Slot, Tab, None} = require('../src/structure');
-const NullPainter = require('../src/dummy-painter');
-const {flipflop} = require('../src/sequence');
+const {Slot, Tab, None, Canvas, painters, sequence} = require('../src/index');
 
 // @ts-ignore
 HTMLImageElement = function(){};
 
 describe("Canvas", () => {
-  const painter = new NullPainter();
+  const painter = new painters.Dummy();
 
   it("can create a single-piece puzzle", () => {
     const canvas = new Canvas('canvas', {
@@ -90,7 +87,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 4,
       horizontalPiecesCount: 4,
-      insertsGenerator: flipflop,
+      insertsGenerator: sequence.flipflop,
     });
     canvas.shuffle(0.7);
     canvas.draw();
@@ -141,7 +138,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 2,
       horizontalPiecesCount: 2,
-      insertsGenerator: flipflop
+      insertsGenerator: sequence.flipflop
     });
     canvas.draw();
 
@@ -175,7 +172,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 1,
       horizontalPiecesCount: 2,
-      insertsGenerator: flipflop
+      insertsGenerator: sequence.flipflop
     });
     canvas.draw();
 
@@ -206,7 +203,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 3,
       horizontalPiecesCount: 3,
-      insertsGenerator: flipflop
+      insertsGenerator: sequence.flipflop
     });
     canvas.draw();
 

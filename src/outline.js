@@ -1,7 +1,13 @@
+/**
+ * This module contains the draw function. Override it change pieces drawing strategy
+ *
+ * @module Outline
+ */
+
 const Piece = require('./piece');
 
 /**
- * @param {import('./structure').Insert} insert
+ * @param {import('./insert').Insert} insert
  * @param {number} t
  * @param {number} s
  * @param {number} n
@@ -38,9 +44,7 @@ function draw(piece, size = 50, borderFill = 0) {
   ].map(it => it * size / 5)
 }
 
-/**
- * @module outline
- */
+
 module.exports = {
   draw
 }

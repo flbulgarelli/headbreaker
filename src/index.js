@@ -1,9 +1,10 @@
-const vector = require('./vector')
+const Vector = require('./vector')
 const {anchor, Anchor} = require('./anchor')
 const Puzzle = require('./puzzle');
 const Piece = require('./piece');
-const {Tab, Slot, None, dump, parse} = require('./structure');
-const outline = require('./outline');
+const {Tab, Slot, None} = require('./insert');
+const Structure = require('./structure');
+const Outline = require('./outline');
 const Canvas = require('./canvas');
 const Manufacturer = require('./manufacturer');
 const sequence = require('./sequence');
@@ -19,14 +20,11 @@ module.exports = {
   Tab,
   Slot,
   None,
-  vector,
+  Vector,
   Metadata,
-  outline,
+  Outline,
+  Structure,
   sequence,
-  structure: {
-    dump,
-    parse
-  },
   painters: {
     Dummy: require('./dummy-painter'),
     Konva: require('./konva-painter')

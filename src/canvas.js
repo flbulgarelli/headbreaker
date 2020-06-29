@@ -1,10 +1,10 @@
-const vector = require('./vector');
+const Vector = require('./vector');
 const Piece = require('./piece');
 const Puzzle = require('./puzzle');
 const Manufacturer = require('../src/manufacturer');
 const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
-const structure = require('./structure');
+const Structure = require('./structure');
 const imageLike = require('./image-metadata');
 const position = require('./position');
 const Metadata = require('./metadata');
@@ -368,7 +368,7 @@ class Canvas {
    */
   _bindPieceToGroup(piece, group) {
     this._painter.onDrag(this, piece, group, (dx, dy) => {
-      if (!vector.isNull(dx, dy)) {
+      if (!Vector.isNull(dx, dy)) {
         piece.drag(dx, dy, true);
         this._painter.logicalTranslate(this, piece, group);
         this.redraw();
@@ -406,7 +406,7 @@ class Canvas {
    * @param {CanvasMetadata} metadata
    */
   _newPiece(structureLike, metadata) {
-    let piece = this.puzzle.newPiece(structure.asStructure(structureLike));
+    let piece = this.puzzle.newPiece(Structure.asStructure(structureLike));
     piece.annotate(metadata);
     piece.placeAt(anchor(metadata.currentPosition.x, metadata.currentPosition.y));
     return piece;

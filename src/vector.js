@@ -1,4 +1,10 @@
 /**
+ * Utilities for handling 2D vectors, expressed a two-elements list
+ *
+ * @module Vector
+ */
+
+/**
  * @param {number} dx
  * @param {number} dy
  * @returns {boolean}
@@ -19,10 +25,7 @@ function diff(x1, y1, x2, y2) {
   return [x1 - x2, y1 - y2];
 }
 
-/**
- * @module vector
- */
 module.exports = {
   isNull,
   diff
-}
+};

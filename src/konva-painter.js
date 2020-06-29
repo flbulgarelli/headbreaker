@@ -13,9 +13,9 @@ try {
 }
 
 const Canvas = require('./canvas');
-const outline = require('./outline');
+const Outline = require('./outline');
 const Piece = require('./piece');
-const vector = require('./vector');
+const Vector = require('./vector');
 
 
 /**
@@ -23,7 +23,7 @@ const vector = require('./vector');
  * @param {*} group
  */
 function currentPositionDiff(model, group) {
-  return vector.diff(group.x(),group.y(), model.metadata.currentPosition.x, model.metadata.currentPosition.y);
+  return Vector.diff(group.x(),group.y(), model.metadata.currentPosition.x, model.metadata.currentPosition.y);
 }
 
 /**
@@ -71,7 +71,7 @@ class KonvaPainter {
 
     const image = canvas._imageMetadataFor(piece);
     figure.shape = new Konva.Line({
-      points: outline.draw(piece, canvas.pieceSize, canvas.borderFill),
+      points: Outline.draw(piece, canvas.pieceSize, canvas.borderFill),
       fill: !image ? piece.metadata.color || 'black' : null,
       fillPatternImage: image && image.content,
       fillPatternScale: image && {x: image.scale, y: image.scale},

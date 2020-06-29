@@ -1,39 +1,8 @@
-/**
- * @typedef {(Tab|Slot|None)} Insert
- */
-const Tab = {
-  isSlot: () => false,
-  isTab:  () => true,
-  isNone:  () => false,
-  match: (other) => other.isSlot(),
-  toString: () => "Tab",
-  complement: () => Slot,
-  dump: () => 'T'
-}
-
-const Slot = {
-  isSlot: () => true,
-  isTab:  () => false,
-  isNone:  () => false,
-  match: (other) => other.isTab(),
-  toString: () => "Slot",
-  complement: () => Tab,
-  dump: () => 'S'
-}
-
-const None = {
-  isSlot: () => false,
-  isTab:  () => false,
-  isNone:  () => true,
-  match: (other) => false,
-  toString: () => "None",
-  complement: () => None,
-  dump: () => '-'
-}
+const {Slot, Tab, None} = require('./insert');
 
 /**
  * @param {string} insert
- * @returns {Insert}
+ * @returns {import('./insert').Insert}
  */
 function parseInsert(insert) {
   return insert === 'S' ? Slot : insert === 'T' ? Tab : None;
@@ -41,10 +10,10 @@ function parseInsert(insert) {
 
 /**
  * @typedef {object} Structure
- * @property {Insert} [up]
- * @property {Insert} [left]
- * @property {Insert} [down]
- * @property {Insert} [right]
+ * @property {import('./insert').Insert} [up]
+ * @property {import('./insert').Insert} [left]
+ * @property {import('./insert').Insert} [down]
+ * @property {import('./insert').Insert} [right]
  */
 
 /**
@@ -90,14 +59,10 @@ function asStructure(structureLike) {
   return structureLike;
 }
 
-
 /**
- * @module structure
+ * @module Structure
  */
 module.exports = {
-  None,
-  Slot,
-  Tab,
   dump,
   parse,
   asStructure

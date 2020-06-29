@@ -1,5 +1,5 @@
 const between = require('./between');
-const vector = require('./vector')
+const Vector = require('./vector')
 
 /**
  * An Anchor is a mutable 2D point that
@@ -73,7 +73,7 @@ class Anchor {
    * @returns {[number, number]}
    */
   diff(other) {
-    return vector.diff(this.x, this.y, other.x, other.y)
+    return Vector.diff(this.x, this.y, other.x, other.y)
   }
 
   /**
@@ -97,7 +97,6 @@ class Anchor {
 function anchor(x, y) {
   return new Anchor(x, y);
 }
-
 
 /**
  * This module exposes the {@link Anchor} class and the {@link anchor} constructor
