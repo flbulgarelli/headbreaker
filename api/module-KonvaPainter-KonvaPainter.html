@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Interface: Painter</title>
+    <title>JSDoc: Class: KonvaPainter</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Interface: Painter</h1>
+    <h1 class="page-title">Class: KonvaPainter</h1>
 
     
 
@@ -28,7 +28,10 @@
 
 <header>
     
-        <h2>Painter</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-KonvaPainter.html">KonvaPainter</a>~</span>KonvaPainter<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">A Painter that uses Konva</div>
         
     
 </header>
@@ -37,11 +40,29 @@
     <div class="container-overview">
     
         
-            <div class="description">An interface for a a rendering backend
-for puzzle's canvas</div>
-        
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="KonvaPainter"><span class="type-signature"></span>new KonvaPainter<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <dl class="details">
@@ -56,6 +77,13 @@ for puzzle's canvas</div>
 
     
 
+    
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li>Painter</li>
+        
+    </ul></dd>
     
 
     
@@ -73,7 +101,7 @@ for puzzle's canvas</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line12">line 12</a>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -85,7 +113,24 @@ for puzzle's canvas</div>
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </div>
 
@@ -158,7 +203,7 @@ for puzzle's canvas</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type">Canvas</span>
 
 
             
@@ -209,7 +254,7 @@ for puzzle's canvas</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line27">line 27</a>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -291,7 +336,7 @@ for puzzle's canvas</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type">Canvas</span>
 
 
             
@@ -365,7 +410,7 @@ for puzzle's canvas</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line23">line 23</a>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -401,7 +446,7 @@ for puzzle's canvas</div>
     
 
     
-    <h4 class="name" id="label"><span class="type-signature"></span>label<span class="signature">(canvas, piece, figure)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="label"><span class="type-signature"></span>label<span class="signature">(_canvas, piece, figure)</span><span class="type-signature"></span></h4>
     
 
     
@@ -441,13 +486,13 @@ for puzzle's canvas</div>
 
         <tr>
             
-                <td class="name"><code>canvas</code></td>
+                <td class="name"><code>_canvas</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type">Canvas</span>
 
 
             
@@ -493,7 +538,7 @@ for puzzle's canvas</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Figure">Figure</a></span>
+<span class="param-type">Figure</span>
 
 
             
@@ -544,7 +589,7 @@ for puzzle's canvas</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line39">line 39</a>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -580,7 +625,7 @@ for puzzle's canvas</div>
     
 
     
-    <h4 class="name" id="logicalTranslate"><span class="type-signature"></span>logicalTranslate<span class="signature">(canvas, piece, group)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="logicalTranslate"><span class="type-signature"></span>logicalTranslate<span class="signature">(_canvas, piece, group)</span><span class="type-signature"></span></h4>
     
 
     
@@ -620,13 +665,13 @@ for puzzle's canvas</div>
 
         <tr>
             
-                <td class="name"><code>canvas</code></td>
+                <td class="name"><code>_canvas</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type">Canvas</span>
 
 
             
@@ -672,7 +717,7 @@ for puzzle's canvas</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Group">Group</a></span>
+<span class="param-type">*</span>
 
 
             
@@ -723,7 +768,7 @@ for puzzle's canvas</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line51">line 51</a>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -759,7 +804,7 @@ for puzzle's canvas</div>
     
 
     
-    <h4 class="name" id="physicalTranslate"><span class="type-signature"></span>physicalTranslate<span class="signature">(canvas, group, piece)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onDrag"><span class="type-signature"></span>onDrag<span class="signature">(_canvas, piece, group, f)</span><span class="type-signature"></span></h4>
     
 
     
@@ -799,13 +844,36 @@ for puzzle's canvas</div>
 
         <tr>
             
-                <td class="name"><code>canvas</code></td>
+                <td class="name"><code>_canvas</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type">Canvas</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>piece</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Piece.html">Piece</a></span>
 
 
             
@@ -828,7 +896,388 @@ for puzzle's canvas</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Group">Group</a></span>
+<span class="param-type">Group</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>f</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">VectorAction</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line142">line 142</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onDragEnd"><span class="type-signature"></span>onDragEnd<span class="signature">(_canvas, _piece, group, f)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_canvas</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Canvas</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_piece</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Piece.html">Piece</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>group</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Group</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>f</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Action</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line161">line 161</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="physicalTranslate"><span class="type-signature"></span>physicalTranslate<span class="signature">(_canvas, group, piece)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_canvas</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Canvas</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>group</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Group</span>
 
 
             
@@ -902,7 +1351,7 @@ for puzzle's canvas</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line45">line 45</a>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -984,7 +1433,7 @@ for puzzle's canvas</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type">Canvas</span>
 
 
             
@@ -1030,7 +1479,7 @@ for puzzle's canvas</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Figure">Figure</a></span>
+<span class="param-type">Figure</span>
 
 
             
@@ -1081,7 +1530,7 @@ for puzzle's canvas</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="canvas.js.html">canvas.js</a>, <a href="canvas.js.html#line33">line 33</a>
+        <a href="konva-painter.js.html">konva-painter.js</a>, <a href="konva-painter.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -1127,13 +1576,13 @@ for puzzle's canvas</div>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-pivot.html">pivot</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="module-Anchor-Anchor.html">Anchor</a></li><li><a href="module-Canvas-Canvas.html">Canvas</a></li><li><a href="module-KonvaPainter-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer-Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-Canvas-Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jun 28 2020 23:27:58 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jun 28 2020 23:26:16 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

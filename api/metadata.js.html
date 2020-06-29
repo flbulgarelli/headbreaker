@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: metadata.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,60 +17,38 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: metadata.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><p><a href="https://travis-ci.com/flbulgarelli/headbreaker"><img src="https://travis-ci.com/flbulgarelli/headbreaker.svg?branch=master" alt="Build Status"></a>
-<a href="https://codeclimate.com/github/flbulgarelli/headbreaker"><img src="https://codeclimate.com/github/flbulgarelli/headbreaker/badges/gpa.svg" alt="Code Climate"></a>
-<a href="https://codeclimate.com/github/flbulgarelli/headbreaker"><img src="https://codeclimate.com/github/flbulgarelli/headbreaker/badges/coverage.svg" alt="Test Coverage"></a></p>
-<h1>:jigsaw: :exploding_head: Headbreaker</h1>
-<blockquote>
-<p>Jigsaw Puzzles Framework for JavaScript</p>
-</blockquote>
-<p><code>headbreaker</code> - a spanish pun for <em>rompecabezas</em> - is a JavaScript framework for building all kind of jigsaw puzzles.</p>
-<h2>☑️ Features</h2>
-<ul>
-<li>100% pure JavaScript</li>
-<li>Extensible data model</li>
-<li>Highly tested</li>
-<li>Highligh customizable puzzle-pieces domain-model</li>
-<li>Zero-dependencies - although Konva.js is used a a rendering backed, it is an optional dependency which can be replaced be custom code</li>
-</ul>
-<h2>📦 Installing</h2>
-<pre class="prettyprint source lang-bash"><code>npm install --save headbreaker
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This module exposes metadata-handling functions you can override to have better performance
+ *
+ * @module Metadata
+ */
 
-# optional: manually add konva to your project if you want to use
-# it as rendering backend
-npm install --save konva
+/**
+ * Copies a metadata object. The default implementation uses {@link JSON#parse}. Override it to have better performance
+ *
+ * @template T
+ * @param {T} metadata
+ * @returns {T}
+ */
+function clone(metadata) {
+  return JSON.parse(JSON.stringify(metadata));
+}
+
+module.exports = {
+  clone
+}
 </code></pre>
-<h2>👀 Docs</h2>
-<p>See https://flbulgarelli.github.io/headbreaker/</p></article>
+        </article>
     </section>
-
-
 
 
 
