@@ -18,6 +18,16 @@ const {itself, orthogonalTransform} = require('./prelude');
  * @param {Piece} target
  */
 
+/**
+ * A piece primitive representation that can be easily stringified, exchanged and persisted
+ *
+ * @typedef {object} PieceDump
+ * @property {import('./position').Position} centralAnchor
+ * @property {string} structure
+ * @property {import('./prelude').Orthogonal<object>} connections
+ * @property {object} metadata
+ */
+
  /**
   * A jigsaw piece
   */
@@ -420,14 +430,6 @@ const {itself, orthogonalTransform} = require('./prelude');
   get id() {
     return this.metadata.id;
   }
-
-  /**
-   * @typedef {object} PieceDump
-   * @property {import('./position').Position} centralAnchor
-   * @property {string} structure
-   * @property {import('./prelude').Orthogonal<object>} connections
-   * @property {object} metadata
-   */
 
   /**
    * Converts this piece into a plain, stringify-ready object.

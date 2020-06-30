@@ -78,9 +78,6 @@ puzzle.autoconnect();
 // Translate puzzle
 puzzle.translate(10, 10);
 
-// Export puzzle
-puzzle.export();
-
 // Shuffle pieces
 puzzle.shuffle(100, 100);
 
@@ -92,6 +89,10 @@ a.drag(10, 5);
 
 // Connect two pieces (if possible)
 a.tryConnectWith(b);
+
+// Export and import puzzle
+const dump = puzzle.export();
+const otherPuzzle = headbreaker.Puzzle.import(dump);
 ```
 
 ## 👀 Demo and API Docs

@@ -1,11 +1,26 @@
 const {Anchor} = require('./anchor');
 const Piece = require('./piece');
 
+ /**
+ * A puzzle primitive representation that can be easily stringified, exchanged and persisted
+ *
+ * @typedef {object} PuzzleDump
+ * @property {number} pieceSize
+ * @property {number} proximity
+ * @property {import('./piece').PieceDump[]} pieces
+ */
+
 /**
  * @typedef {object} Settings
  * @property {number} [pieceSize]
  * @property {number} [proximity]
  */
+
+
+ /**
+  * A set of a {@link Piece}s that can be manipulated as a whole, and that can be
+  * used as a pieces factory
+  */
 class Puzzle {
 
   /**
@@ -19,13 +34,30 @@ class Puzzle {
   }
 
   /**
-   * @param {import('./structure').Structure} [options]
+   * Creates and adds to this puzzle a new piece
+   *
+   * @param {import('./structure').Structure} [options] the piece structure
+   * @returns {Piece} the new piece
    */
   newPiece(options = {}) {
     const piece = new Piece(options);
+    this.addPiece(piece);
+    return piece;
+  }
+
+  /**
+   * @param {Piece} piece
+   */
+  addPiece(piece) {
     this.pieces.push(piece);
     piece.belongTo(this);
-    return piece;
+  }
+
+  /**
+   * @param {Piece[]} pieces
+   */
+  addPieces(pieces) {
+    pieces.forEach(it => this.addPiece(it));
   }
 
   /**
@@ -98,6 +130,7 @@ class Puzzle {
   /**
    * Converts this piece into a plain, stringify-ready object.
    * Pieces should have ids
+   * @returns {PuzzleDump}
    */
   export() {
     return {
@@ -105,6 +138,16 @@ class Puzzle {
       proximity: this.proximity,
       pieces: this.pieces.map(it => it.export())
     }
+  }
+
+  /**
+   * @param {PuzzleDump} dump
+   * @returns {Puzzle}
+   */
+  static import(dump) {
+    const puzzle = new Puzzle({pieceSize: dump.pieceSize, proximity: dump.proximity});
+    puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
+    return puzzle;
   }
 }
 

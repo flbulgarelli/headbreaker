@@ -1,4 +1,3 @@
-// @ts-nocheck
 const assert = require('assert');
 const {Puzzle, Tab, Slot, anchor} = require('../src/index');
 
@@ -63,9 +62,9 @@ describe("puzzle", () => {
 
     const [a, b, c, d] = puzzle.pieces;
 
-    assert(!a.rightConnection);
-    assert(!b.rightConnection);
-    assert(!c.downConnection);
+    assert.equal(a.rightConnection, null);
+    assert.equal(b.rightConnection, null);
+    assert.equal(c.downConnection, null);
   })
 
   it("exports", () => {
@@ -130,7 +129,14 @@ describe("puzzle", () => {
           structure: "---T"
         },
       ]
-
     });
+  })
+
+  it("imports", () => {
+    const imported = Puzzle.import(puzzle.export());
+    assert.deepEqual(imported.pieces.length, puzzle.pieces.length);
+    assert.deepEqual(imported.pieceSize, puzzle.pieceSize);
+    assert.deepEqual(imported.proximity, puzzle.proximity);
+    assert.deepEqual(imported.metadata, puzzle.metadata);
   })
 })
