@@ -30,6 +30,9 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>Puzzle<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
+            <div class="class-description">A set of a <a href="Piece.html">Piece</a>s that can be manipulated as a whole, and that can be
+used as a pieces factory</div>
+        
     
 </header>
 
@@ -38,6 +41,8 @@
     
         
 
+    
+    <h2>Constructor</h2>
     
 
     
@@ -150,7 +155,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line14">line 14</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -250,7 +255,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line18">line 18</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -271,6 +276,423 @@
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".import"><span class="type-signature">(static) </span>import<span class="signature">(dump)</span><span class="type-signature"> &rarr; {<a href="Puzzle.html">Puzzle</a>}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dump</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PuzzleDump">PuzzleDump</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line147">line 147</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Puzzle.html">Puzzle</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addPiece"><span class="type-signature"></span>addPiece<span class="signature">(piece)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>piece</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Piece.html">Piece</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addPieces"><span class="type-signature"></span>addPieces<span class="signature">(pieces)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pieces</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Piece.html">Piece</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
@@ -331,7 +753,7 @@ This method is O(n^2)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line35">line 35</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -469,7 +891,7 @@ This method is O(n)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line48">line 48</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -505,7 +927,7 @@ This method is O(n)
     
 
     
-    <h4 class="name" id="export"><span class="type-signature"></span>export<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="export"><span class="type-signature"></span>export<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#PuzzleDump">PuzzleDump</a>}</span></h4>
     
 
     
@@ -558,7 +980,7 @@ Pieces should have ids
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line102">line 102</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -583,6 +1005,24 @@ Pieces should have ids
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#PuzzleDump">PuzzleDump</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -594,12 +1034,16 @@ Pieces should have ids
     
 
     
-    <h4 class="name" id="newPiece"><span class="type-signature"></span>newPiece<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="newPiece"><span class="type-signature"></span>newPiece<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Piece.html">Piece</a>}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    Creates and adds to this puzzle a new piece
+</div>
 
 
 
@@ -662,7 +1106,7 @@ Pieces should have ids
 
             
 
-            <td class="description last"></td>
+            <td class="description last">the piece structure</td>
         </tr>
 
     
@@ -703,7 +1147,7 @@ Pieces should have ids
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line24">line 24</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -728,6 +1172,28 @@ Pieces should have ids
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    the new piece
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Piece.html">Piece</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -836,7 +1302,7 @@ Pieces should have ids
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line83">line 83</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line115">line 115</a>
     </li></ul></dd>
     
 
@@ -969,7 +1435,7 @@ Pieces should have ids
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line90">line 90</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -1102,7 +1568,7 @@ Pieces should have ids
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line76">line 76</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -1258,7 +1724,7 @@ Pieces should have ids
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line59">line 59</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -1414,7 +1880,7 @@ Pieces should have ids
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line69">line 69</a>
+        <a href="puzzle.js.html">puzzle.js</a>, <a href="puzzle.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -1466,7 +1932,7 @@ Pieces should have ids
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 29 2020 22:31:05 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 29 2020 22:51:58 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>
