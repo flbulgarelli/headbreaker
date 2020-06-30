@@ -11,10 +11,10 @@
 ## ☑️ Features
 
  * 100% pure JavaScript
- * Extensible data model
+ * Headless support domain-model
  * Highly tested
- * Highligh customizable puzzle-pieces domain-model
- * Zero-dependencies - although Konva.js is used a a rendering backed, it is an optional dependency which can be replaced be custom code
+ * Customizable data-model
+ * Zero-dependencies - although Konva.js is used a a rendering backed, it is an optional dependency which can be replaced with custom code
 
 ## 📦 Installing
 
