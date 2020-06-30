@@ -1,5 +1,6 @@
 const between = require('./between');
 const Vector = require('./vector')
+const position = require('./position')
 
 /**
  * An Anchor is a mutable 2D point that
@@ -77,6 +78,13 @@ class Anchor {
   }
 
   /**
+   * @returns {import('./position').Position}
+   */
+  export() {
+    return position(this.x, this.y);
+  }
+
+  /**
    * @param {number} maxX
    * @param {number} maxY
    * @returns {Anchor}
@@ -85,6 +93,14 @@ class Anchor {
     return new Anchor(Math.random() * maxX, Math.random() * maxY);
   }
 
+  /**
+   *
+   * @param {import('./position').Position} position
+   * @returns {Anchor}
+   */
+  static import(position) {
+    return anchor(position.x, position.y);
+  }
 }
 
 /**

@@ -686,6 +686,20 @@ describe("piece", () => {
     })
   })
 
+  describe("import", () => {
+    it("can import piece without anchor", () => {
+      const piece = Piece.import({
+        centralAnchor: null,
+        structure: "--TS",
+        connections: {right:null, down:null, left:null, up:null},
+        metadata: {}
+      });
+      assert.equal(piece.centralAnchor, null);
+      assert.deepEqual(piece.metadata, {});
+      assert.deepEqual(piece.presentConnections, []);
+    })
+  })
+
   describe("export", () => {
     it("can export piece without anchor", () => {
       const piece = new Piece({up: Slot, left: Tab});

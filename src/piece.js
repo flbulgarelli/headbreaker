@@ -422,16 +422,42 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * @typedef {object} PieceDump
+   * @property {import('./position').Position} centralAnchor
+   * @property {string} structure
+   * @property {import('./prelude').Orthogonal<object>} connections
+   * @property {object} metadata
+   */
+
+  /**
    * Converts this piece into a plain, stringify-ready object.
    * Connections should have ids
+   *
+   * @returns {PieceDump}
    */
   export() {
     return {
-      centralAnchor: this.centralAnchor,
+      centralAnchor: this.centralAnchor && this.centralAnchor.export(),
       structure: Structure.serialize(orthogonalTransform(this.inserts, itself)),
       connections: orthogonalTransform(this.connections, it => ({id: it.id})),
       metadata: this.metadata
     };
+  }
+
+  /**
+   * @param {PieceDump} dump
+   */
+  static import(dump) {
+    const piece = new Piece();
+
+    if (dump.centralAnchor) {
+      piece.placeAt(Anchor.import(dump.centralAnchor));
+    }
+
+    if (dump.metadata) {
+      piece.annotate(dump.metadata);
+    }
+    return piece;
   }
 }
 
