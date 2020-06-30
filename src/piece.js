@@ -367,7 +367,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   get connected() {
-    return this.upConnection || this.downConnection || this.leftConnection || this.rightConnection;
+    return !!(this.upConnection || this.downConnection || this.leftConnection || this.rightConnection);
   }
 
   /**

@@ -1,4 +1,3 @@
-// @ts-nocheck
 const assert = require('assert');
 const {Puzzle, Piece, Tab, Slot, None, anchor, Anchor} = require('../src/index');
 
@@ -11,85 +10,85 @@ describe("piece", () => {
 
   it("there are no inserts by default", () => {
     const piece = new Piece()
-    assert(piece.up.isNone())
-    assert(piece.down.isNone())
-    assert(piece.left.isNone())
-    assert(piece.right.isNone())
+    assert.equal(piece.up.isNone(), true);
+    assert.equal(piece.down.isNone(), true);
+    assert.equal(piece.left.isNone(), true);
+    assert.equal(piece.right.isNone(), true);
   })
 
   it("can specify there is an upper tab", () => {
     const piece = new Piece({up: Tab})
-    assert(piece.up.isTab())
-    assert(!piece.up.isSlot())
+    assert.equal(piece.up.isTab(), true);
+    assert.equal(piece.up.isSlot(), false);
   })
 
   it("can specify there is a lower slot", () => {
     const piece = new Piece({down: Slot})
-    assert(!piece.down.isTab())
-    assert(piece.down.isSlot())
+    assert.equal(piece.down.isTab(), false);
+    assert.equal(piece.down.isSlot(), true);
   })
 
   it("can specify there there are lateral Slots an Tabs and implicit upper and bottom Non", () => {
     const piece = new Piece({left: Slot, right: Tab})
-    assert(piece.left.isSlot())
-    assert(piece.right.isTab())
-    assert(piece.up.isNone())
-    assert(piece.down.isNone())
+    assert.equal(piece.left.isSlot(), true);
+    assert.equal(piece.right.isTab(), true);
+    assert.equal(piece.up.isNone(), true);
+    assert.equal(piece.down.isNone(), true);
   })
 
   it("can validate potential vertical matches between two matching pieces", () => {
     const a = new Piece({up: Slot, down: Tab})
     const b = new Piece({up: Slot, down: Tab})
 
-    assert(a.verticallyMatch(b))
-    assert(b.verticallyMatch(a))
+    assert.equal(a.verticallyMatch(b), true);
+    assert.equal(b.verticallyMatch(a), true);
   })
 
   it("can validate potential vertical matches between two partially matching pieces", () => {
     const a = new Piece({up: Slot, down: Tab})
     const b = new Piece({up: Slot, down: Slot})
 
-    assert(a.verticallyMatch(b))
-    assert(!b.verticallyMatch(a))
+    assert.equal(a.verticallyMatch(b), true);
+    assert.equal(b.verticallyMatch(a), false);
   })
 
   it("can validate potential horizontal matches between two matching pieces", () => {
     const a = new Piece({left: Slot, right: Tab})
     const b = new Piece({left: Slot, right: Tab})
 
-    assert(a.horizontallyMatch(b))
-    assert(b.horizontallyMatch(a))
+    assert.equal(a.horizontallyMatch(b), true);
+    assert.equal(b.horizontallyMatch(a), true);
   })
 
   it("can validate potential horizontal matches between two partially matching pieces", () => {
     const a = new Piece({left: Slot, right: Tab})
     const b = new Piece({left: Slot, right: Slot})
 
-    assert(a.horizontallyMatch(b))
-    assert(!b.horizontallyMatch(a))
+    assert.equal(a.horizontallyMatch(b), true);
+    assert.equal(b.horizontallyMatch(a), false);
   })
 
   it("can validate potential vertical matches between non matching pieces", () => {
     const a = new Piece({up: Slot, down: Tab})
     const b = new Piece({up: None, down: Slot})
 
-    assert(!a.verticallyMatch(b))
-    assert(!b.verticallyMatch(a))
+    assert.equal(a.verticallyMatch(b), false);
+    assert.equal(b.verticallyMatch(a), false);
   })
 
   it("can validate potential horizontal matches between non matching pieces", () => {
     const a = new Piece({left: Slot, right: Tab})
     const b = new Piece({left: Tab, right: None})
 
-    assert(!a.horizontallyMatch(b))
-    assert(!b.horizontallyMatch(a))
+    assert.equal(a.horizontallyMatch(b), false);
+    assert.equal(b.horizontallyMatch(a), false);
   })
 
   it("can create a piece from a puzzle", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece();
 
-    assert(piece.puzzle === puzzle);
+    assert.equal(piece.puzzle, puzzle);
   })
 
 
@@ -97,7 +96,7 @@ describe("piece", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece();
 
-    assert(piece.puzzle === puzzle);
+    assert.equal(piece.puzzle, puzzle);
   })
 
 
@@ -110,8 +109,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(0, 0))
 
-    assert(!a.verticallyCloseTo(b));
-    assert(!b.verticallyCloseTo(a));
+    assert.equal(a.verticallyCloseTo(b), false);
+    assert.equal(b.verticallyCloseTo(a), false);
   })
 
 
@@ -124,8 +123,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(0, 0))
 
-    assert(!a.horizontallyCloseTo(b));
-    assert(!b.horizontallyCloseTo(a));
+    assert.equal(a.horizontallyCloseTo(b), false);
+    assert.equal(b.horizontallyCloseTo(a), false);
   })
 
   it("can check whether pieces are vertically close when far away", () => {
@@ -137,8 +136,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(0, 20))
 
-    assert(!a.verticallyCloseTo(b));
-    assert(!b.verticallyCloseTo(a));
+    assert.equal(a.verticallyCloseTo(b), false);
+    assert.equal(b.verticallyCloseTo(a), false);
   })
 
   it("can check whether pieces are horizontally close when far away", () => {
@@ -150,8 +149,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(20, 0))
 
-    assert(!a.horizontallyCloseTo(b));
-    assert(!b.horizontallyCloseTo(a));
+    assert.equal(a.horizontallyCloseTo(b), false);
+    assert.equal(b.horizontallyCloseTo(a), false);
   })
 
   it("can check whether pieces are vertically close when partially overlapped", () => {
@@ -163,8 +162,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(0, 2))
 
-    assert(!a.verticallyCloseTo(b));
-    assert(!b.verticallyCloseTo(a));
+    assert.equal(a.verticallyCloseTo(b), false);
+    assert.equal(b.verticallyCloseTo(a), false);
   })
 
   it("can check whether pieces are horizontally close when partially overlapped", () => {
@@ -176,8 +175,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(2, 0))
 
-    assert(!a.horizontallyCloseTo(b));
-    assert(!b.horizontallyCloseTo(a));
+    assert.equal(a.horizontallyCloseTo(b), false);
+    assert.equal(b.horizontallyCloseTo(a), false);
   })
 
   it("can check whether pieces are vertically close when close", () => {
@@ -189,8 +188,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(0, 3))
 
-    assert(a.verticallyCloseTo(b));
-    assert(!b.verticallyCloseTo(a));
+    assert.equal(a.verticallyCloseTo(b), true);
+    assert.equal(b.verticallyCloseTo(a), false);
   })
 
   it("can check whether pieces are horizontally close when partially overlapped", () => {
@@ -202,8 +201,8 @@ describe("piece", () => {
     const b = puzzle.newPiece();
     b.placeAt(anchor(3, 0))
 
-    assert(a.horizontallyCloseTo(b));
-    assert(!b.horizontallyCloseTo(a));
+    assert.equal(a.horizontallyCloseTo(b), true);
+    assert.equal(b.horizontallyCloseTo(a), false);
   })
 
   it("knows its positive inserts positions", () => {
@@ -237,10 +236,10 @@ describe("piece", () => {
     b.placeAt(anchor(0, 3))
     c.placeAt(anchor(3, 3))
 
-    assert(b.canConnectHorizontallyWith(c));
-    assert(!a.canConnectHorizontallyWith(b));
-    assert(!b.canConnectHorizontallyWith(a));
-    assert(!c.canConnectHorizontallyWith(b));
+    assert.equal(b.canConnectHorizontallyWith(c), true);
+    assert.equal(a.canConnectHorizontallyWith(b), false);
+    assert.equal(b.canConnectHorizontallyWith(a), false);
+    assert.equal(c.canConnectHorizontallyWith(b), false);
   })
 
 
@@ -255,10 +254,10 @@ describe("piece", () => {
     b.placeAt(anchor(0, 3))
     c.placeAt(anchor(3, 3))
 
-    assert(a.canConnectVerticallyWith(b));
-    assert(!b.canConnectVerticallyWith(a));
-    assert(!b.canConnectVerticallyWith(c));
-    assert(!c.canConnectVerticallyWith(b));
+    assert.equal(a.canConnectVerticallyWith(b), true);
+    assert.equal(b.canConnectVerticallyWith(a), false);
+    assert.equal(b.canConnectVerticallyWith(c), false);
+    assert.equal(c.canConnectVerticallyWith(b), false);
   })
 
 
@@ -275,8 +274,8 @@ describe("piece", () => {
 
     a.connectVerticallyWith(b);
     assert.equal(a.downConnection, b);
-    assert(a.connected);
-    assert(b.connected);
+    assert.equal(a.connected, true);
+    assert.equal(b.connected, true);
   })
 
   it("does not connect vertically when too away", () => {
@@ -354,8 +353,8 @@ describe("piece", () => {
 
     b.connectHorizontallyWith(c);
     assert.equal(b.rightConnection, c);
-    assert(b.connected);
-    assert(c.connected);
+    assert.equal(b.connected, true);
+    assert.equal(c.connected, true);
   })
 
   it("does not connect horizontally when too away", () => {
@@ -590,9 +589,9 @@ describe("piece", () => {
       assert.deepEqual(b.centralAnchor, anchor(14, 0));
 
       assert.equal(a.rightConnection, b);
-      assert(!a.leftConnection);
-      assert(!a.upConnection);
-      assert(!a.downConnection);
+      assert.equal(a.leftConnection, null);
+      assert.equal(a.upConnection, null);
+      assert.equal(a.downConnection, null);
     })
 
     it("drags single-connection-piece to left releasing", () => {
@@ -601,10 +600,10 @@ describe("piece", () => {
       assert.deepEqual(a.centralAnchor, anchor(-10, 0));
       assert.deepEqual(b.centralAnchor, anchor(4, 0));
 
-      assert(!a.rightConnection);
-      assert(!a.leftConnection);
-      assert(!a.upConnection);
-      assert(!a.downConnection);
+      assert.equal(a.rightConnection, null);
+      assert.equal(a.leftConnection, null);
+      assert.equal(a.upConnection, null);
+      assert.equal(a.downConnection, null);
     })
 
     it("drags single-connection-piece up releasing", () => {
@@ -613,10 +612,10 @@ describe("piece", () => {
       assert.deepEqual(a.centralAnchor, anchor(0, -10));
       assert.deepEqual(b.centralAnchor, anchor(4, 0));
 
-      assert(!a.rightConnection);
-      assert(!a.leftConnection);
-      assert(!a.upConnection);
-      assert(!a.downConnection);
+      assert.equal(a.rightConnection, null);
+      assert.equal(a.leftConnection, null);
+      assert.equal(a.upConnection, null);
+      assert.equal(a.downConnection, null);
     })
 
 
@@ -626,10 +625,10 @@ describe("piece", () => {
       assert.deepEqual(a.centralAnchor, anchor(0, 10));
       assert.deepEqual(b.centralAnchor, anchor(4, 0));
 
-      assert(!a.rightConnection);
-      assert(!a.leftConnection);
-      assert(!a.upConnection);
-      assert(!a.downConnection);
+      assert.equal(a.rightConnection, null);
+      assert.equal(a.leftConnection, null);
+      assert.equal(a.upConnection, null);
+      assert.equal(a.downConnection, null);
     })
 
     it("drags multi-connection-piece to right releasing", () => {
@@ -639,10 +638,10 @@ describe("piece", () => {
       assert.deepEqual(b.centralAnchor, anchor(4, 0));
       assert.deepEqual(d.centralAnchor, anchor(8, 4));
 
-      assert(!c.rightConnection);
-      assert(!c.leftConnection);
-      assert(!c.upConnection);
-      assert(!c.downConnection);
+      assert.equal(c.rightConnection, null);
+      assert.equal(c.leftConnection, null);
+      assert.equal(c.upConnection, null);
+      assert.equal(c.downConnection, null);
     })
 
     it("drags multi-connection-piece to left pushing", () => {
@@ -652,10 +651,10 @@ describe("piece", () => {
       assert.deepEqual(b.centralAnchor, anchor(-6, 0));
       assert.deepEqual(d.centralAnchor, anchor(-2, 4));
 
-      assert(!c.rightConnection);
-      assert(c.leftConnection);
-      assert(!c.upConnection);
-      assert(c.downConnection);
+      assert.equal(c.rightConnection, null);
+      assert.equal(c.leftConnection, b);
+      assert.equal(c.upConnection, null);
+      assert.equal(c.downConnection, d);
     })
 
     it("drags multi-connection-piece up releasing", () => {
@@ -665,10 +664,10 @@ describe("piece", () => {
       assert.deepEqual(b.centralAnchor, anchor(4, 0));
       assert.deepEqual(d.centralAnchor, anchor(8, 4));
 
-      assert(!c.rightConnection);
-      assert(!c.leftConnection);
-      assert(!c.upConnection);
-      assert(!c.downConnection);
+      assert.equal(c.rightConnection, null);
+      assert.equal(c.leftConnection, null);
+      assert.equal(c.upConnection, null);
+      assert.equal(c.downConnection, null);
     })
 
 
@@ -679,10 +678,10 @@ describe("piece", () => {
       assert.deepEqual(b.centralAnchor, anchor(4, 10));
       assert.deepEqual(d.centralAnchor, anchor(8, 14));
 
-      assert(!c.rightConnection);
-      assert(c.leftConnection);
-      assert(!c.upConnection);
-      assert(c.downConnection);
+      assert.equal(c.rightConnection, null);
+      assert.equal(c.leftConnection, b);
+      assert.equal(c.upConnection, null);
+      assert.equal(c.downConnection, d);
     })
   })
 
@@ -741,11 +740,11 @@ describe("piece", () => {
     it("can export a piece with connections without metadata", () => {
       const puzzle = new Puzzle();
 
-      a = puzzle.newPiece({right: Tab});
-      b = puzzle.newPiece({left: Slot, right: Tab});
+      let a = puzzle.newPiece({right: Tab});
+      let b = puzzle.newPiece({left: Slot, right: Tab});
 
-      a.placeAt(anchor(0, 0))
-      b.placeAt(anchor(4, 0))
+      a.placeAt(anchor(0, 0));
+      b.placeAt(anchor(4, 0));
 
       a.connectHorizontallyWith(b);
 
@@ -760,10 +759,10 @@ describe("piece", () => {
     it("can export a piece with connections with metadata", () => {
       const puzzle = new Puzzle();
 
-      a = puzzle.newPiece({right: Tab});
+      let a = puzzle.newPiece({right: Tab});
       a.annotate({id: 1});
 
-      b = puzzle.newPiece({left: Slot, right: Tab});
+      let b = puzzle.newPiece({left: Slot, right: Tab});
       b.annotate({id: 2});
 
       a.placeAt(anchor(0, 0))
