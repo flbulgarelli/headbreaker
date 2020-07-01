@@ -130,9 +130,9 @@ class Canvas {
    * @param {object} options
    * @param {number} options.width
    * @param {number} options.height
-   * @param {number} options.pieceSize
-   * @param {number} options.proximity
-   * @param {number} options.borderFill the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
+   * @param {number} [options.pieceSize]
+   * @param {number} [options.proximity]
+   * @param {number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
@@ -142,8 +142,8 @@ class Canvas {
   constructor(id, {
       width,
       height,
-      pieceSize,
-      proximity,
+      pieceSize = 50,
+      proximity = 10,
       borderFill = 0,
       strokeWidth = 3,
       strokeColor = 'black',
@@ -169,18 +169,67 @@ class Canvas {
   }
 
   /**
-   * Creates a piece, that is ready to be rendered by calling {@link Canvas#draw}
+   * Creates and renders a piece using a template, that is ready to be rendered by calling {@link Canvas#draw}
    *
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
     metadata.targetPosition = metadata.targetPosition || position.null();
     metadata.currentPosition = metadata.currentPosition || metadata.targetPosition;
-    this._renderPiece(this._newPiece(structure, metadata));
+    this.renderPiece(this._newPiece(structure, metadata));
   }
 
   /**
-   * Automatically generates puzzle's pieces given some configuration paramters
+   * Renders a previously created piece object
+   *
+   * @param {Piece} piece
+   */
+  renderPiece(piece) {
+    /** @type {Figure} */
+    const figure = {label: null, group: null, shape: null};
+    this.figures[piece.metadata.id] = figure;
+
+    this._painter.sketch(this, piece, figure);
+
+    /** @type {LabelMetadata} */
+    const label = piece.metadata.label;
+    if (label && label.text) {
+      label.fontSize = label.fontSize || this.pieceSize * 0.55;
+      label.y = label.y || (this.pieceSize - label.fontSize) / 2;
+      this._painter.label(this, piece, figure);
+    }
+
+    this._bindGroupToPiece(figure.group, piece);
+    this._bindPieceToGroup(piece, figure.group);
+  }
+
+  /**
+   * Renders many previously created piece objects
+   *
+   * @param {Piece[]} pieces
+   */
+  renderPieces(pieces) {
+    pieces.forEach((it) => {
+      this._annotatePiecePosition(it);
+      this.renderPiece(it);
+    });
+  }
+
+  /**
+   * Renders a previously created puzzle object. This method
+   * overrides this canvas' {@link Canvas#pieceSize} and {@link Canvas#proximity}
+   *
+   * @param {Puzzle} puzzle
+   */
+  renderPuzzle(puzzle) {
+    this.pieceSize = puzzle.pieceSize;
+    this.proximity = puzzle.proximity;
+    this._puzzle = puzzle;
+    this.renderPieces(puzzle.pieces);
+  }
+
+  /**
+   * Automatically creates and renders pieces given some configuration paramters
    *
    * @param {object} options
    * @param {number} [options.horizontalPiecesCount]
@@ -201,12 +250,8 @@ class Canvas {
    */
   autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
-
     this._puzzle = manufacturer.build();
-    this._puzzle.pieces.forEach((it) => {
-      this._annotatePiecePosition(it);
-      this._renderPiece(it);
-    });
+    this.renderPieces(this._puzzle.pieces);
   }
 
   /**
@@ -325,28 +370,6 @@ class Canvas {
     const p = position(piece.centralAnchor.x, piece.centralAnchor.y);
     piece.metadata.targetPosition = p;
     piece.metadata.currentPosition = p;
-  }
-
-  /**
-   * @param {Piece} piece
-   */
-  _renderPiece(piece) {
-    /** @type {Figure} */
-    const figure = {label: null, group: null, shape: null};
-    this.figures[piece.metadata.id] = figure;
-
-    this._painter.sketch(this, piece, figure);
-
-    /** @type {LabelMetadata} */
-    const label = piece.metadata.label;
-    if (label && label.text) {
-      label.fontSize = label.fontSize || this.pieceSize * 0.55;
-      label.y = label.y || (this.pieceSize - label.fontSize) / 2;
-      this._painter.label(this, piece, figure);
-    }
-
-    this._bindGroupToPiece(figure.group, piece);
-    this._bindPieceToGroup(piece, figure.group);
   }
 
   /**

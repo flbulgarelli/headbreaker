@@ -448,6 +448,7 @@ const {itself, orthogonalTransform} = require('./prelude');
 
   /**
    * @param {PieceDump} dump
+   * @returns {Piece}
    */
   static import(dump) {
     const piece = new Piece();
