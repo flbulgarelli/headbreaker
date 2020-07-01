@@ -3,7 +3,7 @@
 // Basic Canvas
 // ============
 
-const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
+const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300 });
 basic.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
@@ -431,3 +431,4 @@ dynamic.onDisconnect((piece, figure, target, targetFigure) => {
 
 dynamic.shuffle(0.7);
 dynamic.draw();
+
