@@ -440,7 +440,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   export() {
     return {
       centralAnchor: this.centralAnchor && this.centralAnchor.export(),
-      structure: Structure.serialize(orthogonalTransform(this.inserts, itself)),
+      structure: Structure.serialize(this),
       connections: orthogonalTransform(this.connections, it => ({id: it.id})),
       metadata: this.metadata
     };
@@ -451,7 +451,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {Piece}
    */
   static import(dump) {
-    const piece = new Piece();
+    const piece = new Piece(Structure.deserialize(dump.structure));
 
     if (dump.centralAnchor) {
       piece.placeAt(Anchor.import(dump.centralAnchor));

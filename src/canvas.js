@@ -237,7 +237,7 @@ class Canvas {
    * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
    * @param {CanvasMetadata[]} [options.metadata] optional list of metadata that will be attached to each generated piece
    */
-  autogenerate({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadata = []}) {
+  autogenerate({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadata = []} = {}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);

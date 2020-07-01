@@ -694,6 +694,20 @@ describe("piece", () => {
         metadata: {}
       });
       assert.equal(piece.centralAnchor, null);
+      assert.deepEqual(piece.inserts, [None, None, Tab, Slot]);
+      assert.deepEqual(piece.metadata, {});
+      assert.deepEqual(piece.presentConnections, []);
+    })
+
+    it("can import piece with anchor", () => {
+      const piece = Piece.import({
+        centralAnchor: {x: 2, y: 3},
+        structure: "TTST",
+        connections: {right:null, down:null, left:null, up:null},
+        metadata: {}
+      });
+      assert.deepEqual(piece.centralAnchor, anchor(2, 3));
+      assert.deepEqual(piece.inserts, [Tab, Tab, Slot, Tab]);
       assert.deepEqual(piece.metadata, {});
       assert.deepEqual(piece.presentConnections, []);
     })
