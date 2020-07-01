@@ -447,6 +447,9 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * Converts this piece back from a dump. Connections are not restored. {@link Puzzle#autoconnect} method should be used
+   * after importing all them
+   *
    * @param {PieceDump} dump
    * @returns {Piece}
    */

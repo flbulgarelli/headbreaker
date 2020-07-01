@@ -711,6 +711,19 @@ describe("piece", () => {
       assert.deepEqual(piece.metadata, {});
       assert.deepEqual(piece.presentConnections, []);
     })
+
+    it("can import piece with connections - which are ignored", () => {
+      const piece = Piece.import({
+        centralAnchor: {x: 2, y: 3},
+        structure: "TTST",
+        connections: {right:{id: 2}, down:null, left:null, up:{id: 4}},
+        metadata: {}
+      });
+      assert.deepEqual(piece.centralAnchor, anchor(2, 3));
+      assert.deepEqual(piece.inserts, [Tab, Tab, Slot, Tab]);
+      assert.deepEqual(piece.metadata, {});
+      assert.deepEqual(piece.presentConnections, []);
+    })
   })
 
   describe("export", () => {
