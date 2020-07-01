@@ -45,6 +45,10 @@ class KonvaPainter {
       height: canvas.height
     });
 
+    this._initializeLayer(stage, canvas);
+  }
+
+  _initializeLayer(stage, canvas) {
     var layer = new Konva.Layer();
     stage.add(layer);
     canvas['__konvaLayer__'] = layer;
@@ -55,6 +59,17 @@ class KonvaPainter {
    */
   draw(canvas) {
     canvas['__konvaLayer__'].draw();
+  }
+
+  /**
+   * @param {Canvas} canvas
+   */
+  reinitialize(canvas) {
+    const layer = canvas['__konvaLayer__'];
+    const stage = layer.getStage();
+    layer.destroy();
+
+    this._initializeLayer(stage, canvas);
   }
 
   /**

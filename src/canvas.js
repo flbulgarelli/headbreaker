@@ -22,6 +22,12 @@ function Painter() {}
  */
 Painter.prototype.initialize = (canvas, id) => {};
 /**
+ * Recreates the canvas
+ *
+ * @param {Canvas} canvas
+ */
+Painter.prototype.reinitialize = (canvas) => {};
+/**
  * @param {Canvas} canvas
  */
 Painter.prototype.draw = (canvas) => {};
@@ -114,7 +120,7 @@ Painter.prototype.onDragEnd = (canvas, piece, group, f) => {};
  * @property {import('./position').Position} [currentPosition]
  * @property {string} [color]
  * @property {string} [strokeColor]
- * @property {ImageLike} [image]
+ * @property {import('./image-metadata').ImageLike} [image]
  * @property {LabelMetadata} [label]
  */
 
@@ -161,7 +167,13 @@ class Canvas {
     this.proximity = proximity;
     /** @type {Painter} */
     this._painter = painter || new window['headbreaker']['painters']['Konva']();
+    this._initialize();
     this._painter.initialize(this, id);
+  }
+
+  _initialize() {
+    /** @type {Puzzle} */
+    this._puzzle = null;
     /** @type {Object<string, Figure>} */
     this.figures = {};
     /** @type {Object<string, Template>} */
@@ -305,10 +317,17 @@ class Canvas {
   /**
    * Re-draws this canvas. This method is useful when the canvas {@link Figure}s have
    * being modified and you need changes to become visible
-   *
    */
   redraw() {
     this._painter.draw(this);
+  }
+
+  /**
+   * Clears the canvas, clearing the rendering backend and discarding all the created templates, figures, and pieces
+   */
+  clear() {
+    this._initialize();
+    this._painter.reinitialize(this);
   }
 
   /**
@@ -450,6 +469,8 @@ class Canvas {
   }
 
 }
+
+Canvas.Painter = Painter;
 
 /**
  * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be

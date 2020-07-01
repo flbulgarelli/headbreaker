@@ -103,6 +103,25 @@ describe("Canvas", () => {
     assert.equal(canvas.puzzle.pieces.length, 16);
   })
 
+  it("can clear canvas", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, strokeColor: 'red',
+      painter: painter
+    });
+
+    canvas.autogenerate();
+    canvas.draw();
+    canvas.clear();
+
+    assert.equal(canvas._painter, painter);
+    assert.equal(canvas._puzzle, null);
+    assert.equal(canvas.puzzle.pieces.length, 0);
+    assert.deepEqual(canvas.figures, {});
+  })
+
   it("can sketch a whole puzzle", () => {
     const canvas = new Canvas('canvas', {
       width: 800, height: 800,
