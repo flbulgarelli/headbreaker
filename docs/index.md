@@ -303,4 +303,45 @@ dynamic.draw();
 <div id="dynamic-canvas">
 </div>
 
+## Persistent
+
+### Code
+
+```javascript
+const exportArea = document.getElementById('export-area');
+
+function readDump() {
+  return JSON.parse(exportArea.innerHTML);
+}
+
+function writeDump(dump) {
+  exportArea.innerHTML = JSON.stringify(dump, null, 2);
+}
+
+const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 500 });
+persistent.autogenerate();
+persistent.draw();
+
+document.getElementById('import').addEventListener('click', function() {
+  persistent.clear();
+  persistent.renderPuzzle(headbreaker.Puzzle.import(readDump()));
+  persistent.draw();
+});
+
+document.getElementById('export').addEventListener('click', function() {
+  writeDump(persistent.puzzle.export());
+});
+```
+
+<div id="persistent-canvas">
+</div>
+
+<div class="form-group">
+  <textarea class="form-control" id="export-area" rows="10"></textarea>
+</div>
+<div class="form-group">
+  <button id="export" class="btn btn-primary">Export</button>
+  <button id="import" class="btn btn-primary">Import</button>
+</div>
+
 <script src="js/demo.js"></script>

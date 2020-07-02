@@ -3,7 +3,7 @@
 // Basic Canvas
 // ============
 
-const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
+const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300 });
 basic.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
@@ -431,3 +431,31 @@ dynamic.onDisconnect((piece, figure, target, targetFigure) => {
 
 dynamic.shuffle(0.7);
 dynamic.draw();
+
+
+// =================
+// Persistent Canvas
+// =================
+const exportArea = document.getElementById('export-area');
+
+function readDump() {
+  return JSON.parse(exportArea.innerHTML);
+}
+
+function writeDump(dump) {
+  exportArea.innerHTML = JSON.stringify(dump, null, 2);
+}
+
+const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 400 });
+persistent.autogenerate();
+persistent.draw();
+
+document.getElementById('import').addEventListener('click', function() {
+  persistent.clear();
+  persistent.renderPuzzle(headbreaker.Puzzle.import(readDump()));
+  persistent.draw();
+});
+
+document.getElementById('export').addEventListener('click', function() {
+  writeDump(persistent.puzzle.export());
+});
