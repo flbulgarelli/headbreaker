@@ -141,8 +141,8 @@ describe("Canvas", () => {
     assert.equal(canvas['__nullLayer__'].figures, 2);
     assert.equal(canvas['__nullLayer__'].drawn, true);
 
-    assert.equal(canvas.pieceSize, puzzle.pieceSize);
-    assert.equal(canvas.proximity, puzzle.proximity);
+    assert.equal(canvas.pieceSize, 26);
+    assert.equal(canvas.proximity, 14);
   })
 
 

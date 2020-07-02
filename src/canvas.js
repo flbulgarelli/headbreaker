@@ -234,8 +234,8 @@ class Canvas {
    * @param {Puzzle} puzzle
    */
   renderPuzzle(puzzle) {
-    this.pieceSize = puzzle.pieceSize;
-    this.proximity = puzzle.proximity;
+    this.pieceSize = puzzle.pieceSize * 2;
+    this.proximity = puzzle.proximity * 2;
     this._puzzle = puzzle;
     this.renderPieces(puzzle.pieces);
   }
