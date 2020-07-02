@@ -91,6 +91,7 @@
             <li><a href="#labels">Labels</a></li>
             <li><a href="#sound-and-visual-feedback">Sound and visual feedback</a></li>
             <li><a href="#dynamic">Dynamic</a></li>
+            <li><a href="#persistent">Persistent</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -362,6 +363,45 @@ dynamic.draw();
 <div id="dynamic-canvas">
 </div>
 
+<h2 id="persistent">Persistent</h2>
+<h3 id="code_8">Code</h3>
+<pre><code class="javascript">const exportArea = document.getElementById('export-area');
+
+function readDump() {
+  return JSON.parse(exportArea.innerHTML);
+}
+
+function writeDump(dump) {
+  exportArea.innerHTML = JSON.stringify(dump, null, 2);
+}
+
+const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 500 });
+persistent.autogenerate();
+persistent.draw();
+
+document.getElementById('import').addEventListener('click', function() {
+  persistent.clear();
+  persistent.renderPuzzle(headbreaker.Puzzle.import(readDump()));
+  persistent.draw();
+});
+
+document.getElementById('export').addEventListener('click', function() {
+  writeDump(persistent.puzzle.export());
+});
+</code></pre>
+
+<div id="persistent-canvas">
+</div>
+
+<div class="form-group">
+  <textarea class="form-control" id="export-area" rows="10"></textarea>
+</div>
+
+<div class="form-group">
+  <button id="export" class="btn btn-primary">Export</button>
+  <button id="import" class="btn btn-primary">Import</button>
+</div>
+
 <script src="js/demo.js"></script></div>
         </div>
 
@@ -446,5 +486,5 @@ dynamic.draw();
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-07-01 20:52:21
+Build Date UTC : 2020-07-02 01:27:33
 -->
