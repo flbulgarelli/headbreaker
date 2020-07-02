@@ -147,6 +147,7 @@ class Puzzle {
   static import(dump) {
     const puzzle = new Puzzle({pieceSize: dump.pieceSize, proximity: dump.proximity});
     puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
+    puzzle.autoconnect();
     return puzzle;
   }
 }
