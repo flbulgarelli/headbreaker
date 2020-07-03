@@ -249,6 +249,17 @@ const {itself, orthogonalTransform} = require('./prelude');
     }
   }
 
+   /**
+    * Tells wether this piece central anchor is at given point
+    *
+    * @param {number} x
+    * @param {number} y
+    * @return {boolean}
+    */
+   isAt(x, y) {
+    return this.centralAnchor.isAt(x, y);
+  }
+
   /**
    *
    * @param {number} dx

@@ -12,6 +12,8 @@ class Manufacturer {
   constructor() {
     this.insertsGenerator = fixed;
     this.metadata = [];
+    /** @type {Anchor} */
+    this.headAnchor = null;
   }
 
   /**
@@ -28,6 +30,16 @@ class Manufacturer {
    */
   withInsertsGenerator(generator) {
     this.insertsGenerator = generator || this.insertsGenerator;
+  }
+
+  /**
+   * Sets the central anchor. If not specified, puzzle will be positioned
+   * at the distance of a whole piece from the origin
+   *
+   * @param {Anchor} anchor
+   */
+  withHeadAt(anchor) {
+    this.headAnchor = anchor;
   }
 
   /**
@@ -54,6 +66,7 @@ class Manufacturer {
    */
   build() {
     const puzzle = new Puzzle(this.structure);
+    const positioner = new Positioner(puzzle, this.headAnchor);
 
     let verticalSequence = this._newSequence();
     let horizontalSequence;
@@ -65,7 +78,7 @@ class Manufacturer {
       for (let x = 0; x < this.width; x++) {
         horizontalSequence.next();
         const piece = this._buildPiece(puzzle, horizontalSequence, verticalSequence);
-        piece.placeAt(this._naturalAnchor(x, y, puzzle));
+        piece.placeAt(positioner.naturalAnchor(x, y));
       }
     }
     this._annotateAll(puzzle.pieces);
@@ -90,16 +103,6 @@ class Manufacturer {
     piece.annotate(metadata);
   }
 
-  /**
-   * @param {number} x
-   * @param {number} y
-   * @param {Puzzle} puzzle
-   */
-  _naturalAnchor(x, y, puzzle) {
-    const realSize = puzzle.pieceSize * 2;
-    return anchor((x + 1) * realSize, (y + 1) * realSize)
-  }
-
   _newSequence() {
     return new InsertSequence(this.insertsGenerator);
   }
@@ -116,6 +119,38 @@ class Manufacturer {
       right: horizontalSequence.current(this.width),
       down: verticalSequence.current(this.height)
     });
+  }
+}
+
+class Positioner {
+  constructor(puzzle, headAnchor) {
+    this.puzzle = puzzle;
+    this.initializeOffset(headAnchor);
+  }
+
+  initializeOffset(headAnchor) {
+    if (headAnchor) {
+      this.xOffset = headAnchor.x;
+      this.yOffset = headAnchor.y;
+    }
+    else {
+      this.xOffset = this.realSize;
+      this.yOffset = this.realSize;
+    }
+  }
+
+  get realSize() {
+    return this.puzzle.pieceSize * 2;
+  }
+
+    /**
+   * @param {number} x
+   * @param {number} y
+   */
+  naturalAnchor(x, y) {
+    return anchor(
+      x * this.realSize + this.xOffset,
+      y * this.realSize + this.yOffset);
   }
 }
 

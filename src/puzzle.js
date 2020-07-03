@@ -128,6 +128,15 @@ class Puzzle {
   }
 
   /**
+   * Returns the first piece
+   *
+   * @returns {Piece}
+   */
+  get head() {
+    return this.pieces[0];
+  }
+
+  /**
    * Converts this piece into a plain, stringify-ready object.
    * Pieces should have ids
    * @returns {PuzzleDump}

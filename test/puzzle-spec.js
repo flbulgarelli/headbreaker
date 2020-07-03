@@ -2,6 +2,7 @@ const assert = require('assert');
 const {Puzzle, Tab, Slot, anchor} = require('../src/index');
 
 describe("puzzle", () => {
+  /** @type {Puzzle} */
   let puzzle;
 
   beforeEach(() => {
@@ -19,6 +20,10 @@ describe("puzzle", () => {
       .newPiece({up: Tab})
       .placeAt(anchor(6, 3));
 
+  })
+
+  it("has head", () => {
+    assert.equal(puzzle.head, puzzle.pieces[0]);
   })
 
   it("autoconnects puzzle", () => {

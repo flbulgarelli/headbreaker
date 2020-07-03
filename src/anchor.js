@@ -18,12 +18,20 @@ class Anchor {
   }
 
   /**
-   *
    * @param {Anchor} other
    * @returns {boolean}
    */
-  equals(other) {
-    return other.x == this.x && other.y == this.y;
+  equal(other) {
+    return this.isAt(other.x, other.y);
+  }
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @returns {boolean}
+   */
+  isAt(x, y) {
+    return this.x === x && this.y === y;
   }
 
   /**
