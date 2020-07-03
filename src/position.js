@@ -16,6 +16,39 @@ function position(x, y) {
   return { x, y };
 }
 
-position.null = () => position(0, 0);
+/**
+ * Returns a new (0, 0) position
+ *
+ * @returns {Position}
+ */
+function origin() {
+  return position(0, 0);
+}
 
-module.exports = position;
+/**
+ * Compares two points
+ *
+ * @param {Position} one
+ * @param {Position} other
+ * @returns {boolean}
+ */
+function equal(one, other) {
+  return one.x === other.x && one.y === other.y;
+}
+
+/**
+ * Creates a copy of the given point
+ *
+ * @param {Position} one
+ * @returns {Position}
+ */
+function copy({x, y}) {
+  return {x, y}
+}
+
+module.exports = {
+  position,
+  copy,
+  equal,
+  origin
+};

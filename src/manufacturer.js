@@ -1,5 +1,6 @@
 const Puzzle = require('./puzzle');
 const Piece = require('./piece');
+const {Anchor} = require('./anchor');
 const {anchor} = require('./anchor');
 const {fixed, InsertSequence} = require('./sequence')
 const Metadata = require('./metadata');

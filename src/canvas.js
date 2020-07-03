@@ -6,7 +6,7 @@ const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
 const Structure = require('./structure');
 const imageLike = require('./image-metadata');
-const position = require('./position');
+const {position, ...Position} = require('./position');
 const Metadata = require('./metadata');
 
 /**
@@ -186,8 +186,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    metadata.targetPosition = metadata.targetPosition || position.null();
-    metadata.currentPosition = metadata.currentPosition || metadata.targetPosition;
+    setMetadataPositions(metadata, Position.origin())
     this.renderPiece(this._newPiece(structure, metadata));
   }
 
@@ -387,8 +386,7 @@ class Canvas {
    */
   _annotatePiecePosition(piece) {
     const p = position(piece.centralAnchor.x, piece.centralAnchor.y);
-    piece.metadata.targetPosition = p;
-    piece.metadata.currentPosition = p;
+    setMetadataPositions(piece.metadata, p, Position.copy(p));
   }
 
   /**
@@ -468,6 +466,16 @@ class Canvas {
     return {pieceSize: this.pieceSize / 2, proximity: this.proximity}
   }
 
+}
+
+/**
+ * @param {CanvasMetadata} metadata
+ * @param {import('./position').Position} target
+ * @param {import('./position').Position} [current]
+ */
+function setMetadataPositions(metadata, target, current) {
+  metadata.targetPosition = metadata.targetPosition || target;
+  metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
 }
 
 Canvas.Painter = Painter;

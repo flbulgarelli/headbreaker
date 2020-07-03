@@ -35,9 +35,53 @@ describe("Canvas", () => {
     assert.equal(!!canvas.figures['a'], true);
 
     assert.equal(canvas.puzzle.pieces.length, 1);
-    assert.deepEqual(canvas.puzzle.pieces[0].centralAnchor, {x: 50, y: 50});
+    assert.deepEqual(canvas.puzzle.head.centralAnchor, {x: 50, y: 50});
 
   })
+
+  it("can create a single-piece puzzle with no current nor target positions", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      painter: painter
+    })
+
+    canvas.sketchPiece({
+      structure: '----',
+      metadata: { id: 'a' }
+    });
+
+    canvas.draw();
+
+    const head = canvas.puzzle.head;
+
+    assert.deepEqual(head.metadata.targetPosition, {x: 0, y: 0});
+    assert.deepEqual(head.metadata.currentPosition, head.metadata.targetPosition);
+    assert.notEqual(head.metadata.currentPosition, head.metadata.targetPosition);
+  })
+
+  it("can create a single-piece puzzle with no current but target positions", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      painter: painter
+    })
+
+    canvas.sketchPiece({
+      structure: '----',
+      metadata: {
+        id: 'a',
+        targetPosition: {x: 10, y: 15 }
+      }
+    });
+
+    canvas.draw();
+
+    const head = canvas.puzzle.head;
+
+    assert.deepEqual(head.metadata.targetPosition, {x: 10, y: 15});
+    assert.deepEqual(head.metadata.currentPosition, head.metadata.targetPosition);
+    assert.notEqual(head.metadata.currentPosition, head.metadata.targetPosition);
+  })
+
 
   it("can create a single-piece puzzle with strings", () => {
     const canvas = new Canvas('canvas', {

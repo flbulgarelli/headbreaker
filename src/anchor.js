@@ -1,6 +1,6 @@
 const between = require('./between');
 const Vector = require('./vector')
-const position = require('./position')
+const {position} = require('./position')
 
 /**
  * An Anchor is a mutable 2D point that

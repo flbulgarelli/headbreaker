@@ -9,9 +9,11 @@ const Canvas = require('./canvas');
 const Manufacturer = require('./manufacturer');
 const {InsertSequence, ...generators} = require('./sequence');
 const Metadata = require('./metadata');
+const {position, ...Position} = require('./position');
 
 module.exports = {
   anchor,
+  position,
   Anchor,
   Puzzle,
   Piece,
@@ -25,6 +27,7 @@ module.exports = {
   Metadata,
   Outline,
   Structure,
+  Position,
   generators,
   painters: {
     Dummy: require('./dummy-painter'),

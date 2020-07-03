@@ -1,4 +1,4 @@
-const position = require('./position');
+const {position} = require('./position');
 
 /**
  * @typedef {object} ImageMetadata
