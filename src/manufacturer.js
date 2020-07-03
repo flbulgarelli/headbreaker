@@ -98,7 +98,7 @@ class Manufacturer {
    */
   _annotate(piece, index) {
     const baseMetadata = this.metadata[index];
-    const metadata = baseMetadata ? Metadata.clone(baseMetadata) : {};
+    const metadata = baseMetadata ? Metadata.copy(baseMetadata) : {};
     metadata.id = metadata.id || String(index + 1);
     piece.annotate(metadata);
   }

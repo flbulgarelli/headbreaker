@@ -288,7 +288,7 @@ class Canvas {
     if (!options) {
       throw new Error(`Unknown template ${id}`);
     }
-    const metadata = Metadata.clone(options.metadata);
+    const metadata = Metadata.copy(options.metadata);
     metadata.id = id;
     this.sketchPiece({structure: options.structure, metadata: metadata})
   }

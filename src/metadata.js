@@ -11,10 +11,10 @@
  * @param {T} metadata
  * @returns {T}
  */
-function clone(metadata) {
+function copy(metadata) {
   return JSON.parse(JSON.stringify(metadata));
 }
 
 module.exports = {
-  clone
+  copy
 }
