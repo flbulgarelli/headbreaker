@@ -7,7 +7,7 @@ const Structure = require('./structure');
 const Outline = require('./outline');
 const Canvas = require('./canvas');
 const Manufacturer = require('./manufacturer');
-const sequence = require('./sequence');
+const {InsertSequence, ...generators} = require('./sequence');
 const Metadata = require('./metadata');
 
 module.exports = {
@@ -17,6 +17,7 @@ module.exports = {
   Piece,
   Canvas,
   Manufacturer,
+  InsertSequence,
   Tab,
   Slot,
   None,
@@ -24,7 +25,7 @@ module.exports = {
   Metadata,
   Outline,
   Structure,
-  sequence,
+  generators,
   painters: {
     Dummy: require('./dummy-painter'),
     Konva: require('./konva-painter')

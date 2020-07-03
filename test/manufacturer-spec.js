@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Tab, Slot, None, anchor, Manufacturer, sequence} = require('../src/index');
+const {Tab, Slot, None, anchor, Manufacturer, generators} = require('../src/index');
 
 describe("manufacturer", () => {
   it("create 1 x 1", () => {
@@ -154,7 +154,7 @@ describe("manufacturer", () => {
   it("create 6 x 1 with flip flop", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(6, 1);
-    manufacturer.withInsertsGenerator(sequence.flipflop);
+    manufacturer.withInsertsGenerator(generators.flipflop);
     const puzzle = manufacturer.build();
     const [a, b, c, d, e, f, g] = puzzle.pieces;
 

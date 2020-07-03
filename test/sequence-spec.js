@@ -1,10 +1,9 @@
 const assert = require('assert');
-const {Tab, Slot, None, sequence} = require('../src/index');
-const {InsertSequence, flipflop, fixed, twoAndTwo} = sequence;
+const {Tab, Slot, None, InsertSequence, generators} = require('../src/index');
 
 describe("InsertSequence", () => {
   it("fixed", () => {
-    const sequence = new InsertSequence(fixed);
+    const sequence = new InsertSequence(generators.fixed);
 
     assert.equal(Tab, sequence.next());
     assert.equal(None, sequence.previousComplement());
@@ -20,7 +19,7 @@ describe("InsertSequence", () => {
   })
 
   it("flipflop", () => {
-    const sequence = new InsertSequence(flipflop);
+    const sequence = new InsertSequence(generators.flipflop);
     assert.equal(Tab, sequence.next());
     assert.equal(Slot, sequence.next());
     assert.equal(Tab, sequence.next());
@@ -29,7 +28,7 @@ describe("InsertSequence", () => {
 
 
   it("two-and-two", () => {
-    const sequence = new InsertSequence(twoAndTwo);
+    const sequence = new InsertSequence(generators.twoAndTwo);
     assert.equal(Tab, sequence.next());
     assert.equal(Tab, sequence.next());
     assert.equal(Slot, sequence.next());

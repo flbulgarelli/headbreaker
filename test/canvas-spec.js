@@ -1,6 +1,6 @@
 require('mocha');
 const assert = require('assert');
-const {anchor, Slot, Tab, None, Canvas, painters, sequence, Puzzle} = require('../src/index');
+const {anchor, Slot, Tab, None, Canvas, painters, generators, Puzzle} = require('../src/index');
 
 // @ts-ignore
 HTMLImageElement = function(){};
@@ -87,7 +87,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 4,
       horizontalPiecesCount: 4,
-      insertsGenerator: sequence.flipflop,
+      insertsGenerator: generators.flipflop,
     });
     canvas.shuffle(0.7);
     canvas.draw();
@@ -181,7 +181,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 2,
       horizontalPiecesCount: 2,
-      insertsGenerator: sequence.flipflop
+      insertsGenerator: generators.flipflop
     });
     canvas.draw();
 
@@ -215,7 +215,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 1,
       horizontalPiecesCount: 2,
-      insertsGenerator: sequence.flipflop
+      insertsGenerator: generators.flipflop
     });
     canvas.draw();
 
@@ -246,7 +246,7 @@ describe("Canvas", () => {
     canvas.autogenerate({
       verticalPiecesCount: 3,
       horizontalPiecesCount: 3,
-      insertsGenerator: sequence.flipflop
+      insertsGenerator: generators.flipflop
     });
     canvas.draw();
 

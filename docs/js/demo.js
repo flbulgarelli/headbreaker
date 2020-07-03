@@ -262,7 +262,7 @@ dali.onload = () => {
   });
 
   randomized.autogenerate({
-    insertsGenerator: headbreaker.sequence.flipflop
+    insertsGenerator: headbreaker.generators.flipflop
   });
   randomized.shuffle(0.7);
   randomized.draw();
@@ -361,7 +361,7 @@ berni.onload = () => {
 
   sound.autogenerate({
     horizontalPiecesCount: 6,
-    insertsGenerator: headbreaker.sequence.random
+    insertsGenerator: headbreaker.generators.random
   });
 
   sound.draw();
