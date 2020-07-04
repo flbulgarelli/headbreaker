@@ -261,9 +261,22 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * Moves this piece to the given position, firing translation events
    *
-   * @param {number} dx
-   * @param {number} dy
+   * @param {number} x the final x position
+   * @param {number} y the final y position
+   * @param {boolean} [quiet] indicates wether events should be suppressed
+   */
+  relocateTo(x, y, quiet = false) {
+    this.translate(x - this.centralAnchor.x, y - this.centralAnchor.y, quiet);
+  }
+
+  /**
+   * Move this piece a given distance, firing translation events
+   *
+   * @param {number} dx the x distance
+   * @param {number} dy the y distane
+   * @param {boolean} [quiet] indicates wether events should be suppressed
    */
   translate(dx, dy, quiet = false) {
     if (!Vector.isNull(dx, dy)) {

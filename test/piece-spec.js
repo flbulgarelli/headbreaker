@@ -457,6 +457,26 @@ describe("piece", () => {
     assert.deepEqual(piece.centralAnchor, anchor(10, 5));
   })
 
+  describe("relocates to", () => {
+    /** @type {Piece} */
+    let piece;
+    beforeEach(() => {
+      const puzzle = new Puzzle();
+      piece = puzzle.newPiece({down: Tab});
+    });
+
+    it("starting at origin", () => {
+      piece.placeAt(anchor(0, 0));
+      piece.relocateTo(10, 5);
+      assert.deepEqual(piece.centralAnchor, anchor(10, 5));
+    })
+
+    it("starting at other point", () => {
+      piece.placeAt(anchor(12, -12));
+      piece.relocateTo(10, 5);
+      assert.deepEqual(piece.centralAnchor, anchor(10, 5));
+    })
+  })
 
   it("pushes when no connections", () => {
     const puzzle = new Puzzle();
