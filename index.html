@@ -219,7 +219,7 @@ dali.onload = () =&gt; {
     lineSoftness: 0.12, image: dali
   });
   randomized.autogenerate({
-    insertsGenerator: headbreaker.sequence.flipflop
+    insertsGenerator: headbreaker.generators.flipflop
   });
   randomized.shuffle(0.7);
   randomized.draw();
@@ -284,7 +284,7 @@ berni.onload = () =&gt; {
 
   sound.autogenerate({
     horizontalPiecesCount: 6,
-    insertsGenerator: headbreaker.sequence.random
+    insertsGenerator: headbreaker.generators.random
   });
 
   sound.draw();
@@ -400,6 +400,7 @@ document.getElementById('export').addEventListener('click', function() {
 <div class="form-group">
   <button id="export" class="btn btn-primary">Export</button>
   <button id="import" class="btn btn-primary">Import</button>
+  <button id="shuffle" class="btn btn-primary">Shuffle</button>
 </div>
 
 <script src="js/demo.js"></script></div>
@@ -486,5 +487,5 @@ document.getElementById('export').addEventListener('click', function() {
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-07-02 01:27:33
+Build Date UTC : 2020-07-04 00:50:24
 -->

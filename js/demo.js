@@ -262,7 +262,7 @@ dali.onload = () => {
   });
 
   randomized.autogenerate({
-    insertsGenerator: headbreaker.sequence.flipflop
+    insertsGenerator: headbreaker.generators.flipflop
   });
   randomized.shuffle(0.7);
   randomized.draw();
@@ -361,7 +361,7 @@ berni.onload = () => {
 
   sound.autogenerate({
     horizontalPiecesCount: 6,
-    insertsGenerator: headbreaker.sequence.random
+    insertsGenerator: headbreaker.generators.random
   });
 
   sound.draw();
@@ -446,8 +446,14 @@ function writeDump(dump) {
   exportArea.innerHTML = JSON.stringify(dump, null, 2);
 }
 
-const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 400 });
-persistent.autogenerate();
+const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 400, strokeWidth: 0, borderFill: 4 });
+persistent.autogenerate({metadata: [
+  {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'}, {color: '#D1A704'}, {color: '#C72C07'},
+  {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'}, {color: '#D1A704'},
+  {color: '#C72C07'}, {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'},
+  {color: '#D1A704'}, {color: '#C72C07'}, {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'},
+  {color: '#16BA0D'}, {color: '#D1A704'}, {color: '#C72C07'}, {color: '#000000'}, {color: '#6F04C7'}
+]});
 persistent.draw();
 
 document.getElementById('import').addEventListener('click', function() {
@@ -460,3 +466,7 @@ document.getElementById('export').addEventListener('click', function() {
   writeDump(persistent.puzzle.export());
 });
 
+document.getElementById('shuffle').addEventListener('click', function() {
+  persistent.shuffle();
+  persistent.redraw();
+});

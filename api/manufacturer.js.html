@@ -28,6 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>const Puzzle = require('./puzzle');
 const Piece = require('./piece');
+const {Anchor} = require('./anchor');
 const {anchor} = require('./anchor');
 const {fixed, InsertSequence} = require('./sequence')
 const Metadata = require('./metadata');
@@ -40,6 +41,8 @@ class Manufacturer {
   constructor() {
     this.insertsGenerator = fixed;
     this.metadata = [];
+    /** @type {Anchor} */
+    this.headAnchor = null;
   }
 
   /**
@@ -56,6 +59,16 @@ class Manufacturer {
    */
   withInsertsGenerator(generator) {
     this.insertsGenerator = generator || this.insertsGenerator;
+  }
+
+  /**
+   * Sets the central anchor. If not specified, puzzle will be positioned
+   * at the distance of a whole piece from the origin
+   *
+   * @param {Anchor} anchor
+   */
+  withHeadAt(anchor) {
+    this.headAnchor = anchor;
   }
 
   /**
@@ -82,6 +95,7 @@ class Manufacturer {
    */
   build() {
     const puzzle = new Puzzle(this.structure);
+    const positioner = new Positioner(puzzle, this.headAnchor);
 
     let verticalSequence = this._newSequence();
     let horizontalSequence;
@@ -93,7 +107,7 @@ class Manufacturer {
       for (let x = 0; x &lt; this.width; x++) {
         horizontalSequence.next();
         const piece = this._buildPiece(puzzle, horizontalSequence, verticalSequence);
-        piece.placeAt(this._naturalAnchor(x, y, puzzle));
+        piece.placeAt(positioner.naturalAnchor(x, y));
       }
     }
     this._annotateAll(puzzle.pieces);
@@ -113,19 +127,9 @@ class Manufacturer {
    */
   _annotate(piece, index) {
     const baseMetadata = this.metadata[index];
-    const metadata = baseMetadata ? Metadata.clone(baseMetadata) : {};
+    const metadata = baseMetadata ? Metadata.copy(baseMetadata) : {};
     metadata.id = metadata.id || String(index + 1);
     piece.annotate(metadata);
-  }
-
-  /**
-   * @param {number} x
-   * @param {number} y
-   * @param {Puzzle} puzzle
-   */
-  _naturalAnchor(x, y, puzzle) {
-    const realSize = puzzle.pieceSize * 2;
-    return anchor((x + 1) * realSize, (y + 1) * realSize)
   }
 
   _newSequence() {
@@ -147,6 +151,38 @@ class Manufacturer {
   }
 }
 
+class Positioner {
+  constructor(puzzle, headAnchor) {
+    this.puzzle = puzzle;
+    this.initializeOffset(headAnchor);
+  }
+
+  initializeOffset(headAnchor) {
+    if (headAnchor) {
+      this.xOffset = headAnchor.x;
+      this.yOffset = headAnchor.y;
+    }
+    else {
+      this.xOffset = this.realSize;
+      this.yOffset = this.realSize;
+    }
+  }
+
+  get realSize() {
+    return this.puzzle.pieceSize * 2;
+  }
+
+    /**
+   * @param {number} x
+   * @param {number} y
+   */
+  naturalAnchor(x, y) {
+    return anchor(
+      x * this.realSize + this.xOffset,
+      y * this.realSize + this.yOffset);
+  }
+}
+
 /**
  * @module Manufacturer
  */
@@ -161,13 +197,13 @@ module.exports = Manufacturer;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#itself">itself</a></li><li><a href="global.html#orthogonalMap">orthogonalMap</a></li><li><a href="global.html#orthogonalTransform">orthogonalTransform</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#copy">copy</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#itself">itself</a></li><li><a href="global.html#origin">origin</a></li><li><a href="global.html#orthogonalMap">orthogonalMap</a></li><li><a href="global.html#orthogonalTransform">orthogonalTransform</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setMetadataPositions">setMetadataPositions</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 01 2020 20:15:00 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 03 2020 21:50:18 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>
