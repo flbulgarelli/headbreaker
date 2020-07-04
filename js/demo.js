@@ -470,3 +470,9 @@ document.getElementById('shuffle').addEventListener('click', function() {
   persistent.shuffle();
   persistent.redraw();
 });
+
+document.getElementById('solve').addEventListener('click', function() {
+  console.log('solving')
+  persistent.solve();
+  persistent.redraw();
+});
