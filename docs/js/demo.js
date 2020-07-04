@@ -439,15 +439,21 @@ dynamic.draw();
 const exportArea = document.getElementById('export-area');
 
 function readDump() {
-  return JSON.parse(exportArea.innerHTML);
+  return JSON.parse(exportArea.value);
 }
 
 function writeDump(dump) {
-  exportArea.innerHTML = JSON.stringify(dump, null, 2);
+  exportArea.value = JSON.stringify(dump, null, 2);
 }
 
-const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 400 });
-persistent.autogenerate();
+const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 400, strokeWidth: 0, borderFill: 4 });
+persistent.autogenerate({metadata: [
+  {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'}, {color: '#D1A704'}, {color: '#C72C07'},
+  {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'}, {color: '#D1A704'},
+  {color: '#C72C07'}, {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'},
+  {color: '#D1A704'}, {color: '#C72C07'}, {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'},
+  {color: '#16BA0D'}, {color: '#D1A704'}, {color: '#C72C07'}, {color: '#000000'}, {color: '#6F04C7'}
+]});
 persistent.draw();
 
 document.getElementById('import').addEventListener('click', function() {
