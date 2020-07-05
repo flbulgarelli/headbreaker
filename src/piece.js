@@ -1,5 +1,5 @@
 const Vector = require('./vector');
-const {Anchor} = require('./anchor');
+const {anchor, Anchor} = require('./anchor');
 const {None} = require('./insert')
 const connector = require('./connector')
 const Structure = require('./structure');
@@ -236,39 +236,63 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * Sets the centralAnchor for this piece.
    *
    * @param {Anchor} anchor
    */
-  placeAt(anchor) {
-    const previous = this.centralAnchor;
-    this.centralAnchor = anchor;
-
-    if (previous) {
-      const delta = anchor.diff(previous);
-      this.fireTranslate(...delta);
+  centerAround(anchor) {
+    if (this.centralAnchor) {
+      throw new Error("this pieces has already being centered. Use recenterAround instead");
     }
+    this.centralAnchor = anchor;
   }
 
-   /**
-    * Tells wether this piece central anchor is at given point
-    *
-    * @param {number} x
-    * @param {number} y
-    * @return {boolean}
-    */
-   isAt(x, y) {
+
+  /**
+   * Sets the initial position of this piece. This method is similar to {@link Piece#centerAround},
+   * but takes a vector instead of an anchor.
+   *
+   * @param {number} x
+   * @param {number} y
+   */
+  locateAt(x, y) {
+    this.centerAround(anchor(x, y));
+  }
+
+  /**
+   * Tells wether this piece central anchor is at given point
+   *
+   * @param {number} x
+   * @param {number} y
+   * @return {boolean}
+   */
+  isAt(x, y) {
     return this.centralAnchor.isAt(x, y);
   }
 
   /**
-   * Moves this piece to the given position, firing translation events
+   * Moves this piece to the given position, firing translation events.
+   * Piece must be already centered.
+   *
+   * @param {Anchor} anchor the new central anchor
+   * @param {boolean} [quiet] indicates wether events should be suppressed
+   */
+  recenterAround(anchor, quiet = false) {
+    const [dx, dy] = anchor.diff(this.centralAnchor);
+    this.translate(dx, dy, quiet);
+  }
+
+  /**
+   * Moves this piece to the given position, firing translation events.
+   * Piece must be already centered. This method is similar to {@link Piece#recenterAround},
+   * but takes a vector instead of an anchor.
    *
    * @param {number} x the final x position
    * @param {number} y the final y position
    * @param {boolean} [quiet] indicates wether events should be suppressed
    */
   relocateTo(x, y, quiet = false) {
-    this.translate(x - this.centralAnchor.x, y - this.centralAnchor.y, quiet);
+    this.recenterAround(anchor(x, y), quiet);
   }
 
   /**
@@ -481,7 +505,7 @@ const {itself, orthogonalTransform} = require('./prelude');
     const piece = new Piece(Structure.deserialize(dump.structure));
 
     if (dump.centralAnchor) {
-      piece.placeAt(Anchor.import(dump.centralAnchor));
+      piece.centerAround(Anchor.import(dump.centralAnchor));
     }
 
     if (dump.metadata) {

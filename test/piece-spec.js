@@ -4,7 +4,7 @@ const {Puzzle, Piece, Tab, Slot, None, anchor, Anchor} = require('../src/index')
 describe("piece", () => {
   it("can create a piece and place it", () => {
     const piece = new Piece();
-    piece.placeAt(anchor(0, 0));
+    piece.locateAt(0, 0);
     assert.deepEqual(piece.centralAnchor, anchor(0, 0));
   })
 
@@ -104,10 +104,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(0, 0))
+    b.locateAt(0, 0);
 
     assert.equal(a.verticallyCloseTo(b), false);
     assert.equal(b.verticallyCloseTo(a), false);
@@ -118,10 +118,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(0, 0))
+    b.locateAt(0, 0);
 
     assert.equal(a.horizontallyCloseTo(b), false);
     assert.equal(b.horizontallyCloseTo(a), false);
@@ -131,10 +131,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(0, 20))
+    b.locateAt(0, 20);
 
     assert.equal(a.verticallyCloseTo(b), false);
     assert.equal(b.verticallyCloseTo(a), false);
@@ -144,10 +144,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(20, 0))
+    b.locateAt(20, 0);
 
     assert.equal(a.horizontallyCloseTo(b), false);
     assert.equal(b.horizontallyCloseTo(a), false);
@@ -157,10 +157,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(0, 2))
+    b.locateAt(0, 2);
 
     assert.equal(a.verticallyCloseTo(b), false);
     assert.equal(b.verticallyCloseTo(a), false);
@@ -170,10 +170,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(2, 0))
+    b.locateAt(2, 0);
 
     assert.equal(a.horizontallyCloseTo(b), false);
     assert.equal(b.horizontallyCloseTo(a), false);
@@ -183,10 +183,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(0, 3))
+    b.locateAt(0, 3);
 
     assert.equal(a.verticallyCloseTo(b), true);
     assert.equal(b.verticallyCloseTo(a), false);
@@ -196,10 +196,10 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const a = puzzle.newPiece();
-    a.placeAt(anchor(0, 0))
+    a.locateAt(0, 0);
 
     const b = puzzle.newPiece();
-    b.placeAt(anchor(3, 0))
+    b.locateAt(3, 0);
 
     assert.equal(a.horizontallyCloseTo(b), true);
     assert.equal(b.horizontallyCloseTo(a), false);
@@ -209,7 +209,7 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const piece = puzzle.newPiece();
-    piece.placeAt(anchor(0, 0))
+    piece.locateAt(0, 0);
 
     assert.deepEqual(piece.downAnchor, anchor(0, 2));
     assert.deepEqual(piece.rightAnchor, anchor(2, 0));
@@ -219,7 +219,7 @@ describe("piece", () => {
     const puzzle = new Puzzle();
 
     const piece = puzzle.newPiece();
-    piece.placeAt(anchor(0, 0))
+    piece.locateAt(0, 0);
 
     assert.deepEqual(piece.upAnchor, anchor(0, -2));
     assert.deepEqual(piece.leftAnchor, anchor(-2, 0));
@@ -232,9 +232,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(0, 3))
-    c.placeAt(anchor(3, 3))
+    a.locateAt(0, 0);
+    b.locateAt(0, 3);
+    c.locateAt(3, 3);
 
     assert.equal(b.canConnectHorizontallyWith(c), true);
     assert.equal(a.canConnectHorizontallyWith(b), false);
@@ -250,9 +250,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(0, 3))
-    c.placeAt(anchor(3, 3))
+    a.locateAt(0, 0);
+    b.locateAt(0, 3);
+    c.locateAt(3, 3);
 
     assert.equal(a.canConnectVerticallyWith(b), true);
     assert.equal(b.canConnectVerticallyWith(a), false);
@@ -268,9 +268,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(0, 3))
-    c.placeAt(anchor(3, 3))
+    a.locateAt(0, 0);
+    b.locateAt(0, 3);
+    c.locateAt(3, 3);
 
     a.connectVerticallyWith(b);
     assert.equal(a.downConnection, b);
@@ -284,8 +284,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({down: Tab});
     const b = puzzle.newPiece({up: Slot, right: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(10, 30))
+    a.locateAt(0, 0);
+    b.locateAt(10, 30);
 
     assert.throws(() => a.connectVerticallyWith(b), /can not connect down!/);
   })
@@ -296,8 +296,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({down: Tab});
     const b = puzzle.newPiece({up: Slot, right: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(0, 3))
+    a.locateAt(0, 0);
+    b.locateAt(0, 3);
 
     a.connectVerticallyWith(b);
 
@@ -311,8 +311,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({down: Tab});
     const b = puzzle.newPiece({up: Slot, right: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(0, 3))
+    a.locateAt(0, 0);
+    b.locateAt(0, 3);
 
     a.connectVerticallyWith(b, true);
 
@@ -327,9 +327,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, down: Tab});
     const c = puzzle.newPiece({up: Slot, down: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(0, 3))
-    c.placeAt(anchor(0, 6))
+    a.locateAt(0, 0);
+    b.locateAt(0, 3);
+    c.locateAt(0, 6);
 
     a.connectVerticallyWith(b);
     b.connectVerticallyWith(c);
@@ -347,9 +347,9 @@ describe("piece", () => {
     const b = puzzle.newPiece({up: Slot, right: Tab});
     const c = puzzle.newPiece({left: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(0, 3))
-    c.placeAt(anchor(3, 3))
+    a.locateAt(0, 0);
+    b.locateAt(0, 3);
+    c.locateAt(3, 3);
 
     b.connectHorizontallyWith(c);
     assert.equal(b.rightConnection, c);
@@ -363,8 +363,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({down: Tab});
     const b = puzzle.newPiece({up: Slot, right: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(10, 30))
+    a.locateAt(0, 0);
+    b.locateAt(10, 30);
 
     assert.throws(() => a.connectHorizontallyWith(b), /can not connect right!/);
   })
@@ -375,8 +375,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({right: Tab});
     const b = puzzle.newPiece({left: Slot, right: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(3, 0))
+    a.locateAt(0, 0);
+    b.locateAt(3, 0);
 
     a.connectHorizontallyWith(b);
 
@@ -390,8 +390,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({right: Tab});
     const b = puzzle.newPiece({left: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(5, 1))
+    a.locateAt(0, 0);
+    b.locateAt(5, 1);
 
     a.attractHorizontally(b);
 
@@ -406,8 +406,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({right: Tab});
     const b = puzzle.newPiece({left: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(5, 1))
+    a.locateAt(0, 0);
+    b.locateAt(5, 1);
 
     b.attractHorizontally(a);
 
@@ -421,8 +421,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({down: Tab});
     const b = puzzle.newPiece({up: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(1, 5))
+    a.locateAt(0, 0);
+    b.locateAt(1, 5);
 
     a.attractVertically(b);
 
@@ -437,8 +437,8 @@ describe("piece", () => {
     const a = puzzle.newPiece({down: Tab});
     const b = puzzle.newPiece({up: Slot});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(1, 5))
+    a.locateAt(0, 0);
+    b.locateAt(1, 5);
 
     b.attractVertically(a);
 
@@ -451,7 +451,7 @@ describe("piece", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece({down: Tab});
 
-    piece.placeAt(anchor(0, 0));
+    piece.locateAt(0, 0);
     piece.translate(10, 5);
 
     assert.deepEqual(piece.centralAnchor, anchor(10, 5));
@@ -466,13 +466,13 @@ describe("piece", () => {
     });
 
     it("starting at origin", () => {
-      piece.placeAt(anchor(0, 0));
+      piece.locateAt(0, 0);
       piece.relocateTo(10, 5);
       assert.deepEqual(piece.centralAnchor, anchor(10, 5));
     })
 
     it("starting at other point", () => {
-      piece.placeAt(anchor(12, -12));
+      piece.locateAt(12, -12);
       piece.relocateTo(10, 5);
       assert.deepEqual(piece.centralAnchor, anchor(10, 5));
     })
@@ -482,7 +482,7 @@ describe("piece", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece({down: Tab});
 
-    piece.placeAt(anchor(0, 0));
+    piece.locateAt(0, 0);
     piece.push(10, 5);
 
     assert.deepEqual(piece.centralAnchor, anchor(10, 5));
@@ -496,10 +496,10 @@ describe("piece", () => {
     const c = puzzle.newPiece({left: Slot, right: Tab, down: Slot});
     const d = puzzle.newPiece({up: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(4, 0))
-    c.placeAt(anchor(8, 0))
-    d.placeAt(anchor(8, 4))
+    a.locateAt(0, 0);
+    b.locateAt(4, 0);
+    c.locateAt(8, 0);
+    d.locateAt(8, 4);
 
     a.connectHorizontallyWith(b);
     b.connectHorizontallyWith(c);
@@ -521,10 +521,10 @@ describe("piece", () => {
     const c = puzzle.newPiece({left: Slot, right: Tab, down: Slot});
     const d = puzzle.newPiece({up: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(3, 0))
-    c.placeAt(anchor(6, 0))
-    d.placeAt(anchor(6, 3))
+    a.locateAt(0, 0);
+    b.locateAt(3, 0);
+    c.locateAt(6, 0);
+    d.locateAt(6, 3);
 
     a.connectHorizontallyWith(b);
     b.connectHorizontallyWith(c);
@@ -546,10 +546,10 @@ describe("piece", () => {
     const c = puzzle.newPiece({up: Slot, right: Slot, down: Tab, left: Tab});
     const d = puzzle.newPiece({up: Slot, right: Slot, down: Tab, left: Tab});
 
-    a.placeAt(anchor(0, 0))
-    b.placeAt(anchor(4, 0))
-    c.placeAt(anchor(0, 4))
-    d.placeAt(anchor(4, 4))
+    a.locateAt(0, 0);
+    b.locateAt(4, 0);
+    c.locateAt(0, 4);
+    d.locateAt(4, 4);
 
     a.connectHorizontallyWith(b);
     c.connectHorizontallyWith(d);
@@ -568,7 +568,7 @@ describe("piece", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece({down: Tab});
 
-    piece.placeAt(anchor(0, 0));
+    piece.locateAt(0, 0);
     piece.drag(10, 5);
     piece.drag(-1, 0);
     piece.drag(0, -2);
@@ -588,10 +588,10 @@ describe("piece", () => {
       c = puzzle.newPiece({left: Slot, right: Tab, down: Slot});
       d = puzzle.newPiece({up: Tab});
 
-      a.placeAt(anchor(0, 0))
-      b.placeAt(anchor(4, 0))
-      c.placeAt(anchor(8, 0))
-      d.placeAt(anchor(8, 4))
+      a.locateAt(0, 0);
+      b.locateAt(4, 0);
+      c.locateAt(8, 0);
+      d.locateAt(8, 4);
 
       // a > b > c
       //         v
@@ -760,7 +760,7 @@ describe("piece", () => {
 
     it("can export piece without metadata", () => {
       const piece = new Piece({up: Slot, left: Tab});
-      piece.placeAt(anchor(10, 0));
+      piece.locateAt(10, 0);
 
       assert.deepEqual(piece.export(),  {
         centralAnchor: {x: 10, y: 0},
@@ -772,7 +772,7 @@ describe("piece", () => {
 
     it("can export piece with metadata and anchor", () => {
       const piece = new Piece({up: Slot, left: Tab});
-      piece.placeAt(anchor(10, 0));
+      piece.locateAt(10, 0);
       piece.annotate({foo: 2})
 
       assert.deepEqual(piece.export(),  {
@@ -790,8 +790,8 @@ describe("piece", () => {
       let a = puzzle.newPiece({right: Tab});
       let b = puzzle.newPiece({left: Slot, right: Tab});
 
-      a.placeAt(anchor(0, 0));
-      b.placeAt(anchor(4, 0));
+      a.locateAt(0, 0);
+      b.locateAt(4, 0);
 
       a.connectHorizontallyWith(b);
 
@@ -812,8 +812,8 @@ describe("piece", () => {
       let b = puzzle.newPiece({left: Slot, right: Tab});
       b.annotate({id: 2});
 
-      a.placeAt(anchor(0, 0))
-      b.placeAt(anchor(4, 0))
+      a.locateAt(0, 0);
+      b.locateAt(4, 0);
 
       a.connectHorizontallyWith(b);
 

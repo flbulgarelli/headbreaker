@@ -9,16 +9,16 @@ describe("puzzle", () => {
     puzzle = new Puzzle();
     puzzle
       .newPiece({right: Tab})
-      .placeAt(anchor(0, 0));
+      .locateAt(0, 0);
     puzzle
       .newPiece({left: Slot, right: Tab})
-      .placeAt(anchor(3, 0));
+      .locateAt(3, 0);
     puzzle
       .newPiece({left: Slot, right: Tab, down: Slot})
-      .placeAt(anchor(6, 0));
+      .locateAt(6, 0);
     puzzle
       .newPiece({up: Tab})
-      .placeAt(anchor(6, 3));
+      .locateAt(6, 3);
 
   })
 

@@ -90,7 +90,7 @@ class Puzzle {
    */
   shuffle(maxX, maxY) {
     this.disconnect();
-    this.pieces.forEach(it => it.placeAt(Anchor.atRandom(maxX, maxY)));
+    this.pieces.forEach(it => it.recenterAround(Anchor.atRandom(maxX, maxY)));
     this.autoconnect();
   }
 

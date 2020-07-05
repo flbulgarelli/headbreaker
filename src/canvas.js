@@ -448,7 +448,7 @@ class Canvas {
   _newPiece(structureLike, metadata) {
     let piece = this.puzzle.newPiece(Structure.asStructure(structureLike));
     piece.annotate(metadata);
-    piece.placeAt(anchor(metadata.currentPosition.x, metadata.currentPosition.y));
+    piece.locateAt(metadata.currentPosition.x, metadata.currentPosition.y);
     return piece;
   }
 

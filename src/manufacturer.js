@@ -79,7 +79,7 @@ class Manufacturer {
       for (let x = 0; x < this.width; x++) {
         horizontalSequence.next();
         const piece = this._buildPiece(puzzle, horizontalSequence, verticalSequence);
-        piece.placeAt(positioner.naturalAnchor(x, y));
+        piece.centerAround(positioner.naturalAnchor(x, y));
       }
     }
     this._annotateAll(puzzle.pieces);

@@ -174,10 +174,10 @@ describe("Canvas", () => {
     const puzzle = new Puzzle({pieceSize: 13, proximity: 7});
     puzzle
       .newPiece({right: Tab})
-      .placeAt(anchor(0, 0));
+      .locateAt(0, 0);
     puzzle
       .newPiece({left: Slot, right: Tab})
-      .placeAt(anchor(3, 0));
+      .locateAt(3, 0);
 
     canvas.renderPuzzle(puzzle);
     canvas.draw();
