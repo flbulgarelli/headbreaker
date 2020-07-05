@@ -186,7 +186,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    setMetadataPositions(metadata, Position.origin())
+    initializeMetadataPositions(metadata, Position.origin())
     this.renderPiece(this._newPiece(structure, metadata));
   }
 
@@ -262,7 +262,7 @@ class Canvas {
   autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
     this._puzzle = manufacturer.build();
-    this.renderPieces(this._puzzle.pieces);
+    this.renderPieces(this.puzzle.pieces);
   }
 
   /**
@@ -299,17 +299,31 @@ class Canvas {
     const offset = this.pieceSize;
     this.puzzle.shuffle(farness * (this.width - offset), farness * (this.height - offset))
     this.puzzle.translate(offset, offset);
-    this.autconnected = true;
+    this.autoconnected = true;
+  }
+
+  solve() {
+    this.puzzle.pieces.forEach(it => {
+      const {x, y} = it.metadata.targetPosition;
+      Position.update(it.metadata.currentPosition, x, y);
+      it.relocateTo(x, y);
+    });
+    this.autoconnect();
+  }
+
+  autoconnect() {
+    this.puzzle.autoconnect();
+    this.autoconnected = true;
   }
 
   /**
    * Draws this canvas for the first time
    */
   draw() {
-    if (!this.autconnected) {
-      this.autconnected = true;
-      this.puzzle.autoconnect();
+    if (!this.autoconnected) {
+      this.autoconnect();
     }
+    this.autoconnected = false;
     this.redraw();
   }
 
@@ -386,7 +400,7 @@ class Canvas {
    */
   _annotatePiecePosition(piece) {
     const p = position(piece.centralAnchor.x, piece.centralAnchor.y);
-    setMetadataPositions(piece.metadata, p, Position.copy(p));
+    initializeMetadataPositions(piece.metadata, p, Position.copy(p));
   }
 
   /**
@@ -474,7 +488,7 @@ class Canvas {
  * @param {import('./position').Position} target
  * @param {import('./position').Position} [current]
  */
-function setMetadataPositions(metadata, target, current) {
+function initializeMetadataPositions(metadata, target, current) {
   metadata.targetPosition = metadata.targetPosition || target;
   metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
 }

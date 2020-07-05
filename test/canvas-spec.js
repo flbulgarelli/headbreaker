@@ -133,7 +133,6 @@ describe("Canvas", () => {
       horizontalPiecesCount: 4,
       insertsGenerator: generators.flipflop,
     });
-    canvas.shuffle(0.7);
     canvas.draw();
 
     assert.equal(canvas['__nullLayer__'].figures, 16);
@@ -146,6 +145,39 @@ describe("Canvas", () => {
 
     assert.equal(canvas.puzzle.pieces.length, 16);
   })
+
+  it("can shuffle a puzzle", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      painter: painter
+    });
+
+    canvas.autogenerate();
+    canvas.shuffle();
+
+    assert.equal(canvas.autoconnected, true);
+  })
+
+  it("can solve a puzzle", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      painter: painter
+    });
+
+    canvas.autogenerate();
+    canvas.shuffle();
+    canvas.solve();
+
+    canvas.puzzle.pieces.forEach(it => {
+      assert.deepEqual(it.metadata.currentPosition, it.metadata.targetPosition);
+      assert.notEqual(it.metadata.currentPosition, it.metadata.targetPosition);
+      assert.deepEqual(it.centralAnchor, it.metadata.currentPosition);
+    })
+    assert.equal(canvas.autoconnected, true);
+  })
+
 
   it("can clear canvas", () => {
     const canvas = new Canvas('canvas', {

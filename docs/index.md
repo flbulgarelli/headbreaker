@@ -342,6 +342,8 @@ document.getElementById('export').addEventListener('click', function() {
 <div class="form-group">
   <button id="export" class="btn btn-primary">Export</button>
   <button id="import" class="btn btn-primary">Import</button>
+  <button id="shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="solve" class="btn btn-primary">Solve</button>
 </div>
 
 <script src="js/demo.js"></script>

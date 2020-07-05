@@ -52,9 +52,20 @@ function copy({x, y}) {
   return {x, y}
 }
 
+/**
+ * @param {Position} position
+ * @param {any} x
+ * @param {any} y
+ */
+function update(position, x, y) {
+  position.x = x;
+  position.y = y;
+}
+
 module.exports = {
   position,
   copy,
   equal,
-  origin
+  origin,
+  update
 };

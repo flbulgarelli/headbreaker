@@ -465,3 +465,13 @@ document.getElementById('import').addEventListener('click', function() {
 document.getElementById('export').addEventListener('click', function() {
   writeDump(persistent.puzzle.export());
 });
+
+document.getElementById('shuffle').addEventListener('click', function() {
+  persistent.shuffle();
+  persistent.redraw();
+});
+
+document.getElementById('solve').addEventListener('click', function() {
+  persistent.solve();
+  persistent.redraw();
+});
