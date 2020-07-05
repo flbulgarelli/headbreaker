@@ -122,11 +122,6 @@ function anchor(x, y) {
   return new Anchor(x, y);
 }
 
-/**
- * This module exposes the {@link Anchor} class and the {@link anchor} constructor
- *
- * @module Anchor
- */
 module.exports = {
   anchor,
   Anchor

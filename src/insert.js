@@ -4,10 +4,6 @@
  * @typedef {(Tab|Slot|None)} Insert
  */
 
-/**
- * @module Insert
- */
-
 const Tab = {
   isSlot: () => false,
   isTab:  () => true,

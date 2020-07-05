@@ -2,7 +2,6 @@ const Vector = require('./vector');
 const Piece = require('./piece');
 const Puzzle = require('./puzzle');
 const Manufacturer = require('../src/manufacturer');
-const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
 const Structure = require('./structure');
 const imageLike = require('./image-metadata');

@@ -155,7 +155,4 @@ class Positioner {
   }
 }
 
-/**
- * @module Manufacturer
- */
 module.exports = Manufacturer;

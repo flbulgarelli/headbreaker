@@ -161,7 +161,4 @@ class Puzzle {
   }
 }
 
-/**
- * @module Puzzle
- */
 module.exports = Puzzle;

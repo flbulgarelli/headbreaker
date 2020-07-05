@@ -515,7 +515,4 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 }
 
-/**
- * @module Piece
- */
 module.exports = Piece;
