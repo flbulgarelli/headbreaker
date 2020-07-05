@@ -30,79 +30,11 @@
 const Piece = require('./piece');
 const Puzzle = require('./puzzle');
 const Manufacturer = require('../src/manufacturer');
-const {anchor} = require('./anchor');
 const {twoAndTwo} = require('./sequence');
 const Structure = require('./structure');
 const imageLike = require('./image-metadata');
 const {position, ...Position} = require('./position');
 const Metadata = require('./metadata');
-
-/**
- * An interface for a a rendering backend
- * for puzzle's canvas
- *
- * @interface Painter
- */
-function Painter() {}
-/**
- * @param {Canvas} canvas
- * @param {string} id
- */
-Painter.prototype.initialize = (canvas, id) => {};
-/**
- * Recreates the canvas
- *
- * @param {Canvas} canvas
- */
-Painter.prototype.reinitialize = (canvas) => {};
-/**
- * @param {Canvas} canvas
- */
-Painter.prototype.draw = (canvas) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Figure} figure
- */
-Painter.prototype.sketch = (canvas, piece, figure) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Figure} figure
- */
-Painter.prototype.label = (canvas, piece, figure) => {};
-/**
- * @param {Canvas} canvas
- * @param {Group} group
- * @param {Piece} piece
- */
-Painter.prototype.physicalTranslate = (canvas, group, piece) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Group} group
- */
-Painter.prototype.logicalTranslate = (canvas, piece, group) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Group} group
- * @param {VectorAction} f
- *
- * @callback VectorAction
- * @param {number} dx
- * @param {number} dy
- */
-Painter.prototype.onDrag = (canvas, piece, group, f) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Group} group
- * @param {Action} f
- *
- * @callback Action
- */
-Painter.prototype.onDragEnd = (canvas, piece, group, f) => {};
 
 /**
  * @typedef {object} Shape
@@ -153,11 +85,21 @@ Painter.prototype.onDragEnd = (canvas, piece, group, f) => {};
  */
 
 /**
- * @typedef {object} Template
+  * @typedef {object} Template
  * @property {import('./structure').StructureLike} structure
  * @property {CanvasMetadata} metadata
  */
+
+ /**
+  * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
+  * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to {@link Painter}
+  */
 class Canvas {
+
+  /**
+   * @private
+   * @typedef {import('./painter')} Painter
+   */
 
   /**
    * @param {string} id  the html id of the element where to place the canvas
@@ -214,7 +156,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    setMetadataPositions(metadata, Position.origin())
+    initializeMetadataPositions(metadata, Position.origin())
     this.renderPiece(this._newPiece(structure, metadata));
   }
 
@@ -290,7 +232,7 @@ class Canvas {
   autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
     this._puzzle = manufacturer.build();
-    this.renderPieces(this._puzzle.pieces);
+    this.renderPieces(this.puzzle.pieces);
   }
 
   /**
@@ -327,17 +269,31 @@ class Canvas {
     const offset = this.pieceSize;
     this.puzzle.shuffle(farness * (this.width - offset), farness * (this.height - offset))
     this.puzzle.translate(offset, offset);
-    this.autconnected = true;
+    this.autoconnected = true;
+  }
+
+  solve() {
+    this.puzzle.pieces.forEach(it => {
+      const {x, y} = it.metadata.targetPosition;
+      Position.update(it.metadata.currentPosition, x, y);
+      it.relocateTo(x, y);
+    });
+    this.autoconnect();
+  }
+
+  autoconnect() {
+    this.puzzle.autoconnect();
+    this.autoconnected = true;
   }
 
   /**
    * Draws this canvas for the first time
    */
   draw() {
-    if (!this.autconnected) {
-      this.autconnected = true;
-      this.puzzle.autoconnect();
+    if (!this.autoconnected) {
+      this.autoconnect();
     }
+    this.autoconnected = false;
     this.redraw();
   }
 
@@ -414,7 +370,7 @@ class Canvas {
    */
   _annotatePiecePosition(piece) {
     const p = position(piece.centralAnchor.x, piece.centralAnchor.y);
-    setMetadataPositions(piece.metadata, p, Position.copy(p));
+    initializeMetadataPositions(piece.metadata, p, Position.copy(p));
   }
 
   /**
@@ -476,7 +432,7 @@ class Canvas {
   _newPiece(structureLike, metadata) {
     let piece = this.puzzle.newPiece(Structure.asStructure(structureLike));
     piece.annotate(metadata);
-    piece.placeAt(anchor(metadata.currentPosition.x, metadata.currentPosition.y));
+    piece.locateAt(metadata.currentPosition.x, metadata.currentPosition.y);
     return piece;
   }
 
@@ -497,22 +453,16 @@ class Canvas {
 }
 
 /**
+ * @private
  * @param {CanvasMetadata} metadata
  * @param {import('./position').Position} target
  * @param {import('./position').Position} [current]
  */
-function setMetadataPositions(metadata, target, current) {
+function initializeMetadataPositions(metadata, target, current) {
   metadata.targetPosition = metadata.targetPosition || target;
   metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
 }
 
-Canvas.Painter = Painter;
-
-/**
- * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
- * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to {@link Painter}
- * @module Canvas
- */
 module.exports = Canvas
 </code></pre>
         </article>
@@ -524,13 +474,13 @@ module.exports = Canvas
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#copy">copy</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#itself">itself</a></li><li><a href="global.html#origin">origin</a></li><li><a href="global.html#orthogonalMap">orthogonalMap</a></li><li><a href="global.html#orthogonalTransform">orthogonalTransform</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setMetadataPositions">setMetadataPositions</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 03 2020 21:50:18 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 05 2020 11:44:27 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

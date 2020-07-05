@@ -44,9 +44,12 @@ const Canvas = require('./canvas');
 const Outline = require('./outline');
 const Piece = require('./piece');
 const Vector = require('./vector');
+const Position = require('./position');
+const Painter = require('./painter');
 
 
 /**
+ * @private
  * @param {Piece} model
  * @param {*} group
  */
@@ -55,10 +58,10 @@ function currentPositionDiff(model, group) {
 }
 
 /**
- * A {@link Painter} that uses Konva
+ * A {@link Painter} that uses Konva.js as rendering backend
  * @implements {Painter}
  */
-class KonvaPainter {
+class KonvaPainter extends Painter {
   /** @typedef {import('./canvas').Figure} Figure */
   /** @typedef {import('./canvas').Group} Group */
 
@@ -165,15 +168,14 @@ class KonvaPainter {
    * @param {*} group
    */
   logicalTranslate(_canvas, piece, group) {
-    piece.metadata.currentPosition.x = group.x();
-    piece.metadata.currentPosition.y = group.y();
+    Position.update(piece.metadata.currentPosition, group.x(), group.y());
   }
 
   /**
    * @param {Canvas} _canvas
    * @param {Piece} piece
    * @param {Group} group
-   * @param {import('./canvas').VectorAction} f
+   * @param {import('./painter').VectorAction} f
    */
   onDrag(_canvas, piece, group, f) {
     group.on('mouseover', () => {
@@ -192,7 +194,7 @@ class KonvaPainter {
    * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {Group} group
-   * @param {import('./canvas').Action} f
+   * @param {import('./painter').Action} f
    */
   onDragEnd(_canvas, _piece, group, f) {
     group.on('dragend', () => {
@@ -201,11 +203,6 @@ class KonvaPainter {
   }
 }
 
-/**
- * A {@link Painter} that uses Konvajs as rendering backend
- *
- * @module KonvaPainter
- */
 module.exports = KonvaPainter;
 </code></pre>
         </article>
@@ -217,13 +214,13 @@ module.exports = KonvaPainter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#copy">copy</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#itself">itself</a></li><li><a href="global.html#origin">origin</a></li><li><a href="global.html#orthogonalMap">orthogonalMap</a></li><li><a href="global.html#orthogonalTransform">orthogonalTransform</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setMetadataPositions">setMetadataPositions</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 03 2020 21:50:18 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 05 2020 11:44:27 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

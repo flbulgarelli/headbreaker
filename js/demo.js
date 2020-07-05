@@ -1,7 +1,25 @@
 // @ts-nocheck
+
+// ======
+// Utils
+// =====
+
+function registerButtons(id, canvas) {
+  document.getElementById(`${id}-shuffle`).addEventListener('click', function() {
+    canvas.shuffle(0.8);
+    canvas.redraw();
+  });
+
+  document.getElementById(`${id}-solve`).addEventListener('click', function() {
+    canvas.solve();
+    canvas.redraw();
+  });
+}
+
 // ============
 // Basic Canvas
 // ============
+
 
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300 });
 basic.sketchPiece({
@@ -116,7 +134,7 @@ let vangogh = new Image();
 vangogh.src = 'static/vangogh.jpg';
 vangogh.onload = () => {
   const background = new headbreaker.Canvas('background-canvas', {
-    width: 800, height: 800,
+    width: 800, height: 650,
     pieceSize: 100, proximity: 20,
     borderFill: 10, strokeWidth: 2,
     lineSoftness: 0.12, image: vangogh,
@@ -223,6 +241,7 @@ vangogh.onload = () => {
     metadata: { id: 'y', targetPosition: { x: 500, y: 500 }, currentPosition: { x: 570, y: 560 } }
   });
   background.draw();
+  registerButtons('background', background);
 }
 
 // ====================
@@ -234,7 +253,7 @@ let xul = new Image();
 xul.src = 'static/xul.jpg';
 xul.onload = () => {
   const autogen = new headbreaker.Canvas('autogen-canvas', {
-    width: 800, height: 800,
+    width: 800, height: 650,
     pieceSize: 100, proximity: 20,
     borderFill: 10, strokeWidth: 1.5,
     lineSoftness: 0.18, image: xul,
@@ -245,6 +264,8 @@ xul.onload = () => {
     verticalPiecesCount: 5
   });
   autogen.draw();
+
+  registerButtons('autogen', autogen);
 }
 
 // =================
@@ -255,7 +276,7 @@ let dali = new Image();
 dali.src = 'static/dali.jpg';
 dali.onload = () => {
   const randomized = new headbreaker.Canvas('randomized-canvas', {
-    width: 800, height: 800,
+    width: 800, height: 650,
     pieceSize: 100, proximity: 20,
     borderFill: 10, strokeWidth: 2,
     lineSoftness: 0.12, image: dali
@@ -352,7 +373,7 @@ let berni = new Image();
 berni.src = 'static/berni.jpg';
 berni.onload = () => {
   const sound = new headbreaker.Canvas('sound-canvas', {
-    width: 800, height: 800,
+    width: 800, height: 650,
     pieceSize: 100, proximity: 20,
     borderFill: 10, strokeWidth: 1.5,
     lineSoftness: 0.18, image: berni,
@@ -381,6 +402,8 @@ berni.onload = () => {
   sound.onDisconnect((it) => {
     audio.play();
   });
+
+  registerButtons('sound', sound);
 }
 
 
@@ -439,11 +462,11 @@ dynamic.draw();
 const exportArea = document.getElementById('export-area');
 
 function readDump() {
-  return JSON.parse(exportArea.innerHTML);
+  return JSON.parse(exportArea.value);
 }
 
 function writeDump(dump) {
-  exportArea.innerHTML = JSON.stringify(dump, null, 2);
+  exportArea.value = JSON.stringify(dump, null, 2);
 }
 
 const persistent = new headbreaker.Canvas('persistent-canvas', { width: 500, height: 400, strokeWidth: 0, borderFill: 4 });
@@ -456,23 +479,13 @@ persistent.autogenerate({metadata: [
 ]});
 persistent.draw();
 
-document.getElementById('import').addEventListener('click', function() {
+document.getElementById('persistent-import').addEventListener('click', function() {
   persistent.clear();
   persistent.renderPuzzle(headbreaker.Puzzle.import(readDump()));
   persistent.draw();
 });
 
-document.getElementById('export').addEventListener('click', function() {
+document.getElementById('persistent-export').addEventListener('click', function() {
   writeDump(persistent.puzzle.export());
 });
-
-document.getElementById('shuffle').addEventListener('click', function() {
-  persistent.shuffle();
-  persistent.redraw();
-});
-
-document.getElementById('solve').addEventListener('click', function() {
-  console.log('solving')
-  persistent.solve();
-  persistent.redraw();
-});
+registerButtons('persistent', persistent);

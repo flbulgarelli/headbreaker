@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: DummyPainter</title>
+    <title>JSDoc: Module: Position</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: DummyPainter</h1>
+    <h1 class="page-title">Module: Position</h1>
 
     
 
@@ -28,9 +28,8 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>DummyPainter<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">A <a href="Painter.html">Painter</a> for testing purpouses that does not perform rendering</div>
+            
         
     
 </header>
@@ -39,16 +38,12 @@
     <div class="container-overview">
     
         
+            <div class="description">This module contains functions for dealing with objects with x and y
+coordinates that represent or include point data</div>
+        
 
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="DummyPainter"><span class="type-signature"></span>new DummyPainter<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
+        
+            
 
 
 
@@ -77,13 +72,6 @@
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Painter.html">Painter</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -100,7 +88,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dummy-painter.js.html">dummy-painter.js</a>, <a href="dummy-painter.js.html#line10">line 10</a>
+        <a href="position.js.html">position.js</a>, <a href="position.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -130,6 +118,7 @@
 
 
 
+        
     
     </div>
 
@@ -156,12 +145,16 @@
     
 
     
-    <h4 class="name" id="draw"><span class="type-signature"></span>draw<span class="signature">(canvas)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~copy"><span class="type-signature">(inner) </span>copy<span class="signature">(one)</span><span class="type-signature"> &rarr; {<a href="global.html#Position">Position</a>}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    Creates a copy of the given point
+</div>
 
 
 
@@ -196,13 +189,13 @@
 
         <tr>
             
-                <td class="name"><code>canvas</code></td>
+                <td class="name"><code>one</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type"><a href="global.html#Position">Position</a></span>
 
 
             
@@ -237,13 +230,6 @@
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Painter.html#draw">Painter#draw</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -260,7 +246,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dummy-painter.js.html">dummy-painter.js</a>, <a href="dummy-painter.js.html#line22">line 22</a>
+        <a href="position.js.html">position.js</a>, <a href="position.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -285,6 +271,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#Position">Position</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -296,12 +300,16 @@
     
 
     
-    <h4 class="name" id="initialize"><span class="type-signature"></span>initialize<span class="signature">(canvas, id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~equal"><span class="type-signature">(inner) </span>equal<span class="signature">(one, other)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    Compares two points
+</div>
 
 
 
@@ -336,13 +344,13 @@
 
         <tr>
             
-                <td class="name"><code>canvas</code></td>
+                <td class="name"><code>one</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type"><a href="global.html#Position">Position</a></span>
 
 
             
@@ -359,13 +367,13 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>other</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="global.html#Position">Position</a></span>
 
 
             
@@ -400,13 +408,6 @@
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Painter.html#initialize">Painter#initialize</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -423,7 +424,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dummy-painter.js.html">dummy-painter.js</a>, <a href="dummy-painter.js.html#line15">line 15</a>
+        <a href="position.js.html">position.js</a>, <a href="position.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -448,6 +449,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -459,7 +478,113 @@
     
 
     
-    <h4 class="name" id="sketch"><span class="type-signature"></span>sketch<span class="signature">(canvas, _piece, _figure)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~origin"><span class="type-signature">(inner) </span>origin<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#Position">Position</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns a new (0, 0) position
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="position.js.html">position.js</a>, <a href="position.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#Position">Position</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~update"><span class="type-signature">(inner) </span>update<span class="signature">(position, x, y)</span><span class="type-signature"></span></h4>
     
 
     
@@ -499,13 +624,13 @@
 
         <tr>
             
-                <td class="name"><code>canvas</code></td>
+                <td class="name"><code>position</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Canvas.html">Canvas</a></span>
+<span class="param-type"><a href="global.html#Position">Position</a></span>
 
 
             
@@ -522,13 +647,13 @@
 
         <tr>
             
-                <td class="name"><code>_piece</code></td>
+                <td class="name"><code>x</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Piece.html">Piece</a></span>
+<span class="param-type">any</span>
 
 
             
@@ -545,13 +670,13 @@
 
         <tr>
             
-                <td class="name"><code>_figure</code></td>
+                <td class="name"><code>y</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Figure">Figure</a></span>
+<span class="param-type">any</span>
 
 
             
@@ -586,13 +711,6 @@
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Painter.html#sketch">Painter#sketch</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -609,7 +727,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dummy-painter.js.html">dummy-painter.js</a>, <a href="dummy-painter.js.html#line32">line 32</a>
+        <a href="position.js.html">position.js</a>, <a href="position.js.html#line60">line 60</a>
     </li></ul></dd>
     
 

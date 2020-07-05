@@ -27,7 +27,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const Vector = require('./vector');
-const {Anchor} = require('./anchor');
+const {anchor, Anchor} = require('./anchor');
 const {None} = require('./insert')
 const connector = require('./connector')
 const Structure = require('./structure');
@@ -264,34 +264,71 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * Sets the centralAnchor for this piece.
    *
    * @param {Anchor} anchor
    */
-  placeAt(anchor) {
-    const previous = this.centralAnchor;
-    this.centralAnchor = anchor;
-
-    if (previous) {
-      const delta = anchor.diff(previous);
-      this.fireTranslate(...delta);
+  centerAround(anchor) {
+    if (this.centralAnchor) {
+      throw new Error("this pieces has already being centered. Use recenterAround instead");
     }
+    this.centralAnchor = anchor;
   }
 
-   /**
-    * Tells wether this piece central anchor is at given point
-    *
-    * @param {number} x
-    * @param {number} y
-    * @return {boolean}
-    */
-   isAt(x, y) {
+
+  /**
+   * Sets the initial position of this piece. This method is similar to {@link Piece#centerAround},
+   * but takes a vector instead of an anchor.
+   *
+   * @param {number} x
+   * @param {number} y
+   */
+  locateAt(x, y) {
+    this.centerAround(anchor(x, y));
+  }
+
+  /**
+   * Tells whether this piece central anchor is at given point
+   *
+   * @param {number} x
+   * @param {number} y
+   * @return {boolean}
+   */
+  isAt(x, y) {
     return this.centralAnchor.isAt(x, y);
   }
 
   /**
+   * Moves this piece to the given position, firing translation events.
+   * Piece must be already centered.
    *
-   * @param {number} dx
-   * @param {number} dy
+   * @param {Anchor} anchor the new central anchor
+   * @param {boolean} [quiet] indicates whether events should be suppressed
+   */
+  recenterAround(anchor, quiet = false) {
+    const [dx, dy] = anchor.diff(this.centralAnchor);
+    this.translate(dx, dy, quiet);
+  }
+
+  /**
+   * Moves this piece to the given position, firing translation events.
+   * Piece must be already centered. This method is similar to {@link Piece#recenterAround},
+   * but takes a vector instead of an anchor.
+   *
+   * @param {number} x the final x position
+   * @param {number} y the final y position
+   * @param {boolean} [quiet] indicates whether events should be suppressed
+   */
+  relocateTo(x, y, quiet = false) {
+    this.recenterAround(anchor(x, y), quiet);
+  }
+
+  /**
+   * Move this piece a given distance, firing translation events
+   *
+   * @param {number} dx the x distance
+   * @param {number} dy the y distance
+   * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   translate(dx, dy, quiet = false) {
     if (!Vector.isNull(dx, dy)) {
@@ -496,7 +533,7 @@ const {itself, orthogonalTransform} = require('./prelude');
     const piece = new Piece(Structure.deserialize(dump.structure));
 
     if (dump.centralAnchor) {
-      piece.placeAt(Anchor.import(dump.centralAnchor));
+      piece.centerAround(Anchor.import(dump.centralAnchor));
     }
 
     if (dump.metadata) {
@@ -506,9 +543,6 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 }
 
-/**
- * @module Piece
- */
 module.exports = Piece;
 </code></pre>
         </article>
@@ -520,13 +554,13 @@ module.exports = Piece;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Anchor.html">Anchor</a></li><li><a href="module-Canvas.html">Canvas</a></li><li><a href="module-DummyPainter.html">DummyPainter</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-insert.html">insert</a></li><li><a href="module-KonvaPainter.html">KonvaPainter</a></li><li><a href="module-Manufacturer.html">Manufacturer</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Piece.html">Piece</a></li><li><a href="module-Puzzle.html">Puzzle</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="InsertSequence.html">InsertSequence</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#asImageMetadata">asImageMetadata</a></li><li><a href="global.html#asStructure">asStructure</a></li><li><a href="global.html#between">between</a></li><li><a href="global.html#copy">copy</a></li><li><a href="global.html#currentPositionDiff">currentPositionDiff</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fixed">fixed</a></li><li><a href="global.html#flipflop">flipflop</a></li><li><a href="global.html#itself">itself</a></li><li><a href="global.html#origin">origin</a></li><li><a href="global.html#orthogonalMap">orthogonalMap</a></li><li><a href="global.html#orthogonalTransform">orthogonalTransform</a></li><li><a href="global.html#parseInsert">parseInsert</a></li><li><a href="global.html#pivot">pivot</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setMetadataPositions">setMetadataPositions</a></li><li><a href="global.html#twoAndTwo">twoAndTwo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Puzzle.html">Puzzle</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 03 2020 21:50:18 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 05 2020 11:44:27 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>
