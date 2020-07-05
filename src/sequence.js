@@ -1,5 +1,18 @@
 const {Tab, Slot, None} = require('./insert');
 
+/**
+ * A function for generating {@link Insert}s sequentially
+ *
+ * @callback InsertsGenerator
+ * @param {number} index the position of the element to be generated in the sequence
+ * @returns {import('./insert').Insert}
+ */
+
+/**
+ * This module exports several {@link Insert}s sequences strategies: {@link fixed}, {@link flipflop}, {@link twoAndTwo} and {@link random}
+ *
+ * @module sequence
+ */
 
 /**
  * @type {InsertsGenerator}
@@ -34,14 +47,6 @@ function twoAndTwo(n) {
 function random(_) {
   return Math.random() < 0.5 ? Tab : Slot;
 }
-
-/**
- * A function for generating {@link Insert}s sequentially
- *
- * @callback InsertsGenerator
- * @param {number} index the position of the element to be generated in the sequence
- * @returns {import('./insert').Insert}
- */
 
 /**
  * An InsertSequence is a statefull object that
@@ -89,11 +94,6 @@ class InsertSequence {
   }
 }
 
-/**
- * This module exports several {@link Insert}s sequences strategies: {@link fixed}, {@link flipflop}, {@link twoAndTwo} and {@link random}
- *
- * @module sequence
- */
 module.exports = {
   InsertSequence,
   fixed,

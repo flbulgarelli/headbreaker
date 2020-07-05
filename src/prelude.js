@@ -1,15 +1,4 @@
 /**
- * @template T
- * @param {T} one
- * @param {T} other
- * @param {boolean} [back]
- * @returns {[T, T]}
- */
-function pivot(one, other, back = false) {
-  return back ? [one, other] : [other, one];
-}
-
-/**
  * @template A
  * @typedef {Object} Orthogonal
  * @property {A} up
@@ -26,6 +15,23 @@ function pivot(one, other, back = false) {
  * @param {A} value
  * @returns {B}
  */
+
+/**
+ * Misc generic functions
+ *
+ * @module Prelude
+ */
+
+/**
+ * @template T
+ * @param {T} one
+ * @param {T} other
+ * @param {boolean} [back]
+ * @returns {[T, T]}
+ */
+function pivot(one, other, back = false) {
+  return back ? [one, other] : [other, one];
+}
 
 /**
  * @template A

@@ -1,10 +1,10 @@
+const Piece = require('./piece');
+
 /**
  * This module contains the draw function. Override it change pieces drawing strategy
  *
  * @module Outline
  */
-
-const Piece = require('./piece');
 
 /**
  * @param {import('./insert').Insert} insert

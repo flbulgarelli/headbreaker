@@ -1,6 +1,13 @@
 /**
+ * A connection element of a piece
+ *
  * @typedef {(Tab|Slot|None)} Insert
  */
+
+/**
+ * @module Insert
+ */
+
 const Tab = {
   isSlot: () => false,
   isTab:  () => true,
@@ -31,9 +38,6 @@ const None = {
   serialize: () => '-'
 }
 
-/**
- * @module insert
- */
 module.exports = {
   None,
   Slot,

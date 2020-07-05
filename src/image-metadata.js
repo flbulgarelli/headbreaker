@@ -12,6 +12,10 @@ const {position} = require('./position');
  */
 
 /**
+ * @module ImageMetadata
+ */
+
+/**
  * Converts an image-like object into a true {@link ImageMetadata} object
  *
  * @param {ImageLike} imageLike
@@ -28,9 +32,6 @@ function asImageMetadata(imageLike) {
   return imageLike;
 }
 
-/**
- * @module ImageMetadata
- */
 module.exports = {
   asImageMetadata
 }

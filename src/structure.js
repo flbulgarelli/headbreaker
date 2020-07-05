@@ -2,6 +2,18 @@ const {Slot, Tab, None} = require('./insert');
 const {orthogonalMap} = require('./prelude');
 
 /**
+ * @typedef {object} Structure
+ * @property {import('./insert').Insert} [up]
+ * @property {import('./insert').Insert} [left]
+ * @property {import('./insert').Insert} [down]
+ * @property {import('./insert').Insert} [right]
+ */
+
+/**
+ * @module Structure
+ */
+
+/**
  * @private
  * @param {string} insert
  * @returns {import('./insert').Insert}
@@ -9,14 +21,6 @@ const {orthogonalMap} = require('./prelude');
 function parseInsert(insert) {
   return insert === 'S' ? Slot : insert === 'T' ? Tab : None;
 }
-
-/**
- * @typedef {object} Structure
- * @property {import('./insert').Insert} [up]
- * @property {import('./insert').Insert} [left]
- * @property {import('./insert').Insert} [down]
- * @property {import('./insert').Insert} [right]
- */
 
 /**
  *
@@ -61,9 +65,6 @@ function asStructure(structureLike) {
   return structureLike;
 }
 
-/**
- * @module Structure
- */
 module.exports = {
   serialize,
   deserialize,

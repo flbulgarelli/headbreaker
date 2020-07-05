@@ -4,7 +4,6 @@
  * @property {number} y
  */
 
-
 /**
  *
  * @param {number} x
@@ -15,6 +14,13 @@
 function position(x, y) {
   return { x, y };
 }
+
+ /**
+  * This module contains functions for dealing with objects with x and y
+  * coordinates that represent or include point data
+  *
+  * @module Position
+  */
 
 /**
  * Returns a new (0, 0) position
