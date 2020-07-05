@@ -469,6 +469,7 @@ class Canvas {
 }
 
 /**
+ * @private
  * @param {CanvasMetadata} metadata
  * @param {import('./position').Position} target
  * @param {import('./position').Position} [current]

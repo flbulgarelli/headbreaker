@@ -2,6 +2,7 @@ const {Slot, Tab, None} = require('./insert');
 const {orthogonalMap} = require('./prelude');
 
 /**
+ * @private
  * @param {string} insert
  * @returns {import('./insert').Insert}
  */

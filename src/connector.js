@@ -1,5 +1,12 @@
+/**
+ * @private
+ * @module Connector
+ */
 const {pivot} = require('./prelude');
 
+/**
+ * @private
+ */
 class Connector {
 
   /**

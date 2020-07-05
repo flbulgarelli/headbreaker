@@ -19,6 +19,7 @@ const Vector = require('./vector');
 
 
 /**
+ * @private
  * @param {Piece} model
  * @param {*} group
  */

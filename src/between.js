@@ -1,4 +1,9 @@
 /**
+ * @private
+ * @module between
+ * */
+
+/**
  * @param {number} value
  * @param {number} min
  * @param {number} max
