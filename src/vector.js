@@ -5,6 +5,8 @@
  */
 
 /**
+ * Tells whether this vector is (0, 0)
+ *
  * @param {number} dx
  * @param {number} dy
  * @returns {boolean}
@@ -14,6 +16,7 @@ function isNull(dx, dy) {
 }
 
 /**
+ * Calculates the difference of two vectors
  *
  * @param {number} x1
  * @param {number} y1

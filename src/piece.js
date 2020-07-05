@@ -260,7 +260,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   * Tells wether this piece central anchor is at given point
+   * Tells whether this piece central anchor is at given point
    *
    * @param {number} x
    * @param {number} y
@@ -275,7 +275,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * Piece must be already centered.
    *
    * @param {Anchor} anchor the new central anchor
-   * @param {boolean} [quiet] indicates wether events should be suppressed
+   * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   recenterAround(anchor, quiet = false) {
     const [dx, dy] = anchor.diff(this.centralAnchor);
@@ -289,7 +289,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    *
    * @param {number} x the final x position
    * @param {number} y the final y position
-   * @param {boolean} [quiet] indicates wether events should be suppressed
+   * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   relocateTo(x, y, quiet = false) {
     this.recenterAround(anchor(x, y), quiet);
@@ -299,8 +299,8 @@ const {itself, orthogonalTransform} = require('./prelude');
    * Move this piece a given distance, firing translation events
    *
    * @param {number} dx the x distance
-   * @param {number} dy the y distane
-   * @param {boolean} [quiet] indicates wether events should be suppressed
+   * @param {number} dy the y distance
+   * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   translate(dx, dy, quiet = false) {
     if (!Vector.isNull(dx, dy)) {

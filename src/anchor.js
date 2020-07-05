@@ -58,7 +58,7 @@ class Anchor {
   }
 
   /**
-   * Answers wether this Anchor is near to another given a tolerance
+   * Answers whether this Anchor is near to another given a tolerance
    *
    * @param {Anchor} other
    * @param {number} tolerance the max distance within its radius is considered to be "close"
@@ -76,7 +76,7 @@ class Anchor {
   }
 
   /**
-   * Calculates the distance between this anchor and another
+   * Calculates the difference between this anchor and another
    *
    * @param {Anchor} other
    * @returns {[number, number]}
