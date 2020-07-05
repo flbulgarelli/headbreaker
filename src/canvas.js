@@ -10,73 +10,6 @@ const {position, ...Position} = require('./position');
 const Metadata = require('./metadata');
 
 /**
- * An interface for a a rendering backend
- * for puzzle's canvas
- *
- * @interface Painter
- */
-function Painter() {}
-/**
- * @param {Canvas} canvas
- * @param {string} id
- */
-Painter.prototype.initialize = (canvas, id) => {};
-/**
- * Recreates the canvas
- *
- * @param {Canvas} canvas
- */
-Painter.prototype.reinitialize = (canvas) => {};
-/**
- * @param {Canvas} canvas
- */
-Painter.prototype.draw = (canvas) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Figure} figure
- */
-Painter.prototype.sketch = (canvas, piece, figure) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Figure} figure
- */
-Painter.prototype.label = (canvas, piece, figure) => {};
-/**
- * @param {Canvas} canvas
- * @param {Group} group
- * @param {Piece} piece
- */
-Painter.prototype.physicalTranslate = (canvas, group, piece) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Group} group
- */
-Painter.prototype.logicalTranslate = (canvas, piece, group) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Group} group
- * @param {VectorAction} f
- *
- * @callback VectorAction
- * @param {number} dx
- * @param {number} dy
- */
-Painter.prototype.onDrag = (canvas, piece, group, f) => {};
-/**
- * @param {Canvas} canvas
- * @param {Piece} piece
- * @param {Group} group
- * @param {Action} f
- *
- * @callback Action
- */
-Painter.prototype.onDragEnd = (canvas, piece, group, f) => {};
-
-/**
  * @typedef {object} Shape
  * @typedef {object} Group
  * @typedef {object} Label
@@ -125,11 +58,21 @@ Painter.prototype.onDragEnd = (canvas, piece, group, f) => {};
  */
 
 /**
- * @typedef {object} Template
+  * @typedef {object} Template
  * @property {import('./structure').StructureLike} structure
  * @property {CanvasMetadata} metadata
  */
+
+ /**
+  * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
+  * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to {@link Painter}
+  */
 class Canvas {
+
+  /**
+   * @private
+   * @typedef {import('./painter')} Painter
+   */
 
   /**
    * @param {string} id  the html id of the element where to place the canvas
@@ -493,11 +436,4 @@ function initializeMetadataPositions(metadata, target, current) {
   metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
 }
 
-Canvas.Painter = Painter;
-
-/**
- * An HTML graphical area where puzzles and pieces can be rendered. No assumption of the rendering backend is done - it may be
- * and be a plain HTML SVG or canvas element, or a higher-level library - and this task is fully delegated to {@link Painter}
- * @module Canvas
- */
 module.exports = Canvas

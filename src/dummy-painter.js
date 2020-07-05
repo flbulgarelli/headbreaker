@@ -1,10 +1,13 @@
 const Canvas = require('./canvas');
 const Piece = require('./piece');
+const Painter = require('./painter');
 
 /**
+ * A {@link Painter} for testing purpouses that does not perform rendering
+ *
  * @implements {Painter}
  */
-class DummyPainter extends Canvas.Painter {
+class DummyPainter extends Painter {
   /**
    * @param {Canvas} canvas
    * @param {string} id
@@ -31,9 +34,4 @@ class DummyPainter extends Canvas.Painter {
   }
 }
 
-/**
- * A {@link Painter} for testing purpouses that does not perform rendering
- *
- * @module DummyPainter
- */
 module.exports = DummyPainter;

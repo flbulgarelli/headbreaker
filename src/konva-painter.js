@@ -17,6 +17,7 @@ const Outline = require('./outline');
 const Piece = require('./piece');
 const Vector = require('./vector');
 const Position = require('./position');
+const Painter = require('./painter');
 
 
 /**
@@ -29,10 +30,10 @@ function currentPositionDiff(model, group) {
 }
 
 /**
- * A {@link Painter} that uses Konva
+ * A {@link Painter} that uses Konva.js as rendering backend
  * @implements {Painter}
  */
-class KonvaPainter {
+class KonvaPainter extends Painter {
   /** @typedef {import('./canvas').Figure} Figure */
   /** @typedef {import('./canvas').Group} Group */
 
@@ -146,7 +147,7 @@ class KonvaPainter {
    * @param {Canvas} _canvas
    * @param {Piece} piece
    * @param {Group} group
-   * @param {import('./canvas').VectorAction} f
+   * @param {import('./painter').VectorAction} f
    */
   onDrag(_canvas, piece, group, f) {
     group.on('mouseover', () => {
@@ -165,7 +166,7 @@ class KonvaPainter {
    * @param {Canvas} _canvas
    * @param {Piece} _piece
    * @param {Group} group
-   * @param {import('./canvas').Action} f
+   * @param {import('./painter').Action} f
    */
   onDragEnd(_canvas, _piece, group, f) {
     group.on('dragend', () => {
@@ -174,9 +175,4 @@ class KonvaPainter {
   }
 }
 
-/**
- * A {@link Painter} that uses Konvajs as rendering backend
- *
- * @module KonvaPainter
- */
 module.exports = KonvaPainter;
