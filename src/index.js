@@ -3,6 +3,7 @@ const {anchor, Anchor} = require('./anchor')
 const Puzzle = require('./puzzle');
 const Piece = require('./piece');
 const {Tab, Slot, None} = require('./insert');
+const {NullValidator, PieceValidator, PuzzleValidator} = require('./validator');
 const Structure = require('./structure');
 const Outline = require('./outline');
 const Canvas = require('./canvas');
@@ -20,6 +21,9 @@ module.exports = {
   Canvas,
   Manufacturer,
   InsertSequence,
+  PieceValidator,
+  PuzzleValidator,
+  NullValidator,
   Tab,
   Slot,
   None,

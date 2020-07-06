@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Tab, Slot, anchor} = require('../src/index');
+const {Puzzle, Tab, Slot, PuzzleValidator} = require('../src/index');
 
 describe("puzzle", () => {
   /** @type {Puzzle} */
@@ -70,6 +70,39 @@ describe("puzzle", () => {
     assert.equal(a.rightConnection, null);
     assert.equal(b.rightConnection, null);
     assert.equal(c.downConnection, null);
+  })
+
+  describe("validation", () => {
+    it("is invalid by default", () => {
+      assert.equal(puzzle.isValid(), false);
+    })
+
+    describe("with attached validator", () => {
+      /** @type {PuzzleValidator} */
+      let validator;
+      beforeEach(() => {
+        validator = new PuzzleValidator(it => it.head.isAt(10, 10));
+        puzzle.attachValidator(validator);
+      })
+
+      it("can be valid using a validator", () => {
+        assert.equal(puzzle.isValid(), false);
+
+        puzzle.head.drag(10, 10);
+        assert.equal(puzzle.isValid(), true);
+      })
+
+      it("can be validated using a validator", (done) => {
+        validator.onValid(() => done());
+        puzzle.validate();
+
+        puzzle.head.drag(10, 10);
+
+        puzzle.validate();
+        puzzle.validate();
+        puzzle.validate();
+      })
+    })
   })
 
   it("exports", () => {

@@ -1,5 +1,6 @@
 const {Anchor} = require('./anchor');
 const Piece = require('./piece');
+const {NullValidator} = require('./validator');
 
  /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
@@ -31,6 +32,8 @@ class Puzzle {
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
+    /** @type {import('./validator').Validator} */
+    this.validator = NullValidator;
   }
 
   /**
@@ -101,8 +104,7 @@ class Puzzle {
   translate(dx, dy) {
     this.pieces.forEach(it => it.translate(dx, dy));
   }
-
-    /**
+  /**
    * @param {import('./piece').TranslationListener} f
    */
   onTranslate(f) {
@@ -134,6 +136,30 @@ class Puzzle {
    */
   get head() {
     return this.pieces[0];
+  }
+
+  /**
+   * Returns the central anchor of the first piece
+   *
+   * @returns {Anchor}
+   */
+  get headAnchor() {
+    return this.head.centralAnchor;
+  }
+
+  /**
+   * @param {import('./validator').Validator} validator
+   */
+  attachValidator(validator) {
+    this.validator = validator;
+  }
+
+  isValid() {
+    return this.validator.isValid(this);
+  }
+
+  validate() {
+    this.validator.validate(this);
   }
 
   /**
