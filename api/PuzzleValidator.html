@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Vector</title>
+    <title>JSDoc: Class: PuzzleValidator</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Vector</h1>
+    <h1 class="page-title">Class: PuzzleValidator</h1>
 
     
 
@@ -28,8 +28,7 @@
 
 <header>
     
-        
-            
+        <h2><span class="attribs"><span class="type-signature"></span></span>PuzzleValidator<span class="signature">(f)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -38,20 +37,72 @@
     <div class="container-overview">
     
         
-            <div class="description">Utilities for handling 2D vectors, expressed a two-elements list</div>
+
+    
+
+    
+    <h4 class="name" id="PuzzleValidator"><span class="type-signature"></span>new PuzzleValidator<span class="signature">(f)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
         
 
         
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>f</code></td>
             
 
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PuzzleCondition">PuzzleCondition</a></span>
 
 
+            
+            </td>
 
+            
 
+            
 
+            <td class="description last"></td>
+        </tr>
 
-
-
+    
+    </tbody>
+</table>
 
 
 
@@ -87,7 +138,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vector.js.html">vector.js</a>, <a href="vector.js.html#line1">line 1</a>
+        <a href="validator.js.html">validator.js</a>, <a href="validator.js.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -117,7 +168,6 @@
 
 
 
-        
     
     </div>
 
@@ -144,16 +194,12 @@
     
 
     
-    <h4 class="name" id="~diff"><span class="type-signature">(inner) </span>diff<span class="signature">(x1, y1, x2, y2)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="isValid"><span class="type-signature"></span>isValid<span class="signature">(puzzle)</span><span class="type-signature"></span></h4>
     
 
     
 
 
-
-<div class="description">
-    Calculates the difference of two vectors
-</div>
 
 
 
@@ -188,82 +234,13 @@
 
         <tr>
             
-                <td class="name"><code>x1</code></td>
+                <td class="name"><code>puzzle</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>x2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
+<span class="param-type"><a href="Puzzle.html">Puzzle</a></span>
 
 
             
@@ -314,7 +291,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vector.js.html">vector.js</a>, <a href="vector.js.html#line27">line 27</a>
+        <a href="validator.js.html">validator.js</a>, <a href="validator.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -339,190 +316,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~isNull"><span class="type-signature">(inner) </span>isNull<span class="signature">(dx, dy)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Tells whether this vector is (0, 0)
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>dx</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dy</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vector.js.html">vector.js</a>, <a href="vector.js.html#line14">line 14</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -550,7 +343,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 05 2020 22:39:44 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 05 2020 22:39:45 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

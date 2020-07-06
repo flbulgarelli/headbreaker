@@ -396,7 +396,7 @@ berni.onload = () => {
       figure.shape.stroke('black');
       targetFigure.shape.stroke('black');
       sound.redraw();
-    }, 200);
+    }, 100);
   });
 
   sound.onDisconnect((it) => {
