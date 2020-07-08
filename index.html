@@ -92,6 +92,7 @@
             <li><a href="#sound-and-visual-feedback">Sound and visual feedback</a></li>
             <li><a href="#dynamic">Dynamic</a></li>
             <li><a href="#persistent">Persistent</a></li>
+            <li><a href="#validated">Validated</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -454,6 +455,50 @@ document.getElementById('persistent-export').addEventListener('click', function(
   <button id="persistent-solve" class="btn btn-primary">Solve</button>
 </div>
 
+<h2 id="validated">Validated</h2>
+<h3 id="code_10">Code</h3>
+<pre><code class="javascript">let pettoruti = new Image();
+pettoruti.src = 'static/pettoruti.jpg';
+pettoruti.onload = () =&gt; {
+  const validated = new headbreaker.Canvas('validated-canvas', {
+    width: 800, height: 650,
+    pieceSize: 80, proximity: 18,
+    borderFill: 8, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: pettoruti,
+  });
+
+  validated.autogenerate({
+    horizontalPiecesCount: 4,
+    verticalPiecesCount: 6
+  });
+  validated.draw();
+
+  function targetDiff(piece) {
+    return headbreaker.Position.diff(piece.metadata.targetPosition, piece.metadata.currentPosition);
+  }
+  const validator = new headbreaker.PuzzleValidator((puzzle) =&gt; {
+    const distance = targetDiff(puzzle.head);
+    return puzzle.pieces.every(piece =&gt;
+      headbreaker.Vector.equal(distance, targetDiff(piece))
+    );
+  });
+  validator.onValid(() =&gt; {
+    setTimeout(() =&gt; alert('well done'), 0);
+  })
+  validated.puzzle.attachValidator(validator)
+
+  registerButtons('validated', validated);
+}
+</code></pre>
+
+<div id="validated-canvas">
+</div>
+
+<div class="form-group">
+  <button id="validated-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="validated-solve" class="btn btn-primary">Solve</button>
+</div>
+
 <script src="js/demo.js"></script></div>
         </div>
 
@@ -538,5 +583,5 @@ document.getElementById('persistent-export').addEventListener('click', function(
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-07-06 01:40:15
+Build Date UTC : 2020-07-08 04:29:40
 -->
