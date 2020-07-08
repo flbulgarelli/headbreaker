@@ -489,3 +489,44 @@ document.getElementById('persistent-export').addEventListener('click', function(
   writeDump(persistent.puzzle.export());
 });
 registerButtons('persistent', persistent);
+
+
+// ================
+// Validated Canvas
+// ================
+
+let pettoruti = new Image();
+pettoruti.src = 'static/pettoruti.jpg';
+pettoruti.onload = () => {
+  const validated = new headbreaker.Canvas('validated-canvas', {
+    width: 800, height: 650,
+    pieceSize: 80, proximity: 18,
+    borderFill: 8, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: pettoruti,
+  });
+
+  validated.autogenerate({
+    horizontalPiecesCount: 4,
+    verticalPiecesCount: 6
+  });
+  validated.draw();
+
+  function targetDiff(piece) {
+    return headbreaker.Position.diff(piece.metadata.targetPosition, piece.metadata.currentPosition);
+  }
+  const validator = new headbreaker.PuzzleValidator((puzzle) => {
+    console.log('validating')
+    const distance = targetDiff(puzzle.head);
+    return puzzle.pieces.every(piece => {
+      console.log(targetDiff(piece));
+      console.log(distance);
+      return headbreaker.Vector.equal(...distance, ...targetDiff(piece))
+    });
+  });
+  validator.onValid(() => {
+    setTimeout(() => alert('well done'), 0);
+  })
+  validated.puzzle.attachValidator(validator)
+
+  registerButtons('validated', validated);
+}

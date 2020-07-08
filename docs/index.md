@@ -396,4 +396,51 @@ document.getElementById('persistent-export').addEventListener('click', function(
   <button id="persistent-solve" class="btn btn-primary">Solve</button>
 </div>
 
+## Validated
+
+### Code
+
+```javascript
+let pettoruti = new Image();
+pettoruti.src = 'static/pettoruti.jpg';
+pettoruti.onload = () => {
+  const validated = new headbreaker.Canvas('validated-canvas', {
+    width: 800, height: 650,
+    pieceSize: 80, proximity: 18,
+    borderFill: 8, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: pettoruti,
+  });
+
+  validated.autogenerate({
+    horizontalPiecesCount: 4,
+    verticalPiecesCount: 6
+  });
+  validated.draw();
+
+  function targetDiff(piece) {
+    return headbreaker.Position.diff(piece.metadata.targetPosition, piece.metadata.currentPosition);
+  }
+  const validator = new headbreaker.PuzzleValidator((puzzle) => {
+    const distance = targetDiff(puzzle.head);
+    return puzzle.pieces.every(piece =>
+      headbreaker.Vector.equal(distance, targetDiff(piece))
+    );
+  });
+  validator.onValid(() => {
+    setTimeout(() => alert('well done'), 0);
+  })
+  validated.puzzle.attachValidator(validator)
+
+  registerButtons('validated', validated);
+}
+```
+
+<div id="validated-canvas">
+</div>
+<div class="form-group">
+  <button id="validated-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="validated-solve" class="btn btn-primary">Solve</button>
+</div>
+
+
 <script src="js/demo.js"></script>
