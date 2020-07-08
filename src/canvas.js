@@ -372,6 +372,7 @@ class Canvas {
     });
     this._painter.onDragEnd(this, piece, group, () => {
       piece.drop();
+      this.puzzle.validate();
       this.redraw();
     })
   }
