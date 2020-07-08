@@ -124,14 +124,14 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {number} dy
    */
   fireTranslate(dx, dy) {
-    this.translateListeners.forEach(it => it(this, dx, dy))
+    this.translateListeners.forEach(it => it(this, dx, dy));
   }
 
   /**
    * @param {Piece} other
    */
   fireConnect(other) {
-    this.connectListeners.forEach(it => it(this, other))
+    this.connectListeners.forEach(it => it(this, other));
   }
 
     /**
@@ -139,7 +139,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    */
   fireDisconnect(others) {
     others.forEach(other => {
-      this.disconnectListeners.forEach(it => it(this, other))
+      this.disconnectListeners.forEach(it => it(this, other));
     });
   }
 

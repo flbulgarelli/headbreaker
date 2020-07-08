@@ -31,7 +31,7 @@ class Anchor {
    * @returns {boolean}
    */
   isAt(x, y) {
-    return this.x === x && this.y === y;
+    return Vector.equal(this.x, this.y, x, y);
   }
 
   /**

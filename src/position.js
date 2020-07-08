@@ -1,3 +1,5 @@
+const Vector = require('./vector');
+
 /**
  * @typedef {object} Position
  * @property {number} x
@@ -39,7 +41,7 @@ function origin() {
  * @returns {boolean}
  */
 function equal(one, other) {
-  return one.x === other.x && one.y === other.y;
+  return Vector.equal(one.x, one.y, other.x, other.y);
 }
 
 /**
@@ -62,10 +64,20 @@ function update(position, x, y) {
   position.y = y;
 }
 
+/**
+ * @param {Position} one
+ * @param {Position} other
+ * @returns {[number, number]};
+ */
+function diff(one, other) {
+  return Vector.diff(one.x, one.y, other.x, other.y);
+}
+
 module.exports = {
   position,
   copy,
   equal,
   origin,
-  update
+  update,
+  diff
 };
