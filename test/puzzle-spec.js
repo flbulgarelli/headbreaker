@@ -78,11 +78,8 @@ describe("puzzle", () => {
     })
 
     describe("with attached validator", () => {
-      /** @type {PuzzleValidator} */
-      let validator;
       beforeEach(() => {
-        validator = new PuzzleValidator(it => it.head.isAt(10, 10));
-        puzzle.attachValidator(validator);
+        puzzle.attachValidator(new PuzzleValidator(it => it.head.isAt(10, 10)));
       })
 
       it("can be valid using a validator", () => {
@@ -93,7 +90,7 @@ describe("puzzle", () => {
       })
 
       it("can be validated using a validator", (done) => {
-        validator.onValid(() => done());
+        puzzle.onValid(() => done());
         puzzle.validate();
 
         puzzle.head.drag(10, 10);

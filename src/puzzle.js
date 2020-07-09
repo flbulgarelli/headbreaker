@@ -64,6 +64,15 @@ class Puzzle {
   }
 
   /**
+   * Annotates all the pieces with the given list of metadata
+   *
+   * @param {object[]} metadata
+   */
+  annotate(metadata) {
+    this.pieces.forEach((piece, index) => piece.annotate(metadata[index]));
+  }
+
+  /**
    * Tries to connect pieces in their current positions
    * This method is O(n^2)
    */
@@ -125,6 +134,14 @@ class Puzzle {
     this.pieces.forEach(it => it.onDisconnect(f));
   }
 
+  /**
+   * @param {import('./validator').ValidationListener} f
+   */
+  onValid(f) {
+    this.validator.onValid(f);
+  }
+
+
   get metadata() {
     return this.pieces.map(it => it.metadata);
   }
@@ -160,6 +177,10 @@ class Puzzle {
 
   validate() {
     this.validator.validate(this);
+  }
+
+  get connected() {
+    return this.pieces.every(it => it.connected);
   }
 
   /**

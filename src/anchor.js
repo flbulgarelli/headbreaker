@@ -85,11 +85,15 @@ class Anchor {
     return Vector.diff(this.x, this.y, other.x, other.y)
   }
 
+  asPosition() {
+    return position(this.x, this.y);
+  }
+
   /**
    * @returns {import('./position').Position}
    */
   export() {
-    return position(this.x, this.y);
+    return this.asPosition();
   }
 
   /**

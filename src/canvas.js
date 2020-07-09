@@ -7,6 +7,8 @@ const Structure = require('./structure');
 const imageLike = require('./image-metadata');
 const {position, ...Position} = require('./position');
 const Metadata = require('./metadata');
+const SpatialMetadata = require('./spatial-metadata');
+const {PuzzleValidator, PieceValidator} = require('./validator');
 
 /**
  * @typedef {object} Shape
@@ -128,7 +130,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    initializeMetadataPositions(metadata, Position.origin())
+    SpatialMetadata.initialize(metadata, Position.origin())
     this.renderPiece(this._newPiece(structure, metadata));
   }
 
@@ -286,6 +288,41 @@ class Canvas {
   }
 
   /**
+   * Sets a validator for the canvas' puzzle. Only one validator
+   * can be attached, so subsequent calls of this method will override the previously
+   * attached validator
+   *
+   * @param {import('./validator').Validator} validator
+   */
+  attachValidator(validator) {
+    this.puzzle.attachValidator(validator);
+  }
+
+  /**
+   * Sets a validator that will report when puzzle has been solved,
+   * overriding any previously configured validator
+   */
+  attachSolvedValidator() {
+    this.puzzle.attachValidator(new PuzzleValidator(SpatialMetadata.solved));
+  }
+
+  /**
+   * Sets a validator that will report when puzzle pieces are in their expected relative
+   * positions, overriding any previously configured validator
+   */
+  attachRelativePositionValidator() {
+    this.puzzle.attachValidator(new PuzzleValidator(SpatialMetadata.relativePosition));
+  }
+
+  /**
+   * Sets a validator that will report when puzzle pieces are in their expected absolute
+   * positions, overriding any previously configured validator
+   */
+  attachAbsolutePositionValidator() {
+    this.puzzle.attachValidator(new PieceValidator(SpatialMetadata.absolutePosition));
+  }
+
+  /**
    * Registers a listener for connect events
    *
    * @param {CanvasConnectionListener} f
@@ -317,6 +354,13 @@ class Canvas {
   }
 
   /**
+   * @param {import('./validator').ValidationListener} f
+   */
+  onValid(f) {
+    this.puzzle.onValid(f);
+  }
+
+  /**
    * Answers the visual representation for the given piece.
    * This method uses piece's id.
    *
@@ -341,8 +385,8 @@ class Canvas {
    * @param {Piece} piece
    */
   _annotatePiecePosition(piece) {
-    const p = position(piece.centralAnchor.x, piece.centralAnchor.y);
-    initializeMetadataPositions(piece.metadata, p, Position.copy(p));
+    const p = piece.centralAnchor.asPosition();
+    SpatialMetadata.initialize(piece.metadata, p, Position.copy(p));
   }
 
   /**
@@ -422,18 +466,6 @@ class Canvas {
   get settings() {
     return {pieceSize: this.pieceSize / 2, proximity: this.proximity}
   }
-
-}
-
-/**
- * @private
- * @param {CanvasMetadata} metadata
- * @param {import('./position').Position} target
- * @param {import('./position').Position} [current]
- */
-function initializeMetadataPositions(metadata, target, current) {
-  metadata.targetPosition = metadata.targetPosition || target;
-  metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
 }
 
 module.exports = Canvas

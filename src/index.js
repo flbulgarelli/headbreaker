@@ -10,6 +10,7 @@ const Canvas = require('./canvas');
 const Manufacturer = require('./manufacturer');
 const {InsertSequence, ...generators} = require('./sequence');
 const Metadata = require('./metadata');
+const SpatialMetadata = require('./spatial-metadata');
 const {position, ...Position} = require('./position');
 
 module.exports = {
@@ -29,6 +30,7 @@ module.exports = {
   None,
   Vector,
   Metadata,
+  SpatialMetadata,
   Outline,
   Structure,
   Position,

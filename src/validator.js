@@ -104,6 +104,11 @@ class PuzzleValidator extends AbstractValidator {
   }
 }
 
+/**
+* @type {import('../src/validator').PuzzleCondition}
+*/
+PuzzleValidator.connected = (puzzle) => puzzle.connected;
+
 const NullValidator = {
   /**
    * @param {Puzzle} puzzle
@@ -115,7 +120,12 @@ const NullValidator = {
   /**
    * @param {Puzzle} puzzle
    */
-  validate(puzzle) {}
+  validate(puzzle) {},
+
+  /**
+   * @param {ValidationListener} f
+   */
+  onValid(f) {}
 };
 
 

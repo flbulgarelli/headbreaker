@@ -34,6 +34,15 @@ describe("validator", () => {
       validator.validate(puzzle);
       assert.equal(validator.valid, true);
     })
+
+    it("connected validator", () => {
+      puzzle.disconnect();
+      const validator = new PuzzleValidator(PuzzleValidator.connected);
+      assert.equal(validator.isValid(puzzle), false);
+
+      puzzle.autoconnect();
+      assert.equal(validator.isValid(puzzle), true);
+    })
   })
 
   describe("piece", () => {

@@ -410,28 +410,15 @@ pettoruti.onload = () => {
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
   });
-
   validated.autogenerate({
     horizontalPiecesCount: 4,
     verticalPiecesCount: 6
   });
-  validated.draw();
-
-  function targetDiff(piece) {
-    return headbreaker.Position.diff(piece.metadata.targetPosition, piece.metadata.currentPosition);
-  }
-  const validator = new headbreaker.PuzzleValidator((puzzle) => {
-    const distance = targetDiff(puzzle.head);
-    return puzzle.pieces.every(piece =>
-      headbreaker.Vector.equal(distance, targetDiff(piece))
-    );
-  });
-  validator.onValid(() => {
+  validated.attachSolvedValidator();
+  validated.onValid(() => {
     setTimeout(() => alert('well done'), 0);
   })
-  validated.puzzle.attachValidator(validator)
-
-  registerButtons('validated', validated);
+  validated.draw();
 }
 ```
 

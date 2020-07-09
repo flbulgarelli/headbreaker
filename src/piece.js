@@ -56,13 +56,23 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * Adds unestructured user-defined metadata on this piece.
+   *
+   * @param {object} metadata
+   */
+  annotate(metadata) {
+    Object.assign(this.metadata, metadata);
+  }
+
+  /**
    * Sets unestructured user-defined metadata on this piece.
+   *
    * This object has no strong requirement, but it is recommended to have an
    * id property.
    *
    * @param {object} metadata
    */
-  annotate(metadata) {
+  reannotate(metadata) {
     this.metadata = metadata;
   }
 

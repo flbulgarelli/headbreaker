@@ -2,6 +2,22 @@ const assert = require('assert');
 const {Puzzle, Piece, Tab, Slot, None, anchor, Anchor} = require('../src/index');
 
 describe("piece", () => {
+  describe("can annotate a piece", () => {
+    it("can annotate with undefined or null", () => {
+      const piece = new Piece();
+      piece.annotate(null);
+      piece.annotate(undefined);
+      assert.deepEqual(piece.metadata, {});
+    })
+
+    it("can annotate with right values", () => {
+      const piece = new Piece();
+      piece.annotate({foo: 1})
+      piece.annotate({bar: 2});
+      assert.deepEqual(piece.metadata, {foo: 1, bar: 2});
+    })
+  })
+
   it("can create a piece and place it", () => {
     const piece = new Piece();
     piece.locateAt(0, 0);
