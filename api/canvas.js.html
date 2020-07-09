@@ -35,6 +35,8 @@ const Structure = require('./structure');
 const imageLike = require('./image-metadata');
 const {position, ...Position} = require('./position');
 const Metadata = require('./metadata');
+const SpatialMetadata = require('./spatial-metadata');
+const {PuzzleValidator, PieceValidator} = require('./validator');
 
 /**
  * @typedef {object} Shape
@@ -156,7 +158,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    initializeMetadataPositions(metadata, Position.origin())
+    SpatialMetadata.initialize(metadata, Position.origin())
     this.renderPiece(this._newPiece(structure, metadata));
   }
 
@@ -314,6 +316,41 @@ class Canvas {
   }
 
   /**
+   * Sets a validator for the canvas' puzzle. Only one validator
+   * can be attached, so subsequent calls of this method will override the previously
+   * attached validator
+   *
+   * @param {import('./validator').Validator} validator
+   */
+  attachValidator(validator) {
+    this.puzzle.attachValidator(validator);
+  }
+
+  /**
+   * Sets a validator that will report when puzzle has been solved,
+   * overriding any previously configured validator
+   */
+  attachSolvedValidator() {
+    this.puzzle.attachValidator(new PuzzleValidator(SpatialMetadata.solved));
+  }
+
+  /**
+   * Sets a validator that will report when puzzle pieces are in their expected relative
+   * positions, overriding any previously configured validator
+   */
+  attachRelativePositionValidator() {
+    this.puzzle.attachValidator(new PuzzleValidator(SpatialMetadata.relativePosition));
+  }
+
+  /**
+   * Sets a validator that will report when puzzle pieces are in their expected absolute
+   * positions, overriding any previously configured validator
+   */
+  attachAbsolutePositionValidator() {
+    this.puzzle.attachValidator(new PieceValidator(SpatialMetadata.absolutePosition));
+  }
+
+  /**
    * Registers a listener for connect events
    *
    * @param {CanvasConnectionListener} f
@@ -345,6 +382,13 @@ class Canvas {
   }
 
   /**
+   * @param {import('./validator').ValidationListener} f
+   */
+  onValid(f) {
+    this.puzzle.onValid(f);
+  }
+
+  /**
    * Answers the visual representation for the given piece.
    * This method uses piece's id.
    *
@@ -369,8 +413,8 @@ class Canvas {
    * @param {Piece} piece
    */
   _annotatePiecePosition(piece) {
-    const p = position(piece.centralAnchor.x, piece.centralAnchor.y);
-    initializeMetadataPositions(piece.metadata, p, Position.copy(p));
+    const p = piece.centralAnchor.asPosition();
+    SpatialMetadata.initialize(piece.metadata, p, Position.copy(p));
   }
 
   /**
@@ -400,6 +444,7 @@ class Canvas {
     });
     this._painter.onDragEnd(this, piece, group, () => {
       piece.drop();
+      this.puzzle.validate();
       this.redraw();
     })
   }
@@ -449,18 +494,6 @@ class Canvas {
   get settings() {
     return {pieceSize: this.pieceSize / 2, proximity: this.proximity}
   }
-
-}
-
-/**
- * @private
- * @param {CanvasMetadata} metadata
- * @param {import('./position').Position} target
- * @param {import('./position').Position} [current]
- */
-function initializeMetadataPositions(metadata, target, current) {
-  metadata.targetPosition = metadata.targetPosition || target;
-  metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
 }
 
 module.exports = Canvas
@@ -474,13 +507,13 @@ module.exports = Canvas
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 05 2020 22:39:44 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 08 2020 22:15:56 GMT-0300 (-03)
 </footer>
 
 <script> prettyPrint(); </script>

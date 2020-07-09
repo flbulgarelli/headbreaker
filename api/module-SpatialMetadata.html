@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Structure</title>
+    <title>JSDoc: Module: SpatialMetadata</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Structure</h1>
+    <h1 class="page-title">Module: SpatialMetadata</h1>
 
     
 
@@ -29,6 +29,8 @@
 <header>
     
         
+            
+        
     
 </header>
 
@@ -36,6 +38,85 @@
     <div class="container-overview">
     
         
+            <div class="description">Functions for handling spatial metadata
+and pieces and puzzles that are annotated with it</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="spatial-metadata.js.html">spatial-metadata.js</a>, <a href="spatial-metadata.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
     
@@ -64,7 +145,91 @@
     
 
     
-    <h4 class="name" id="~asStructure"><span class="type-signature">(inner) </span>asStructure<span class="signature">(structureLike)</span><span class="type-signature"> &rarr; {<a href="global.html#Structure">Structure</a>}</span></h4>
+    <h4 class="name" id="~absolutePosition"><span class="type-signature">(inner) </span>absolutePosition<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="spatial-metadata.js.html">spatial-metadata.js</a>, <a href="spatial-metadata.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~initialize"><span class="type-signature">(inner) </span>initialize<span class="signature">(metadata, target, current<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -92,6 +257,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -104,18 +271,90 @@
 
         <tr>
             
-                <td class="name"><code>structureLike</code></td>
+                <td class="name"><code>metadata</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">StructureLike</span>
+<span class="param-type"><a href="global.html#SpatialMetadata">SpatialMetadata</a></span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Position">Position</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>current</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Position">Position</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -161,7 +400,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line61">line 61</a>
+        <a href="spatial-metadata.js.html">spatial-metadata.js</a>, <a href="spatial-metadata.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -186,24 +425,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -215,7 +436,7 @@
     
 
     
-    <h4 class="name" id="~deserialize"><span class="type-signature">(inner) </span>deserialize<span class="signature">(string)</span><span class="type-signature"> &rarr; {<a href="global.html#Structure">Structure</a>}</span></h4>
+    <h4 class="name" id="~relativePosition"><span class="type-signature">(inner) </span>relativePosition<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -228,55 +449,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>string</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -312,7 +484,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line39">line 39</a>
+        <a href="spatial-metadata.js.html">spatial-metadata.js</a>, <a href="spatial-metadata.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -337,24 +509,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -366,7 +520,7 @@
     
 
     
-    <h4 class="name" id="~serialize"><span class="type-signature">(inner) </span>serialize<span class="signature">(structure)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~solved"><span class="type-signature">(inner) </span>solved<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -379,55 +533,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>structure</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -463,7 +568,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line30">line 30</a>
+        <a href="spatial-metadata.js.html">spatial-metadata.js</a>, <a href="spatial-metadata.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -488,24 +593,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -514,81 +601,6 @@
         
     
 
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="~StructureLike">StructureLike</h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
-|
-
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line53">line 53</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
     
 
     

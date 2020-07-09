@@ -461,37 +461,47 @@ document.getElementById('persistent-export').addEventListener('click', function(
 pettoruti.src = 'static/pettoruti.jpg';
 pettoruti.onload = () =&gt; {
   const validated = new headbreaker.Canvas('validated-canvas', {
-    width: 800, height: 650,
+    width: 800, height: 900,
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
   });
-
   validated.autogenerate({
-    horizontalPiecesCount: 4,
-    verticalPiecesCount: 6
+    horizontalPiecesCount: 5,
+    verticalPiecesCount: 8
   });
-  validated.draw();
-
-  function targetDiff(piece) {
-    return headbreaker.Position.diff(piece.metadata.targetPosition, piece.metadata.currentPosition);
-  }
-  const validator = new headbreaker.PuzzleValidator((puzzle) =&gt; {
-    const distance = targetDiff(puzzle.head);
-    return puzzle.pieces.every(piece =&gt;
-      headbreaker.Vector.equal(distance, targetDiff(piece))
-    );
-  });
-  validator.onValid(() =&gt; {
-    setTimeout(() =&gt; alert('well done'), 0);
+  validated.attachSolvedValidator();
+  validated.onValid(() =&gt; {
+    setTimeout(() =&gt; {
+      document.getElementById('validated-canvas-overlay').setAttribute(&quot;class&quot;, &quot;active&quot;);
+    }, 1500);
   })
-  validated.puzzle.attachValidator(validator)
-
+  validated.draw();
   registerButtons('validated', validated);
 }
 </code></pre>
 
-<div id="validated-canvas">
+<style>
+#validated-canvas-overlay {
+  position:absolute;
+  left:0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease-in-out;
+}
+
+#validated-canvas-overlay.active {
+  opacity: 1;
+}
+</style>
+
+<div style="position:relative">
+  <div id="validated-canvas">
+  </div>
+  <img id="validated-canvas-overlay" src="static/pettoruti.jpg">
 </div>
 
 <div class="form-group">
@@ -583,5 +593,5 @@ pettoruti.onload = () =&gt; {
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-07-08 04:29:40
+Build Date UTC : 2020-07-09 05:27:46
 -->

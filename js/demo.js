@@ -1,37 +1,4 @@
 // @ts-nocheck
-const RoundedOutline = {
-  bezier: true,
-  draw(piece, size = 50, borderFill = 0) {
-    const offset = borderFill * 5 / size;
-    return [
-      (0 - offset),                                                  (0 - offset),
-      1,                                                             (0 - offset),
-      1.2,                                                           headbreaker.Outline.select(piece.up, (-1 - offset), (1 - offset), (0 - offset)),
-      2,                                                             headbreaker.Outline.select(piece.up, (-1 - offset), (1 - offset), (0 - offset)),
-      2.8,                                                           headbreaker.Outline.select(piece.up, (-1 - offset), (1 - offset), (0 - offset)),
-      3,                                                             (0 - offset),
-      (4 + offset),                                                  (0 - offset),
-      (4 + offset),                                                  1,
-      headbreaker.Outline.select(piece.right, (5 + offset), (3 + offset), (4 + offset)), 1.2,
-      headbreaker.Outline.select(piece.right, (5 + offset), (3 + offset), (4 + offset)), 2,
-      headbreaker.Outline.select(piece.right, (5 + offset), (3 + offset), (4 + offset)), 2.8,
-      (4 + offset),                                                  3,
-      (4 + offset),                                                  (4 + offset),
-      3,                                                             (4 + offset),
-      2.8,                                                           headbreaker.Outline.select(piece.down, (5 + offset), (3 + offset), (4 + offset)),
-      2,                                                             headbreaker.Outline.select(piece.down, (5 + offset), (3 + offset), (4 + offset)),
-      1.2,                                                           headbreaker.Outline.select(piece.down, (5 + offset), (3 + offset), (4 + offset)),
-      1,                                                             (4 + offset),
-      (0 - offset),                                                  (4 + offset),
-      (0 - offset),                                                  3,
-      headbreaker.Outline.select(piece.left, (-1 - offset), (1 - offset), (0 - offset)), 2.8,
-      headbreaker.Outline.select(piece.left, (-1 - offset), (1 - offset), (0 - offset)), 2,
-      headbreaker.Outline.select(piece.left, (-1 - offset), (1 - offset), (0 - offset)), 1.2,
-      (0 - offset),                                                  1,
-      (0 - offset),                                                  (0 - offset),
-    ].map(it => it * size / 5)
-  }
-}
 
 // ======
 // Utils
@@ -52,6 +19,8 @@ function registerButtons(id, canvas) {
 // ============
 // Basic Canvas
 // ============
+
+
 const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300 });
 basic.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
@@ -168,8 +137,7 @@ vangogh.onload = () => {
     width: 800, height: 650,
     pieceSize: 100, proximity: 20,
     borderFill: 10, strokeWidth: 2,
-    lineSoftness: 0, image: vangogh,
-    painter: new headbreaker.painters.Konva(RoundedOutline)
+    lineSoftness: 0.12, image: vangogh,
   });
 
   background.sketchPiece({
@@ -526,39 +494,27 @@ registerButtons('persistent', persistent);
 // ================
 // Validated Canvas
 // ================
-
 let pettoruti = new Image();
 pettoruti.src = 'static/pettoruti.jpg';
 pettoruti.onload = () => {
   const validated = new headbreaker.Canvas('validated-canvas', {
-    width: 800, height: 650,
+    width: 800, height: 900,
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
   });
-
   validated.autogenerate({
-    horizontalPiecesCount: 4,
-    verticalPiecesCount: 6
+    horizontalPiecesCount: 5,
+    verticalPiecesCount: 8
   });
-  validated.draw();
-
-  function targetDiff(piece) {
-    return headbreaker.Position.diff(piece.metadata.targetPosition, piece.metadata.currentPosition);
-  }
-  const validator = new headbreaker.PuzzleValidator((puzzle) => {
-    console.log('validating')
-    const distance = targetDiff(puzzle.head);
-    return puzzle.pieces.every(piece => {
-      console.log(targetDiff(piece));
-      console.log(distance);
-      return headbreaker.Vector.equal(...distance, ...targetDiff(piece))
-    });
-  });
-  validator.onValid(() => {
-    setTimeout(() => alert('well done'), 0);
+  validated.attachSolvedValidator();
+  validated.onValid(() => {
+    setTimeout(() => {
+      if (validated.puzzle.isValid()) {
+        document.getElementById('validated-canvas-overlay').setAttribute("class", "active");
+      }
+    }, 1500);
   })
-  validated.puzzle.attachValidator(validator)
-
+  validated.draw();
   registerButtons('validated', validated);
 }

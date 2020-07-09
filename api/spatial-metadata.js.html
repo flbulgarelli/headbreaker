@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: prelude.js</title>
+    <title>JSDoc: Source: spatial-metadata.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: prelude.js</h1>
+    <h1 class="page-title">Source: spatial-metadata.js</h1>
 
     
 
@@ -26,85 +26,64 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @template A
- * @typedef {Object} Orthogonal
- * @property {A} up
- * @property {A} down
- * @property {A} left
- * @property {A} right
+            <pre class="prettyprint source linenums"><code>const Position = require('./position');
+const Vector = require('./vector');
+const {PuzzleValidator} = require('./validator');
+
+/**
+ * @typedef {object} SpatialMetadata
+ * @property {import('./position').Position} [targetPosition]
+ * @property {import('./position').Position} [currentPosition]
  */
 
 /**
- * @template A
- * @template B
+ * Functions for handling spatial metadata
+ * and pieces and puzzles that are annotated with it
  *
- * @callback Mapper
- * @param {A} value
- * @returns {B}
+ * @module SpatialMetadata
  */
 
-/**
- * Misc generic functions
- *
- * @module Prelude
- */
-
-/**
- * @template T
- * @param {T} one
- * @param {T} other
- * @param {boolean} [back]
- * @returns {[T, T]}
- */
-function pivot(one, other, back = false) {
-  return back ? [one, other] : [other, one];
+function diffToTarget(piece) {
+  return Position.diff(piece.metadata.targetPosition, piece.centralAnchor.asPosition());
 }
 
 /**
- * @template A
- * @template B
- *
- * @param {A[]} values
- * @param {Mapper&lt;A, B>} mapper
- * @param {A} replacement
- * @returns {B[]}
+ * @type {import('../src/validator').PuzzleCondition}
  */
-function orthogonalMap(values, mapper, replacement = null) {
-  return values.map(it => {
-    const value = it || replacement;
-    return value &amp;&amp; mapper(value)
+const solved = (puzzle) => relativePosition(puzzle) &amp;&amp; PuzzleValidator.connected(puzzle);
+
+/**
+ * @type {import('../src/validator').PuzzleCondition}
+ */
+const relativePosition = (puzzle) => {
+  const [dx, dy] = diffToTarget(puzzle.head);
+  return puzzle.pieces.every(piece => {
+    return Vector.equal(dx, dy, ...diffToTarget(piece))
   });
 }
 
 /**
- * @template A
- * @template B
- * @param {A[]} values
- * @param {Mapper&lt;A, B>} mapper
- * @param {A} replacement
- * @returns {Orthogonal&lt;B>}
+ *@type {import('../src/validator').PieceCondition}
  */
-function orthogonalTransform(values, mapper, replacement = null) {
-  const [right, down, left, up] = orthogonalMap(values, mapper, replacement)
-  return {right, down, left, up};
-}
+const absolutePosition = (piece) => Position.equal(piece.centralAnchor.asPosition(), piece.metadata.targetPosition);
+
 
 /**
- * @template A
- * @param {A} arg
- * @returns {A}
+ * @param {SpatialMetadata} metadata
+ * @param {import('./position').Position} target
+ * @param {import('./position').Position} [current]
  */
-function itself(arg) {
-  return arg;
+function initialize(metadata, target, current) {
+  metadata.targetPosition = metadata.targetPosition || target;
+  metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
 }
 
 module.exports = {
-  pivot,
-  itself,
-  orthogonalMap,
-  orthogonalTransform
-};
+  initialize,
+  solved,
+  relativePosition,
+  absolutePosition
+}
 </code></pre>
         </article>
     </section>
