@@ -1,4 +1,4 @@
-const Vector = require('./vector')
+const Pair = require('./pair')
 const {anchor, Anchor} = require('./anchor')
 const Puzzle = require('./puzzle');
 const Piece = require('./piece');
@@ -28,7 +28,7 @@ module.exports = {
   Tab,
   Slot,
   None,
-  Vector,
+  Pair,
   Metadata,
   SpatialMetadata,
   Outline,

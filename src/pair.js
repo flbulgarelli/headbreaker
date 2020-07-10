@@ -1,11 +1,15 @@
 /**
- * Utilities for handling 2D vectors, expressed a two-elements list
- *
- * @module Vector
+ * @typedef {[number, number]} Pair
  */
 
 /**
- * Tells whether this vector is (0, 0)
+ * Utilities for handling 2D vectors, expressed a two-elements list
+ *
+ * @module Pair
+ */
+
+/**
+ * Tells whether this pair is (0, 0)
  *
  * @param {number} x
  * @param {number} y
@@ -33,7 +37,7 @@ function equal(x1, y1, x2, y2) {
  * @param {number} y1
  * @param {number} x2
  * @param {number} y2
- * @returns {[number, number]}
+ * @returns {Pair}
  */
 function diff(x1, y1, x2, y2) {
   return [x1 - x2, y1 - y2];

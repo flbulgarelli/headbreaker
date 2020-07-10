@@ -1,4 +1,4 @@
-const Vector = require('./vector');
+const Pair = require('./pair');
 const {anchor, Anchor} = require('./anchor');
 const {None} = require('./insert')
 const connector = require('./connector')
@@ -260,7 +260,7 @@ const {itself, orthogonalTransform} = require('./prelude');
 
   /**
    * Sets the initial position of this piece. This method is similar to {@link Piece#centerAround},
-   * but takes a vector instead of an anchor.
+   * but takes a pair instead of an anchor.
    *
    * @param {number} x
    * @param {number} y
@@ -295,7 +295,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   /**
    * Moves this piece to the given position, firing translation events.
    * Piece must be already centered. This method is similar to {@link Piece#recenterAround},
-   * but takes a vector instead of an anchor.
+   * but takes a pair instead of an anchor.
    *
    * @param {number} x the final x position
    * @param {number} y the final y position
@@ -313,7 +313,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   translate(dx, dy, quiet = false) {
-    if (!Vector.isNull(dx, dy)) {
+    if (!Pair.isNull(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
       if (!quiet) {
         this.fireTranslate(dx, dy);
@@ -342,7 +342,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {number} dy
    */
   drag(dx, dy, quiet = false) {
-    if (Vector.isNull(dx, dy)) return;
+    if (Pair.isNull(dx, dy)) return;
 
     if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
       this.disconnect();

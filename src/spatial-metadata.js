@@ -1,5 +1,5 @@
 const Position = require('./position');
-const Vector = require('./vector');
+const Pair = require('./pair');
 const {PuzzleValidator} = require('./validator');
 
 /**
@@ -30,7 +30,7 @@ const solved = (puzzle) => relativePosition(puzzle) && PuzzleValidator.connected
 const relativePosition = (puzzle) => {
   const [dx, dy] = diffToTarget(puzzle.head);
   return puzzle.pieces.every(piece => {
-    return Vector.equal(dx, dy, ...diffToTarget(piece))
+    return Pair.equal(dx, dy, ...diffToTarget(piece))
   });
 }
 

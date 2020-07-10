@@ -1,5 +1,5 @@
 const between = require('./between');
-const Vector = require('./vector')
+const Pair = require('./pair')
 const {position} = require('./position')
 
 /**
@@ -31,7 +31,7 @@ class Anchor {
    * @returns {boolean}
    */
   isAt(x, y) {
-    return Vector.equal(this.x, this.y, x, y);
+    return Pair.equal(this.x, this.y, x, y);
   }
 
   /**
@@ -79,10 +79,17 @@ class Anchor {
    * Calculates the difference between this anchor and another
    *
    * @param {Anchor} other
-   * @returns {[number, number]}
+   * @returns {import('./pair').Pair}
    */
   diff(other) {
-    return Vector.diff(this.x, this.y, other.x, other.y)
+    return Pair.diff(this.x, this.y, other.x, other.y)
+  }
+
+  /**
+   * @returns {import('./pair').Pair}
+   */
+  asPoint() {
+    return [this.x, this.y];
   }
 
   asPosition() {

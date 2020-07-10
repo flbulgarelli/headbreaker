@@ -15,7 +15,7 @@ try {
 const Canvas = require('./canvas');
 const Outline = require('./outline');
 const Piece = require('./piece');
-const Vector = require('./vector');
+const Pair = require('./pair');
 const Position = require('./position');
 const Painter = require('./painter');
 
@@ -26,7 +26,7 @@ const Painter = require('./painter');
  * @param {*} group
  */
 function currentPositionDiff(model, group) {
-  return Vector.diff(group.x(),group.y(), model.metadata.currentPosition.x, model.metadata.currentPosition.y);
+  return Pair.diff(group.x(),group.y(), model.metadata.currentPosition.x, model.metadata.currentPosition.y);
 }
 
 /**

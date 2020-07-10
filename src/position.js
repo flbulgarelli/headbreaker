@@ -1,4 +1,4 @@
-const Vector = require('./vector');
+const Pair = require('./pair');
 
 /**
  * @typedef {object} Position
@@ -41,7 +41,7 @@ function origin() {
  * @returns {boolean}
  */
 function equal(one, other) {
-  return Vector.equal(one.x, one.y, other.x, other.y);
+  return Pair.equal(one.x, one.y, other.x, other.y);
 }
 
 /**
@@ -67,10 +67,10 @@ function update(position, x, y) {
 /**
  * @param {Position} one
  * @param {Position} other
- * @returns {[number, number]};
+ * @returns {import('./pair').Pair};
  */
 function diff(one, other) {
-  return Vector.diff(one.x, one.y, other.x, other.y);
+  return Pair.diff(one.x, one.y, other.x, other.y);
 }
 
 module.exports = {
