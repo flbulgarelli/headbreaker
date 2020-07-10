@@ -54,7 +54,7 @@ function random(_) {
  */
 class InsertSequence {
   /**
-   * @param {InsertsGenerator} generator;
+   * @param {InsertsGenerator} generator the generator used by this sequence to produce inserts
    */
   constructor(generator) {
     this.generator = generator;
