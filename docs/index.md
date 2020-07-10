@@ -405,24 +405,46 @@ let pettoruti = new Image();
 pettoruti.src = 'static/pettoruti.jpg';
 pettoruti.onload = () => {
   const validated = new headbreaker.Canvas('validated-canvas', {
-    width: 800, height: 650,
+    width: 800, height: 900,
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
   });
   validated.autogenerate({
-    horizontalPiecesCount: 4,
-    verticalPiecesCount: 6
+    horizontalPiecesCount: 5,
+    verticalPiecesCount: 8
   });
   validated.attachSolvedValidator();
   validated.onValid(() => {
-    setTimeout(() => alert('well done'), 0);
+    setTimeout(() => {
+      document.getElementById('validated-canvas-overlay').setAttribute("class", "active");
+    }, 1500);
   })
   validated.draw();
 }
 ```
 
-<div id="validated-canvas">
+<style>
+#validated-canvas-overlay {
+  position:absolute;
+  left:0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease-in-out;
+}
+
+#validated-canvas-overlay.active {
+  opacity: 1;
+}
+</style>
+
+<div style="position:relative">
+  <div id="validated-canvas">
+  </div>
+  <img id="validated-canvas-overlay" src="static/pettoruti.jpg">
 </div>
 <div class="form-group">
   <button id="validated-shuffle" class="btn btn-primary">Shuffle</button>

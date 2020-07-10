@@ -494,23 +494,26 @@ registerButtons('persistent', persistent);
 // ================
 // Validated Canvas
 // ================
-
 let pettoruti = new Image();
 pettoruti.src = 'static/pettoruti.jpg';
 pettoruti.onload = () => {
   const validated = new headbreaker.Canvas('validated-canvas', {
-    width: 800, height: 650,
+    width: 800, height: 900,
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
   });
   validated.autogenerate({
-    horizontalPiecesCount: 4,
-    verticalPiecesCount: 6
+    horizontalPiecesCount: 5,
+    verticalPiecesCount: 8
   });
   validated.attachSolvedValidator();
   validated.onValid(() => {
-    setTimeout(() => alert('well done'), 0);
+    setTimeout(() => {
+      if (validated.puzzle.isValid()) {
+        document.getElementById('validated-canvas-overlay').setAttribute("class", "active");
+      }
+    }, 1500);
   })
   validated.draw();
   registerButtons('validated', validated);
