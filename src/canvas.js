@@ -249,7 +249,6 @@ class Canvas {
   solve() {
     this.puzzle.pieces.forEach(it => {
       const {x, y} = it.metadata.targetPosition;
-      Position.update(it.metadata.currentPosition, x, y);
       it.relocateTo(x, y);
     });
     this.autoconnect();
