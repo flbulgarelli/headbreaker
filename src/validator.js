@@ -49,8 +49,23 @@ class AbstractValidator {
     this.validListeners.push(f);
   }
 
+  /**
+   * Answers the current validity status of this validator. This
+   * property neither alters the current status nor triggers new validity checks
+   *
+   * @returns {boolean}
+   */
   get valid() {
     return this._valid;
+  }
+
+  /**
+   * Answers wether this is the {@link NullValidator}
+   *
+   * @returns {boolean}
+   */
+  get isNull() {
+    return false;
   }
 }
 
@@ -67,6 +82,7 @@ class AbstractValidator {
  * @returns {boolean}
  */
 
+/** A validator that evaluates each piece independently */
 class PieceValidator extends AbstractValidator {
 
   /**
@@ -125,7 +141,23 @@ const NullValidator = {
   /**
    * @param {ValidationListener} f
    */
-  onValid(f) {}
+  onValid(f) {},
+
+  /**
+   * @returns {boolean}
+   */
+  get valid() {
+    return false;
+  },
+
+  /**
+   * Answers wether this is the {@link NullValidator}
+   *
+   * @returns {boolean}
+   */
+  get isNull() {
+    return true;
+  }
 };
 
 

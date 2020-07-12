@@ -452,6 +452,11 @@ class Canvas {
     return piece;
   }
 
+  /**
+   * The puzzle rendered by this canvas
+   *
+   * @returns {Puzzle}
+   */
   get puzzle() {
     if (!this._puzzle) {
       this._initializeEmptyPuzzle();
