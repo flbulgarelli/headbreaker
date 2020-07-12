@@ -380,7 +380,7 @@ document.getElementById('persistent-import').addEventListener('click', function(
 });
 
 document.getElementById('persistent-export').addEventListener('click', function() {
-  writeDump(persistent.puzzle.export());
+  writeDump(persistent.puzzle.export({compact: true}));
 });
 ```
 

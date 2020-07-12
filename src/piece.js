@@ -24,7 +24,7 @@ const {itself, orthogonalTransform} = require('./prelude');
  * @typedef {object} PieceDump
  * @property {import('./position').Position} centralAnchor
  * @property {string} structure
- * @property {import('./prelude').Orthogonal<object>} connections
+ * @property {import('./prelude').Orthogonal<object>} [connections]
  * @property {object} metadata
  */
 
@@ -493,15 +493,19 @@ const {itself, orthogonalTransform} = require('./prelude');
    * Converts this piece into a plain, stringify-ready object.
    * Connections should have ids
    *
+   * @param {object} options
+   * @param {boolean} [options.compact]
    * @returns {PieceDump}
    */
-  export() {
-    return {
+  export({compact = false} = {}) {
+    const base = {
       centralAnchor: this.centralAnchor && this.centralAnchor.export(),
       structure: Structure.serialize(this),
-      connections: orthogonalTransform(this.connections, it => ({id: it.id})),
       metadata: this.metadata
     };
+    return compact ? base : Object.assign(base, {
+      connections: orthogonalTransform(this.connections, it => ({id: it.id}))
+    })
   }
 
   /**

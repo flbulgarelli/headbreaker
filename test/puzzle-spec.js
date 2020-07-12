@@ -102,69 +102,112 @@ describe("puzzle", () => {
     })
   })
 
-  it("exports", () => {
-    assert.deepEqual(puzzle.export(), {
-      pieceSize: 2,
-      proximity: 1,
-      pieces: [
-        {
-          centralAnchor: {
-            x: 0,
-            y: 0
+  describe("exports", () => {
+    it("exports with connections data", () => {
+      assert.deepEqual(puzzle.export(), {
+        pieceSize: 2,
+        proximity: 1,
+        pieces: [
+          {
+            centralAnchor: {
+              x: 0,
+              y: 0
+            },
+            connections: {
+              down: null,
+              left: null,
+              right: null,
+              up: null,
+            },
+            metadata: {},
+            structure: "T---"
           },
-          connections: {
-            down: null,
-            left: null,
-            right: null,
-            up: null,
+          {
+            centralAnchor: {
+              x: 3,
+              y: 0
+            },
+            connections: {
+              down: null,
+              left: null,
+              right: null,
+              up: null,
+            },
+            metadata: {},
+            structure: "T-S-"
           },
-          metadata: {},
-          structure: "T---"
-        },
-        {
-          centralAnchor: {
-            x: 3,
-            y: 0
+          {
+            centralAnchor: {
+              x: 6,
+              y: 0
+            },
+            connections: {
+              down: null,
+              left: null,
+              right: null,
+              up: null,
+            },
+            metadata: {},
+            structure: "TSS-"
           },
-          connections: {
-            down: null,
-            left: null,
-            right: null,
-            up: null,
+          {
+            centralAnchor: {
+              x: 6,
+              y: 3
+            },
+            connections: {
+              down: null,
+              left: null,
+              right: null,
+              up: null,
+            },
+            metadata: {},
+            structure: "---T"
           },
-          metadata: {},
-          structure: "T-S-"
-        },
-        {
-          centralAnchor: {
-            x: 6,
-            y: 0
+        ]
+      });
+    })
+
+    it("exports without connections data", () => {
+      assert.deepEqual(puzzle.export({compact: true}), {
+        pieceSize: 2,
+        proximity: 1,
+        pieces: [
+          {
+            centralAnchor: {
+              x: 0,
+              y: 0
+            },
+            metadata: {},
+            structure: "T---"
           },
-          connections: {
-            down: null,
-            left: null,
-            right: null,
-            up: null,
+          {
+            centralAnchor: {
+              x: 3,
+              y: 0
+            },
+            metadata: {},
+            structure: "T-S-"
           },
-          metadata: {},
-          structure: "TSS-"
-        },
-        {
-          centralAnchor: {
-            x: 6,
-            y: 3
+          {
+            centralAnchor: {
+              x: 6,
+              y: 0
+            },
+            metadata: {},
+            structure: "TSS-"
           },
-          connections: {
-            down: null,
-            left: null,
-            right: null,
-            up: null,
+          {
+            centralAnchor: {
+              x: 6,
+              y: 3
+            },
+            metadata: {},
+            structure: "---T"
           },
-          metadata: {},
-          structure: "---T"
-        },
-      ]
-    });
+        ]
+      });
+    })
   })
 
   it("imports", () => {

@@ -186,13 +186,16 @@ class Puzzle {
   /**
    * Converts this piece into a plain, stringify-ready object.
    * Pieces should have ids
+   *
+   * @param {object} options config options for export
+   * @param {boolean} [options.compact] if connection information must be omitted
    * @returns {PuzzleDump}
    */
-  export() {
+  export(options = {}) {
     return {
       pieceSize: this.pieceSize,
       proximity: this.proximity,
-      pieces: this.pieces.map(it => it.export())
+      pieces: this.pieces.map(it => it.export(options))
     }
   }
 
