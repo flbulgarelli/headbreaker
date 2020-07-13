@@ -7,7 +7,7 @@
     "test": "./node_modules/mocha/bin/mocha",
     "build": "webpack --config webpack.prod.js",
     "api": "node_modules/jsdoc-import-support/jsdoc.js src/ -d docs/api -R README.md; exit 0",
-    "types": "node_modules/jsdoc-import-support/jsdoc.js -t node_modules/tsd-jsdoc/dist -d dist/ -r src/; exit 0"
+    "types": "node_modules/jsdoc-import-support/jsdoc.js -t node_modules/tsd-jsdoc/dist/ -d dist/ -r src/; mv dist/types.d.ts dist/headbreaker.d.ts; exit 0"
   },
   "repository": {
     "type": "git",

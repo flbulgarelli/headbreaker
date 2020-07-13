@@ -40,6 +40,7 @@ class Anchor {
    *
    * @param {number} dx
    * @param {number} dy
+   * @returns {Anchor}
    */
   translated(dx, dy) {
     return this.copy().translate(dx, dy);
@@ -86,12 +87,19 @@ class Anchor {
   }
 
   /**
+   * Converts this anchor into a point
+   *
    * @returns {import('./pair').Pair}
    */
   asPoint() {
     return [this.x, this.y];
   }
 
+  /**
+   * Converts this anchor into a position
+   *
+   * @returns {import('./position').Position}
+   */
   asPosition() {
     return position(this.x, this.y);
   }

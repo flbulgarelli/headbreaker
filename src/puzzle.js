@@ -80,6 +80,9 @@ class Puzzle {
     this.pieces.forEach(it => this.autoconnectWith(it));
   }
 
+  /**
+   * Disconnects all pieces
+   */
   disconnect() {
     this.pieces.forEach(it => it.disconnect());
   }
@@ -198,6 +201,11 @@ class Puzzle {
     this.validator.validate(this);
   }
 
+  /**
+   * Wether all the pieces in this puzzle are connected
+   *
+   * @returns {boolean}
+   */
   get connected() {
     return this.pieces.every(it => it.connected);
   }

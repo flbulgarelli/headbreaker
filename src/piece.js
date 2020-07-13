@@ -42,6 +42,7 @@ const {itself, orthogonalTransform} = require('./prelude');
     this.left = left;
     this.right = right;
     this.metadata = {};
+    /** @type {Anchor} */
     this.centralAnchor = null;
     this._initializeListeners();
   }

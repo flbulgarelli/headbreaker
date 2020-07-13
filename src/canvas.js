@@ -441,7 +441,6 @@ class Canvas {
   }
 
   /**
-   *
    * @param {import('./structure').StructureLike} structureLike
    * @param {CanvasMetadata} metadata
    */
