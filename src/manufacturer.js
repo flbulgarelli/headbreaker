@@ -124,6 +124,11 @@ class Manufacturer {
 }
 
 class Positioner {
+  /**
+   *
+   * @param {Puzzle} puzzle
+   * @param {Anchor} headAnchor
+   */
   constructor(puzzle, headAnchor) {
     this.puzzle = puzzle;
     this.initializeOffset(headAnchor);
@@ -135,13 +140,13 @@ class Positioner {
       this.yOffset = headAnchor.y;
     }
     else {
-      this.xOffset = this.realSize;
-      this.yOffset = this.realSize;
+      this.xOffset = this.pieceWidth;
+      this.yOffset = this.pieceWidth;
     }
   }
 
-  get realSize() {
-    return this.puzzle.pieceSize * 2;
+  get pieceWidth() {
+    return this.puzzle.pieceWidth;
   }
 
     /**
@@ -150,8 +155,8 @@ class Positioner {
    */
   naturalAnchor(x, y) {
     return anchor(
-      x * this.realSize + this.xOffset,
-      y * this.realSize + this.yOffset);
+      x * this.pieceWidth + this.xOffset,
+      y * this.pieceWidth + this.yOffset);
   }
 }
 

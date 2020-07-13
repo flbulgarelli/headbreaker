@@ -141,6 +141,25 @@ class Puzzle {
     this.validator.onValid(f);
   }
 
+  /**
+   * Answers the list of points where
+   * central anchors of pieces are located
+   *
+   * @returns {import('./pair').Pair[]}
+   */
+  get points() {
+    return this.pieces.map(it => it.centralAnchor.asPoint());
+  }
+
+  /**
+   * Answers a list of points whose coordinates are scaled
+   * to the {@link Puzzle#pieceWidth}
+   *
+   * @returns {import('./pair').Pair[]}
+   */
+  get refs() {
+    return this.points.map(([x, y]) => [x / this.pieceWidth, y / this.pieceWidth])
+  }
 
   get metadata() {
     return this.pieces.map(it => it.metadata);
@@ -181,6 +200,15 @@ class Puzzle {
 
   get connected() {
     return this.pieces.every(it => it.connected);
+  }
+
+  /**
+   * The piece width, from edge to edge
+   *
+   * @returns {number} the double of the {@link Puzzle#pieceSize}
+   */
+  get pieceWidth() {
+    return this.pieceSize * 2;
   }
 
   /**

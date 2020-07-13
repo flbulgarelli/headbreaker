@@ -26,6 +26,14 @@ describe("puzzle", () => {
     assert.equal(puzzle.head, puzzle.pieces[0]);
   })
 
+  it("has points", () => {
+    assert.deepEqual(puzzle.points, [[0, 0], [3, 0], [6, 0], [6, 3]]);
+  })
+
+  it("has refs", () => {
+    assert.deepEqual(puzzle.refs, [[0, 0], [0.75, 0], [1.5, 0], [1.5, 0.75]]);
+  })
+
   it("autoconnects puzzle", () => {
     puzzle.autoconnect();
 
