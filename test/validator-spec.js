@@ -43,6 +43,36 @@ describe("validator", () => {
       puzzle.autoconnect();
       assert.equal(validator.isValid(puzzle), true);
     })
+
+
+    describe("relative refs validator", () => {
+      it("without offset", () => {
+        const validator = new PuzzleValidator(PuzzleValidator.relativeRefs([[0, 0], [1, 0], [0, 1], [1, 1]]));
+        assert.equal(validator.isValid(puzzle), true);
+      })
+
+      it("with offset in refs", () => {
+        const validator = new PuzzleValidator(PuzzleValidator.relativeRefs([[1, 1], [2, 1], [1, 2], [2, 2]]));
+        assert.equal(validator.isValid(puzzle), true);
+      })
+
+      it("with offset in pieces", () => {
+        const validator = new PuzzleValidator(PuzzleValidator.relativeRefs([[0, 0], [1, 0], [0, 1], [1, 1]]));
+        puzzle.translate(10, -10);
+        assert.equal(validator.isValid(puzzle), true);
+      })
+
+      it("with non integral offset in pieces", () => {
+        const validator = new PuzzleValidator(PuzzleValidator.relativeRefs([[0, 0], [1, 0], [0, 1], [1, 1]]));
+        puzzle.translate(2, -3);
+        assert.equal(validator.isValid(puzzle), true);
+      })
+
+      it("with invalid refs", () => {
+        const validator = new PuzzleValidator(PuzzleValidator.relativeRefs([[0, 0], [1, 1], [2, 2], [3, 3]]));
+        assert.equal(validator.isValid(puzzle), false);
+      })
+    })
   })
 
   describe("piece", () => {

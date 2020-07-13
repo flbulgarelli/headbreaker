@@ -1,5 +1,6 @@
 const Puzzle = require('./puzzle');
 const Piece = require('./piece');
+const Pair = require('./pair');
 
 /**
  * @typedef {PieceValidator | PuzzleValidator | NullValidator} Validator
@@ -121,9 +122,26 @@ class PuzzleValidator extends AbstractValidator {
 }
 
 /**
-* @type {import('../src/validator').PuzzleCondition}
+* @type {PuzzleCondition}
 */
 PuzzleValidator.connected = (puzzle) => puzzle.connected;
+
+/**
+ * @param {import('./pair').Pair[]} expected the expected relative refs
+ * @returns {PuzzleCondition}
+ */
+PuzzleValidator.relativeRefs = (expected) => {
+  return (puzzle) => {
+    function diff(x, y, index) {
+      const [x2, y2] = expected[index];
+      return Pair.diff(x, y, x2 * puzzle.pieceWidth, y2 * puzzle.pieceWidth);
+    }
+    const points = puzzle.points;
+    const [x0, y0] = points[0];
+    const [dx, dy] = diff(x0, y0, 0);
+    return points.every(([x, y], index) => Pair.equal(dx, dy, ...diff(x, y, index)))
+  };
+};
 
 const NullValidator = {
   /**
