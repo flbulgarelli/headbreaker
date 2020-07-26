@@ -103,5 +103,10 @@ describe("validator", () => {
     it("is validation status is initially undefined", () => {
       assert.equal(validator.valid, undefined);
     })
+
+    it("is validation status can be updated without firing events", () => {
+      validator.updateValidity(puzzle);
+      assert.equal(validator.valid, false);
+    })
   })
 })

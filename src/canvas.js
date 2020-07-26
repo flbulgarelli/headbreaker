@@ -266,6 +266,7 @@ class Canvas {
     if (!this.autoconnected) {
       this.autoconnect();
     }
+    this.puzzle.updateValidity();
     this.autoconnected = false;
     this.redraw();
   }
@@ -357,6 +358,15 @@ class Canvas {
    */
   onValid(f) {
     this.puzzle.onValid(f);
+  }
+
+  /**
+   * Returns the current validation status
+   *
+   * @type {boolean}
+   */
+  get valid() {
+    return this.puzzle.valid;
   }
 
   /**

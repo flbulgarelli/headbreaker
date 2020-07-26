@@ -39,6 +39,22 @@ describe("Canvas", () => {
 
   })
 
+  it("initializes the validityon draw", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2,
+      lineSoftness: 0.12, strokeColor: 'black',
+      painter: painter
+    })
+
+    canvas.sketchPiece({ structure: '----', metadata: { id: 'a' }});
+    canvas.draw();
+
+    assert.deepEqual(canvas.puzzle.valid, false);
+  })
+
+
   it("can create a single-piece puzzle with no current nor target positions", () => {
     const canvas = new Canvas('canvas', {
       width: 800, height: 800,

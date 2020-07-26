@@ -33,7 +33,7 @@ class Puzzle {
     /** @type {Piece[]} */
     this.pieces = [];
     /** @type {import('./validator').Validator} */
-    this.validator = NullValidator;
+    this.validator = new NullValidator();
   }
 
   /**
@@ -210,7 +210,7 @@ class Puzzle {
    *
    * Calling this property will not fire any validation listeners.
    *
-   * @returns {boolean}
+   * @type {boolean}
    */
   get valid() {
     return this.validator.valid;
@@ -221,6 +221,15 @@ class Puzzle {
    * and firing validation listeners if becomes valid
    */
   validate() {
+    this.validator.validate(this);
+  }
+
+  /**
+   * Checks whether this puzzle is valid, updating valid property.
+   *
+   * Validations listeners are NOT fired.
+   */
+  updateValidity() {
     this.validator.validate(this);
   }
 

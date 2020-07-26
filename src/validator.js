@@ -21,17 +21,27 @@ class AbstractValidator {
   }
 
   /**
-   * Validates the puzzle, firing validation events
+   * Validates the puzzle, updating the validity state and
+   * firing validation events
    *
    * @param {Puzzle} puzzle
    */
   validate(puzzle) {
     const wasValid = this._valid;
-    // @ts-ignore
-    this._valid = this.isValid(puzzle);
+    this.updateValidity(puzzle);
     if (this._valid && !wasValid) {
       this.fireValid(puzzle);
     }
+  }
+
+  /**
+   * Updates the valid state.
+   *
+   * @param {Puzzle} puzzle
+   */
+  updateValidity(puzzle) {
+    // @ts-ignore
+    this._valid = this.isValid(puzzle);
   }
 
   /**
@@ -121,6 +131,24 @@ class PuzzleValidator extends AbstractValidator {
   }
 }
 
+class NullValidator extends AbstractValidator {
+
+  /**
+   * @param {Puzzle} puzzle
+   */
+  isValid(puzzle) {
+    return false;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  get isNull() {
+    return true;
+  }
+};
+
+
 /**
 * @type {PuzzleCondition}
 */
@@ -142,42 +170,6 @@ PuzzleValidator.relativeRefs = (expected) => {
     return points.every(([x, y], index) => Pair.equal(dx, dy, ...diff(x, y, index)))
   };
 };
-
-const NullValidator = {
-  /**
-   * @param {Puzzle} puzzle
-   */
-  isValid(puzzle) {
-    return false;
-  },
-
-  /**
-   * @param {Puzzle} puzzle
-   */
-  validate(puzzle) {},
-
-  /**
-   * @param {ValidationListener} f
-   */
-  onValid(f) {},
-
-  /**
-   * @returns {boolean}
-   */
-  get valid() {
-    return false;
-  },
-
-  /**
-   * Answers wether this is the {@link NullValidator}
-   *
-   * @returns {boolean}
-   */
-  get isNull() {
-    return true;
-  }
-};
-
 
 module.exports = {
   PuzzleValidator,
