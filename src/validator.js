@@ -17,7 +17,7 @@ class AbstractValidator {
   constructor() {
     /** @type {ValidationListener[]} */
     this.validListeners = [];
-    this._valid = false;
+    this._valid = undefined;
   }
 
   /**
@@ -26,12 +26,12 @@ class AbstractValidator {
    * @param {Puzzle} puzzle
    */
   validate(puzzle) {
+    const wasValid = this._valid;
     // @ts-ignore
-    const valid = this.isValid(puzzle);
-    if (valid && !this._valid) {
+    this._valid = this.isValid(puzzle);
+    if (this._valid && !wasValid) {
       this.fireValid(puzzle);
     }
-    this._valid = valid;
   }
 
   /**

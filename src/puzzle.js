@@ -193,10 +193,33 @@ class Puzzle {
     this.validator = validator;
   }
 
+  /**
+   * Checks whether this puzzle is valid.
+   *
+   * Calling this method will not fire any validation listeners nor update the
+   * valid property.
+   *
+   * @returns {boolean}
+   */
   isValid() {
     return this.validator.isValid(this);
   }
 
+  /**
+   * Returns the current validation status
+   *
+   * Calling this property will not fire any validation listeners.
+   *
+   * @returns {boolean}
+   */
+  get valid() {
+    return this.validator.valid;
+  }
+
+  /**
+   * Checks whether this puzzle is valid, updating valid property
+   * and firing validation listeners if becomes valid
+   */
   validate() {
     this.validator.validate(this);
   }

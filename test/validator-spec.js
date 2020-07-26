@@ -5,6 +5,9 @@ const {anchor, Puzzle, Manufacturer, PuzzleValidator, PieceValidator} = require(
 describe("validator", () => {
   /** @type {Puzzle} */
   let puzzle;
+  /** @type {import('../src/validator').Validator} */
+  let validator;
+
   beforeEach(() => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(2, 2);
@@ -14,7 +17,9 @@ describe("validator", () => {
   });
 
   describe("puzzle", () => {
-    const validator = new PuzzleValidator((puzzle) => puzzle.head.isAt(10, 10));
+    beforeEach(() => {
+      validator = new PuzzleValidator((puzzle) => puzzle.head.isAt(10, 10));
+    });
 
     it("passes with valid puzzle", () => {
       assert.equal(validator.isValid(puzzle), false);
@@ -76,12 +81,27 @@ describe("validator", () => {
   })
 
   describe("piece", () => {
-    const validator = new PieceValidator((piece) => piece.metadata.value == 1);
+    beforeEach(() => {
+      validator = new PieceValidator((piece) => piece.metadata.value == 1);
+    })
 
     it("passes with valid puzzle", () => {
       assert.equal(validator.isValid(puzzle), false);
       puzzle.metadata.forEach(it => it.value = 1);
       assert.equal(validator.isValid(puzzle), true);
+    })
+
+    it("is valid within onValid", (done) => {
+      validator.onValid(() => {
+        assert.equal(validator.valid, true);
+        done();
+      });
+      puzzle.metadata.forEach(it => it.value = 1);
+      validator.validate(puzzle);
+    })
+
+    it("is validation status is initially undefined", () => {
+      assert.equal(validator.valid, undefined);
     })
   })
 })
