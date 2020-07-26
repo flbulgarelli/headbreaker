@@ -11,7 +11,7 @@ const Pair = require('./pair');
  * @param {Puzzle} puzzle
  */
 
-
+/** An abstract base validator */
 class AbstractValidator {
 
   constructor() {
@@ -64,7 +64,7 @@ class AbstractValidator {
    * Answers the current validity status of this validator. This
    * property neither alters the current status nor triggers new validity checks
    *
-   * @returns {boolean}
+   * @type {boolean}
    */
   get valid() {
     return this._valid;
@@ -73,7 +73,7 @@ class AbstractValidator {
   /**
    * Answers wether this is the {@link NullValidator}
    *
-   * @returns {boolean}
+   * @type {boolean}
    */
   get isNull() {
     return false;
@@ -113,6 +113,7 @@ class PieceValidator extends AbstractValidator {
   }
 }
 
+/** A validator that evaluates the whole puzzle */
 class PuzzleValidator extends AbstractValidator {
 
   /**
@@ -131,6 +132,7 @@ class PuzzleValidator extends AbstractValidator {
   }
 }
 
+/** A validator that always is invalid */
 class NullValidator extends AbstractValidator {
 
   /**
@@ -141,7 +143,7 @@ class NullValidator extends AbstractValidator {
   }
 
   /**
-   * @returns {boolean}
+   * @type {boolean}
    */
   get isNull() {
     return true;

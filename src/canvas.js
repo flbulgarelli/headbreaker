@@ -464,7 +464,7 @@ class Canvas {
   /**
    * The puzzle rendered by this canvas
    *
-   * @returns {Puzzle}
+   * @type {Puzzle}
    */
   get puzzle() {
     if (!this._puzzle) {
@@ -474,7 +474,7 @@ class Canvas {
   }
 
   /**
-   * @returns {import('./puzzle').Settings}
+   * @type {import('./puzzle').Settings}
    */
   get settings() {
     return {pieceSize: this.pieceSize / 2, proximity: this.proximity}

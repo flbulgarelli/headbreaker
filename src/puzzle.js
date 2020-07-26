@@ -148,7 +148,7 @@ class Puzzle {
    * Answers the list of points where
    * central anchors of pieces are located
    *
-   * @returns {import('./pair').Pair[]}
+   * @type {import('./pair').Pair[]}
    */
   get points() {
     return this.pieces.map(it => it.centralAnchor.asPoint());
@@ -158,12 +158,15 @@ class Puzzle {
    * Answers a list of points whose coordinates are scaled
    * to the {@link Puzzle#pieceWidth}
    *
-   * @returns {import('./pair').Pair[]}
+   * @type {import('./pair').Pair[]}
    */
   get refs() {
     return this.points.map(([x, y]) => [x / this.pieceWidth, y / this.pieceWidth])
   }
 
+  /**
+   * @type {any[]}
+   */
   get metadata() {
     return this.pieces.map(it => it.metadata);
   }
@@ -171,7 +174,7 @@ class Puzzle {
   /**
    * Returns the first piece
    *
-   * @returns {Piece}
+   * @type {Piece}
    */
   get head() {
     return this.pieces[0];
@@ -180,7 +183,7 @@ class Puzzle {
   /**
    * Returns the central anchor of the first piece
    *
-   * @returns {Anchor}
+   * @type {Anchor}
    */
   get headAnchor() {
     return this.head.centralAnchor;
@@ -236,16 +239,17 @@ class Puzzle {
   /**
    * Wether all the pieces in this puzzle are connected
    *
-   * @returns {boolean}
+   * @type {boolean}
    */
   get connected() {
     return this.pieces.every(it => it.connected);
   }
 
   /**
-   * The piece width, from edge to edge
+   * The piece width, from edge to edge.
+   * This is the double of the {@link Puzzle#pieceSize}
    *
-   * @returns {number} the double of the {@link Puzzle#pieceSize}
+   * @type {number}
    */
   get pieceWidth() {
     return this.pieceSize * 2;

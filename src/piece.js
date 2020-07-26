@@ -85,12 +85,15 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   * @returns {Piece[]}
+   * @type {Piece[]}
    */
   get presentConnections() {
     return this.connections.filter(itself);
   }
 
+  /**
+   * @type {Piece[]}
+   */
   get connections() {
     return [
       this.rightConnection,
@@ -100,6 +103,9 @@ const {itself, orthogonalTransform} = require('./prelude');
     ];
   }
 
+  /**
+   * @type {import('./insert').Insert[]}
+   */
   get inserts() {
     return [
       this.right,
@@ -440,42 +446,42 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get downAnchor() {
     return this.centralAnchor.translated(0, this.size);
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get rightAnchor() {
     return this.centralAnchor.translated(this.size, 0);
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get upAnchor() {
     return this.centralAnchor.translated(0, -this.size);
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get leftAnchor() {
     return this.centralAnchor.translated(-this.size, 0);
   }
 
   /**
-   * @return {number}
+   * @type {number}
    */
   get size() {
     return this.puzzle.pieceSize;
   }
 
   /**
-   * @returns {number}
+   * @type {number}
    */
   get proximity() {
     return this.puzzle.proximity;
@@ -484,7 +490,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   /**
    * This piece id. It is extracted from metadata
    *
-   * @returns {string}
+   * @type {string}
    */
   get id() {
     return this.metadata.id;
