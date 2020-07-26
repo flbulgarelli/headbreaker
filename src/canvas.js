@@ -4,7 +4,7 @@ const Puzzle = require('./puzzle');
 const Manufacturer = require('../src/manufacturer');
 const {twoAndTwo} = require('./sequence');
 const Structure = require('./structure');
-const imageLike = require('./image-metadata');
+const ImageMetadata = require('./image-metadata');
 const {position, ...Position} = require('./position');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
@@ -104,7 +104,7 @@ class Canvas {
     this.height = height;
     this.pieceSize = pieceSize;
     this.borderFill = borderFill;
-    this.imageMetadata = imageLike.asImageMetadata(image);
+    this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
@@ -431,18 +431,18 @@ class Canvas {
   }
 
   /**
-   * @param {Piece} model
+   * @param {Piece} piece
    * @returns {import('./image-metadata').ImageMetadata}
    */
-  _imageMetadataFor(model) {
+  _imageMetadataFor(piece) {
     if (this.imageMetadata) {
       return {
         content: this.imageMetadata.content,
-        offset: model.metadata.targetPosition || this.imageMetadata.offset,
-        scale: model.metadata.scale || this.imageMetadata.scale
+        offset: piece.metadata.targetPosition || this.imageMetadata.offset,
+        scale: piece.metadata.scale || this.imageMetadata.scale
       };
     } else {
-      return imageLike.asImageMetadata(model.metadata.image);
+      return ImageMetadata.asImageMetadata(piece.metadata.image);
     }
   }
 
