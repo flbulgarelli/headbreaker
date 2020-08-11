@@ -76,6 +76,20 @@ class KonvaPainter extends Painter {
   }
 
   /**
+   * @param {Canvas} canvas
+   * @param {number} width
+   * @param {number} height
+   */
+  resize(canvas, width, height) {
+    const layer = canvas['__konvaLayer__'];
+    const stage = layer.getStage();
+
+    stage.width(width);
+    stage.height(height);
+    stage.draw();
+  }
+
+  /**
    *
    * @param {Canvas} canvas
    * @param {Piece} piece

@@ -391,6 +391,18 @@ class Canvas {
   }
 
   /**
+   * Sets the new width and height of the canvas
+   *
+   * @param {number} width
+   * @param {number} height
+   */
+  resize(width, height) {
+    this.width = width;
+    this.height = height;
+    this._painter.resize(this, width, height);
+  }
+
+  /**
    * @param {Piece} piece
    */
   _annotatePiecePosition(piece) {

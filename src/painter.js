@@ -18,6 +18,12 @@ const Piece = require('./piece');
  * @interface Painter
  */
 class Painter {
+  /**
+   * @param {Canvas} canvas
+   * @param {number} width
+   * @param {number} height
+   */
+  resize(canvas, width, height) {}
 
   /**
    * Creates the rendering backend, initializig all its contents.

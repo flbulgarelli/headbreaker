@@ -452,4 +452,37 @@ pettoruti.onload = () => {
 </div>
 
 
+## Responsive
+
+### Code
+
+```javascript
+const responsive = new headbreaker.Canvas('responsive-canvas', {
+  width: 800, height: 650,
+  pieceSize: 100, proximity: 20,
+  borderFill: 10, strokeWidth: 1.5,
+  lineSoftness: 0.18,
+});
+
+responsive.autogenerate({
+  horizontalPiecesCount: 3,
+  verticalPiecesCount: 3
+});
+responsive.draw();
+
+window.addEventListener('resize', () => {
+  var container = document.getElementById('responsive-canvas');
+  responsive.resize(container.offsetWidth, container.scrollHeight)
+});
+```
+
+### Demo
+
+<div id="responsive-canvas">
+</div>
+<div class="form-group">
+  <button id="responsive-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="responsive-solve" class="btn btn-primary">Solve</button>
+</div>
+
 <script src="js/demo.js"></script>

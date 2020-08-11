@@ -516,3 +516,29 @@ pettoruti.onload = () => {
   validated.draw();
   registerButtons('validated', validated);
 }
+
+
+
+
+// ================
+// Responsive Canvas
+// ================
+
+const responsive = new headbreaker.Canvas('responsive-canvas', {
+  width: 800, height: 650,
+  pieceSize: 100, proximity: 20,
+  borderFill: 10, strokeWidth: 1.5,
+  lineSoftness: 0.18,
+});
+
+responsive.autogenerate({
+  horizontalPiecesCount: 3,
+  verticalPiecesCount: 3
+});
+responsive.draw();
+
+registerButtons('responsive', responsive);
+window.addEventListener('resize', () => {
+  var container = document.getElementById('responsive-canvas');
+  responsive.resize(container.offsetWidth, container.scrollHeight)
+});
