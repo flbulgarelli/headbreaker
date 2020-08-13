@@ -315,6 +315,16 @@ class Canvas {
   }
 
   /**
+   * Sets a validator that will report when puzzle are at the expected given
+   * relative refs
+   *
+   * @param {[number, number][]} expected
+   */
+  attachRelativeRefsValidator(expected) {
+    this.puzzle.attachValidator(new PuzzleValidator(PuzzleValidator.relativeRefs(expected)));
+  }
+
+  /**
    * Sets a validator that will report when puzzle pieces are in their expected absolute
    * positions, overriding any previously configured validator
    */

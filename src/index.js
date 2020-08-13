@@ -13,6 +13,9 @@ const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {position, ...Position} = require('./position');
 
+/**
+ * @module headbreaker
+ */
 module.exports = {
   anchor,
   position,

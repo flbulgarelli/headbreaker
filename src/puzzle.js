@@ -72,6 +72,15 @@ class Puzzle {
     this.pieces.forEach((piece, index) => piece.annotate(metadata[index]));
   }
 
+   /**
+   * Relocates all the pieces to the given list of points
+   *
+   * @param {import('./pair').Pair[]} points
+   */
+  relocateTo(points) {
+    this.pieces.forEach((piece, index) => piece.relocateTo(...points[index]));
+  }
+
   /**
    * Tries to connect pieces in their current positions
    * This method is O(n^2)
