@@ -1,11 +1,10 @@
-// @ts-nocheck
 const assert = require('assert');
 const Piece = require('../src/piece');
 const Outline = require('../src/outline');
 
 describe("draw", () => {
   it("should produce an square", () => {
-    assert.deepEqual(Outline.draw(new Piece(), 5), [
+    assert.deepEqual(Outline.draw(new Piece(), {x: 5, y: 5}), [
       0, 0,
       1, 0,
       2, 0,
@@ -26,7 +25,7 @@ describe("draw", () => {
   })
 
   it("should produce an square with border fill", () => {
-    assert.deepEqual(Outline.draw(new Piece(), 5, 0.5), [
+    assert.deepEqual(Outline.draw(new Piece(), {x: 5, y: 5}, 0.5), [
       -0.5,  -0.5,
       1,     -0.5,
       2,     -0.5,

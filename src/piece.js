@@ -449,35 +449,35 @@ const {itself, orthogonalTransform} = require('./prelude');
    *@type {Anchor}
    */
   get downAnchor() {
-    return this.centralAnchor.translated(0, this.size);
+    return this.centralAnchor.translated(0, this.radio.y);
   }
 
   /**
    *@type {Anchor}
    */
   get rightAnchor() {
-    return this.centralAnchor.translated(this.size, 0);
+    return this.centralAnchor.translated(this.radio.x, 0);
   }
 
   /**
    *@type {Anchor}
    */
   get upAnchor() {
-    return this.centralAnchor.translated(0, -this.size);
+    return this.centralAnchor.translated(0, -this.radio.y);
   }
 
   /**
    *@type {Anchor}
    */
   get leftAnchor() {
-    return this.centralAnchor.translated(-this.size, 0);
+    return this.centralAnchor.translated(-this.radio.x, 0);
   }
 
   /**
-   * @type {number}
+   * @type {import('./position').Position}
    */
-  get size() {
-    return this.puzzle.pieceSize;
+  get radio() {
+    return this.puzzle.pieceRadio;
   }
 
   /**

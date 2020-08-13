@@ -16,7 +16,8 @@ describe("manufacturer", () => {
     assert.equal(first.down, None);
     assert.equal(first.left, None);
 
-    assert.equal(first.size, 10);
+    assert.equal(first.radio.x, 10);
+    assert.equal(first.radio.y, 10);
     assert.equal(first.proximity, 1);
 
     assert.deepEqual(first.centralAnchor, anchor(20, 20));

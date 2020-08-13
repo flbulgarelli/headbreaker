@@ -19,7 +19,7 @@ function select(insert, t, s, n) {
 /**
  *
  * @param {Piece} piece
- * @param {number} [size]
+ * @param {import('./position').Position} [size]
  * @returns {number[]}
  */
 function draw(piece, size = 50, borderFill = 0) {

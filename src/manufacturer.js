@@ -140,13 +140,13 @@ class Positioner {
       this.yOffset = headAnchor.y;
     }
     else {
-      this.xOffset = this.pieceWidth;
-      this.yOffset = this.pieceWidth;
+      this.xOffset = this.pieceRadio;
+      this.yOffset = this.pieceRadio;
     }
   }
 
-  get pieceWidth() {
-    return this.puzzle.pieceWidth;
+  get pieceRadio() {
+    return this.puzzle.pieceRadio;
   }
 
     /**
@@ -155,8 +155,8 @@ class Positioner {
    */
   naturalAnchor(x, y) {
     return anchor(
-      x * this.pieceWidth + this.xOffset,
-      y * this.pieceWidth + this.yOffset);
+      x * this.pieceRadio.x + this.xOffset,
+      y * this.pieceRadio.y + this.yOffset);
   }
 }
 

@@ -73,11 +73,22 @@ function diff(one, other) {
   return Pair.diff(one.x, one.y, other.x, other.y);
 }
 
+/**
+ * @param {Position} position
+ * @param {number} n
+ *
+ * @returns {Position}
+ */
+function multiply({x, y}, n) {
+  return {x: x * n , y: y * n};
+}
+
 module.exports = {
   position,
   copy,
   equal,
   origin,
   update,
-  diff
+  diff,
+  multiply
 };
