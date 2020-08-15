@@ -505,6 +505,7 @@ pettoruti.onload = () => {
     horizontalPiecesCount: 5,
     verticalPiecesCount: 8
   });
+  validated.draw();
   validated.attachSolvedValidator();
   validated.onValid(() => {
     setTimeout(() => {
@@ -513,7 +514,6 @@ pettoruti.onload = () => {
       }
     }, 1500);
   })
-  validated.draw();
   registerButtons('validated', validated);
 }
 
