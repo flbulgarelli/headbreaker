@@ -1,6 +1,6 @@
 {
   "name": "headbreaker",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Jigsaw puzzles framework for js",
   "main": "index.js",
   "scripts": {
