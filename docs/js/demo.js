@@ -533,7 +533,12 @@ const responsive = new headbreaker.Canvas('responsive-canvas', {
 
 responsive.autogenerate({
   horizontalPiecesCount: 3,
-  verticalPiecesCount: 3
+  verticalPiecesCount: 3,
+  metadata: [
+    {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'},
+    {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'},
+    {color: '#16BA0D'}, {color: '#000000'}, {color: '#6F04C7'},
+  ]
 });
 responsive.draw();
 
@@ -542,3 +547,24 @@ window.addEventListener('resize', () => {
   var container = document.getElementById('responsive-canvas');
   responsive.resize(container.offsetWidth, container.scrollHeight)
 });
+
+// ==================
+// Rectangular Canvas
+// ==================
+let quinquela = new Image();
+quinquela.src = 'static/quinquela.jpg';
+quinquela.onload = () => {
+  const rectangular = new headbreaker.Canvas('rectangular-canvas', {
+    width: 800, height: 650,
+    pieceSize: {x: 200, y: 120}, proximity: 20,
+    borderFill: {x: 20, y: 12}, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: quinquela
+  });
+
+  rectangular.autogenerate({
+    horizontalPiecesCount: 3,
+    verticalPiecesCount: 3
+  });
+  rectangular.draw();
+  registerButtons('rectangular', rectangular);
+}

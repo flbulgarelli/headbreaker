@@ -485,4 +485,39 @@ window.addEventListener('resize', () => {
   <button id="responsive-solve" class="btn btn-primary">Solve</button>
 </div>
 
+
+## Rectangular
+
+### Code
+
+```javascript
+let quinquela = new Image();
+quinquela.src = 'static/quinquela.jpg';
+quinquela.onload = () => {
+  const rectangular = new headbreaker.Canvas('rectangular-canvas', {
+    width: 800, height: 650,
+    pieceSize: {x: 200, y: 120}, proximity: 20,
+    borderFill: {x: 20, y: 12}, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: quinquela
+  });
+
+  rectangular.autogenerate({
+    horizontalPiecesCount: 3,
+    verticalPiecesCount: 3
+  });
+  rectangular.draw();
+  registerButtons('rectangular', rectangular);
+}
+```
+
+### Demo
+
+<div id="rectangular-canvas">
+</div>
+<div class="form-group">
+  <button id="rectangular-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="rectangular-solve" class="btn btn-primary">Solve</button>
+</div>
+
+
 <script src="js/demo.js"></script>

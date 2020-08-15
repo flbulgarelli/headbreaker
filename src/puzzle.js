@@ -1,19 +1,20 @@
 const {Anchor} = require('./anchor');
 const Piece = require('./piece');
 const {NullValidator} = require('./validator');
+const {position, ...Position} = require('./position')
 
- /**
+/**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PuzzleDump
- * @property {number} pieceSize
+ * @property {import('./position').Position} pieceRadio
  * @property {number} proximity
  * @property {import('./piece').PieceDump[]} pieces
  */
 
 /**
  * @typedef {object} Settings
- * @property {number} [pieceSize]
+ * @property {import('./position').Position|number} [pieceRadio]
  * @property {number} [proximity]
  */
 
@@ -27,8 +28,8 @@ class Puzzle {
   /**
    * @param {Settings} [options]
    */
-  constructor({pieceSize = 2, proximity = 1} = {}) {
-    this.pieceSize = pieceSize;
+  constructor({pieceRadio = 2, proximity = 1} = {}) {
+    this.pieceRadio = Position.cast(pieceRadio);
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
@@ -170,7 +171,7 @@ class Puzzle {
    * @type {import('./pair').Pair[]}
    */
   get refs() {
-    return this.points.map(([x, y]) => [x / this.pieceWidth, y / this.pieceWidth])
+    return this.points.map(([x, y]) => [x / this.pieceDiameter.x, y / this.pieceDiameter.y])
   }
 
   /**
@@ -256,12 +257,12 @@ class Puzzle {
 
   /**
    * The piece width, from edge to edge.
-   * This is the double of the {@link Puzzle#pieceSize}
+   * This is the double of the {@link Puzzle#pieceRadio}
    *
-   * @type {number}
+   * @type {import('./position').Position}
    */
-  get pieceWidth() {
-    return this.pieceSize * 2;
+  get pieceDiameter() {
+    return Position.multiply(this.pieceRadio, 2);
   }
 
   /**
@@ -274,7 +275,7 @@ class Puzzle {
    */
   export(options = {}) {
     return {
-      pieceSize: this.pieceSize,
+      pieceRadio: this.pieceRadio,
       proximity: this.proximity,
       pieces: this.pieces.map(it => it.export(options))
     }
@@ -285,7 +286,7 @@ class Puzzle {
    * @returns {Puzzle}
    */
   static import(dump) {
-    const puzzle = new Puzzle({pieceSize: dump.pieceSize, proximity: dump.proximity});
+    const puzzle = new Puzzle({pieceRadio: dump.pieceRadio, proximity: dump.proximity});
     puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
     puzzle.autoconnect();
     return puzzle;

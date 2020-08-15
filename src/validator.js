@@ -164,7 +164,7 @@ PuzzleValidator.relativeRefs = (expected) => {
   return (puzzle) => {
     function diff(x, y, index) {
       const [x2, y2] = expected[index];
-      return Pair.diff(x, y, x2 * puzzle.pieceWidth, y2 * puzzle.pieceWidth);
+      return Pair.diff(x, y, x2 * puzzle.pieceDiameter.x, y2 * puzzle.pieceDiameter.y);
     }
     const points = puzzle.points;
     const [x0, y0] = points[0];

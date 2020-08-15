@@ -108,13 +108,31 @@ describe("piece", () => {
   })
 
 
-  it("can create a piece from a puzzle", () => {
-    const puzzle = new Puzzle();
+  it("can create a rectangular, wide piece from a puzzle", () => {
+    const puzzle = new Puzzle({pieceRadio: {x: 6, y: 4}});
     const piece = puzzle.newPiece();
+    piece.locateAt(0, 0);
 
     assert.equal(piece.puzzle, puzzle);
+    assert.deepEqual(piece.radio, {x: 6, y: 4});
+    assert.deepEqual(piece.rightAnchor, anchor(6, 0));
+    assert.deepEqual(piece.leftAnchor, anchor(-6, 0));
+    assert.deepEqual(piece.upAnchor, anchor(0, -4));
+    assert.deepEqual(piece.downAnchor, anchor(0, 4));
   })
 
+  it("can create a rectangular, tall piece from a puzzle", () => {
+    const puzzle = new Puzzle({pieceRadio: {x: 3, y: 5}});
+    const piece = puzzle.newPiece();
+    piece.locateAt(0, 0);
+
+    assert.equal(piece.puzzle, puzzle);
+    assert.deepEqual(piece.radio, {x: 3, y: 5});
+    assert.deepEqual(piece.rightAnchor, anchor(3, 0));
+    assert.deepEqual(piece.leftAnchor, anchor(-3, 0));
+    assert.deepEqual(piece.upAnchor, anchor(0, -5));
+    assert.deepEqual(piece.downAnchor, anchor(0, 5));
+  })
 
   it("can check whether pieces are vertically close when overlapped", () => {
     const puzzle = new Puzzle();
@@ -129,6 +147,19 @@ describe("piece", () => {
     assert.equal(b.verticallyCloseTo(a), false);
   })
 
+
+  it("can check whether rectangular pieces are vertically close when overlapped", () => {
+    const puzzle = new Puzzle({pieceRadio: {x: 4, y: 10}});
+
+    const a = puzzle.newPiece();
+    a.locateAt(0, 0);
+
+    const b = puzzle.newPiece();
+    b.locateAt(0, 0);
+
+    assert.equal(a.verticallyCloseTo(b), false);
+    assert.equal(b.verticallyCloseTo(a), false);
+  })
 
   it("can check whether pieces are horizontally close when overlapped", () => {
     const puzzle = new Puzzle();
@@ -269,6 +300,24 @@ describe("piece", () => {
     a.locateAt(0, 0);
     b.locateAt(0, 3);
     c.locateAt(3, 3);
+
+    assert.equal(a.canConnectVerticallyWith(b), true);
+    assert.equal(b.canConnectVerticallyWith(a), false);
+    assert.equal(b.canConnectVerticallyWith(c), false);
+    assert.equal(c.canConnectVerticallyWith(b), false);
+  })
+
+
+  it("checks if rectangular pieces can connect vertically", () => {
+    const puzzle = new Puzzle({pieceRadio: {x: 2, y: 3}});
+
+    const a = puzzle.newPiece({down: Tab});
+    const b = puzzle.newPiece({up: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot});
+
+    a.locateAt(0, 0);
+    b.locateAt(0, 5);
+    c.locateAt(3, 5);
 
     assert.equal(a.canConnectVerticallyWith(b), true);
     assert.equal(b.canConnectVerticallyWith(a), false);
@@ -553,6 +602,32 @@ describe("piece", () => {
     assert.deepEqual(c.centralAnchor, anchor(7, 0));
     assert.deepEqual(d.centralAnchor, anchor(7, 4));
   })
+
+  it("pushes rectangular pieces when has connections and attracts", () => {
+    const puzzle = new Puzzle({pieceRadio: {x: 2, y: 3}});
+
+    const a = puzzle.newPiece({right: Tab});
+    const b = puzzle.newPiece({left: Slot, right: Tab});
+    const c = puzzle.newPiece({left: Slot, right: Tab, down: Slot});
+    const d = puzzle.newPiece({up: Tab});
+
+    a.locateAt(0, 0);
+    b.locateAt(3, 0);
+    c.locateAt(6, 0);
+    d.locateAt(6, 5);
+
+    a.connectHorizontallyWith(b);
+    b.connectHorizontallyWith(c);
+    c.connectVerticallyWith(d);
+
+    a.push(1, 1);
+
+    assert.deepEqual(a.centralAnchor, anchor(-1, 0));
+    assert.deepEqual(b.centralAnchor, anchor(3, 0));
+    assert.deepEqual(c.centralAnchor, anchor(7, 0));
+    assert.deepEqual(d.centralAnchor, anchor(7, 6));
+  })
+
 
   it("pushes with double connections", () => {
     const puzzle = new Puzzle();

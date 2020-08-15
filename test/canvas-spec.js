@@ -219,7 +219,7 @@ describe("Canvas", () => {
       width: 800, height: 800,
       painter: painter
     });
-    const puzzle = new Puzzle({pieceSize: 13, proximity: 7});
+    const puzzle = new Puzzle({pieceRadio: 13, proximity: 7});
     puzzle
       .newPiece({right: Tab})
       .locateAt(0, 0);
@@ -233,7 +233,7 @@ describe("Canvas", () => {
     assert.equal(canvas['__nullLayer__'].figures, 2);
     assert.equal(canvas['__nullLayer__'].drawn, true);
 
-    assert.equal(canvas.pieceSize, 26);
+    assert.deepEqual(canvas.pieceDiameter, {x: 26, y: 26});
     assert.equal(canvas.proximity, 14);
   })
 

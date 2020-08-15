@@ -80,9 +80,9 @@ class Canvas {
    * @param {object} options
    * @param {number} options.width
    * @param {number} options.height
-   * @param {number} [options.pieceSize]
+   * @param {import('./position').Position|number} [options.pieceSize]
    * @param {number} [options.proximity]
-   * @param {number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
+   * @param {import('./position').Position|number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
@@ -102,8 +102,8 @@ class Canvas {
       painter = null }) {
     this.width = width;
     this.height = height;
-    this.pieceSize = pieceSize;
-    this.borderFill = borderFill;
+    this.pieceDiameter = Position.cast(pieceSize);
+    this.borderFill = Position.cast(borderFill);
     this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
@@ -149,8 +149,8 @@ class Canvas {
     /** @type {LabelMetadata} */
     const label = piece.metadata.label;
     if (label && label.text) {
-      label.fontSize = label.fontSize || this.pieceSize * 0.55;
-      label.y = label.y || (this.pieceSize - label.fontSize) / 2;
+      label.fontSize = label.fontSize || this.pieceDiameter.y * 0.55;
+      label.y = label.y || (this.pieceDiameter.y - label.fontSize) / 2;
       this._painter.label(this, piece, figure);
     }
 
@@ -172,12 +172,12 @@ class Canvas {
 
   /**
    * Renders a previously created puzzle object. This method
-   * overrides this canvas' {@link Canvas#pieceSize} and {@link Canvas#proximity}
+   * overrides this canvas' {@link Canvas#pieceDiameter} and {@link Canvas#proximity}
    *
    * @param {Puzzle} puzzle
    */
   renderPuzzle(puzzle) {
-    this.pieceSize = puzzle.pieceWidth;
+    this.pieceDiameter = puzzle.pieceDiameter;
     this.proximity = puzzle.proximity * 2;
     this._puzzle = puzzle;
     this.renderPieces(puzzle.pieces);
@@ -237,12 +237,12 @@ class Canvas {
   }
 
   /**
-   * @param {number} farness from 0 to 1, how far pieces will be placed from x = pieceSize, y = pieceSize
+   * @param {number} farness from 0 to 1, how far pieces will be placed from x = pieceDiameter.x, y = pieceDiameter.y
    */
   shuffle(farness = 1) {
-    const offset = this.pieceSize;
-    this.puzzle.shuffle(farness * (this.width - offset), farness * (this.height - offset))
-    this.puzzle.translate(offset, offset);
+    const offset = this.pieceRadio;
+    this.puzzle.shuffle(farness * (this.width - offset.x), farness * (this.height - offset.y))
+    this.puzzle.translate(offset.x, offset.y);
     this.autoconnected = true;
   }
 
@@ -484,6 +484,13 @@ class Canvas {
   }
 
   /**
+   * @type {import('./position').Position}
+   */
+  get pieceRadio() {
+    return Position.multiply(this.pieceDiameter, 0.5)
+  }
+
+  /**
    * The puzzle rendered by this canvas
    *
    * @type {Puzzle}
@@ -499,7 +506,7 @@ class Canvas {
    * @type {import('./puzzle').Settings}
    */
   get settings() {
-    return {pieceSize: this.pieceSize / 2, proximity: this.proximity}
+    return {pieceRadio: this.pieceRadio, proximity: this.proximity}
   }
 }
 
