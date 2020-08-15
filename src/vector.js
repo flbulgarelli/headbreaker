@@ -1,7 +1,7 @@
 const Pair = require('./pair');
 
 /**
- * @typedef {object} Position
+ * @typedef {object} Vector
  * @property {number} x
  * @property {number} y
  */
@@ -11,19 +11,19 @@ const Pair = require('./pair');
  * @param {number} x
  * @param {number} y
  *
- * @returns {Position}
+ * @returns {Vector}
  */
-function position(x, y) {
+function vector(x, y) {
   return { x, y };
 }
 
 /**
- * @param {Position|number} value
- * @returns {Position}
+ * @param {Vector|number} value
+ * @returns {Vector}
  */
 function cast(value) {
   if (typeof value === 'number') {
-    return position(value, value);
+    return vector(value, value);
   } else {
     return value;
   }
@@ -33,23 +33,23 @@ function cast(value) {
   * This module contains functions for dealing with objects with x and y
   * coordinates that represent or include point data
   *
-  * @module Position
+  * @module Vector
   */
 
 /**
- * Returns a new (0, 0) position
+ * Returns a new (0, 0) vector
  *
- * @returns {Position}
+ * @returns {Vector}
  */
 function origin() {
-  return position(0, 0);
+  return vector(0, 0);
 }
 
 /**
  * Compares two points
  *
- * @param {Position} one
- * @param {Position} other
+ * @param {Vector} one
+ * @param {Vector} other
  * @returns {boolean}
  */
 function equal(one, other) {
@@ -59,26 +59,26 @@ function equal(one, other) {
 /**
  * Creates a copy of the given point
  *
- * @param {Position} one
- * @returns {Position}
+ * @param {Vector} one
+ * @returns {Vector}
  */
 function copy({x, y}) {
   return {x, y}
 }
 
 /**
- * @param {Position} position
+ * @param {Vector} vector
  * @param {any} x
  * @param {any} y
  */
-function update(position, x, y) {
-  position.x = x;
-  position.y = y;
+function update(vector, x, y) {
+  vector.x = x;
+  vector.y = y;
 }
 
 /**
- * @param {Position} one
- * @param {Position} other
+ * @param {Vector} one
+ * @param {Vector} other
  * @returns {import('./pair').Pair};
  */
 function diff(one, other) {
@@ -86,10 +86,10 @@ function diff(one, other) {
 }
 
 /**
- * @param {Position|number} one
- * @param {Position|number} other
+ * @param {Vector|number} one
+ * @param {Vector|number} other
  *
- * @returns {Position}
+ * @returns {Vector}
  */
 function multiply(one, other) {
   const first = cast(one);
@@ -99,10 +99,10 @@ function multiply(one, other) {
 
 
 /**
- * @param {Position|number} one
- * @param {Position|number} other
+ * @param {Vector|number} one
+ * @param {Vector|number} other
  *
- * @returns {Position}
+ * @returns {Vector}
  */
 function divide(one, other) {
   const first = cast(one);
@@ -112,7 +112,7 @@ function divide(one, other) {
 
 module.exports = {
   cast,
-  position,
+  vector,
   copy,
   equal,
   origin,

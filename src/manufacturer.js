@@ -139,8 +139,8 @@ class Positioner {
    */
   initializeOffset(headAnchor) {
     if (headAnchor) {
-      /** @type {import('./position').Position} */
-      this.offset = headAnchor.asPosition();
+      /** @type {import('./vector').Vector} */
+      this.offset = headAnchor.asVector();
     }
     else {
       this.offset = this.pieceDiameter;

@@ -1,6 +1,6 @@
 const between = require('./between');
 const Pair = require('./pair')
-const {position} = require('./position')
+const {vector} = require('./vector')
 
 /**
  * An Anchor is a mutable 2D point that
@@ -91,24 +91,24 @@ class Anchor {
    *
    * @returns {import('./pair').Pair}
    */
-  asPoint() {
+  asPair() {
     return [this.x, this.y];
   }
 
   /**
-   * Converts this anchor into a position
+   * Converts this anchor into a vector
    *
-   * @returns {import('./position').Position}
+   * @returns {import('./vector').Vector}
    */
-  asPosition() {
-    return position(this.x, this.y);
+  asVector() {
+    return vector(this.x, this.y);
   }
 
   /**
-   * @returns {import('./position').Position}
+   * @returns {import('./vector').Vector}
    */
   export() {
-    return this.asPosition();
+    return this.asVector();
   }
 
   /**
@@ -122,11 +122,11 @@ class Anchor {
 
   /**
    *
-   * @param {import('./position').Position} position
+   * @param {import('./vector').Vector} vector
    * @returns {Anchor}
    */
-  static import(position) {
-    return anchor(position.x, position.y);
+  static import(vector) {
+    return anchor(vector.x, vector.y);
   }
 }
 

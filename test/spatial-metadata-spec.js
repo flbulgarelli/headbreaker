@@ -14,7 +14,7 @@ describe("SpatialMetadata", () => {
       puzzle = manufacturer.build();
 
       puzzle.annotate(puzzle.pieces.map(it => ({
-        targetPosition: it.centralAnchor.asPosition()
+        targetPosition: it.centralAnchor.asVector()
       })));
     });
 

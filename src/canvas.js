@@ -5,7 +5,7 @@ const Manufacturer = require('../src/manufacturer');
 const {twoAndTwo} = require('./sequence');
 const Structure = require('./structure');
 const ImageMetadata = require('./image-metadata');
-const {position, ...Position} = require('./position');
+const {vector, ...Vector} = require('./vector');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
@@ -50,8 +50,8 @@ const {PuzzleValidator, PieceValidator} = require('./validator');
 /**
  * @typedef {object} CanvasMetadata
  * @property {string} [id]
- * @property {import('./position').Position} [targetPosition]
- * @property {import('./position').Position} [currentPosition]
+ * @property {import('./vector').Vector} [targetPosition]
+ * @property {import('./vector').Vector} [currentPosition]
  * @property {string} [color]
  * @property {string} [strokeColor]
  * @property {import('./image-metadata').ImageLike} [image]
@@ -80,9 +80,9 @@ class Canvas {
    * @param {object} options
    * @param {number} options.width
    * @param {number} options.height
-   * @param {import('./position').Position|number} [options.pieceSize]
+   * @param {import('./vector').Vector|number} [options.pieceSize]
    * @param {number} [options.proximity]
-   * @param {import('./position').Position|number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
+   * @param {import('./vector').Vector|number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
@@ -102,8 +102,8 @@ class Canvas {
       painter = null }) {
     this.width = width;
     this.height = height;
-    this.pieceDiameter = Position.cast(pieceSize);
-    this.borderFill = Position.cast(borderFill);
+    this.pieceDiameter = Vector.cast(pieceSize);
+    this.borderFill = Vector.cast(borderFill);
     this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
@@ -130,7 +130,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    SpatialMetadata.initialize(metadata, Position.origin())
+    SpatialMetadata.initialize(metadata, Vector.origin())
     this.renderPiece(this._newPiece(structure, metadata));
   }
 
@@ -416,8 +416,8 @@ class Canvas {
    * @param {Piece} piece
    */
   _annotatePiecePosition(piece) {
-    const p = piece.centralAnchor.asPosition();
-    SpatialMetadata.initialize(piece.metadata, p, Position.copy(p));
+    const p = piece.centralAnchor.asVector();
+    SpatialMetadata.initialize(piece.metadata, p, Vector.copy(p));
   }
 
   /**
@@ -484,10 +484,10 @@ class Canvas {
   }
 
   /**
-   * @type {import('./position').Position}
+   * @type {import('./vector').Vector}
    */
   get pieceRadio() {
-    return Position.multiply(this.pieceDiameter, 0.5)
+    return Vector.multiply(this.pieceDiameter, 0.5)
   }
 
   /**

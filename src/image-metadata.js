@@ -1,9 +1,9 @@
-const {position} = require('./position');
+const {vector} = require('./vector');
 
 /**
  * @typedef {object} ImageMetadata
  * @property {HTMLImageElement}    content
- * @property {import('./position').Position} [offset]
+ * @property {import('./vector').Vector} [offset]
  * @property {number}   [scale]
  */
 
@@ -25,7 +25,7 @@ function asImageMetadata(imageLike) {
   if (imageLike instanceof HTMLImageElement) {
     return {
       content: imageLike,
-      offset: position(1, 1),
+      offset: vector(1, 1),
       scale: 1
     };
   }

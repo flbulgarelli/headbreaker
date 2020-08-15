@@ -11,14 +11,14 @@ const Manufacturer = require('./manufacturer');
 const {InsertSequence, ...generators} = require('./sequence');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
-const {position, ...Position} = require('./position');
+const {vector, ...Vector} = require('./vector');
 
 /**
  * @module headbreaker
  */
 module.exports = {
   anchor,
-  position,
+  vector,
   Anchor,
   Puzzle,
   Piece,
@@ -36,7 +36,7 @@ module.exports = {
   SpatialMetadata,
   Outline,
   Structure,
-  Position,
+  Vector,
   generators,
   painters: {
     Dummy: require('./dummy-painter'),

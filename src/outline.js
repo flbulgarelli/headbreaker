@@ -1,5 +1,5 @@
 const Piece = require('./piece');
-const {position, ...Position} = require('./position');
+const {vector, ...Vector} = require('./vector');
 
 /**
  * This module contains the draw function. Override it change pieces drawing strategy
@@ -20,13 +20,13 @@ function select(insert, t, s, n) {
 /**
  *
  * @param {Piece} piece
- * @param {import('./position').Position|number} [size]
- * @param {import('./position').Position|number} [borderFill]
+ * @param {import('./vector').Vector|number} [size]
+ * @param {import('./vector').Vector|number} [borderFill]
  * @returns {number[]}
  */
 function draw(piece, size = 50, borderFill = 0) {
-  const sizeVector = Position.cast(size);
-  const offset = Position.divide(Position.multiply(borderFill, 5), sizeVector);
+  const sizeVector = Vector.cast(size);
+  const offset = Vector.divide(Vector.multiply(borderFill, 5), sizeVector);
   return [
     (0 - offset.x),                                                  (0 - offset.y),
     1,                                                               (0 - offset.y),

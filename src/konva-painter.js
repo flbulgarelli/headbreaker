@@ -16,7 +16,7 @@ const Canvas = require('./canvas');
 const Outline = require('./outline');
 const Piece = require('./piece');
 const Pair = require('./pair');
-const Position = require('./position');
+const Vector = require('./vector');
 const Painter = require('./painter');
 
 
@@ -154,7 +154,7 @@ class KonvaPainter extends Painter {
    * @param {*} group
    */
   logicalTranslate(_canvas, piece, group) {
-    Position.update(piece.metadata.currentPosition, group.x(), group.y());
+    Vector.update(piece.metadata.currentPosition, group.x(), group.y());
   }
 
   /**

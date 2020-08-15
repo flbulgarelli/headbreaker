@@ -22,7 +22,7 @@ const {itself, orthogonalTransform} = require('./prelude');
  * A piece primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PieceDump
- * @property {import('./position').Position} centralAnchor
+ * @property {import('./vector').Vector} centralAnchor
  * @property {string} structure
  * @property {import('./prelude').Orthogonal<object>} [connections]
  * @property {object} metadata
@@ -474,7 +474,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   * @type {import('./position').Position}
+   * @type {import('./vector').Vector}
    */
   get radio() {
     return this.puzzle.pieceRadio;

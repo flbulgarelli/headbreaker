@@ -1,20 +1,20 @@
 const {Anchor} = require('./anchor');
 const Piece = require('./piece');
 const {NullValidator} = require('./validator');
-const {position, ...Position} = require('./position')
+const {vector, ...Vector} = require('./vector')
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PuzzleDump
- * @property {import('./position').Position} pieceRadio
+ * @property {import('./vector').Vector} pieceRadio
  * @property {number} proximity
  * @property {import('./piece').PieceDump[]} pieces
  */
 
 /**
  * @typedef {object} Settings
- * @property {import('./position').Position|number} [pieceRadio]
+ * @property {import('./vector').Vector|number} [pieceRadio]
  * @property {number} [proximity]
  */
 
@@ -29,7 +29,7 @@ class Puzzle {
    * @param {Settings} [options]
    */
   constructor({pieceRadio = 2, proximity = 1} = {}) {
-    this.pieceRadio = Position.cast(pieceRadio);
+    this.pieceRadio = Vector.cast(pieceRadio);
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
@@ -161,7 +161,7 @@ class Puzzle {
    * @type {import('./pair').Pair[]}
    */
   get points() {
-    return this.pieces.map(it => it.centralAnchor.asPoint());
+    return this.pieces.map(it => it.centralAnchor.asPair());
   }
 
   /**
@@ -259,10 +259,10 @@ class Puzzle {
    * The piece width, from edge to edge.
    * This is the double of the {@link Puzzle#pieceRadio}
    *
-   * @type {import('./position').Position}
+   * @type {import('./vector').Vector}
    */
   get pieceDiameter() {
-    return Position.multiply(this.pieceRadio, 2);
+    return Vector.multiply(this.pieceRadio, 2);
   }
 
   /**
