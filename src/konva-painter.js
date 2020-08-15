@@ -45,7 +45,8 @@ class KonvaPainter extends Painter {
     var stage = new Konva.Stage({
       container: id,
       width: canvas.width,
-      height: canvas.height
+      height: canvas.height,
+      draggable: !canvas.fixed,
     });
 
     this._initializeLayer(stage, canvas);

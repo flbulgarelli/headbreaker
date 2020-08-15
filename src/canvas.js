@@ -87,6 +87,7 @@ class Canvas {
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
    * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
+   * @param {boolean} [options.fixed] whether the canvas can is fixed or can be dragged
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
    */
   constructor(id, {
@@ -99,6 +100,7 @@ class Canvas {
       strokeColor = 'black',
       lineSoftness = 0,
       image = null,
+      fixed = false,
       painter = null }) {
     this.width = width;
     this.height = height;
@@ -109,6 +111,7 @@ class Canvas {
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
     this.proximity = proximity;
+    this.fixed = fixed;
     /** @type {Painter} */
     this._painter = painter || new window['headbreaker']['painters']['Konva']();
     this._initialize();
