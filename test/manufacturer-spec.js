@@ -152,6 +152,42 @@ describe("manufacturer", () => {
     assert.equal(f.left, Slot);
   })
 
+  it("create 2 x 2 with rectangular pieces", () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimmensions(2, 2);
+    manufacturer.withStructure({pieceRadio: {x:  2, y: 3}})
+    const puzzle = manufacturer.build();
+
+    const [a, b, c, d] = puzzle.pieces;
+
+    assert.equal(puzzle.pieces.length, 4);
+
+    assert.equal(a.up, None);
+    assert.equal(a.right, Tab);
+    assert.equal(a.down, Tab);
+    assert.equal(a.left, None);
+
+    assert.equal(b.up, None);
+    assert.equal(b.right, None);
+    assert.equal(b.down, Tab);
+    assert.equal(b.left, Slot);
+
+    assert.equal(c.up, Slot);
+    assert.equal(c.right, Tab);
+    assert.equal(c.down, None);
+    assert.equal(c.left, None);
+
+    assert.equal(d.up, Slot);
+    assert.equal(d.right, None);
+    assert.equal(d.down, None);
+    assert.equal(d.left, Slot);
+
+    assert.deepEqual(a.centralAnchor, anchor(4, 6));
+    assert.deepEqual(b.centralAnchor, anchor(8, 6));
+    assert.deepEqual(c.centralAnchor, anchor(4, 12));
+    assert.deepEqual(d.centralAnchor, anchor(8, 12));
+  })
+
   it("create 6 x 1 with flip flop", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(6, 1);
