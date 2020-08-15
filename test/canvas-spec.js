@@ -233,7 +233,7 @@ describe("Canvas", () => {
     assert.equal(canvas['__nullLayer__'].figures, 2);
     assert.equal(canvas['__nullLayer__'].drawn, true);
 
-    assert.equal(canvas.pieceSize, 26);
+    assert.deepEqual(canvas.pieceDiameter, {x: 26, y: 26});
     assert.equal(canvas.proximity, 14);
   })
 
