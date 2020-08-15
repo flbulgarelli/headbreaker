@@ -83,6 +83,18 @@ function multiply({x, y}, n) {
   return {x: x * n , y: y * n};
 }
 
+
+/**
+ * @param {number} n
+ * @param {Position} position
+ *
+ * @returns {Position}
+ */
+function divide(n, {x, y}) {
+  return {x: n / x  , y: n / y};
+}
+
+
 module.exports = {
   position,
   copy,
@@ -90,5 +102,6 @@ module.exports = {
   origin,
   update,
   diff,
-  multiply
+  multiply,
+  divide
 };
