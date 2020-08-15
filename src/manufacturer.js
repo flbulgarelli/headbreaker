@@ -134,19 +134,21 @@ class Positioner {
     this.initializeOffset(headAnchor);
   }
 
+  /**
+   * @param {Anchor} headAnchor
+   */
   initializeOffset(headAnchor) {
     if (headAnchor) {
-      this.xOffset = headAnchor.x;
-      this.yOffset = headAnchor.y;
+      /** @type {import('./position').Position} */
+      this.offset = headAnchor.asPosition();
     }
     else {
-      this.xOffset = this.pieceRadio;
-      this.yOffset = this.pieceRadio;
+      this.offset = this.pieceDiameter;
     }
   }
 
-  get pieceRadio() {
-    return this.puzzle.pieceRadio;
+  get pieceDiameter() {
+    return this.puzzle.pieceDiameter;
   }
 
     /**
@@ -155,8 +157,8 @@ class Positioner {
    */
   naturalAnchor(x, y) {
     return anchor(
-      x * this.pieceRadio.x + this.xOffset,
-      y * this.pieceRadio.y + this.yOffset);
+      x * this.pieceDiameter.x + this.offset.x,
+      y * this.pieceDiameter.y + this.offset.y);
   }
 }
 
