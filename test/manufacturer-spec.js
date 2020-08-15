@@ -5,7 +5,7 @@ describe("manufacturer", () => {
   it("create 1 x 1", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(1, 1);
-    manufacturer.withStructure({pieceSize: 10, proximity: 1});
+    manufacturer.withStructure({pieceRadio: 10, proximity: 1});
     const puzzle = manufacturer.build();
     const first = puzzle.pieces[0];
 
@@ -27,7 +27,7 @@ describe("manufacturer", () => {
   it("create 1 x 1 with central anchor", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(1, 1);
-    manufacturer.withStructure({pieceSize: 10, proximity: 1});
+    manufacturer.withStructure({pieceRadio: 10, proximity: 1});
     manufacturer.withHeadAt(anchor(-3, 5));
     const puzzle = manufacturer.build();
 
@@ -38,7 +38,7 @@ describe("manufacturer", () => {
   it("create 2 x 1", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimmensions(2, 1);
-    manufacturer.withStructure({pieceSize: 10, proximity: 1});
+    manufacturer.withStructure({pieceRadio: 10, proximity: 1});
     const puzzle = manufacturer.build();
 
     const first = puzzle.pieces[0];

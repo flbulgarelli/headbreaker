@@ -17,6 +17,18 @@ function position(x, y) {
   return { x, y };
 }
 
+/**
+ * @param {Position|number} value
+ * @returns {Position}
+ */
+function cast(value) {
+  if (typeof value === 'number') {
+    return position(value, value);
+  } else {
+    return value;
+  }
+}
+
  /**
   * This module contains functions for dealing with objects with x and y
   * coordinates that represent or include point data
@@ -74,28 +86,32 @@ function diff(one, other) {
 }
 
 /**
- * @param {Position} position
- * @param {number} n
+ * @param {Position|number} one
+ * @param {Position|number} other
  *
  * @returns {Position}
  */
-function multiply({x, y}, n) {
-  return {x: x * n , y: y * n};
+function multiply(one, other) {
+  const first = cast(one);
+  const second = cast(other);
+  return {x: first.x * second.x , y: first.y * second.y};
 }
 
 
 /**
- * @param {number} n
- * @param {Position} position
+ * @param {Position|number} one
+ * @param {Position|number} other
  *
  * @returns {Position}
  */
-function divide(n, {x, y}) {
-  return {x: n / x  , y: n / y};
+function divide(one, other) {
+  const first = cast(one);
+  const second = cast(other);
+  return {x: first.x / second.x , y: first.y / second.y};
 }
 
-
 module.exports = {
+  cast,
   position,
   copy,
   equal,

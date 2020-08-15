@@ -14,8 +14,7 @@ const {position, ...Position} = require('./position')
 
 /**
  * @typedef {object} Settings
- * @property {number} [pieceSize]
- * @property {import('./position').Position} [pieceRadio]
+ * @property {import('./position').Position|number} [pieceRadio]
  * @property {number} [proximity]
  */
 
@@ -29,8 +28,8 @@ class Puzzle {
   /**
    * @param {Settings} [options]
    */
-  constructor({pieceSize = 2, pieceRadio = null, proximity = 1} = {}) {
-    this.pieceRadio = pieceRadio || position(pieceSize, pieceSize);
+  constructor({pieceRadio = 2, proximity = 1} = {}) {
+    this.pieceRadio = Position.cast(pieceRadio);
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
@@ -258,7 +257,7 @@ class Puzzle {
 
   /**
    * The piece width, from edge to edge.
-   * This is the double of the {@link Puzzle#pieceSize}
+   * This is the double of the {@link Puzzle#pieceRadio}
    *
    * @type {import('./position').Position}
    */
@@ -287,7 +286,7 @@ class Puzzle {
    * @returns {Puzzle}
    */
   static import(dump) {
-    const puzzle = new Puzzle({pieceRadio: dump.pieceSize, proximity: dump.proximity});
+    const puzzle = new Puzzle({pieceRadio: dump.pieceRadio, proximity: dump.proximity});
     puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
     puzzle.autoconnect();
     return puzzle;

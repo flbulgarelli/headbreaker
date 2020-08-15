@@ -80,10 +80,9 @@ class Canvas {
    * @param {object} options
    * @param {number} options.width
    * @param {number} options.height
-   * @param {number} [options.pieceSize]
-   * @param {import('./position').Position} [options.pieceDiameter]
+   * @param {import('./position').Position|number} [options.pieceSize]
    * @param {number} [options.proximity]
-   * @param {number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
+   * @param {import('./position').Position|number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
@@ -94,7 +93,6 @@ class Canvas {
       width,
       height,
       pieceSize = 50,
-      pieceDiameter = null,
       proximity = 10,
       borderFill = 0,
       strokeWidth = 3,
@@ -104,8 +102,8 @@ class Canvas {
       painter = null }) {
     this.width = width;
     this.height = height;
-    this.pieceDiameter = pieceDiameter || position(pieceSize, pieceSize);
-    this.borderFill = borderFill;
+    this.pieceDiameter = Position.cast(pieceSize);
+    this.borderFill = Position.cast(borderFill);
     this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;

@@ -219,7 +219,7 @@ describe("Canvas", () => {
       width: 800, height: 800,
       painter: painter
     });
-    const puzzle = new Puzzle({pieceSize: 13, proximity: 7});
+    const puzzle = new Puzzle({pieceRadio: 13, proximity: 7});
     puzzle
       .newPiece({right: Tab})
       .locateAt(0, 0);
