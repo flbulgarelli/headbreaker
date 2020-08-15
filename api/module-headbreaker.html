@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: image-metadata.js</title>
+    <title>JSDoc: Module: headbreaker</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,55 +17,52 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: image-metadata.js</h1>
+    <h1 class="page-title">Module: headbreaker</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const {vector} = require('./vector');
+        
+    
+</header>
 
-/**
- * @typedef {object} ImageMetadata
- * @property {HTMLImageElement}    content
- * @property {import('./vector').Vector} [offset]
- * @property {number}   [scale]
- */
+<article>
+    <div class="container-overview">
+    
+        
 
-/**
- * @typedef {HTMLImageElement|ImageMetadata} ImageLike
- */
+        
+    
+    </div>
 
-/**
- * @module ImageMetadata
- */
+    
 
-/**
- * Converts an image-like object into a true {@link ImageMetadata} object
- *
- * @param {ImageLike} imageLike
- * @returns {ImageMetadata}
- */
-function asImageMetadata(imageLike) {
-  if (imageLike instanceof HTMLImageElement) {
-    return {
-      content: imageLike,
-      offset: vector(1, 1),
-      scale: 1
-    };
-  }
-  return imageLike;
-}
+    
 
-module.exports = {
-  asImageMetadata
-}
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

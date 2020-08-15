@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Structure</title>
+    <title>JSDoc: Module: Pair</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Structure</h1>
+    <h1 class="page-title">Module: Pair</h1>
 
     
 
@@ -29,6 +29,8 @@
 <header>
     
         
+            
+        
     
 </header>
 
@@ -36,6 +38,84 @@
     <div class="container-overview">
     
         
+            <div class="description">Utilities for handling 2D vectors, expressed a two-elements list</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
     
@@ -64,12 +144,16 @@
     
 
     
-    <h4 class="name" id="~asStructure"><span class="type-signature">(inner) </span>asStructure<span class="signature">(structureLike)</span><span class="type-signature"> &rarr; {<a href="global.html#Structure">Structure</a>}</span></h4>
+    <h4 class="name" id="~diff"><span class="type-signature">(inner) </span>diff<span class="signature">(x1, y1, x2, y2)</span><span class="type-signature"> &rarr; {Pair}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    Calculates the difference of two vectors
+</div>
 
 
 
@@ -104,13 +188,82 @@
 
         <tr>
             
-                <td class="name"><code>structureLike</code></td>
+                <td class="name"><code>x1</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">StructureLike</span>
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>x2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
 
 
             
@@ -161,7 +314,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line61">line 61</a>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -197,7 +350,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
+<span class="param-type">Pair</span>
 
 
     </dd>
@@ -215,7 +368,7 @@
     
 
     
-    <h4 class="name" id="~deserialize"><span class="type-signature">(inner) </span>deserialize<span class="signature">(string)</span><span class="type-signature"> &rarr; {<a href="global.html#Structure">Structure</a>}</span></h4>
+    <h4 class="name" id="~equal"><span class="type-signature">(inner) </span>equal<span class="signature">(x1, y1, x2, y2)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -255,13 +408,82 @@
 
         <tr>
             
-                <td class="name"><code>string</code></td>
+                <td class="name"><code>x1</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>x2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
 
 
             
@@ -312,7 +534,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line39">line 39</a>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -348,7 +570,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -366,12 +588,16 @@
     
 
     
-    <h4 class="name" id="~serialize"><span class="type-signature">(inner) </span>serialize<span class="signature">(structure)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~isNull"><span class="type-signature">(inner) </span>isNull<span class="signature">(x, y)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    Tells whether this pair is (0, 0)
+</div>
 
 
 
@@ -406,13 +632,36 @@
 
         <tr>
             
-                <td class="name"><code>structure</code></td>
+                <td class="name"><code>x</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
 
 
             
@@ -463,7 +712,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line30">line 30</a>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -499,7 +748,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -514,81 +763,6 @@
         
     
 
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="~StructureLike">StructureLike</h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="global.html#Structure">Structure</a></span>
-|
-
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line53">line 53</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
     
 
     

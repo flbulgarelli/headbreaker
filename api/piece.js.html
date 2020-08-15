@@ -26,7 +26,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const Vector = require('./vector');
+            <pre class="prettyprint source linenums"><code>const Pair = require('./pair');
 const {anchor, Anchor} = require('./anchor');
 const {None} = require('./insert')
 const connector = require('./connector')
@@ -50,9 +50,9 @@ const {itself, orthogonalTransform} = require('./prelude');
  * A piece primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PieceDump
- * @property {import('./position').Position} centralAnchor
+ * @property {import('./vector').Vector} centralAnchor
  * @property {string} structure
- * @property {import('./prelude').Orthogonal&lt;object>} connections
+ * @property {import('./prelude').Orthogonal&lt;object>} [connections]
  * @property {object} metadata
  */
 
@@ -70,6 +70,7 @@ const {itself, orthogonalTransform} = require('./prelude');
     this.left = left;
     this.right = right;
     this.metadata = {};
+    /** @type {Anchor} */
     this.centralAnchor = null;
     this._initializeListeners();
   }
@@ -112,12 +113,15 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   * @returns {Piece[]}
+   * @type {Piece[]}
    */
   get presentConnections() {
     return this.connections.filter(itself);
   }
 
+  /**
+   * @type {Piece[]}
+   */
   get connections() {
     return [
       this.rightConnection,
@@ -127,6 +131,9 @@ const {itself, orthogonalTransform} = require('./prelude');
     ];
   }
 
+  /**
+   * @type {import('./insert').Insert[]}
+   */
   get inserts() {
     return [
       this.right,
@@ -288,7 +295,7 @@ const {itself, orthogonalTransform} = require('./prelude');
 
   /**
    * Sets the initial position of this piece. This method is similar to {@link Piece#centerAround},
-   * but takes a vector instead of an anchor.
+   * but takes a pair instead of an anchor.
    *
    * @param {number} x
    * @param {number} y
@@ -323,7 +330,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   /**
    * Moves this piece to the given position, firing translation events.
    * Piece must be already centered. This method is similar to {@link Piece#recenterAround},
-   * but takes a vector instead of an anchor.
+   * but takes a pair instead of an anchor.
    *
    * @param {number} x the final x position
    * @param {number} y the final y position
@@ -341,7 +348,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   translate(dx, dy, quiet = false) {
-    if (!Vector.isNull(dx, dy)) {
+    if (!Pair.isNull(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
       if (!quiet) {
         this.fireTranslate(dx, dy);
@@ -370,7 +377,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {number} dy
    */
   drag(dx, dy, quiet = false) {
-    if (Vector.isNull(dx, dy)) return;
+    if (Pair.isNull(dx, dy)) return;
 
     if (this.horizontallyOpenMovement(dx) &amp;&amp; this.vericallyOpenMovement(dy)) {
       this.disconnect();
@@ -467,42 +474,42 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get downAnchor() {
-    return this.centralAnchor.translated(0, this.size);
+    return this.centralAnchor.translated(0, this.radio.y);
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get rightAnchor() {
-    return this.centralAnchor.translated(this.size, 0);
+    return this.centralAnchor.translated(this.radio.x, 0);
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get upAnchor() {
-    return this.centralAnchor.translated(0, -this.size);
+    return this.centralAnchor.translated(0, -this.radio.y);
   }
 
   /**
-   * @return {Anchor}
+   *@type {Anchor}
    */
   get leftAnchor() {
-    return this.centralAnchor.translated(-this.size, 0);
+    return this.centralAnchor.translated(-this.radio.x, 0);
   }
 
   /**
-   * @return {number}
+   * @type {import('./vector').Vector}
    */
-  get size() {
-    return this.puzzle.pieceSize;
+  get radio() {
+    return this.puzzle.pieceRadio;
   }
 
   /**
-   * @returns {number}
+   * @type {number}
    */
   get proximity() {
     return this.puzzle.proximity;
@@ -511,7 +518,7 @@ const {itself, orthogonalTransform} = require('./prelude');
   /**
    * This piece id. It is extracted from metadata
    *
-   * @returns {string}
+   * @type {string}
    */
   get id() {
     return this.metadata.id;
@@ -521,15 +528,19 @@ const {itself, orthogonalTransform} = require('./prelude');
    * Converts this piece into a plain, stringify-ready object.
    * Connections should have ids
    *
+   * @param {object} options
+   * @param {boolean} [options.compact]
    * @returns {PieceDump}
    */
-  export() {
-    return {
+  export({compact = false} = {}) {
+    const base = {
       centralAnchor: this.centralAnchor &amp;&amp; this.centralAnchor.export(),
       structure: Structure.serialize(this),
-      connections: orthogonalTransform(this.connections, it => ({id: it.id})),
       metadata: this.metadata
     };
+    return compact ? base : Object.assign(base, {
+      connections: orthogonalTransform(this.connections, it => ({id: it.id}))
+    })
   }
 
   /**
@@ -564,13 +575,13 @@ module.exports = Piece;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 08 2020 22:15:56 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Aug 15 2020 03:37:59 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

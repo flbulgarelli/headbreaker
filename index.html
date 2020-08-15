@@ -93,6 +93,8 @@
             <li><a href="#dynamic">Dynamic</a></li>
             <li><a href="#persistent">Persistent</a></li>
             <li><a href="#validated">Validated</a></li>
+            <li><a href="#responsive">Responsive</a></li>
+            <li><a href="#rectangular">Rectangular</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -437,7 +439,7 @@ document.getElementById('persistent-import').addEventListener('click', function(
 });
 
 document.getElementById('persistent-export').addEventListener('click', function() {
-  writeDump(persistent.puzzle.export());
+  writeDump(persistent.puzzle.export({compact: true}));
 });
 </code></pre>
 
@@ -477,7 +479,6 @@ pettoruti.onload = () =&gt; {
     }, 1500);
   })
   validated.draw();
-  registerButtons('validated', validated);
 }
 </code></pre>
 
@@ -507,6 +508,66 @@ pettoruti.onload = () =&gt; {
 <div class="form-group">
   <button id="validated-shuffle" class="btn btn-primary">Shuffle</button>
   <button id="validated-solve" class="btn btn-primary">Solve</button>
+</div>
+
+<h2 id="responsive">Responsive</h2>
+<h3 id="code_11">Code</h3>
+<pre><code class="javascript">const responsive = new headbreaker.Canvas('responsive-canvas', {
+  width: 800, height: 650,
+  pieceSize: 100, proximity: 20,
+  borderFill: 10, strokeWidth: 1.5,
+  lineSoftness: 0.18,
+});
+
+responsive.autogenerate({
+  horizontalPiecesCount: 3,
+  verticalPiecesCount: 3
+});
+responsive.draw();
+
+window.addEventListener('resize', () =&gt; {
+  var container = document.getElementById('responsive-canvas');
+  responsive.resize(container.offsetWidth, container.scrollHeight)
+});
+</code></pre>
+
+<h3 id="demo_9">Demo</h3>
+<div id="responsive-canvas">
+</div>
+
+<div class="form-group">
+  <button id="responsive-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="responsive-solve" class="btn btn-primary">Solve</button>
+</div>
+
+<h2 id="rectangular">Rectangular</h2>
+<h3 id="code_12">Code</h3>
+<pre><code class="javascript">let quinquela = new Image();
+quinquela.src = 'static/quinquela.jpg';
+quinquela.onload = () =&gt; {
+  const rectangular = new headbreaker.Canvas('rectangular-canvas', {
+    width: 800, height: 650,
+    pieceSize: {x: 200, y: 120}, proximity: 20,
+    borderFill: {x: 20, y: 12}, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: quinquela
+  });
+
+  rectangular.autogenerate({
+    horizontalPiecesCount: 3,
+    verticalPiecesCount: 3
+  });
+  rectangular.draw();
+  registerButtons('rectangular', rectangular);
+}
+</code></pre>
+
+<h3 id="demo_10">Demo</h3>
+<div id="rectangular-canvas">
+</div>
+
+<div class="form-group">
+  <button id="rectangular-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="rectangular-solve" class="btn btn-primary">Solve</button>
 </div>
 
 <script src="js/demo.js"></script></div>
@@ -593,5 +654,5 @@ pettoruti.onload = () =&gt; {
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-07-09 05:27:46
+Build Date UTC : 2020-08-15 06:38:10
 -->

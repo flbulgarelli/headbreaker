@@ -26,14 +26,15 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const Position = require('./position');
-const Vector = require('./vector');
+            <pre class="prettyprint source linenums"><code>const Vector = require('./vector');
+const Piece = require('./piece');
+const Pair = require('./pair');
 const {PuzzleValidator} = require('./validator');
 
 /**
  * @typedef {object} SpatialMetadata
- * @property {import('./position').Position} [targetPosition]
- * @property {import('./position').Position} [currentPosition]
+ * @property {import('./vector').Vector} [targetPosition]
+ * @property {import('./vector').Vector} [currentPosition]
  */
 
 /**
@@ -43,8 +44,12 @@ const {PuzzleValidator} = require('./validator');
  * @module SpatialMetadata
  */
 
+ /**
+  *
+  * @param {Piece} piece
+  */
 function diffToTarget(piece) {
-  return Position.diff(piece.metadata.targetPosition, piece.centralAnchor.asPosition());
+  return Vector.diff(piece.metadata.targetPosition, piece.centralAnchor.asVector());
 }
 
 /**
@@ -58,24 +63,24 @@ const solved = (puzzle) => relativePosition(puzzle) &amp;&amp; PuzzleValidator.c
 const relativePosition = (puzzle) => {
   const [dx, dy] = diffToTarget(puzzle.head);
   return puzzle.pieces.every(piece => {
-    return Vector.equal(dx, dy, ...diffToTarget(piece))
+    return Pair.equal(dx, dy, ...diffToTarget(piece))
   });
 }
 
 /**
  *@type {import('../src/validator').PieceCondition}
  */
-const absolutePosition = (piece) => Position.equal(piece.centralAnchor.asPosition(), piece.metadata.targetPosition);
+const absolutePosition = (piece) => Vector.equal(piece.centralAnchor.asVector(), piece.metadata.targetPosition);
 
 
 /**
  * @param {SpatialMetadata} metadata
- * @param {import('./position').Position} target
- * @param {import('./position').Position} [current]
+ * @param {import('./vector').Vector} target
+ * @param {import('./vector').Vector} [current]
  */
 function initialize(metadata, target, current) {
   metadata.targetPosition = metadata.targetPosition || target;
-  metadata.currentPosition = metadata.currentPosition || current || Position.copy(metadata.targetPosition);
+  metadata.currentPosition = metadata.currentPosition || current || Vector.copy(metadata.targetPosition);
 }
 
 module.exports = {
@@ -94,13 +99,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 08 2020 22:15:56 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Aug 15 2020 03:37:59 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: image-metadata.js</title>
+    <title>JSDoc: Source: index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: image-metadata.js</h1>
+    <h1 class="page-title">Source: index.js</h1>
 
     
 
@@ -26,42 +26,50 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const {vector} = require('./vector');
+            <pre class="prettyprint source linenums"><code>const Pair = require('./pair')
+const {anchor, Anchor} = require('./anchor')
+const Puzzle = require('./puzzle');
+const Piece = require('./piece');
+const {Tab, Slot, None} = require('./insert');
+const {NullValidator, PieceValidator, PuzzleValidator} = require('./validator');
+const Structure = require('./structure');
+const Outline = require('./outline');
+const Canvas = require('./canvas');
+const Manufacturer = require('./manufacturer');
+const {InsertSequence, ...generators} = require('./sequence');
+const Metadata = require('./metadata');
+const SpatialMetadata = require('./spatial-metadata');
+const {vector, ...Vector} = require('./vector');
 
 /**
- * @typedef {object} ImageMetadata
- * @property {HTMLImageElement}    content
- * @property {import('./vector').Vector} [offset]
- * @property {number}   [scale]
+ * @module headbreaker
  */
-
-/**
- * @typedef {HTMLImageElement|ImageMetadata} ImageLike
- */
-
-/**
- * @module ImageMetadata
- */
-
-/**
- * Converts an image-like object into a true {@link ImageMetadata} object
- *
- * @param {ImageLike} imageLike
- * @returns {ImageMetadata}
- */
-function asImageMetadata(imageLike) {
-  if (imageLike instanceof HTMLImageElement) {
-    return {
-      content: imageLike,
-      offset: vector(1, 1),
-      scale: 1
-    };
-  }
-  return imageLike;
-}
-
 module.exports = {
-  asImageMetadata
+  anchor,
+  vector,
+  Anchor,
+  Puzzle,
+  Piece,
+  Canvas,
+  Manufacturer,
+  InsertSequence,
+  PieceValidator,
+  PuzzleValidator,
+  NullValidator,
+  Tab,
+  Slot,
+  None,
+  Pair,
+  Metadata,
+  SpatialMetadata,
+  Outline,
+  Structure,
+  Vector,
+  generators,
+  painters: {
+    Dummy: require('./dummy-painter'),
+    Konva: require('./konva-painter')
+  }
 }
 </code></pre>
         </article>

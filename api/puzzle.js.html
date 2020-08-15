@@ -29,19 +29,20 @@
             <pre class="prettyprint source linenums"><code>const {Anchor} = require('./anchor');
 const Piece = require('./piece');
 const {NullValidator} = require('./validator');
+const {vector, ...Vector} = require('./vector')
 
- /**
+/**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PuzzleDump
- * @property {number} pieceSize
+ * @property {import('./vector').Vector} pieceRadio
  * @property {number} proximity
  * @property {import('./piece').PieceDump[]} pieces
  */
 
 /**
  * @typedef {object} Settings
- * @property {number} [pieceSize]
+ * @property {import('./vector').Vector|number} [pieceRadio]
  * @property {number} [proximity]
  */
 
@@ -55,13 +56,13 @@ class Puzzle {
   /**
    * @param {Settings} [options]
    */
-  constructor({pieceSize = 2, proximity = 1} = {}) {
-    this.pieceSize = pieceSize;
+  constructor({pieceRadio = 2, proximity = 1} = {}) {
+    this.pieceRadio = Vector.cast(pieceRadio);
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
     /** @type {import('./validator').Validator} */
-    this.validator = NullValidator;
+    this.validator = new NullValidator();
   }
 
   /**
@@ -100,6 +101,15 @@ class Puzzle {
     this.pieces.forEach((piece, index) => piece.annotate(metadata[index]));
   }
 
+   /**
+   * Relocates all the pieces to the given list of points
+   *
+   * @param {import('./pair').Pair[]} points
+   */
+  relocateTo(points) {
+    this.pieces.forEach((piece, index) => piece.relocateTo(...points[index]));
+  }
+
   /**
    * Tries to connect pieces in their current positions
    * This method is O(n^2)
@@ -108,6 +118,9 @@ class Puzzle {
     this.pieces.forEach(it => this.autoconnectWith(it));
   }
 
+  /**
+   * Disconnects all pieces
+   */
   disconnect() {
     this.pieces.forEach(it => it.disconnect());
   }
@@ -169,7 +182,29 @@ class Puzzle {
     this.validator.onValid(f);
   }
 
+  /**
+   * Answers the list of points where
+   * central anchors of pieces are located
+   *
+   * @type {import('./pair').Pair[]}
+   */
+  get points() {
+    return this.pieces.map(it => it.centralAnchor.asPair());
+  }
 
+  /**
+   * Answers a list of points whose coordinates are scaled
+   * to the {@link Puzzle#pieceWidth}
+   *
+   * @type {import('./pair').Pair[]}
+   */
+  get refs() {
+    return this.points.map(([x, y]) => [x / this.pieceDiameter.x, y / this.pieceDiameter.y])
+  }
+
+  /**
+   * @type {any[]}
+   */
   get metadata() {
     return this.pieces.map(it => it.metadata);
   }
@@ -177,7 +212,7 @@ class Puzzle {
   /**
    * Returns the first piece
    *
-   * @returns {Piece}
+   * @type {Piece}
    */
   get head() {
     return this.pieces[0];
@@ -186,7 +221,7 @@ class Puzzle {
   /**
    * Returns the central anchor of the first piece
    *
-   * @returns {Anchor}
+   * @type {Anchor}
    */
   get headAnchor() {
     return this.head.centralAnchor;
@@ -199,28 +234,78 @@ class Puzzle {
     this.validator = validator;
   }
 
+  /**
+   * Checks whether this puzzle is valid.
+   *
+   * Calling this method will not fire any validation listeners nor update the
+   * valid property.
+   *
+   * @returns {boolean}
+   */
   isValid() {
     return this.validator.isValid(this);
   }
 
+  /**
+   * Returns the current validation status
+   *
+   * Calling this property will not fire any validation listeners.
+   *
+   * @type {boolean}
+   */
+  get valid() {
+    return this.validator.valid;
+  }
+
+  /**
+   * Checks whether this puzzle is valid, updating valid property
+   * and firing validation listeners if becomes valid
+   */
   validate() {
     this.validator.validate(this);
   }
 
+  /**
+   * Checks whether this puzzle is valid, updating valid property.
+   *
+   * Validations listeners are NOT fired.
+   */
+  updateValidity() {
+    this.validator.validate(this);
+  }
+
+  /**
+   * Wether all the pieces in this puzzle are connected
+   *
+   * @type {boolean}
+   */
   get connected() {
     return this.pieces.every(it => it.connected);
   }
 
   /**
+   * The piece width, from edge to edge.
+   * This is the double of the {@link Puzzle#pieceRadio}
+   *
+   * @type {import('./vector').Vector}
+   */
+  get pieceDiameter() {
+    return Vector.multiply(this.pieceRadio, 2);
+  }
+
+  /**
    * Converts this piece into a plain, stringify-ready object.
    * Pieces should have ids
+   *
+   * @param {object} options config options for export
+   * @param {boolean} [options.compact] if connection information must be omitted
    * @returns {PuzzleDump}
    */
-  export() {
+  export(options = {}) {
     return {
-      pieceSize: this.pieceSize,
+      pieceRadio: this.pieceRadio,
       proximity: this.proximity,
-      pieces: this.pieces.map(it => it.export())
+      pieces: this.pieces.map(it => it.export(options))
     }
   }
 
@@ -229,7 +314,7 @@ class Puzzle {
    * @returns {Puzzle}
    */
   static import(dump) {
-    const puzzle = new Puzzle({pieceSize: dump.pieceSize, proximity: dump.proximity});
+    const puzzle = new Puzzle({pieceRadio: dump.pieceRadio, proximity: dump.proximity});
     puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
     puzzle.autoconnect();
     return puzzle;
@@ -247,13 +332,13 @@ module.exports = Puzzle;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 08 2020 22:15:56 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Aug 15 2020 03:37:59 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: image-metadata.js</title>
+    <title>JSDoc: Source: pair.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: image-metadata.js</h1>
+    <h1 class="page-title">Source: pair.js</h1>
 
     
 
@@ -26,43 +26,56 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const {vector} = require('./vector');
-
-/**
- * @typedef {object} ImageMetadata
- * @property {HTMLImageElement}    content
- * @property {import('./vector').Vector} [offset]
- * @property {number}   [scale]
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {[number, number]} Pair
  */
 
 /**
- * @typedef {HTMLImageElement|ImageMetadata} ImageLike
- */
-
-/**
- * @module ImageMetadata
- */
-
-/**
- * Converts an image-like object into a true {@link ImageMetadata} object
+ * Utilities for handling 2D vectors, expressed a two-elements list
  *
- * @param {ImageLike} imageLike
- * @returns {ImageMetadata}
+ * @module Pair
  */
-function asImageMetadata(imageLike) {
-  if (imageLike instanceof HTMLImageElement) {
-    return {
-      content: imageLike,
-      offset: vector(1, 1),
-      scale: 1
-    };
-  }
-  return imageLike;
+
+/**
+ * Tells whether this pair is (0, 0)
+ *
+ * @param {number} x
+ * @param {number} y
+ * @returns {boolean}
+ */
+function isNull(x, y) {
+  return equal(x, y, 0, 0);
+}
+
+/**
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @returns {boolean}
+ */
+function equal(x1, y1, x2, y2) {
+  return x1 === x2 &amp;&amp; y1 === y2;
+}
+
+/**
+ * Calculates the difference of two vectors
+ *
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @returns {Pair}
+ */
+function diff(x1, y1, x2, y2) {
+  return [x1 - x2, y1 - y2];
 }
 
 module.exports = {
-  asImageMetadata
-}
+  isNull,
+  diff,
+  equal
+};
 </code></pre>
         </article>
     </section>

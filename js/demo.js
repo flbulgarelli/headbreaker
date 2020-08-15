@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 // ======
 // Utils
 // =====
@@ -486,7 +484,7 @@ document.getElementById('persistent-import').addEventListener('click', function(
 });
 
 document.getElementById('persistent-export').addEventListener('click', function() {
-  writeDump(persistent.puzzle.export());
+  writeDump(persistent.puzzle.export({compact: true}));
 });
 registerButtons('persistent', persistent);
 
@@ -507,6 +505,7 @@ pettoruti.onload = () => {
     horizontalPiecesCount: 5,
     verticalPiecesCount: 8
   });
+  validated.draw();
   validated.attachSolvedValidator();
   validated.onValid(() => {
     setTimeout(() => {
@@ -515,6 +514,57 @@ pettoruti.onload = () => {
       }
     }, 1500);
   })
-  validated.draw();
   registerButtons('validated', validated);
+}
+
+
+
+
+// ================
+// Responsive Canvas
+// ================
+
+const responsive = new headbreaker.Canvas('responsive-canvas', {
+  width: 800, height: 650,
+  pieceSize: 100, proximity: 20,
+  borderFill: 10, strokeWidth: 1.5,
+  lineSoftness: 0.18,
+});
+
+responsive.autogenerate({
+  horizontalPiecesCount: 3,
+  verticalPiecesCount: 3,
+  metadata: [
+    {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'},
+    {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'},
+    {color: '#16BA0D'}, {color: '#000000'}, {color: '#6F04C7'},
+  ]
+});
+responsive.draw();
+
+registerButtons('responsive', responsive);
+window.addEventListener('resize', () => {
+  var container = document.getElementById('responsive-canvas');
+  responsive.resize(container.offsetWidth, container.scrollHeight)
+});
+
+// ==================
+// Rectangular Canvas
+// ==================
+let quinquela = new Image();
+quinquela.src = 'static/quinquela.jpg';
+quinquela.onload = () => {
+  const rectangular = new headbreaker.Canvas('rectangular-canvas', {
+    width: 800, height: 650,
+    pieceSize: {x: 200, y: 120}, proximity: 20,
+    borderFill: {x: 20, y: 12}, strokeWidth: 1.5,
+    lineSoftness: 0.18, image: quinquela
+  });
+
+  rectangular.autogenerate({
+    horizontalPiecesCount: 3,
+    verticalPiecesCount: 3
+  });
+  rectangular.draw();
+  registerButtons('rectangular', rectangular);
 }

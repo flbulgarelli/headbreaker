@@ -26,51 +26,128 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Utilities for handling 2D vectors, expressed a two-elements list
- *
- * @module Vector
+            <pre class="prettyprint source linenums"><code>const Pair = require('./pair');
+
+/**
+ * @typedef {object} Vector
+ * @property {number} x
+ * @property {number} y
  */
 
 /**
- * Tells whether this vector is (0, 0)
  *
  * @param {number} x
  * @param {number} y
- * @returns {boolean}
- */
-function isNull(x, y) {
-  return equal(x, y, 0, 0);
-}
-
-/**
- * @param {number} x1
- * @param {number} y1
- * @param {number} x2
- * @param {number} y2
- * @returns {boolean}
- */
-function equal(x1, y1, x2, y2) {
-  return x1 === x2 &amp;&amp; y1 === y2;
-}
-
-/**
- * Calculates the difference of two vectors
  *
- * @param {number} x1
- * @param {number} y1
- * @param {number} x2
- * @param {number} y2
- * @returns {[number, number]}
+ * @returns {Vector}
  */
-function diff(x1, y1, x2, y2) {
-  return [x1 - x2, y1 - y2];
+function vector(x, y) {
+  return { x, y };
+}
+
+/**
+ * @param {Vector|number} value
+ * @returns {Vector}
+ */
+function cast(value) {
+  if (typeof value === 'number') {
+    return vector(value, value);
+  } else {
+    return value;
+  }
+}
+
+ /**
+  * This module contains functions for dealing with objects with x and y
+  * coordinates that represent or include point data
+  *
+  * @module Vector
+  */
+
+/**
+ * Returns a new (0, 0) vector
+ *
+ * @returns {Vector}
+ */
+function origin() {
+  return vector(0, 0);
+}
+
+/**
+ * Compares two points
+ *
+ * @param {Vector} one
+ * @param {Vector} other
+ * @returns {boolean}
+ */
+function equal(one, other) {
+  return Pair.equal(one.x, one.y, other.x, other.y);
+}
+
+/**
+ * Creates a copy of the given point
+ *
+ * @param {Vector} one
+ * @returns {Vector}
+ */
+function copy({x, y}) {
+  return {x, y}
+}
+
+/**
+ * @param {Vector} vector
+ * @param {any} x
+ * @param {any} y
+ */
+function update(vector, x, y) {
+  vector.x = x;
+  vector.y = y;
+}
+
+/**
+ * @param {Vector} one
+ * @param {Vector} other
+ * @returns {import('./pair').Pair};
+ */
+function diff(one, other) {
+  return Pair.diff(one.x, one.y, other.x, other.y);
+}
+
+/**
+ * @param {Vector|number} one
+ * @param {Vector|number} other
+ *
+ * @returns {Vector}
+ */
+function multiply(one, other) {
+  const first = cast(one);
+  const second = cast(other);
+  return {x: first.x * second.x , y: first.y * second.y};
+}
+
+
+/**
+ * @param {Vector|number} one
+ * @param {Vector|number} other
+ *
+ * @returns {Vector}
+ */
+function divide(one, other) {
+  const first = cast(one);
+  const second = cast(other);
+  return {x: first.x / second.x , y: first.y / second.y};
 }
 
 module.exports = {
-  isNull,
+  cast,
+  vector,
+  copy,
+  equal,
+  origin,
+  update,
   diff,
-  equal
+  multiply,
+  divide
 };
 </code></pre>
         </article>
@@ -82,13 +159,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 08 2020 22:15:56 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Aug 15 2020 03:37:59 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

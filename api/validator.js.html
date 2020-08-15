@@ -28,6 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>const Puzzle = require('./puzzle');
 const Piece = require('./piece');
+const Pair = require('./pair');
 
 /**
  * @typedef {PieceValidator | PuzzleValidator | NullValidator} Validator
@@ -38,27 +39,37 @@ const Piece = require('./piece');
  * @param {Puzzle} puzzle
  */
 
-
+/** An abstract base validator */
 class AbstractValidator {
 
   constructor() {
     /** @type {ValidationListener[]} */
     this.validListeners = [];
-    this._valid = false;
+    this._valid = undefined;
   }
 
   /**
-   * Validates the puzzle, firing validation events
+   * Validates the puzzle, updating the validity state and
+   * firing validation events
    *
    * @param {Puzzle} puzzle
    */
   validate(puzzle) {
-    // @ts-ignore
-    const valid = this.isValid(puzzle);
-    if (valid &amp;&amp; !this._valid) {
+    const wasValid = this._valid;
+    this.updateValidity(puzzle);
+    if (this._valid &amp;&amp; !wasValid) {
       this.fireValid(puzzle);
     }
-    this._valid = valid;
+  }
+
+  /**
+   * Updates the valid state.
+   *
+   * @param {Puzzle} puzzle
+   */
+  updateValidity(puzzle) {
+    // @ts-ignore
+    this._valid = this.isValid(puzzle);
   }
 
   /**
@@ -77,8 +88,23 @@ class AbstractValidator {
     this.validListeners.push(f);
   }
 
+  /**
+   * Answers the current validity status of this validator. This
+   * property neither alters the current status nor triggers new validity checks
+   *
+   * @type {boolean}
+   */
   get valid() {
     return this._valid;
+  }
+
+  /**
+   * Answers wether this is the {@link NullValidator}
+   *
+   * @type {boolean}
+   */
+  get isNull() {
+    return false;
   }
 }
 
@@ -95,6 +121,7 @@ class AbstractValidator {
  * @returns {boolean}
  */
 
+/** A validator that evaluates each piece independently */
 class PieceValidator extends AbstractValidator {
 
   /**
@@ -114,6 +141,7 @@ class PieceValidator extends AbstractValidator {
   }
 }
 
+/** A validator that evaluates the whole puzzle */
 class PuzzleValidator extends AbstractValidator {
 
   /**
@@ -132,30 +160,46 @@ class PuzzleValidator extends AbstractValidator {
   }
 }
 
-/**
-* @type {import('../src/validator').PuzzleCondition}
-*/
-PuzzleValidator.connected = (puzzle) => puzzle.connected;
+/** A validator that always is invalid */
+class NullValidator extends AbstractValidator {
 
-const NullValidator = {
   /**
    * @param {Puzzle} puzzle
    */
   isValid(puzzle) {
     return false;
-  },
+  }
 
   /**
-   * @param {Puzzle} puzzle
+   * @type {boolean}
    */
-  validate(puzzle) {},
-
-  /**
-   * @param {ValidationListener} f
-   */
-  onValid(f) {}
+  get isNull() {
+    return true;
+  }
 };
 
+
+/**
+* @type {PuzzleCondition}
+*/
+PuzzleValidator.connected = (puzzle) => puzzle.connected;
+
+/**
+ * @param {import('./pair').Pair[]} expected the expected relative refs
+ * @returns {PuzzleCondition}
+ */
+PuzzleValidator.relativeRefs = (expected) => {
+  return (puzzle) => {
+    function diff(x, y, index) {
+      const [x2, y2] = expected[index];
+      return Pair.diff(x, y, x2 * puzzle.pieceDiameter.x, y2 * puzzle.pieceDiameter.y);
+    }
+    const points = puzzle.points;
+    const [x0, y0] = points[0];
+    const [dx, dy] = diff(x0, y0, 0);
+    return points.every(([x, y], index) => Pair.equal(dx, dy, ...diff(x, y, index)))
+  };
+};
 
 module.exports = {
   PuzzleValidator,
@@ -172,13 +216,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Position.html">Position</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#position">position</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 08 2020 22:15:56 GMT-0300 (-03)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Aug 15 2020 03:37:59 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
