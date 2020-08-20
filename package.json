@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
+    "all": "npm test && npm run build && npm run types && npm run api",
     "build": "webpack --config webpack.prod.js",
     "api": "node_modules/jsdoc-import-support/jsdoc.js src/ -d docs/api -R README.md; exit 0",
     "types": "node_modules/jsdoc-import-support/jsdoc.js -t node_modules/tsd-jsdoc/dist/ -d dist/ -r src/; mv dist/types.d.ts dist/headbreaker.d.ts; exit 0"
