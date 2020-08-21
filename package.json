@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Jigsaw puzzles framework for js",
   "main": "index.js",
+  "types": "dist/headbreaker.d.ts",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
     "all": "npm test && npm run build && npm run types && npm run api",

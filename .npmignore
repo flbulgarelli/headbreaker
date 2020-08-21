@@ -1,0 +1,10 @@
+.codeclimate.yml
+.travis.yml
+.vscode/**
+dist/*.js*
+docs/**
+mkdocs.yml
+node_modules/**
+site/**
+test/**
+headbreaker-*.tgz
