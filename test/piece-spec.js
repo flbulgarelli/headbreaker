@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Piece, Tab, Slot, None, anchor, vector, radio} = require('../src/index');
+const {Puzzle, Piece, Tab, Slot, None, anchor, vector, radio, diameter} = require('../src/index');
 
 describe("piece", () => {
   describe("can annotate a piece", () => {
@@ -98,6 +98,28 @@ describe("piece", () => {
 
     assert.equal(a.horizontallyMatch(b), false);
     assert.equal(b.horizontallyMatch(a), false);
+  })
+
+  it("can configure a piece", () => {
+    const piece = new Piece({ up: Slot, left: Tab });
+    piece.configure({
+      centralAnchor: anchor(10, 0),
+      size: diameter(4)
+    });
+
+    assert.deepEqual(piece.radio, vector(2, 2));
+    assert.deepEqual(piece.centralAnchor, anchor(10, 0));
+    assert.deepEqual(piece.metadata, {});
+  })
+
+  it("can create a piece with config", () => {
+    const piece = new Piece(
+      { up: Slot, left: Tab },
+      { metadata: {foo: 2}, centralAnchor: vector(10, 0), size: radio(4) });
+
+    assert.deepEqual(piece.radio, vector(4, 4));
+    assert.deepEqual(piece.centralAnchor, anchor(10, 0));
+    assert.deepEqual(piece.metadata, {foo: 2});
   })
 
   it("can create a piece from a puzzle", () => {
@@ -908,6 +930,20 @@ describe("piece", () => {
       });
     })
 
+    it("can export piece with metadata, anchor and size", () => {
+      const piece = new Piece({up: Slot, left: Tab});
+      piece.locateAt(10, 0);
+      piece.annotate({foo: 2});
+      piece.resize(radio(4));
+
+      assert.deepEqual(piece.export(),  {
+        centralAnchor: {x: 10, y: 0},
+        structure: "--TS",
+        connections: {right:null, down:null, left:null, up:null},
+        metadata: {foo: 2},
+        size: {radio: {x: 4, y: 4}}
+      });
+    })
 
     it("can export a piece with connections without metadata", () => {
       const puzzle = new Puzzle();

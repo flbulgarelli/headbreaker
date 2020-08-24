@@ -18,14 +18,22 @@ const {itself, orthogonalTransform} = require('./prelude');
  * @param {Piece} target
  */
 
+ /**
+  * @typedef {Object} PieceConfig
+  * @property {import('./vector').Vector} [centralAnchor]
+  * @property {import('./size').Size} [size]
+  * @property {any} [metadata]
+  */
+
 /**
  * A piece primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PieceDump
  * @property {import('./vector').Vector} centralAnchor
- * @property {string} structure
+ * @property {import('./size').Size} [size]
+ * @property {any} metadata
  * @property {import('./prelude').Orthogonal<object>} [connections]
- * @property {object} metadata
+ * @property {string} structure
  */
 
  /**
@@ -33,21 +41,24 @@ const {itself, orthogonalTransform} = require('./prelude');
   */
  class Piece {
 
-  /**
-   * @param {import('./structure').Structure} [options]
-   */
-  constructor({up = None, down = None, left = None, right = None} = {}) {
-    this.up = up;
-    this.down = down;
-    this.left = left;
-    this.right = right;
-    this.metadata = {};
-    /** @type {Anchor} */
-    this.centralAnchor = null;
-    this._initializeListeners();
-    /** @type {import('./size').Size} */
-    this._size = null;
-  }
+   /**
+    * @param {import('./structure').Structure} [structure]
+    * @param {PieceConfig} [config]
+    */
+   constructor({up = None, down = None, left = None, right = None} = {}, config = {}) {
+      this.up = up;
+      this.down = down;
+      this.left = left;
+      this.right = right;
+      /** @type {any} */
+      this.metadata = {};
+      /** @type {Anchor} */
+      this.centralAnchor = null;
+      /** @type {import('./size').Size} */
+      this._size = null;
+      this._initializeListeners();
+      this.configure(config);
+    }
 
   _initializeListeners() {
     /** @type {TranslationListener[]} */
@@ -57,6 +68,27 @@ const {itself, orthogonalTransform} = require('./prelude');
     /** @type {ConnectionListener[]} */
     this.disconnectListeners = [];
   }
+
+  /**
+   * Runs positining, sizing and metadata configurations
+   * in a single step
+   *
+   * @param {PieceConfig} config
+   */
+  configure(config) {
+    if (config.centralAnchor) {
+      this.centerAround(Anchor.import(config.centralAnchor));
+    }
+
+    if (config.metadata) {
+      this.annotate(config.metadata);
+    }
+
+    if (config.size) {
+      this.resize(config.size)
+    }
+  }
+
 
   /**
    * Adds unestructured user-defined metadata on this piece.
@@ -535,6 +567,9 @@ const {itself, orthogonalTransform} = require('./prelude');
       structure: Structure.serialize(this),
       metadata: this.metadata
     };
+    if (this._size) {
+      base.size = {radio: this._size.radio };
+    }
     return compact ? base : Object.assign(base, {
       connections: orthogonalTransform(this.connections, it => ({id: it.id}))
     })
@@ -548,16 +583,9 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {Piece}
    */
   static import(dump) {
-    const piece = new Piece(Structure.deserialize(dump.structure));
-
-    if (dump.centralAnchor) {
-      piece.centerAround(Anchor.import(dump.centralAnchor));
-    }
-
-    if (dump.metadata) {
-      piece.annotate(dump.metadata);
-    }
-    return piece;
+    return new Piece(
+      Structure.deserialize(dump.structure),
+      {centralAnchor: dump.centralAnchor, metadata: dump.metadata, size: dump.size});
   }
 }
 
