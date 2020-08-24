@@ -171,7 +171,10 @@ class Puzzle {
    * @type {import('./pair').Pair[]}
    */
   get refs() {
-    return this.points.map(([x, y]) => [x / this.pieceDiameter.x, y / this.pieceDiameter.y])
+    return this.points.map(([x, y], index) => {
+      const diameter = this.pieces[index].diameter;
+      return [x / diameter.x, y / diameter.y]
+    })
   }
 
   /**
@@ -262,7 +265,10 @@ class Puzzle {
    * @type {import('./vector').Vector}
    */
   get pieceDiameter() {
-    return Vector.multiply(this.pieceRadio, 2);
+    if (!this._pieceDiameter) {
+      this._pieceDiameter = Vector.multiply(this.pieceRadio, 2);
+    }
+    return this._pieceDiameter;
   }
 
   /**

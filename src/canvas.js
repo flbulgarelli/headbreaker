@@ -152,8 +152,8 @@ class Canvas {
     /** @type {LabelMetadata} */
     const label = piece.metadata.label;
     if (label && label.text) {
-      label.fontSize = label.fontSize || this.pieceDiameter.y * 0.55;
-      label.y = label.y || (this.pieceDiameter.y - label.fontSize) / 2;
+      label.fontSize = label.fontSize || piece.diameter.y * 0.55;
+      label.y = label.y || (piece.diameter.y - label.fontSize) / 2;
       this._painter.label(this, piece, figure);
     }
 

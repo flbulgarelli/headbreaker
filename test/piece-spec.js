@@ -107,6 +107,14 @@ describe("piece", () => {
     assert.equal(piece.puzzle, puzzle);
   })
 
+  it("can compute diameter multiple times", () => {
+    const puzzle = new Puzzle({pieceRadio: {x: 6, y: 4}});
+    const piece = puzzle.newPiece();
+
+    assert.deepEqual(piece.diameter, {x: 12, y: 8});
+    assert.deepEqual(piece.diameter, {x: 12, y: 8});
+  })
+
 
   it("can create a rectangular, wide piece from a puzzle", () => {
     const puzzle = new Puzzle({pieceRadio: {x: 6, y: 4}});

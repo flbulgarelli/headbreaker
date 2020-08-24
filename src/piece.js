@@ -481,6 +481,15 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * The double of the radio
+   *
+   * @type {import('./vector').Vector}
+   */
+  get diameter() {
+    return this.puzzle.pieceDiameter;
+  }
+
+  /**
    * @type {number}
    */
   get proximity() {
