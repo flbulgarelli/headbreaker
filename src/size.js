@@ -1,7 +1,7 @@
 const Vector = require('./vector');
 
 /**
- * @typedef {Object} Dimmension
+ * @typedef {Object} Size
  * @property {import('./vector').Vector} radio
  * @property {import('./vector').Vector} diameter
  **/
@@ -9,7 +9,7 @@ const Vector = require('./vector');
 
 /**
  * @param {import('./vector').Vector|number} value
- * @returns {Dimmension}
+ * @returns {Size}
  */
 function radio(value) {
   const vector = Vector.cast(value)
@@ -21,7 +21,7 @@ function radio(value) {
 
 /**
  * @param {import('./vector').Vector|number} value
- * @returns {Dimmension}
+ * @returns {Size}
  */
 function diameter(value) {
   const vector = Vector.cast(value)

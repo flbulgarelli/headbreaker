@@ -12,6 +12,7 @@ const {InsertSequence, ...generators} = require('./sequence');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {vector, ...Vector} = require('./vector');
+const {radio, diameter} = require('./size');
 
 /**
  * @module headbreaker
@@ -19,6 +20,8 @@ const {vector, ...Vector} = require('./vector');
 module.exports = {
   anchor,
   vector,
+  radio,
+  diameter,
   Anchor,
   Puzzle,
   Piece,

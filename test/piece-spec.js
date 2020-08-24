@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Piece, Tab, Slot, None, anchor, vector} = require('../src/index');
+const {Puzzle, Piece, Tab, Slot, None, anchor, vector, radio} = require('../src/index');
 
 describe("piece", () => {
   describe("can annotate a piece", () => {
@@ -115,18 +115,30 @@ describe("piece", () => {
     assert.deepEqual(piece.diameter, vector(6, 4));
   })
 
-  it("can override piece size", () => {
+  it("can override piece size with scalar", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece();
 
     assert.deepEqual(piece.radio, vector(2, 2));
     assert.deepEqual(piece.diameter, vector(4, 4));
 
-    piece.overrideRadio(vector(5, 9));
+    piece.resize(radio(5));
 
-    assert.deepEqual(piece.radio, vector(5, 9));
-    assert.deepEqual(piece.diameter, vector(10, 18));
+    assert.deepEqual(piece.radio, vector(5, 5));
+    assert.deepEqual(piece.diameter, vector(10, 10));
+  })
 
+  it("can override piece size with scalar", () => {
+    const puzzle = new Puzzle();
+    const piece = puzzle.newPiece();
+
+    assert.deepEqual(piece.radio, vector(2, 2));
+    assert.deepEqual(piece.diameter, vector(4, 4));
+
+    piece.resize(radio(vector(5, 2)));
+
+    assert.deepEqual(piece.radio, vector(5, 2));
+    assert.deepEqual(piece.diameter, vector(10, 4));
   })
 
 

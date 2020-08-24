@@ -45,8 +45,8 @@ const {itself, orthogonalTransform} = require('./prelude');
     /** @type {Anchor} */
     this.centralAnchor = null;
     this._initializeListeners();
-    /** @type {import('./dimmension').Dimmension} */
-    this._dimmension = null;
+    /** @type {import('./size').Size} */
+    this._size = null;
   }
 
   _initializeListeners() {
@@ -479,17 +479,17 @@ const {itself, orthogonalTransform} = require('./prelude');
    * Defines this piece's own dimmension, overriding puzzle's
    * default dimmension
    *
-   * @param {import('./dimmension').Dimmension} dimmension
+   * @param {import('./size').Size} size
    */
-  overrideDimmension(dimmension) {
-    this._dimmension = dimmension;
+  resize(size) {
+    this._size = size;
   }
 
   /**
    * @type {import('./vector').Vector}
    */
   get radio() {
-    return this.dimmension.pieceRadio;
+    return this.size.radio;
   }
 
   /**
@@ -498,11 +498,11 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @type {import('./vector').Vector}
    */
   get diameter() {
-    return this.dimmension.pieceDiameter;
+    return this.size.diameter;
   }
 
-  get dimmension() {
-    return this._dimmension || this.puzzle.pieceDimmension;
+  get size() {
+    return this._size || this.puzzle.pieceSize;
   }
 
   /**
