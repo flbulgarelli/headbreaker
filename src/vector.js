@@ -50,10 +50,11 @@ function origin() {
  *
  * @param {Vector} one
  * @param {Vector} other
+ * @param {number} [delta] the tolance in comparison
  * @returns {boolean}
  */
-function equal(one, other) {
-  return Pair.equal(one.x, one.y, other.x, other.y);
+function equal(one, other, delta = 0) {
+  return Pair.equal(one.x, one.y, other.x, other.y, delta);
 }
 
 /**

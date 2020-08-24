@@ -24,10 +24,11 @@ function isNull(x, y) {
  * @param {number} y1
  * @param {number} x2
  * @param {number} y2
+ * @param {number} [delta] tolerance in comparison
  * @returns {boolean}
  */
-function equal(x1, y1, x2, y2) {
-  return x1 === x2 && y1 === y2;
+function equal(x1, y1, x2, y2, delta = 0) {
+  return Math.abs(x1 - x2) <= delta && Math.abs(y1 - y2) <= delta;
 }
 
 /**
