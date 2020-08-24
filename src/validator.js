@@ -163,13 +163,15 @@ PuzzleValidator.connected = (puzzle) => puzzle.connected;
 PuzzleValidator.relativeRefs = (expected) => {
   return (puzzle) => {
     function diff(x, y, index) {
-      const [x2, y2] = expected[index];
-      return Pair.diff(x, y, x2 * puzzle.pieceDiameter.x, y2 * puzzle.pieceDiameter.y);
+      return Pair.diff(x, y, ...expected[index]);
     }
-    const points = puzzle.points;
-    const [x0, y0] = points[0];
-    const [dx, dy] = diff(x0, y0, 0);
-    return points.every(([x, y], index) => Pair.equal(dx, dy, ...diff(x, y, index)))
+    const refs = puzzle.refs;
+    const [x0, y0] = refs[0];
+    const [dx0, dy0] = diff(x0, y0, 0);
+    return refs.every(([x, y], index) => {
+      const [dx, dy] = diff(x, y, index);
+      return Pair.equal(dx0, dy0, dx, dy, 0.01);
+    })
   };
 };
 
