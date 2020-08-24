@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Outline</title>
+    <title>JSDoc: Module: Pair</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Outline</h1>
+    <h1 class="page-title">Module: Pair</h1>
 
     
 
@@ -34,7 +34,7 @@
     <div class="container-overview">
     
         
-            <div class="description">This module contains the draw function. Override it change pieces drawing strategy</div>
+            <div class="description">Utilities for handling 2D vectors, expressed a two-elements list</div>
         
 
         
@@ -69,7 +69,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="outline.js.html">outline.js</a>, <a href="outline.js.html#line4">line 4</a>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line5">line 5</a>
     </li></ul></dd>
     
 
@@ -108,12 +108,16 @@
     
 
     
-    <h4 class="name" id="~draw"><span class="type-signature">(inner) </span>draw<span class="signature">(piece, size<span class="signature-attributes">opt</span>, borderFill<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span></h4>
+    <h4 class="name" id="~diff"><span class="type-signature">(inner) </span>diff<span class="signature">(x1, y1, x2, y2)</span><span class="type-signature"> &rarr; {Pair}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    Calculates the difference of two vectors
+</div>
 
 
 
@@ -136,11 +140,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -152,32 +152,20 @@
 
         <tr>
             
-                <td class="name"><code>piece</code></td>
+                <td class="name"><code>x1</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Piece</span>
+<span class="param-type">number</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last"></td>
@@ -187,15 +175,12 @@
 
         <tr>
             
-                <td class="name"><code>size</code></td>
+                <td class="name"><code>y1</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Vector">Vector</a></span>
-|
-
 <span class="param-type">number</span>
 
 
@@ -203,23 +188,7 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    50
-                
-                </td>
             
 
             <td class="description last"></td>
@@ -229,15 +198,12 @@
 
         <tr>
             
-                <td class="name"><code>borderFill</code></td>
+                <td class="name"><code>x2</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Vector">Vector</a></span>
-|
-
 <span class="param-type">number</span>
 
 
@@ -245,23 +211,30 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y2</code></td>
+            
+
+            <td class="type">
+            
                 
-                    0
-                
-                </td>
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
             
 
             <td class="description last"></td>
@@ -305,7 +278,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="outline.js.html">outline.js</a>, <a href="outline.js.html#line28">line 28</a>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -341,7 +314,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type">Pair</span>
 
 
     </dd>
@@ -359,7 +332,7 @@
     
 
     
-    <h4 class="name" id="~select"><span class="type-signature">(inner) </span>select<span class="signature">(insert, t, s, n)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~equal"><span class="type-signature">(inner) </span>equal<span class="signature">(x1, y1, x2, y2)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -399,30 +372,7 @@
 
         <tr>
             
-                <td class="name"><code>insert</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#Insert">Insert</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>t</code></td>
+                <td class="name"><code>x1</code></td>
             
 
             <td class="type">
@@ -445,7 +395,7 @@
 
         <tr>
             
-                <td class="name"><code>s</code></td>
+                <td class="name"><code>y1</code></td>
             
 
             <td class="type">
@@ -468,7 +418,30 @@
 
         <tr>
             
-                <td class="name"><code>n</code></td>
+                <td class="name"><code>x2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y2</code></td>
             
 
             <td class="type">
@@ -525,7 +498,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="outline.js.html">outline.js</a>, <a href="outline.js.html#line17">line 17</a>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -550,6 +523,202 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~isNull"><span class="type-signature">(inner) </span>isNull<span class="signature">(x, y)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Tells whether this pair is (0, 0)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pair.js.html">pair.js</a>, <a href="pair.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 

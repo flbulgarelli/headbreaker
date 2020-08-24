@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Outline</title>
+    <title>JSDoc: Module: Structure</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Outline</h1>
+    <h1 class="page-title">Module: Structure</h1>
 
     
 
@@ -33,8 +33,6 @@
 <article>
     <div class="container-overview">
     
-        
-            <div class="description">This module contains the draw function. Override it change pieces drawing strategy</div>
         
 
         
@@ -69,7 +67,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="outline.js.html">outline.js</a>, <a href="outline.js.html#line4">line 4</a>
+        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -108,7 +106,7 @@
     
 
     
-    <h4 class="name" id="~draw"><span class="type-signature">(inner) </span>draw<span class="signature">(piece, size<span class="signature-attributes">opt</span>, borderFill<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span></h4>
+    <h4 class="name" id="~asStructure"><span class="type-signature">(inner) </span>asStructure<span class="signature">(structureLike)</span><span class="type-signature"> &rarr; {<a href="global.html#Structure">Structure</a>}</span></h4>
     
 
     
@@ -136,11 +134,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -152,116 +146,20 @@
 
         <tr>
             
-                <td class="name"><code>piece</code></td>
+                <td class="name"><code>structureLike</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Piece</span>
+<span class="param-type">StructureLike</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>size</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#Vector">Vector</a></span>
-|
-
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    50
-                
-                </td>
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>borderFill</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#Vector">Vector</a></span>
-|
-
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    0
-                
-                </td>
             
 
             <td class="description last"></td>
@@ -305,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="outline.js.html">outline.js</a>, <a href="outline.js.html#line28">line 28</a>
+        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -341,7 +239,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type"><a href="global.html#Structure">Structure</a></span>
 
 
     </dd>
@@ -359,7 +257,7 @@
     
 
     
-    <h4 class="name" id="~select"><span class="type-signature">(inner) </span>select<span class="signature">(insert, t, s, n)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~deserialize"><span class="type-signature">(inner) </span>deserialize<span class="signature">(string)</span><span class="type-signature"> &rarr; {<a href="global.html#Structure">Structure</a>}</span></h4>
     
 
     
@@ -399,82 +297,13 @@
 
         <tr>
             
-                <td class="name"><code>insert</code></td>
+                <td class="name"><code>string</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Insert">Insert</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>t</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>s</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>n</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -525,7 +354,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="outline.js.html">outline.js</a>, <a href="outline.js.html#line17">line 17</a>
+        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -550,6 +379,175 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#Structure">Structure</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~serialize"><span class="type-signature">(inner) </span>serialize<span class="signature">(structure)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>structure</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Structure">Structure</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -558,6 +556,81 @@
         
     
 
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="~StructureLike">StructureLike</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="global.html#Structure">Structure</a></span>
+|
+
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="structure.js.html">structure.js</a>, <a href="structure.js.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
     
 
     
