@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Piece, Tab, Slot, None, anchor, Anchor} = require('../src/index');
+const {Puzzle, Piece, Tab, Slot, None, anchor, vector} = require('../src/index');
 
 describe("piece", () => {
   describe("can annotate a piece", () => {
@@ -108,21 +108,35 @@ describe("piece", () => {
   })
 
   it("can compute diameter multiple times", () => {
-    const puzzle = new Puzzle({pieceRadio: {x: 6, y: 4}});
+    const puzzle = new Puzzle({pieceRadio: vector(3, 2)});
     const piece = puzzle.newPiece();
 
-    assert.deepEqual(piece.diameter, {x: 12, y: 8});
-    assert.deepEqual(piece.diameter, {x: 12, y: 8});
+    assert.deepEqual(piece.diameter, vector(6, 4));
+    assert.deepEqual(piece.diameter, vector(6, 4));
+  })
+
+  it("can override piece size", () => {
+    const puzzle = new Puzzle();
+    const piece = puzzle.newPiece();
+
+    assert.deepEqual(piece.radio, vector(2, 2));
+    assert.deepEqual(piece.diameter, vector(4, 4));
+
+    piece.overrideRadio(vector(5, 9));
+
+    assert.deepEqual(piece.radio, vector(5, 9));
+    assert.deepEqual(piece.diameter, vector(10, 18));
+
   })
 
 
   it("can create a rectangular, wide piece from a puzzle", () => {
-    const puzzle = new Puzzle({pieceRadio: {x: 6, y: 4}});
+    const puzzle = new Puzzle({pieceRadio: vector(6, 4)});
     const piece = puzzle.newPiece();
     piece.locateAt(0, 0);
 
     assert.equal(piece.puzzle, puzzle);
-    assert.deepEqual(piece.radio, {x: 6, y: 4});
+    assert.deepEqual(piece.radio, vector(6, 4));
     assert.deepEqual(piece.rightAnchor, anchor(6, 0));
     assert.deepEqual(piece.leftAnchor, anchor(-6, 0));
     assert.deepEqual(piece.upAnchor, anchor(0, -4));

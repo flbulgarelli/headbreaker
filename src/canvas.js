@@ -9,6 +9,7 @@ const {vector, ...Vector} = require('./vector');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
+const Dimmension = require('./dimmension');
 
 /**
  * @typedef {object} Shape
@@ -104,7 +105,7 @@ class Canvas {
       painter = null }) {
     this.width = width;
     this.height = height;
-    this.pieceDiameter = Vector.cast(pieceSize);
+    this.pieceDimmension = Dimmension.diameter(pieceSize);
     this.borderFill = Vector.cast(borderFill);
     this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
@@ -490,7 +491,14 @@ class Canvas {
    * @type {import('./vector').Vector}
    */
   get pieceRadio() {
-    return Vector.multiply(this.pieceDiameter, 0.5)
+    return this.pieceDimmension.radio;
+  }
+
+  /**
+   * @type {import('./vector').Vector}
+   */
+  get pieceDiameter() {
+    return this.pieceDimmension.diameter;
   }
 
   /**
