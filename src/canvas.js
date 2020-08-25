@@ -134,7 +134,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, metadata}) {
-    SpatialMetadata.initialize(metadata, Vector.origin())
+    SpatialMetadata.initialize(metadata, Vector.zero())
     this.renderPiece(this._newPiece(structure, metadata));
   }
 
@@ -462,11 +462,11 @@ class Canvas {
    */
   _imageMetadataFor(piece) {
     if (this.imageMetadata) {
-      return {
-        content: this.imageMetadata.content,
-        offset: piece.metadata.targetPosition || this.imageMetadata.offset,
-        scale: piece.metadata.scale || this.imageMetadata.scale
-      };
+      const scale = piece.metadata.scale || this.imageMetadata.scale || 1;
+      const offset = Vector.plus(
+        piece.metadata.targetPosition || Vector.zero(),
+        this.imageMetadata.offset || Vector.zero());
+      return { content: this.imageMetadata.content, offset, scale };
     } else {
       return ImageMetadata.asImageMetadata(piece.metadata.image);
     }

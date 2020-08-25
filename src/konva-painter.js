@@ -108,7 +108,7 @@ class KonvaPainter extends Painter {
       fill: !image ? piece.metadata.color || 'black' : null,
       fillPatternImage: image && image.content,
       fillPatternScale: image && {x: image.scale, y: image.scale},
-      fillPatternOffset: image && image.offset,
+      fillPatternOffset: image && Vector.divide(image.offset, image.scale),
       tension: canvas.lineSoftness,
       stroke: piece.metadata.strokeColor || canvas.strokeColor,
       strokeWidth: canvas.strokeWidth,
