@@ -9,6 +9,7 @@ const {vector, ...Vector} = require('./vector');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
+const {diameter} = require('./size');
 
 /**
  * @typedef {object} Shape
@@ -80,7 +81,7 @@ class Canvas {
    * @param {object} options
    * @param {number} options.width
    * @param {number} options.height
-   * @param {import('./vector').Vector|number} [options.pieceSize]
+   * @param {import('./vector').Vector|number} [options.pieceSize] the piece size expresed as it edge-to-edge diameter
    * @param {number} [options.proximity]
    * @param {import('./vector').Vector|number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
    * @param {number} [options.strokeWidth]
@@ -104,7 +105,7 @@ class Canvas {
       painter = null }) {
     this.width = width;
     this.height = height;
-    this.pieceDiameter = Vector.cast(pieceSize);
+    this.pieceSize = diameter(pieceSize);
     this.borderFill = Vector.cast(borderFill);
     this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
@@ -180,7 +181,7 @@ class Canvas {
    * @param {Puzzle} puzzle
    */
   renderPuzzle(puzzle) {
-    this.pieceDiameter = puzzle.pieceDiameter;
+    this.pieceSize = puzzle.pieceSize;
     this.proximity = puzzle.proximity * 2;
     this._puzzle = puzzle;
     this.renderPieces(puzzle.pieces);
@@ -490,7 +491,14 @@ class Canvas {
    * @type {import('./vector').Vector}
    */
   get pieceRadio() {
-    return Vector.multiply(this.pieceDiameter, 0.5)
+    return this.pieceSize.radio;
+  }
+
+  /**
+   * @type {import('./vector').Vector}
+   */
+  get pieceDiameter() {
+    return this.pieceSize.diameter;
   }
 
   /**

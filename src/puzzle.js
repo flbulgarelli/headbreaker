@@ -2,6 +2,7 @@ const {Anchor} = require('./anchor');
 const Piece = require('./piece');
 const {NullValidator} = require('./validator');
 const {vector, ...Vector} = require('./vector')
+const {radio} = require('./size')
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
@@ -29,7 +30,7 @@ class Puzzle {
    * @param {Settings} [options]
    */
   constructor({pieceRadio = 2, proximity = 1} = {}) {
-    this.pieceRadio = Vector.cast(pieceRadio);
+    this.pieceSize = radio(pieceRadio);
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
@@ -265,10 +266,16 @@ class Puzzle {
    * @type {import('./vector').Vector}
    */
   get pieceDiameter() {
-    if (!this._pieceDiameter) {
-      this._pieceDiameter = Vector.multiply(this.pieceRadio, 2);
-    }
-    return this._pieceDiameter;
+    return this.pieceSize.diameter;
+  }
+
+  /**
+   * The piece width, from center to edge
+   *
+   * @type {import('./vector').Vector}
+   */
+  get pieceRadio() {
+    return this.pieceSize.radio;
   }
 
   /**
