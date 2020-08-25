@@ -10,6 +10,7 @@ const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
 const {diameter} = require('./size');
+const {itself} = require('./prelude');
 
 /**
  * @typedef {object} Shape
@@ -90,6 +91,8 @@ class Canvas {
    * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {boolean} [options.fixed] whether the canvas can is fixed or can be dragged
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
+   * @param {number} [options.horizontalPiecesMaxCount] the maximal amount of horizontal pieces used to calculate the maximal width.
+   *                                                    You only need to specify this option when pieces are manually sketched and you require this information for image scaling
    */
   constructor(id, {
       width,
@@ -102,7 +105,8 @@ class Canvas {
       lineSoftness = 0,
       image = null,
       fixed = false,
-      painter = null }) {
+      painter = null,
+      horizontalPiecesMaxCount = null }) {
     this.width = width;
     this.height = height;
     this.pieceSize = diameter(pieceSize);
@@ -117,6 +121,9 @@ class Canvas {
     this._painter = painter || new window['headbreaker']['painters']['Konva']();
     this._initialize();
     this._painter.initialize(this, id);
+    this._horizontalPiecesMaxCount = horizontalPiecesMaxCount;
+    /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
+    this._imageAdjuster = itself;
   }
 
   _initialize() {
@@ -210,6 +217,7 @@ class Canvas {
   autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
     this._puzzle = manufacturer.build();
+    this._horizontalPiecesMaxCount = manufacturer.width;
     this.renderPieces(this.puzzle.pieces);
   }
 
@@ -460,7 +468,7 @@ class Canvas {
    * @param {Piece} piece
    * @returns {import('./image-metadata').ImageMetadata}
    */
-  _imageMetadataFor(piece) {
+  _baseImageMetadataFor(piece) {
     if (this.imageMetadata) {
       const scale = piece.metadata.scale || this.imageMetadata.scale || 1;
       const offset = Vector.plus(
@@ -469,6 +477,31 @@ class Canvas {
       return { content: this.imageMetadata.content, offset, scale };
     } else {
       return ImageMetadata.asImageMetadata(piece.metadata.image);
+    }
+  }
+
+  /**
+   * @param {Piece} piece
+   *
+   * @returns {import('./image-metadata').ImageMetadata}
+   */
+  imageMetadataFor(piece) {
+    return this._imageAdjuster(this._baseImageMetadataFor(piece));
+  }
+
+  adjustImagesToPuzzleWidth() {
+    this._imageAdjuster = (image) => {
+      const scale = this.puzzleWidth / image.content.width;
+      const offset = Vector.plus(image.offset, Vector.minus(this.borderFill, this.pieceDiameter));
+      return { content: image.content, scale, offset };
+    };
+  }
+
+  adjustImagesToPieceWidth() {
+    this._imageAdjuster = (image) => {
+      const scale = this.pieceWidth / image.content.width;
+      const offset = Vector.plus(image.offset, this.borderFill);
+      return { content: image.content, scale, offset };
     }
   }
 
@@ -485,6 +518,17 @@ class Canvas {
     piece.annotate(metadata);
     piece.locateAt(metadata.currentPosition.x, metadata.currentPosition.y);
     return piece;
+  }
+
+  get pieceWidth() {
+    return this.pieceDiameter.x;
+  }
+
+  get puzzleWidth() {
+    if (!this._horizontalPiecesMaxCount) {
+      throw new Error("You need to specify the horizontalPiecesMaxCount in order to calculate the puzzleWidth");
+    }
+    return this.pieceDiameter.x * this._horizontalPiecesMaxCount + this.strokeWidth * 2;
   }
 
   /**

@@ -102,7 +102,7 @@ class KonvaPainter extends Painter {
       y: piece.metadata.currentPosition.y
     });
 
-    const image = canvas._imageMetadataFor(piece);
+    const image = canvas.imageMetadataFor(piece);
     figure.shape = new Konva.Line({
       points: Outline.draw(piece, piece.diameter, canvas.borderFill),
       fill: !image ? piece.metadata.color || 'black' : null,

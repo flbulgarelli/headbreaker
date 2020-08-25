@@ -119,6 +119,16 @@ function plus(one, other) {
 /**
  * @param {Vector|number} one
  * @param {Vector|number} other
+ *
+ * @returns {Vector}
+ */
+function minus(one, other) {
+  return apply(one, other, (v1, v2) => v1 - v2);
+}
+
+/**
+ * @param {Vector|number} one
+ * @param {Vector|number} other
  * @param {(one: number, other: number) => number} [f]
  *
  * @returns {Vector}
@@ -140,5 +150,6 @@ module.exports = {
   multiply,
   divide,
   plus,
+  minus,
   apply
 };

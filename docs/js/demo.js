@@ -548,9 +548,10 @@ window.addEventListener('resize', () => {
   responsive.resize(container.offsetWidth, container.scrollHeight)
 });
 
-// ==================
-// Rectangular Canvas
-// ==================
+// ============================
+// Rectangular, Adjusted Canvas
+// ============================
+
 let quinquela = new Image();
 quinquela.src = 'static/quinquela.jpg';
 quinquela.onload = () => {
@@ -561,6 +562,7 @@ quinquela.onload = () => {
     lineSoftness: 0.18, image: quinquela
   });
 
+  rectangular.adjustImagesToPuzzleWidth();
   rectangular.autogenerate({
     horizontalPiecesCount: 3,
     verticalPiecesCount: 3

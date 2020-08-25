@@ -235,6 +235,7 @@ describe("Canvas", () => {
 
     assert.deepEqual(canvas.pieceDiameter, {x: 26, y: 26});
     assert.equal(canvas.proximity, 14);
+
   })
 
 
@@ -258,6 +259,9 @@ describe("Canvas", () => {
     assert.equal(canvas.puzzle.pieces[1].metadata.label.text, 'b');
     assert.equal(canvas.puzzle.pieces[2].metadata.label.text, 'c');
     assert.equal(canvas.puzzle.pieces[3].metadata.label.text, 'd');
+
+    assert.equal(canvas.puzzleWidth, 204);
+    assert.equal(canvas.pieceWidth, 100);
   })
 
 

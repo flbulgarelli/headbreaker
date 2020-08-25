@@ -501,6 +501,7 @@ quinquela.onload = () => {
     lineSoftness: 0.18, image: quinquela
   });
 
+  rectangular.adjustImagesToPuzzleWidth();
   rectangular.autogenerate({
     horizontalPiecesCount: 3,
     verticalPiecesCount: 3
