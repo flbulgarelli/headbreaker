@@ -41,7 +41,7 @@ function cast(value) {
  *
  * @returns {Vector}
  */
-function origin() {
+function zero() {
   return vector(0, 0);
 }
 
@@ -93,11 +93,8 @@ function diff(one, other) {
  * @returns {Vector}
  */
 function multiply(one, other) {
-  const first = cast(one);
-  const second = cast(other);
-  return {x: first.x * second.x , y: first.y * second.y};
+  return apply(one, other, (v1, v2) => v1 * v2);
 }
-
 
 /**
  * @param {Vector|number} one
@@ -106,9 +103,30 @@ function multiply(one, other) {
  * @returns {Vector}
  */
 function divide(one, other) {
+  return apply(one, other, (v1, v2) => v1 / v2);
+}
+
+/**
+ * @param {Vector|number} one
+ * @param {Vector|number} other
+ *
+ * @returns {Vector}
+ */
+function plus(one, other) {
+  return apply(one, other, (v1, v2) => v1 + v2);
+}
+
+/**
+ * @param {Vector|number} one
+ * @param {Vector|number} other
+ * @param {(one: number, other: number) => number} [f]
+ *
+ * @returns {Vector}
+ */
+function apply(one, other, f) {
   const first = cast(one);
   const second = cast(other);
-  return {x: first.x / second.x , y: first.y / second.y};
+  return {x: f(first.x, second.x), y: f(first.y, second.y)};
 }
 
 module.exports = {
@@ -116,9 +134,11 @@ module.exports = {
   vector,
   copy,
   equal,
-  origin,
+  zero,
   update,
   diff,
   multiply,
-  divide
+  divide,
+  plus,
+  apply
 };
