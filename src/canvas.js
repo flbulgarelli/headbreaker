@@ -92,8 +92,8 @@ class Canvas {
    * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {boolean} [options.fixed] whether the canvas can is fixed or can be dragged
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
-   * @param {number} [options.horizontalPiecesMaxCount] the maximal amount of horizontal pieces used to calculate the maximal width.
-   *                                                    You only need to specify this option when pieces are manually sketched and you require this information for image scaling
+   * @param {import('./vector').Vector|number} [options.maxPiecesCount] the maximal amount of pieces used to calculate the maximal width and height.
+   *                                                                    You only need to specify this option when pieces are manually sketched and you require this information for image scaling
    */
   constructor(id, {
       width,
@@ -107,7 +107,7 @@ class Canvas {
       image = null,
       fixed = false,
       painter = null,
-      horizontalPiecesMaxCount = null }) {
+      maxPiecesCount = null }) {
     this.width = width;
     this.height = height;
     this.pieceSize = diameter(pieceSize);
@@ -122,7 +122,8 @@ class Canvas {
     this._painter = painter || new window['headbreaker']['painters']['Konva']();
     this._initialize();
     this._painter.initialize(this, id);
-    this._horizontalPiecesMaxCount = horizontalPiecesMaxCount;
+    /** @type {import('./vector').Vector} */
+    this._maxPiecesCount = Vector.cast(maxPiecesCount);
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
   }
@@ -218,7 +219,7 @@ class Canvas {
   autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
     this._puzzle = manufacturer.build();
-    this._horizontalPiecesMaxCount = manufacturer.width;
+    this._maxPiecesCount = vector(manufacturer.width, manufacturer.height);
     this.renderPieces(this.puzzle.pieces);
   }
 
@@ -532,11 +533,23 @@ class Canvas {
     return this.pieceDiameter.x;
   }
 
+  get pieceHeight() {
+    return this.pieceDiameter.y;
+  }
+
   get puzzleWidth() {
-    if (!this._horizontalPiecesMaxCount) {
-      throw new Error("You need to specify the horizontalPiecesMaxCount in order to calculate the puzzleWidth");
+    return this.pieceDiameter.x * this.maxPiecesCount.x + this.strokeWidth * 2;
+  }
+
+  get puzzleHeight() {
+    return this.pieceDiameter.y * this.maxPiecesCount.y + this.strokeWidth * 2;
+  }
+
+  get maxPiecesCount() {
+    if (!this._maxPiecesCount) {
+      throw new Error("max pieces count was not specified");
     }
-    return this.pieceDiameter.x * this._horizontalPiecesMaxCount + this.strokeWidth * 2;
+    return this._maxPiecesCount;
   }
 
   /**
