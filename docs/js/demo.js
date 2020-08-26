@@ -502,11 +502,13 @@ pettoruti.onload = () => {
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
+    fixed: true
   });
   validated.autogenerate({
     horizontalPiecesCount: 5,
     verticalPiecesCount: 8
   });
+  validated.puzzle.pieces[4].translate(63, -56);
   validated.draw();
   validated.attachSolvedValidator();
   validated.onValid(() => {

@@ -411,18 +411,21 @@ pettoruti.onload = () => {
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
+    // used to stick canvas to its current position
+    fixed: true
   });
   validated.autogenerate({
     horizontalPiecesCount: 5,
     verticalPiecesCount: 8
   });
+  validated.puzzle.pieces[4].translate(63, -56);
+  validated.draw();
   validated.attachSolvedValidator();
   validated.onValid(() => {
     setTimeout(() => {
       document.getElementById('validated-canvas-overlay').setAttribute("class", "active");
     }, 1500);
   })
-  validated.draw();
 }
 ```
 
