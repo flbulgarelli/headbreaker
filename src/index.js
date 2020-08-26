@@ -4,6 +4,7 @@ const Puzzle = require('./puzzle');
 const Piece = require('./piece');
 const {Tab, Slot, None} = require('./insert');
 const {NullValidator, PieceValidator, PuzzleValidator} = require('./validator');
+const {Horizontal, Vertical} = require('./axis');
 const Structure = require('./structure');
 const Outline = require('./outline');
 const Canvas = require('./canvas');
@@ -31,6 +32,8 @@ module.exports = {
   PieceValidator,
   PuzzleValidator,
   NullValidator,
+  Horizontal,
+  Vertical,
   Tab,
   Slot,
   None,

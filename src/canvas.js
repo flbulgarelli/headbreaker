@@ -9,6 +9,7 @@ const {vector, ...Vector} = require('./vector');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
+const {Horizontal, Vertical} = require('./axis');
 const {diameter} = require('./size');
 const {itself} = require('./prelude');
 
@@ -492,26 +493,59 @@ class Canvas {
   }
 
   /**
-   * Configures canvas to adjust images width to puzzle's width
+   * Configures canvas to adjust images axis to puzzle's axis
+   *
+   * @param {import('./axis').Axis} axis
    */
-  adjustImagesToPuzzleWidth() {
+  adjustImagesToPuzzle(axis) {
     this._imageAdjuster = (image) => {
-      const scale = this.puzzleWidth / image.content.width;
+      const scale = axis.atVector(this.puzzleDiameter) / axis.atDimension(image.content);
       const offset = Vector.plus(image.offset, Vector.minus(this.borderFill, this.pieceDiameter));
       return { content: image.content, scale, offset };
     };
   }
 
   /**
-   * Configures canvas to adjust images width to pieces's width
+   * Configures canvas to adjust images width to puzzle's width
    */
-  adjustImagesToPieceWidth() {
+  adjustImagesToPuzzleWidth() {
+    this.adjustImagesToPuzzle(Horizontal);
+  }
+
+  /**
+   * Configures canvas to adjust images height to puzzle's height
+   */
+  adjustImagesToPuzzleHeight() {
+    this.adjustImagesToPuzzle(Vertical);
+  }
+
+  /**
+   * Configures canvas to adjust images axis to pieces's axis
+   *
+   * @param {import('./axis').Axis} axis
+   */
+  adjustImagesToPiece(axis) {
     this._imageAdjuster = (image) => {
-      const scale = this.pieceWidth / image.content.width;
+      const scale = axis.atVector(this.pieceDiameter) / axis.atDimension(image.content);
       const offset = Vector.plus(image.offset, this.borderFill);
       return { content: image.content, scale, offset };
     }
   }
+
+  /**
+   * Configures canvas to adjust images width to pieces's width
+   */
+  adjustImagesToPieceWidth() {
+    this.adjustImagesToPiece(Horizontal);
+  }
+
+  /**
+   * Configures canvas to adjust images height to pieces's height
+   */
+  adjustImagesToPieceHeight() {
+    this.adjustImagesToPiece(Vertical);
+  }
+
 
   _initializeEmptyPuzzle() {
     this._puzzle = new Puzzle(this.settings);
@@ -529,20 +563,9 @@ class Canvas {
     return piece;
   }
 
-  get pieceWidth() {
-    return this.pieceDiameter.x;
-  }
-
-  get pieceHeight() {
-    return this.pieceDiameter.y;
-  }
-
-  get puzzleWidth() {
-    return this.pieceDiameter.x * this.maxPiecesCount.x + this.strokeWidth * 2;
-  }
-
-  get puzzleHeight() {
-    return this.pieceDiameter.y * this.maxPiecesCount.y + this.strokeWidth * 2;
+  /** @type {import('./vector').Vector} */
+  get puzzleDiameter() {
+    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2);
   }
 
   get maxPiecesCount() {
