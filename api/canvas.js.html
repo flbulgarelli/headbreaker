@@ -37,6 +37,9 @@ const {vector, ...Vector} = require('./vector');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
+const {Horizontal, Vertical} = require('./axis');
+const {diameter} = require('./size');
+const {itself} = require('./prelude');
 
 /**
  * @typedef {object} Shape
@@ -87,8 +90,9 @@ const {PuzzleValidator, PieceValidator} = require('./validator');
  */
 
 /**
-  * @typedef {object} Template
+ * @typedef {object} Template
  * @property {import('./structure').StructureLike} structure
+ * @property {import('./size').Size} [size]
  * @property {CanvasMetadata} metadata
  */
 
@@ -108,7 +112,7 @@ class Canvas {
    * @param {object} options
    * @param {number} options.width
    * @param {number} options.height
-   * @param {import('./vector').Vector|number} [options.pieceSize]
+   * @param {import('./vector').Vector|number} [options.pieceSize] the piece size expresed as it edge-to-edge diameter
    * @param {number} [options.proximity]
    * @param {import('./vector').Vector|number} [options.borderFill] the broder fill of the pieces, expresed in pixels. 0 means no border fill, 0.5 * pieceSize means full fill
    * @param {number} [options.strokeWidth]
@@ -117,6 +121,8 @@ class Canvas {
    * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {boolean} [options.fixed] whether the canvas can is fixed or can be dragged
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
+   * @param {import('./vector').Vector|number} [options.maxPiecesCount] the maximal amount of pieces used to calculate the maximal width and height.
+   *                                                                    You only need to specify this option when pieces are manually sketched and you require this information for image scaling
    */
   constructor(id, {
       width,
@@ -129,10 +135,11 @@ class Canvas {
       lineSoftness = 0,
       image = null,
       fixed = false,
-      painter = null }) {
+      painter = null,
+      maxPiecesCount = null }) {
     this.width = width;
     this.height = height;
-    this.pieceDiameter = Vector.cast(pieceSize);
+    this.pieceSize = diameter(pieceSize);
     this.borderFill = Vector.cast(borderFill);
     this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
@@ -144,6 +151,10 @@ class Canvas {
     this._painter = painter || new window['headbreaker']['painters']['Konva']();
     this._initialize();
     this._painter.initialize(this, id);
+    /** @type {import('./vector').Vector} */
+    this._maxPiecesCount = Vector.cast(maxPiecesCount);
+    /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
+    this._imageAdjuster = itself;
   }
 
   _initialize() {
@@ -160,9 +171,9 @@ class Canvas {
    *
    * @param {Template} options
    */
-  sketchPiece({structure, metadata}) {
-    SpatialMetadata.initialize(metadata, Vector.origin())
-    this.renderPiece(this._newPiece(structure, metadata));
+  sketchPiece({structure, size = null, metadata}) {
+    SpatialMetadata.initialize(metadata, Vector.zero())
+    this.renderPiece(this._newPiece(structure, size, metadata));
   }
 
   /**
@@ -180,8 +191,8 @@ class Canvas {
     /** @type {LabelMetadata} */
     const label = piece.metadata.label;
     if (label &amp;&amp; label.text) {
-      label.fontSize = label.fontSize || this.pieceDiameter.y * 0.55;
-      label.y = label.y || (this.pieceDiameter.y - label.fontSize) / 2;
+      label.fontSize = label.fontSize || piece.diameter.y * 0.55;
+      label.y = label.y || (piece.diameter.y - label.fontSize) / 2;
       this._painter.label(this, piece, figure);
     }
 
@@ -208,7 +219,7 @@ class Canvas {
    * @param {Puzzle} puzzle
    */
   renderPuzzle(puzzle) {
-    this.pieceDiameter = puzzle.pieceDiameter;
+    this.pieceSize = puzzle.pieceSize;
     this.proximity = puzzle.proximity * 2;
     this._puzzle = puzzle;
     this.renderPieces(puzzle.pieces);
@@ -237,6 +248,7 @@ class Canvas {
   autogenerateWithManufacturer(manufacturer) {
     manufacturer.withStructure(this.settings);
     this._puzzle = manufacturer.build();
+    this._maxPiecesCount = vector(manufacturer.width, manufacturer.height);
     this.renderPieces(this.puzzle.pieces);
   }
 
@@ -487,38 +499,122 @@ class Canvas {
    * @param {Piece} piece
    * @returns {import('./image-metadata').ImageMetadata}
    */
-  _imageMetadataFor(piece) {
+  _baseImageMetadataFor(piece) {
     if (this.imageMetadata) {
-      return {
-        content: this.imageMetadata.content,
-        offset: piece.metadata.targetPosition || this.imageMetadata.offset,
-        scale: piece.metadata.scale || this.imageMetadata.scale
-      };
+      const scale = piece.metadata.scale || this.imageMetadata.scale || 1;
+      const offset = Vector.plus(
+        piece.metadata.targetPosition || Vector.zero(),
+        this.imageMetadata.offset || Vector.zero());
+      return { content: this.imageMetadata.content, offset, scale };
     } else {
       return ImageMetadata.asImageMetadata(piece.metadata.image);
     }
   }
+
+  /**
+   * @param {Piece} piece
+   *
+   * @returns {import('./image-metadata').ImageMetadata}
+   */
+  imageMetadataFor(piece) {
+    return this._imageAdjuster(this._baseImageMetadataFor(piece));
+  }
+
+  /**
+   * Configures canvas to adjust images axis to puzzle's axis
+   *
+   * @param {import('./axis').Axis} axis
+   */
+  adjustImagesToPuzzle(axis) {
+    this._imageAdjuster = (image) => {
+      const scale = axis.atVector(this.puzzleDiameter) / axis.atDimension(image.content);
+      const offset = Vector.plus(image.offset, Vector.minus(this.borderFill, this.pieceDiameter));
+      return { content: image.content, scale, offset };
+    };
+  }
+
+  /**
+   * Configures canvas to adjust images width to puzzle's width
+   */
+  adjustImagesToPuzzleWidth() {
+    this.adjustImagesToPuzzle(Horizontal);
+  }
+
+  /**
+   * Configures canvas to adjust images height to puzzle's height
+   */
+  adjustImagesToPuzzleHeight() {
+    this.adjustImagesToPuzzle(Vertical);
+  }
+
+  /**
+   * Configures canvas to adjust images axis to pieces's axis
+   *
+   * @param {import('./axis').Axis} axis
+   */
+  adjustImagesToPiece(axis) {
+    this._imageAdjuster = (image) => {
+      const scale = axis.atVector(this.pieceDiameter) / axis.atDimension(image.content);
+      const offset = Vector.plus(image.offset, this.borderFill);
+      return { content: image.content, scale, offset };
+    }
+  }
+
+  /**
+   * Configures canvas to adjust images width to pieces's width
+   */
+  adjustImagesToPieceWidth() {
+    this.adjustImagesToPiece(Horizontal);
+  }
+
+  /**
+   * Configures canvas to adjust images height to pieces's height
+   */
+  adjustImagesToPieceHeight() {
+    this.adjustImagesToPiece(Vertical);
+  }
+
 
   _initializeEmptyPuzzle() {
     this._puzzle = new Puzzle(this.settings);
   }
 
   /**
-   * @param {import('./structure').StructureLike} structureLike
+   * @param {import('./structure').StructureLike} structureLike the piece structure
+   * @param {import('./size').Size} size
    * @param {CanvasMetadata} metadata
    */
-  _newPiece(structureLike, metadata) {
-    let piece = this.puzzle.newPiece(Structure.asStructure(structureLike));
-    piece.annotate(metadata);
-    piece.locateAt(metadata.currentPosition.x, metadata.currentPosition.y);
+  _newPiece(structureLike, size, metadata) {
+    let piece = this.puzzle.newPiece(
+      Structure.asStructure(structureLike),
+      { centralAnchor: vector(metadata.currentPosition.x, metadata.currentPosition.y), metadata, size });
     return piece;
+  }
+
+  /** @type {import('./vector').Vector} */
+  get puzzleDiameter() {
+    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2);
+  }
+
+  get maxPiecesCount() {
+    if (!this._maxPiecesCount) {
+      throw new Error("max pieces count was not specified");
+    }
+    return this._maxPiecesCount;
   }
 
   /**
    * @type {import('./vector').Vector}
    */
   get pieceRadio() {
-    return Vector.multiply(this.pieceDiameter, 0.5)
+    return this.pieceSize.radio;
+  }
+
+  /**
+   * @type {import('./vector').Vector}
+   */
+  get pieceDiameter() {
+    return this.pieceSize.diameter;
   }
 
   /**
@@ -552,13 +648,13 @@ module.exports = Canvas
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#vector">vector</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Aug 23 2020 21:46:58 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Aug 26 2020 18:45:36 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

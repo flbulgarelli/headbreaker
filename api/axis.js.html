@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
+    <title>JSDoc: Source: axis.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: index.js</h1>
+    <h1 class="page-title">Source: axis.js</h1>
 
     
 
@@ -26,56 +26,51 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const Pair = require('./pair')
-const {anchor, Anchor} = require('./anchor')
-const Puzzle = require('./puzzle');
-const Piece = require('./piece');
-const {Tab, Slot, None} = require('./insert');
-const {NullValidator, PieceValidator, PuzzleValidator} = require('./validator');
-const {Horizontal, Vertical} = require('./axis');
-const Structure = require('./structure');
-const Outline = require('./outline');
-const Canvas = require('./canvas');
-const Manufacturer = require('./manufacturer');
-const {InsertSequence, ...generators} = require('./sequence');
-const Metadata = require('./metadata');
-const SpatialMetadata = require('./spatial-metadata');
-const {vector, ...Vector} = require('./vector');
-const {radio, diameter} = require('./size');
+            <pre class="prettyprint source linenums"><code>
 
 /**
- * @module headbreaker
+ * @typedef {Vertical|Horizontal} Axis
  */
-module.exports = {
-  anchor,
-  vector,
-  radio,
-  diameter,
-  Anchor,
-  Puzzle,
-  Piece,
-  Canvas,
-  Manufacturer,
-  InsertSequence,
-  PieceValidator,
-  PuzzleValidator,
-  NullValidator,
-  Horizontal,
-  Vertical,
-  Tab,
-  Slot,
-  None,
-  Pair,
-  Metadata,
-  SpatialMetadata,
-  Outline,
-  Structure,
-  Vector,
-  generators,
-  painters: {
-    Dummy: require('./dummy-painter'),
-    Konva: require('./konva-painter')
+
+const Vertical = {
+  /**
+   * @param {import("./vector").Vector} vector
+   * @returns {number}
+   */
+  atVector(vector) {
+    return vector.y
+  },
+
+  /**
+   * @param {HTMLImageElement} image
+   * @returns {number}
+   */
+  atDimension(image) {
+    return image.height;
   }
+}
+
+const Horizontal = {
+  /**
+   * @param {import("./vector").Vector} vector
+   * @returns {number}
+   */
+  atVector(vector) {
+    return vector.x
+  },
+
+  /**
+   * @param {HTMLImageElement} image
+   * @returns {number}
+   */
+  atDimension(image) {
+    return image.width;
+  }
+}
+
+module.exports = {
+  Vertical,
+  Horizontal
 }
 </code></pre>
         </article>

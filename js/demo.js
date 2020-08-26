@@ -257,6 +257,7 @@ xul.onload = () => {
     lineSoftness: 0.18, image: xul,
   });
 
+  autogen.adjustImagesToPuzzleHeight();
   autogen.autogenerate({
     horizontalPiecesCount: 6,
     verticalPiecesCount: 5
@@ -378,6 +379,7 @@ berni.onload = () => {
     strokeColor: 'black'
   });
 
+  sound.adjustImagesToPuzzleHeight();
   sound.autogenerate({
     horizontalPiecesCount: 6,
     insertsGenerator: headbreaker.generators.random
@@ -500,11 +502,13 @@ pettoruti.onload = () => {
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
+    fixed: true
   });
   validated.autogenerate({
     horizontalPiecesCount: 5,
     verticalPiecesCount: 8
   });
+  validated.puzzle.pieces[4].translate(63, -56);
   validated.draw();
   validated.attachSolvedValidator();
   validated.onValid(() => {
@@ -548,9 +552,10 @@ window.addEventListener('resize', () => {
   responsive.resize(container.offsetWidth, container.scrollHeight)
 });
 
-// ==================
-// Rectangular Canvas
-// ==================
+// ============================
+// Rectangular, Adjusted Canvas
+// ============================
+
 let quinquela = new Image();
 quinquela.src = 'static/quinquela.jpg';
 quinquela.onload = () => {
@@ -561,6 +566,7 @@ quinquela.onload = () => {
     lineSoftness: 0.18, image: quinquela
   });
 
+  rectangular.adjustImagesToPuzzleWidth();
   rectangular.autogenerate({
     horizontalPiecesCount: 3,
     verticalPiecesCount: 3

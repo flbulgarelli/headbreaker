@@ -232,6 +232,7 @@ xul.onload = () =&gt; {
     lineSoftness: 0.18, image: xul,
   });
 
+  autogen.adjustImagesToPuzzleHeight();
   autogen.autogenerate({
     horizontalPiecesCount: 6,
     verticalPiecesCount: 5
@@ -324,6 +325,7 @@ berni.onload = () =&gt; {
     strokeColor: 'black'
   });
 
+  sound.adjustImagesToPuzzleHeight();
   sound.autogenerate({
     horizontalPiecesCount: 6,
     insertsGenerator: headbreaker.generators.random
@@ -467,18 +469,21 @@ pettoruti.onload = () =&gt; {
     pieceSize: 80, proximity: 18,
     borderFill: 8, strokeWidth: 1.5,
     lineSoftness: 0.18, image: pettoruti,
+    // used to stick canvas to its current position
+    fixed: true
   });
   validated.autogenerate({
     horizontalPiecesCount: 5,
     verticalPiecesCount: 8
   });
+  validated.puzzle.pieces[4].translate(63, -56);
+  validated.draw();
   validated.attachSolvedValidator();
   validated.onValid(() =&gt; {
     setTimeout(() =&gt; {
       document.getElementById('validated-canvas-overlay').setAttribute(&quot;class&quot;, &quot;active&quot;);
     }, 1500);
   })
-  validated.draw();
 }
 </code></pre>
 
@@ -552,6 +557,7 @@ quinquela.onload = () =&gt; {
     lineSoftness: 0.18, image: quinquela
   });
 
+  rectangular.adjustImagesToPuzzleWidth();
   rectangular.autogenerate({
     horizontalPiecesCount: 3,
     verticalPiecesCount: 3
@@ -654,5 +660,5 @@ quinquela.onload = () =&gt; {
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-08-24 00:50:32
+Build Date UTC : 2020-08-26 21:45:57
 -->
