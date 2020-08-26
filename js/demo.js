@@ -522,12 +522,11 @@ pettoruti.onload = () => {
 }
 
 
-
-
-// ================
+// =================
 // Responsive Canvas
-// ================
+// =================
 
+const initialWidth = 800;
 const responsive = new headbreaker.Canvas('responsive-canvas', {
   width: 800, height: 650,
   pieceSize: 100, proximity: 20,
@@ -546,11 +545,16 @@ responsive.autogenerate({
 });
 responsive.draw();
 
-registerButtons('responsive', responsive);
-window.addEventListener('resize', () => {
-  var container = document.getElementById('responsive-canvas');
-  responsive.resize(container.offsetWidth, container.scrollHeight)
+['resize', 'DOMContentLoaded'].forEach((event) => {
+  window.addEventListener(event, () => {
+    var container = document.getElementById('responsive-canvas');
+    responsive.resize(container.offsetWidth, container.scrollHeight);
+    responsive.scale(container.offsetWidth / initialWidth);
+    responsive.redraw();
+  });
 });
+
+registerButtons('responsive', responsive);
 
 // ============================
 // Rectangular, Adjusted Canvas

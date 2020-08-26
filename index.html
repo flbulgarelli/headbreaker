@@ -101,6 +101,12 @@
 
 <script src="js/headbreaker.js"></script>
 
+<style>
+.form-group {
+  margin-top: 15px;
+}
+</style>
+
 <h1 id="samples">Samples</h1>
 <h2 id="basic">Basic</h2>
 <h3 id="code">Code</h3>
@@ -517,7 +523,8 @@ pettoruti.onload = () =&gt; {
 
 <h2 id="responsive">Responsive</h2>
 <h3 id="code_11">Code</h3>
-<pre><code class="javascript">const responsive = new headbreaker.Canvas('responsive-canvas', {
+<pre><code class="javascript">const initialWidth = 800;
+const responsive = new headbreaker.Canvas('responsive-canvas', {
   width: 800, height: 650,
   pieceSize: 100, proximity: 20,
   borderFill: 10, strokeWidth: 1.5,
@@ -526,17 +533,32 @@ pettoruti.onload = () =&gt; {
 
 responsive.autogenerate({
   horizontalPiecesCount: 3,
-  verticalPiecesCount: 3
+  verticalPiecesCount: 3,
+  metadata: [
+    {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'},
+    {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'},
+    {color: '#16BA0D'}, {color: '#000000'}, {color: '#6F04C7'},
+  ]
 });
 responsive.draw();
 
-window.addEventListener('resize', () =&gt; {
-  var container = document.getElementById('responsive-canvas');
-  responsive.resize(container.offsetWidth, container.scrollHeight)
+['resize', 'DOMContentLoaded'].forEach((event) =&gt; {
+  window.addEventListener(event, () =&gt; {
+    var container = document.getElementById('responsive-canvas');
+    responsive.resize(container.offsetWidth, container.scrollHeight);
+    responsive.scale(container.offsetWidth / initialWidth);
+    responsive.redraw();
+  });
 });
 </code></pre>
 
 <h3 id="demo_9">Demo</h3>
+<style>
+#responsive-canvas .konvajs-content canvas {
+  border: solid !important;
+}
+</style>
+
 <div id="responsive-canvas">
 </div>
 
@@ -660,5 +682,5 @@ quinquela.onload = () =&gt; {
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-08-26 21:45:57
+Build Date UTC : 2020-08-26 22:41:45
 -->
