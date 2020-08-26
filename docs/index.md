@@ -1,4 +1,9 @@
 <script src="js/headbreaker.js"></script>
+<style>
+.form-group {
+  margin-top: 15px;
+}
+</style>
 
 # Samples
 
@@ -462,6 +467,7 @@ pettoruti.onload = () => {
 ### Code
 
 ```javascript
+const initialWidth = 800;
 const responsive = new headbreaker.Canvas('responsive-canvas', {
   width: 800, height: 650,
   pieceSize: 100, proximity: 20,
@@ -471,17 +477,32 @@ const responsive = new headbreaker.Canvas('responsive-canvas', {
 
 responsive.autogenerate({
   horizontalPiecesCount: 3,
-  verticalPiecesCount: 3
+  verticalPiecesCount: 3,
+  metadata: [
+    {color: '#6F04C7'}, {color: '#0498D1'}, {color: '#16BA0D'},
+    {color: '#000000'}, {color: '#6F04C7'}, {color: '#0498D1'},
+    {color: '#16BA0D'}, {color: '#000000'}, {color: '#6F04C7'},
+  ]
 });
 responsive.draw();
 
-window.addEventListener('resize', () => {
-  var container = document.getElementById('responsive-canvas');
-  responsive.resize(container.offsetWidth, container.scrollHeight)
+['resize', 'DOMContentLoaded'].forEach((event) => {
+  window.addEventListener(event, () => {
+    var container = document.getElementById('responsive-canvas');
+    responsive.resize(container.offsetWidth, container.scrollHeight);
+    responsive.scale(container.offsetWidth / initialWidth);
+    responsive.redraw();
+  });
 });
 ```
 
 ### Demo
+
+<style>
+#responsive-canvas .konvajs-content canvas {
+  border: solid !important;
+}
+</style>
 
 <div id="responsive-canvas">
 </div>

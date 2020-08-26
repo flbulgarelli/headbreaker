@@ -51,6 +51,14 @@ class Painter {
   draw(canvas) { }
 
   /**
+   * Scales the canvas contents
+   *
+   * @param {Canvas} canvas
+   * @param {import('./vector').Vector} factor
+   */
+  scale(canvas, factor) { }
+
+  /**
    * Adds a piece to the rendering backend, so that it is ready to be drawn
    *
    * @param {Canvas} canvas

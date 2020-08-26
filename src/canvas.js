@@ -428,6 +428,14 @@ class Canvas {
   }
 
   /**
+   * Scales the canvas contents to the given factor
+   * @param {import('./vector').Vector|number} factor
+   */
+  scale(factor) {
+    this._painter.scale(this, Vector.cast(factor));
+  }
+
+  /**
    * @param {Piece} piece
    */
   _annotatePiecePosition(piece) {

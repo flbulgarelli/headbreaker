@@ -70,10 +70,9 @@ class KonvaPainter extends Painter {
    */
   reinitialize(canvas) {
     const layer = canvas['__konvaLayer__'];
-    const stage = layer.getStage();
     layer.destroy();
 
-    this._initializeLayer(stage, canvas);
+    this._initializeLayer(layer.getStage(), canvas);
   }
 
   /**
@@ -87,7 +86,14 @@ class KonvaPainter extends Painter {
 
     stage.width(width);
     stage.height(height);
-    stage.draw();
+  }
+
+  /**
+   * @param {Canvas} canvas
+   * @param {import('./vector').Vector} factor
+   */
+  scale(canvas, factor) {
+    canvas['__konvaLayer__'].getStage().scale(factor);
   }
 
   /**
