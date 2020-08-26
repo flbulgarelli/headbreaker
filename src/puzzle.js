@@ -41,11 +41,12 @@ class Puzzle {
   /**
    * Creates and adds to this puzzle a new piece
    *
-   * @param {import('./structure').Structure} [options] the piece structure
+   * @param {import('./structure').Structure} [structure] the piece structure
+   * @param {import('./piece').PieceConfig} [config] the piece config
    * @returns {Piece} the new piece
    */
-  newPiece(options = {}) {
-    const piece = new Piece(options);
+  newPiece(structure = {}, config = {}) {
+    const piece = new Piece(structure, config);
     this.addPiece(piece);
     return piece;
   }

@@ -61,8 +61,9 @@ const {itself} = require('./prelude');
  */
 
 /**
-  * @typedef {object} Template
+ * @typedef {object} Template
  * @property {import('./structure').StructureLike} structure
+ * @property {import('./size').Size} [size]
  * @property {CanvasMetadata} metadata
  */
 
@@ -140,9 +141,9 @@ class Canvas {
    *
    * @param {Template} options
    */
-  sketchPiece({structure, metadata}) {
+  sketchPiece({structure, size = null, metadata}) {
     SpatialMetadata.initialize(metadata, Vector.zero())
-    this.renderPiece(this._newPiece(structure, metadata));
+    this.renderPiece(this._newPiece(structure, size, metadata));
   }
 
   /**
@@ -489,6 +490,9 @@ class Canvas {
     return this._imageAdjuster(this._baseImageMetadataFor(piece));
   }
 
+  /**
+   * Configures canvas to adjust images width to puzzle's width
+   */
   adjustImagesToPuzzleWidth() {
     this._imageAdjuster = (image) => {
       const scale = this.puzzleWidth / image.content.width;
@@ -497,6 +501,9 @@ class Canvas {
     };
   }
 
+  /**
+   * Configures canvas to adjust images width to pieces's width
+   */
   adjustImagesToPieceWidth() {
     this._imageAdjuster = (image) => {
       const scale = this.pieceWidth / image.content.width;
@@ -510,13 +517,14 @@ class Canvas {
   }
 
   /**
-   * @param {import('./structure').StructureLike} structureLike
+   * @param {import('./structure').StructureLike} structureLike the piece structure
+   * @param {import('./size').Size} size
    * @param {CanvasMetadata} metadata
    */
-  _newPiece(structureLike, metadata) {
-    let piece = this.puzzle.newPiece(Structure.asStructure(structureLike));
-    piece.annotate(metadata);
-    piece.locateAt(metadata.currentPosition.x, metadata.currentPosition.y);
+  _newPiece(structureLike, size, metadata) {
+    let piece = this.puzzle.newPiece(
+      Structure.asStructure(structureLike),
+      { centralAnchor: vector(metadata.currentPosition.x, metadata.currentPosition.y), metadata, size });
     return piece;
   }
 
