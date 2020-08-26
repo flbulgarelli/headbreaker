@@ -257,6 +257,7 @@ xul.onload = () => {
     lineSoftness: 0.18, image: xul,
   });
 
+  autogen.adjustImagesToPuzzleHeight();
   autogen.autogenerate({
     horizontalPiecesCount: 6,
     verticalPiecesCount: 5
@@ -378,6 +379,7 @@ berni.onload = () => {
     strokeColor: 'black'
   });
 
+  sound.adjustImagesToPuzzleHeight();
   sound.autogenerate({
     horizontalPiecesCount: 6,
     insertsGenerator: headbreaker.generators.random
