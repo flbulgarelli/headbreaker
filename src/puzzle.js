@@ -4,6 +4,11 @@ const {NullValidator} = require('./validator');
 const {vector, ...Vector} = require('./vector')
 const {radio} = require('./size')
 
+
+/**
+ * @typedef  {(pieces: import("./piece")[]) => Anchor[]} Shuffler
+ */
+
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
  *
@@ -116,8 +121,17 @@ class Puzzle {
    * @param {number} maxY
    */
   shuffle(maxX, maxY) {
+    this.shuffleWith((pieces) => pieces.map(_it => Anchor.atRandom(maxX, maxY)));
+  }
+
+  /**
+   * @param {Shuffler} shuffler
+   */
+  shuffleWith(shuffler) {
     this.disconnect();
-    this.pieces.forEach(it => it.recenterAround(Anchor.atRandom(maxX, maxY)));
+    shuffler(this.pieces).forEach((newAnchor, index) => {
+      this.pieces[index].recenterAround(newAnchor);
+    });
     this.autoconnect();
   }
 
