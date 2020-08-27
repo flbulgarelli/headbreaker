@@ -105,7 +105,8 @@ class KonvaPainter extends Painter {
   sketch(canvas, piece, figure) {
     figure.group = new Konva.Group({
       x: piece.metadata.currentPosition.x,
-      y: piece.metadata.currentPosition.y
+      y: piece.metadata.currentPosition.y,
+      draggable: !piece.metadata.fixed
     });
 
     const image = canvas.imageMetadataFor(piece);
@@ -121,7 +122,6 @@ class KonvaPainter extends Painter {
       closed: true,
     });
     figure.group.add(figure.shape);
-    figure.group.draggable('true');
 
     canvas['__konvaLayer__'].add(figure.group);
   }

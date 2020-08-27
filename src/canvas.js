@@ -56,6 +56,7 @@ const {itself} = require('./prelude');
  * @property {import('./vector').Vector} [targetPosition]
  * @property {import('./vector').Vector} [currentPosition]
  * @property {string} [color]
+ * @property {boolean} [fixed]
  * @property {string} [strokeColor]
  * @property {import('./image-metadata').ImageLike} [image]
  * @property {LabelMetadata} [label]
