@@ -146,8 +146,11 @@ vangogh.onload = () => {
     pieceSize: 100, proximity: 20,
     borderFill: 10, strokeWidth: 2,
     lineSoftness: 0.12, image: vangogh,
+    // optional, but it must be set in order to activate image scaling
+    maxPiecesCount: {x: 5, y: 5}
   });
 
+  background.adjustImagesToPuzzleHeight();
   background.sketchPiece({
     structure: 'TS--',
     metadata: { id: 'a', targetPosition: { x: 100, y: 100 } },
