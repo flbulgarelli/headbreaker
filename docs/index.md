@@ -140,6 +140,8 @@ vangogh.onload = () => {
 </div>
 <div class="form-group">
   <button id="background-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="background-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="background-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="background-solve" class="btn btn-primary">Solve</button>
 </div>
 
@@ -173,6 +175,8 @@ xul.onload = () => {
 </div>
 <div class="form-group">
   <button id="autogen-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="autogen-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="autogen-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="autogen-solve" class="btn btn-primary">Solve</button>
 </div>
 
@@ -301,6 +305,8 @@ berni.onload = () => {
 </div>
 <div class="form-group">
   <button id="sound-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="sound-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="sound-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="sound-solve" class="btn btn-primary">Solve</button>
 </div>
 
@@ -400,6 +406,8 @@ document.getElementById('persistent-export').addEventListener('click', function(
   <button id="persistent-export" class="btn btn-primary">Export</button>
   <button id="persistent-import" class="btn btn-primary">Import</button>
   <button id="persistent-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="persistent-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="persistent-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="persistent-solve" class="btn btn-primary">Solve</button>
 </div>
 
@@ -458,6 +466,8 @@ pettoruti.onload = () => {
 </div>
 <div class="form-group">
   <button id="validated-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="validated-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="validated-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="validated-solve" class="btn btn-primary">Solve</button>
 </div>
 
@@ -508,6 +518,8 @@ responsive.draw();
 </div>
 <div class="form-group">
   <button id="responsive-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="responsive-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="responsive-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="responsive-solve" class="btn btn-primary">Solve</button>
 </div>
 
@@ -543,6 +555,8 @@ quinquela.onload = () => {
 </div>
 <div class="form-group">
   <button id="rectangular-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="rectangular-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="rectangular-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="rectangular-solve" class="btn btn-primary">Solve</button>
 </div>
 

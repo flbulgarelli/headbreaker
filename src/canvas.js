@@ -10,6 +10,7 @@ const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
 const {Horizontal, Vertical} = require('./axis');
+const Shuffler = require('./shuffler');
 const {diameter} = require('./size');
 const {itself} = require('./prelude');
 
@@ -94,8 +95,10 @@ class Canvas {
    * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {boolean} [options.fixed] whether the canvas can is fixed or can be dragged
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
+   * @param {import('./vector').Vector|number} [options.puzzleDiameter] the puzzle diameter used to calculate the maximal width and height
+   *                                                                    You only need to specify this option when pieces are manually sketched and images must be adjusted
    * @param {import('./vector').Vector|number} [options.maxPiecesCount] the maximal amount of pieces used to calculate the maximal width and height.
-   *                                                                    You only need to specify this option when pieces are manually sketched and you require this information for image scaling
+   *                                                                    You only need to specify this option when pieces are manually sketched and images must be adjusted
    */
   constructor(id, {
       width,
@@ -109,6 +112,7 @@ class Canvas {
       image = null,
       fixed = false,
       painter = null,
+      puzzleDiameter = null,
       maxPiecesCount = null }) {
     this.width = width;
     this.height = height;
@@ -126,6 +130,8 @@ class Canvas {
     this._painter.initialize(this, id);
     /** @type {import('./vector').Vector} */
     this._maxPiecesCount = Vector.cast(maxPiecesCount);
+    /** @type {import('./vector').Vector} */
+    this._puzzleDiameter = Vector.cast(puzzleDiameter);
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
   }
@@ -259,6 +265,16 @@ class Canvas {
     const offset = this.pieceRadio;
     this.puzzle.shuffle(farness * (this.width - offset.x), farness * (this.height - offset.y))
     this.puzzle.translate(offset.x, offset.y);
+    this.autoconnected = true;
+  }
+
+  shuffleColumns(farness = 0) {
+    this.puzzle.shuffleWith(Shuffler.columns)
+    this.autoconnected = true;
+  }
+
+  shuffleGrid(farness = 0) {
+    this.puzzle.shuffleWith(Shuffler.grid)
     this.autoconnected = true;
   }
 
@@ -502,7 +518,9 @@ class Canvas {
   }
 
   /**
-   * Configures canvas to adjust images axis to puzzle's axis
+   * Configures canvas to adjust images axis to puzzle's axis.
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    *
    * @param {import('./axis').Axis} axis
    */
@@ -516,6 +534,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images width to puzzle's width
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPuzzleWidth() {
     this.adjustImagesToPuzzle(Horizontal);
@@ -523,6 +543,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images height to puzzle's height
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPuzzleHeight() {
     this.adjustImagesToPuzzle(Vertical);
@@ -530,6 +552,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images axis to pieces's axis
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    *
    * @param {import('./axis').Axis} axis
    */
@@ -543,6 +567,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images width to pieces's width
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPieceWidth() {
     this.adjustImagesToPiece(Horizontal);
@@ -550,6 +576,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images height to pieces's height
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPieceHeight() {
     this.adjustImagesToPiece(Vertical);
@@ -572,9 +600,23 @@ class Canvas {
     return piece;
   }
 
-  /** @type {import('./vector').Vector} */
+  /**
+   * The puzzle diameter, using the
+   * configured puzzle diameter or the estimated one, if the first is not available.
+   *
+   * @type {import('./vector').Vector}
+   * */
   get puzzleDiameter() {
-    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2);
+    return this._puzzleDiameter || this.estimatedPuzzleDiameter;
+  }
+
+  /**
+   * The estimated puzzle diameter calculated using the the max pieces count.
+   *
+   * @type {import('./vector').Vector}
+   * */
+  get estimatedPuzzleDiameter() {
+    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2)
   }
 
   get maxPiecesCount() {

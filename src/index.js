@@ -14,6 +14,7 @@ const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {vector, ...Vector} = require('./vector');
 const {radio, diameter} = require('./size');
+const Shuffler = require('./shuffler');
 
 /**
  * @module headbreaker
@@ -43,6 +44,7 @@ module.exports = {
   Outline,
   Structure,
   Vector,
+  Shuffler,
   generators,
   painters: {
     Dummy: require('./dummy-painter'),

@@ -8,6 +8,16 @@ function registerButtons(id, canvas) {
     canvas.redraw();
   });
 
+  document.getElementById(`${id}-shuffle-grid`).addEventListener('click', function() {
+    canvas.shuffleGrid(0.8);
+    canvas.redraw();
+  });
+
+  document.getElementById(`${id}-shuffle-columns`).addEventListener('click', function() {
+    canvas.shuffleColumns(0.8);
+    canvas.redraw();
+  });
+
   document.getElementById(`${id}-solve`).addEventListener('click', function() {
     canvas.solve();
     canvas.redraw();
