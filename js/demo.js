@@ -8,6 +8,16 @@ function registerButtons(id, canvas) {
     canvas.redraw();
   });
 
+  document.getElementById(`${id}-shuffle-grid`).addEventListener('click', function() {
+    canvas.shuffleGrid(0.8);
+    canvas.redraw();
+  });
+
+  document.getElementById(`${id}-shuffle-columns`).addEventListener('click', function() {
+    canvas.shuffleColumns(0.8);
+    canvas.redraw();
+  });
+
   document.getElementById(`${id}-solve`).addEventListener('click', function() {
     canvas.solve();
     canvas.redraw();
@@ -136,8 +146,11 @@ vangogh.onload = () => {
     pieceSize: 100, proximity: 20,
     borderFill: 10, strokeWidth: 2,
     lineSoftness: 0.12, image: vangogh,
+    // optional, but it must be set in order to activate image scaling
+    maxPiecesCount: {x: 5, y: 5}
   });
 
+  background.adjustImagesToPuzzleHeight();
   background.sketchPiece({
     structure: 'TS--',
     metadata: { id: 'a', targetPosition: { x: 100, y: 100 } },

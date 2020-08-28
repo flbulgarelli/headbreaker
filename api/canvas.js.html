@@ -38,6 +38,7 @@ const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
 const {Horizontal, Vertical} = require('./axis');
+const Shuffler = require('./shuffler');
 const {diameter} = require('./size');
 const {itself} = require('./prelude');
 
@@ -84,6 +85,7 @@ const {itself} = require('./prelude');
  * @property {import('./vector').Vector} [targetPosition]
  * @property {import('./vector').Vector} [currentPosition]
  * @property {string} [color]
+ * @property {boolean} [fixed]
  * @property {string} [strokeColor]
  * @property {import('./image-metadata').ImageLike} [image]
  * @property {LabelMetadata} [label]
@@ -121,8 +123,10 @@ class Canvas {
    * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {boolean} [options.fixed] whether the canvas can is fixed or can be dragged
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
+   * @param {import('./vector').Vector|number} [options.puzzleDiameter] the puzzle diameter used to calculate the maximal width and height
+   *                                                                    You only need to specify this option when pieces are manually sketched and images must be adjusted
    * @param {import('./vector').Vector|number} [options.maxPiecesCount] the maximal amount of pieces used to calculate the maximal width and height.
-   *                                                                    You only need to specify this option when pieces are manually sketched and you require this information for image scaling
+   *                                                                    You only need to specify this option when pieces are manually sketched and images must be adjusted
    */
   constructor(id, {
       width,
@@ -136,6 +140,7 @@ class Canvas {
       image = null,
       fixed = false,
       painter = null,
+      puzzleDiameter = null,
       maxPiecesCount = null }) {
     this.width = width;
     this.height = height;
@@ -153,6 +158,8 @@ class Canvas {
     this._painter.initialize(this, id);
     /** @type {import('./vector').Vector} */
     this._maxPiecesCount = Vector.cast(maxPiecesCount);
+    /** @type {import('./vector').Vector} */
+    this._puzzleDiameter = Vector.cast(puzzleDiameter);
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
   }
@@ -286,6 +293,16 @@ class Canvas {
     const offset = this.pieceRadio;
     this.puzzle.shuffle(farness * (this.width - offset.x), farness * (this.height - offset.y))
     this.puzzle.translate(offset.x, offset.y);
+    this.autoconnected = true;
+  }
+
+  shuffleColumns(farness = 0) {
+    this.puzzle.shuffleWith(Shuffler.columns)
+    this.autoconnected = true;
+  }
+
+  shuffleGrid(farness = 0) {
+    this.puzzle.shuffleWith(Shuffler.grid)
     this.autoconnected = true;
   }
 
@@ -529,7 +546,9 @@ class Canvas {
   }
 
   /**
-   * Configures canvas to adjust images axis to puzzle's axis
+   * Configures canvas to adjust images axis to puzzle's axis.
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    *
    * @param {import('./axis').Axis} axis
    */
@@ -543,6 +562,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images width to puzzle's width
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPuzzleWidth() {
     this.adjustImagesToPuzzle(Horizontal);
@@ -550,6 +571,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images height to puzzle's height
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPuzzleHeight() {
     this.adjustImagesToPuzzle(Vertical);
@@ -557,6 +580,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images axis to pieces's axis
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    *
    * @param {import('./axis').Axis} axis
    */
@@ -570,6 +595,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images width to pieces's width
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPieceWidth() {
     this.adjustImagesToPiece(Horizontal);
@@ -577,6 +604,8 @@ class Canvas {
 
   /**
    * Configures canvas to adjust images height to pieces's height
+   *
+   * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    */
   adjustImagesToPieceHeight() {
     this.adjustImagesToPiece(Vertical);
@@ -599,9 +628,23 @@ class Canvas {
     return piece;
   }
 
-  /** @type {import('./vector').Vector} */
+  /**
+   * The puzzle diameter, using the
+   * configured puzzle diameter or the estimated one, if the first is not available.
+   *
+   * @type {import('./vector').Vector}
+   * */
   get puzzleDiameter() {
-    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2);
+    return this._puzzleDiameter || this.estimatedPuzzleDiameter;
+  }
+
+  /**
+   * The estimated puzzle diameter calculated using the the max pieces count.
+   *
+   * @type {import('./vector').Vector}
+   * */
+  get estimatedPuzzleDiameter() {
+    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2)
   }
 
   get maxPiecesCount() {
@@ -656,13 +699,13 @@ module.exports = Canvas
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#vector">vector</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Aug 26 2020 19:41:38 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Aug 28 2020 17:04:56 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
