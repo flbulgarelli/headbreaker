@@ -268,13 +268,34 @@ class Canvas {
     this.autoconnected = true;
   }
 
-  shuffleColumns(farness = 0) {
-    this.puzzle.shuffleWith(Shuffler.columns)
-    this.autoconnected = true;
+  /**
+   * **Warning**: this method requires {@code maxPiecesCount} to be set.
+   *
+   * @param {number} farness
+   */
+  shuffleColumns(farness = 1) {
+    this._shuffleSolution(farness, Shuffler.columns);
   }
 
-  shuffleGrid(farness = 0) {
-    this.puzzle.shuffleWith(Shuffler.grid)
+  /**
+   * **Warning**: this method requires {@code maxPiecesCount} to be set.
+   *
+   * @param {number} farness
+   */
+  shuffleGrid(farness = 1) {
+    this._shuffleSolution(farness, Shuffler.grid);
+  }
+
+  /**
+   * @private
+   * @param {number} farness
+   * @param {import('./shuffler').Shuffler} shuffler
+   */
+  _shuffleSolution(farness, shuffler) {
+    this.solve();
+    this.puzzle.shuffleWith(Shuffler.padder(this.proximity * 3, this.maxPiecesCount.x, this.maxPiecesCount.y));
+    this.puzzle.shuffleWith(shuffler)
+    this.puzzle.shuffleWith(Shuffler.noise(Vector.cast(this.proximity * farness / 2)))
     this.autoconnected = true;
   }
 

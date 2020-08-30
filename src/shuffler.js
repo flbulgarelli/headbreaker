@@ -57,6 +57,46 @@ const columns = (pieces) => {
 };
 
 
+/**
+ * @param {number} padding
+ * @param {number} width
+ * @param {number} height
+ * @returns {Shuffler}
+ * */
+function padder(padding, width, height) {
+  return (pieces) => {
+    const destinations = pieces.map(it => it.centralAnchor.asVector());
+    let dx = 0;
+    let dy = 0;
+    for (let j = 0; j < height; j++) {
+      for (let i = 0; i < width; i++) {
+        const destination = destinations[i + width * j];
+        destination.x += dx;
+        destination.y += dy;
+
+        dx += padding;
+      }
+      dx = 0;
+      dy += padding;
+    }
+    return destinations;
+  }
+}
+
+/**
+ * @param {import('./vector').Vector} maxDistance
+ * @returns {Shuffler}
+ */
+function noise(maxDistance) {
+  return (pieces) => {
+    return pieces.map(it =>
+      Anchor
+        .atRandom(2 * maxDistance.x, 2 * maxDistance.y)
+        .translate(-maxDistance.x, -maxDistance.y)
+        .translate(it.centralAnchor.x, it.centralAnchor.y)
+        .asVector());
+  }
+}
 
 /**
  * @type {Shuffler}
@@ -67,5 +107,7 @@ module.exports = {
   random,
   grid,
   columns,
-  noop
+  noop,
+  padder,
+  noise
 }

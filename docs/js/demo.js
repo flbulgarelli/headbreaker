@@ -9,12 +9,12 @@ function registerButtons(id, canvas) {
   });
 
   document.getElementById(`${id}-shuffle-grid`).addEventListener('click', function() {
-    canvas.shuffleGrid(0.8);
+    canvas.shuffleGrid(1.2);
     canvas.redraw();
   });
 
   document.getElementById(`${id}-shuffle-columns`).addEventListener('click', function() {
-    canvas.shuffleColumns(0.8);
+    canvas.shuffleColumns(1.2);
     canvas.redraw();
   });
 

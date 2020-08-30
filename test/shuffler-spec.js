@@ -17,11 +17,11 @@ describe("shuffler", () => {
     puzzle = new Puzzle();
     pieces = [
       puzzle.newPiece({}, {centralAnchor: vector(0, 0)}),
-      puzzle.newPiece({}, {centralAnchor: vector(0, 10)}),
       puzzle.newPiece({}, {centralAnchor: vector(10, 0)}),
+      puzzle.newPiece({}, {centralAnchor: vector(0, 10)}),
       puzzle.newPiece({}, {centralAnchor: vector(10, 10)}),
-      puzzle.newPiece({}, {centralAnchor: vector(20, 0)}),
-      puzzle.newPiece({}, {centralAnchor: vector(20, 10)}),
+      puzzle.newPiece({}, {centralAnchor: vector(0, 20)}),
+      puzzle.newPiece({}, {centralAnchor: vector(10, 20)})
     ];
   })
 
@@ -32,11 +32,31 @@ describe("shuffler", () => {
 
   it("columns", () => {
     const result = Shuffler.columns(pieces);
-    assert.deepEqual(result.map(it => it.x), [0, 0, 10, 10, 20, 20])
+    assert.deepEqual(result.map(it => it.x), [0, 10, 0, 10, 0, 10])
     assert.equal(hasDuplicates(result), false, "There must not be any duplicates");
   })
 
   it("noop", () => {
-    assert.deepEqual(Shuffler.noop(pieces), [anchor(0, 0), anchor(0, 10), anchor(10, 0), anchor(10, 10), anchor(20, 0), anchor(20, 10)])
+    assert.deepEqual(Shuffler.noop(pieces), [
+      vector(0, 0), vector(10, 0),
+      vector(0, 10), vector(10, 10),
+      vector(0, 20), vector(10, 20)
+    ])
+  })
+
+  it("noisy", () => {
+    assert.deepEqual(Shuffler.noise(vector(0, 0))(pieces), [
+      vector(0, 0), vector(10, 0),
+      vector(0, 10), vector(10, 10),
+      vector(0, 20), vector(10, 20)
+    ])
+  })
+
+  it("padder", () => {
+    assert.deepEqual(Shuffler.padder(5, 2, 3)(pieces), [
+      vector(0, 0), vector(15, 0),
+      vector(0, 15), vector(15, 15),
+      vector(0, 30), vector(15, 30)
+    ])
   })
 })
