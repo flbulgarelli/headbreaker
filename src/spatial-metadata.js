@@ -33,10 +33,8 @@ const solved = (puzzle) => relativePosition(puzzle) && PuzzleValidator.connected
  * @type {import('../src/validator').PuzzleCondition}
  */
 const relativePosition = (puzzle) => {
-  const [dx, dy] = diffToTarget(puzzle.head);
-  return puzzle.pieces.every(piece => {
-    return Pair.equal(dx, dy, ...diffToTarget(piece))
-  });
+  const diff0 = diffToTarget(puzzle.head);
+  return puzzle.pieces.every(piece => PuzzleValidator.equalDiffs(diff0, diffToTarget(piece)));
 }
 
 /**

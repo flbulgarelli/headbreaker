@@ -27,15 +27,28 @@ describe("SpatialMetadata", () => {
       assert.equal(validator.isValid(puzzle), true);
     })
 
-    it("relative-position validator", () => {
-      const validator = new PuzzleValidator(SpatialMetadata.relativePosition);
-      assert.equal(validator.isValid(puzzle), true);
+    describe("relative-position validator", () => {
+      it("works when postions are exact", () => {
+        const validator = new PuzzleValidator(SpatialMetadata.relativePosition);
+        assert.equal(validator.isValid(puzzle), true);
 
-      puzzle.translate(10, 23);
-      assert.equal(validator.isValid(puzzle), true);
+        puzzle.translate(10, 23);
+        assert.equal(validator.isValid(puzzle), true);
 
-      puzzle.shuffle(200, 200);
-      assert.equal(validator.isValid(puzzle), false);
+        puzzle.shuffle(200, 200);
+        assert.equal(validator.isValid(puzzle), false);
+      })
+
+      it("works when postions not are exact", () => {
+        const validator = new PuzzleValidator(SpatialMetadata.relativePosition);
+        assert.equal(validator.isValid(puzzle), true);
+
+        puzzle.translate(10.33333333333333333331, 23.33333333333333333331);
+        assert.equal(validator.isValid(puzzle), true);
+
+        puzzle.shuffle(200, 200);
+        assert.equal(validator.isValid(puzzle), false);
+      })
     })
 
     it("absolute-position validator", () => {

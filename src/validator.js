@@ -130,6 +130,18 @@ class PuzzleValidator extends AbstractValidator {
   isValid(puzzle) {
     return this.condition(puzzle);
   }
+
+  /**
+   * Compares two pairs
+   *
+   * @param {import('./pair').Pair} param0
+   * @param {import('./pair').Pair} param1
+   *
+   * @returns {boolean}
+   */
+  static equalDiffs([dx0, dy0], [dx, dy]) {
+    return Pair.equal(dx0, dy0, dx, dy, PuzzleValidator.DIFF_DELTA);
+  }
 }
 
 /** A validator that always is invalid */
@@ -150,6 +162,12 @@ class NullValidator extends AbstractValidator {
   }
 };
 
+/**
+ * The delta used to compare distances
+ *
+ * @type {number}
+ */
+PuzzleValidator.DIFF_DELTA = 0.01;
 
 /**
 * @type {PuzzleCondition}
@@ -167,11 +185,8 @@ PuzzleValidator.relativeRefs = (expected) => {
     }
     const refs = puzzle.refs;
     const [x0, y0] = refs[0];
-    const [dx0, dy0] = diff(x0, y0, 0);
-    return refs.every(([x, y], index) => {
-      const [dx, dy] = diff(x, y, index);
-      return Pair.equal(dx0, dy0, dx, dy, 0.01);
-    })
+    const diff0 = diff(x0, y0, 0);
+    return refs.every(([x, y], index) => PuzzleValidator.equalDiffs(diff0, diff(x, y, index)));
   };
 };
 
