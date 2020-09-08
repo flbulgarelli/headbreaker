@@ -333,6 +333,18 @@ class Canvas {
   }
 
   /**
+   * Refreshes image metadata.
+   *
+   * Use this method in order adjuster updates and image changes after initial draw
+   * to make effect.
+   **/
+  refill() {
+    this.puzzle.pieces.forEach(piece => {
+      this._painter.fill(this, piece, this.getFigure(piece));
+    });
+  }
+
+  /**
    * Clears the canvas, clearing the rendering backend and discarding all the created templates, figures, and pieces
    */
   clear() {

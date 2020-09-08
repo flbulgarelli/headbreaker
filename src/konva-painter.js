@@ -109,21 +109,30 @@ class KonvaPainter extends Painter {
       draggable: !piece.metadata.fixed
     });
 
-    const image = canvas.imageMetadataFor(piece);
     figure.shape = new Konva.Line({
       points: Outline.draw(piece, piece.diameter, canvas.borderFill),
-      fill: !image ? piece.metadata.color || 'black' : null,
-      fillPatternImage: image && image.content,
-      fillPatternScale: image && {x: image.scale, y: image.scale},
-      fillPatternOffset: image && Vector.divide(image.offset, image.scale),
       tension: canvas.lineSoftness,
       stroke: piece.metadata.strokeColor || canvas.strokeColor,
       strokeWidth: canvas.strokeWidth,
       closed: true,
     });
+    this.fill(canvas, piece, figure);
     figure.group.add(figure.shape);
 
     canvas['__konvaLayer__'].add(figure.group);
+  }
+
+  /**
+   * @param {Canvas} canvas
+   * @param {Piece} piece
+   * @param {Figure} figure
+   */
+  fill(canvas, piece, figure) {
+    const image = canvas.imageMetadataFor(piece);
+    figure.shape.fill(!image ? piece.metadata.color || 'black' : null);
+    figure.shape.fillPatternImage(image && image.content);
+    figure.shape.fillPatternScale(image && {x: image.scale, y: image.scale});
+    figure.shape.fillPatternOffset(image && Vector.divide(image.offset, image.scale));
   }
 
   /**

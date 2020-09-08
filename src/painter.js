@@ -68,6 +68,16 @@ class Painter {
   sketch(canvas, piece, figure) { }
 
   /**
+   * Fills a piece using the canvas image information
+   * assigned for it
+   *
+   * @param {Canvas} canvas
+   * @param {Piece} piece
+   * @param {import('./canvas').Figure} figure
+   */
+  fill(canvas, piece, figure) { }
+
+  /**
    * Adds piece's label to the given figure in the rendering backend
    *
    * @param {Canvas} canvas
