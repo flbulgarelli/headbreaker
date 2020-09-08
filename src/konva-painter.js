@@ -70,9 +70,10 @@ class KonvaPainter extends Painter {
    */
   reinitialize(canvas) {
     const layer = canvas['__konvaLayer__'];
+    const stage = layer.getStage();
     layer.destroy();
 
-    this._initializeLayer(layer.getStage(), canvas);
+    this._initializeLayer(stage, canvas);
   }
 
   /**
