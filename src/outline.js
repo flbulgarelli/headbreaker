@@ -69,19 +69,19 @@ class Rounded {
     const o = Vector.multiply(s, 4/5);
     return [
       //            0                                      1                                      2
-      0             , -s.y         ,                                                                         // start
-      0             , -s.y         ,         0             , 0            ,         0             , 0      , // rect
-      o.x           , 0            ,         o.x           , s.y          ,         0             , s.y    , // in curve
-      0             , s.y          ,         0             , 2 * s.y      ,         0             , 2 * s.y, // rect
-      0             , 2 * s.y      ,         s.x           , 2 * s.y      ,         1 * s.x       , 2 * s.y, // rect
-      1 * s.x       , 2 * s.y - o.y,         2 * s.x       , 2 * s.y - o.y,         2 * s.x       , 2 * s.y, // in curve
-      2 * s.x       , 2 * s.y      ,         3 * s.x       , 2 * s.y      ,         3 * s.x       , 2 * s.y, // rect
-      3 * s.x       , 2 * s.y      ,         3 * s.x       , s.y          ,         3 * s.x       , s.y    , // rect
-      3 * s.x + o.x , s.y          ,         3 * s.x + o.x , 0            ,         3 * s.x       , 0      , // out curve
-      3 * s.x       , 0            ,         3 * s.x       , -s.y         ,         3 * s.x       , -s.y   , // rect
-      3 * s.x       , -s.y         ,         2 * s.x       , -s.y         ,         2 * s.x       , -s.y   , // rect
-      2 * s.x       , -s.y - o.y   ,         1 * s.x       , -s.y - o.y   ,         1 * s.x       , -s.y   , // our curve
-      1 * s.x       , -s.y         ,         0             , -s.y         ,         0             , -s.y    // rect
+      0             , 0            ,                                                                         // start
+      0             , 0            ,         0             , s.y          ,         0             , s.y    , // rect
+      o.x           , s.y          ,         o.x           , 2 * s.y      ,         0             , 2 * s.y, // in curve
+      0             , 2 * s.y      ,         0             , 3 * s.y      ,         0             , 3 * s.y, // rect
+      0             , 3 * s.y      ,         s.x           , 3 * s.y      ,         1 * s.x       , 3 * s.y, // rect
+      1 * s.x       , 3 * s.y - o.y,         2 * s.x       , 3 * s.y - o.y,         2 * s.x       , 3 * s.y, // in curve
+      2 * s.x       , 3 * s.y      ,         3 * s.x       , 3 * s.y      ,         3 * s.x       , 3 * s.y, // rect
+      3 * s.x       , 3 * s.y      ,         3 * s.x       , 2 * s.y      ,         3 * s.x       , 2 * s.y, // rect
+      3 * s.x + o.x , 2 * s.y      ,         3 * s.x + o.x , s.y          ,         3 * s.x       , s.y    , // out curve
+      3 * s.x       , s.y          ,         3 * s.x       , 0            ,         3 * s.x       , 0      , // rect
+      3 * s.x       , 0            ,         2 * s.x       , 0            ,         2 * s.x       , 0      , // rect
+      2 * s.x       , -o.y         ,         1 * s.x       , -o.y         ,         1 * s.x       , 0      , // our curve
+      1 * s.x       , 0            ,         0             , 0            ,         0             , 0       // rect
     ]
   }
 
