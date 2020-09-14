@@ -74,37 +74,59 @@ class Rounded {
   draw(p, size = 150, borderFill = 0) {
     const s = Vector.divide(Vector.cast(size), 3);
     const o = Vector.multiply(s, 4/5);
+    const b = Vector.multiply(s, 2/5);
+
+    const b0 = p.left.isNone() && p.up.isNone();
+    const b1 = p.left.isNone() && p.down.isNone();
+    const b2 = p.right.isNone() && p.down.isNone();
+    const b3 = p.right.isNone() && p.up.isNone();
+
+    const nx = (c) => c ? b.x : 0;
+    const ny = (c) => c ? b.y : 0;
+
     return [
       //            0                                      1                                      2
-      0             , 0            ,
-      0             , 0            ,         0             , s.y          ,         0             , s.y    ,
+      nx(b0)         , 0            ,
+      ...(b0 ?
+      [0             , 0            ,         0             , 0            ,         0             , b.y] :
+      [                                                                                                 ])  ,
+      0             , ny(b0)        ,         0             , s.y          ,         0             , s.y    ,
       ...sl(p,
       [-o.x         , s.y          ,         -o.x          , 2 * s.y],
       [o.x          , s.y          ,         o.x           , 2 * s.y],
       [0            , s.y          ,         0             , 2 * s.y])
-                                                                          ,         0             , 2 * s.y,
-      0             , 2 * s.y      ,         0             , 3 * s.y      ,         0             , 3 * s.y,
-      0             , 3 * s.y      ,         s.x           , 3 * s.y      ,         1 * s.x       , 3 * s.y,
+                                                                          ,         0              , 2 * s.y,
+      0             , 2 * s.y      ,         0             , 3 * s.y      ,         0              , 3 * s.y - ny(b1),
+      ...(b1 ?
+      [0            , 3 * s.y     ,         0             , 3 * s.y       ,         b.x            , 3 * s.y] :
+      [                                                                                                     ])  ,
+      nx(b1)        , 3 * s.y      ,         s.x           , 3 * s.y      ,         1 * s.x        , 3 * s.y,
       ...sd(p,
       [1 * s.x      , 3 * s.y + o.y,         2 * s.x       , 3 * s.y + o.y],
       [1 * s.x      , 3 * s.y - o.y,         2 * s.x       , 3 * s.y - o.y],
       [1 * s.x      , 3 * s.y      ,         2 * s.x       , 3 * s.y])
-                                                                          ,         2 * s.x       , 3 * s.y,
-      2 * s.x       , 3 * s.y      ,         3 * s.x       , 3 * s.y      ,         3 * s.x       , 3 * s.y,
-      3 * s.x       , 3 * s.y      ,         3 * s.x       , 2 * s.y      ,         3 * s.x       , 2 * s.y,
+                                                                          ,         2 * s.x         , 3 * s.y,
+      2 * s.x       , 3 * s.y      ,         3 * s.x       , 3 * s.y      ,         3 * s.x - nx(b2), 3 * s.y,
+      ...(b2 ?
+      [3 * s.x       , 3 * s.y     ,         3 * s.x       , 3 * s.y       ,        3 * s.x       , 3 * s.y - b.y] :
+      [                                                                                                          ])  ,
+      3 * s.x       , 3 * s.y - ny(b2),      3 * s.x       , 2 * s.y      ,         3 * s.x       , 2 * s.y,
       ...sr(p,
       [3 * s.x + o.x, 2 * s.y      ,         3 * s.x + o.x , s.y],
       [3 * s.x - o.x, 2 * s.y      ,         3 * s.x - o.x , s.y],
       [3 * s.x      , 2 * s.y      ,         3 * s.x       , s.y])
                                                                           ,         3 * s.x       , s.y    ,
-      3 * s.x       , s.y          ,         3 * s.x       , 0            ,         3 * s.x       , 0      ,
-      3 * s.x       , 0            ,         2 * s.x       , 0            ,         2 * s.x       , 0      ,
+      3 * s.x       , s.y          ,         3 * s.x       , 0            ,         3 * s.x       , ny(b3) ,
+      ...(b3 ?
+      [3 * s.x      , 0            ,         3 * s.x       , 0            ,         3 * s.x - b.x  , 0] :
+      [                                                                                                 ])  ,
+      3 * s.x - nx(b3), 0            ,         2 * s.x       , 0            ,         2 * s.x       , 0      ,
       ...su(p,
       [2 * s.x      , -o.y         ,         1 * s.x       , -o.y],
       [2 * s.x      , o.y          ,         1 * s.x       , o.y],
       [2 * s.x      , 0            ,         1 * s.x       , 0])
                                                                           ,         1 * s.x       , 0      ,
-      1 * s.x       , 0            ,         0             , 0            ,         0             , 0
+      1 * s.x       , 0            ,         0             , 0            ,         (b0 ? b.x : 0), 0
     ]
   }
 
