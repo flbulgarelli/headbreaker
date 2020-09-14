@@ -65,8 +65,15 @@ class Squared {
 }
 
 class Rounded {
-  constructor(options = {bezelize: false}) {
-    this.bezelize = options.bezelize;
+  constructor({
+    bezelize = false,
+    bezelDepth = 2/5,
+    insertDepth = 4/5,
+    borderLength = 1/3} = {}) {
+    this.bezelize = bezelize;
+    this.bezelDepth = bezelDepth;
+    this.insertDepth = insertDepth;
+    this.borderLength = borderLength;
   }
 
   /**
@@ -76,56 +83,64 @@ class Rounded {
    * @returns {number[]}
    */
   draw(p, size = 150, borderFill = 0) {
-    const s = Vector.divide(Vector.cast(size), 3);
-    const o = Vector.multiply(s, 4/5);
-    const b = Vector.multiply(s, 2/5);
+    const fullSize = Vector.cast(size);
+    const r = Math.trunc(Vector.min(fullSize) * (1 - 2 * this.borderLength) * 100) / 100;
+    const s = Vector.divide(Vector.minus(fullSize, r), 2);
+    const o = Vector.multiply(r, this.insertDepth);
+    const b = Vector.multiply(s, this.bezelDepth);
     const [b0, b1, b2, b3] = this.bezels(p);
     const nx = (c) => c ? b.x : 0;
     const ny = (c) => c ? b.y : 0;
 
+    const rsy  = r + s.y;
+    const rsx  = r + s.x;
+    const r2sy = r + 2 * s.y;
+    const r2sx = r + 2 * s.x;
+
+
     return [
-      //            0                                      1                                      2
+      //              0                                         1                                      2
       nx(b0)          , 0               ,
       ...(b0 ?
-      [0              , 0               ,         0             , 0             ,         0             , b.y] :
-      [                                                                                                      ]),
-      0               , ny(b0)          ,         0             , s.y           ,         0             , s.y    ,
+      [0              , 0               ,         0             , 0             ,         0             , b.y         ] :
+      [                                                                                                               ]),
+      0               , ny(b0)          ,         0             , s.y           ,         0             , s.y           ,
       ...sl(p,
-      [-o.x           , s.y             ,         -o.x          , 2 * s.y],
-      [o.x            , s.y             ,         o.x           , 2 * s.y],
-      [0              , s.y             ,         0             , 2 * s.y])
-                                                                                ,         0              , 2 * s.y,
-      0               , 2 * s.y         ,         0             , 3 * s.y       ,         0              , 3 * s.y - ny(b1),
+      [-o.x           , s.y             ,         -o.x          , rsy],
+      [o.x            , s.y             ,         o.x           , rsy],
+      [0              , s.y             ,         0             , rsy])
+                                                                                ,         0              , rsy          ,
+      0               , rsy             ,         0             , r2sy          ,         0              , r2sy - ny(b1),
       ...(b1 ?
-      [0              , 3 * s.y         ,         0             , 3 * s.y       ,         b.x            , 3 * s.y] :
-      [                                                                                                           ]),
-      nx(b1)          , 3 * s.y         ,         s.x           , 3 * s.y       ,         1 * s.x        , 3 * s.y,
+      [0              , r2sy            ,         0             , r2sy          ,         b.x            , r2sy        ] :
+      [                                                                                                                ]),
+      nx(b1)          , r2sy            ,         s.x           , r2sy          ,         s.x            , r2sy          ,
       ...sd(p,
-      [1 * s.x        , 3 * s.y + o.y   ,         2 * s.x       , 3 * s.y + o.y],
-      [1 * s.x        , 3 * s.y - o.y   ,         2 * s.x       , 3 * s.y - o.y],
-      [1 * s.x        , 3 * s.y         ,         2 * s.x       , 3 * s.y])
-                                                                               ,         2 * s.x         , 3 * s.y,
-      2 * s.x         , 3 * s.y         ,         3 * s.x       , 3 * s.y      ,         3 * s.x - nx(b2), 3 * s.y,
+      [s.x            , r2sy + o.y      ,         rsx           , r2sy + o.y   ],
+      [s.x            , r2sy - o.y      ,         rsx           , r2sy - o.y   ],
+      [s.x            , r2sy            ,         rsx           , r2sy   ])
+                                                                               ,         rsx             , r2sy          ,
+      rsx             , r2sy            ,         r2sx          , r2sy         ,         r2sx - nx(b2)   , r2sy          ,
       ...(b2 ?
-      [3 * s.x        , 3 * s.y         ,         3 * s.x       , 3 * s.y      ,        3 * s.x          , 3 * s.y - b.y] :
-      [                                                                                                          ]),
-      3 * s.x         , 3 * s.y - ny(b2),         3 * s.x       , 2 * s.y      ,         3 * s.x         , 2 * s.y,
+      [r2sx           , r2sy            ,         r2sx          , r2sy         ,         r2sx            , r2sy    - b.y]:
+      [                                                                                                                 ]),
+      r2sx            , r2sy - ny(b2)   ,         r2sx          , rsy          ,         r2sx            , rsy            ,
       ...sr(p,
-      [3 * s.x + o.x  , 2 * s.y         ,         3 * s.x + o.x , s.y],
-      [3 * s.x - o.x  , 2 * s.y         ,         3 * s.x - o.x , s.y],
-      [3 * s.x        , 2 * s.y         ,         3 * s.x       , s.y])
-                                                                               ,         3 * s.x         , s.y    ,
-      3 * s.x         , s.y             ,         3 * s.x       , 0            ,         3 * s.x         , ny(b3) ,
+      [r2sx + o.x     , rsy             ,         r2sx + o.x    , s.y],
+      [r2sx - o.x     , rsy             ,         r2sx - o.x    , s.y],
+      [r2sx           , rsy             ,         r2sx          , s.y])
+                                                                               ,         r2sx            , s.y    ,
+      r2sx            , s.y             ,         r2sx          , 0            ,         r2sx            , ny(b3) ,
       ...(b3 ?
-      [3 * s.x        , 0               ,         3 * s.x       , 0            ,         3 * s.x - b.x   , 0] :
+      [r2sx           , 0               ,         r2sx          , 0            ,         r2sx    - b.x   , 0] :
       [                                                                                                     ]),
-      3 * s.x - nx(b3), 0               ,         2 * s.x       , 0            ,         2 * s.x         , 0      ,
+      r2sx - nx(b3)   , 0               ,         rsx           , 0            ,         rsx             , 0      ,
       ...su(p,
-      [2 * s.x        , -o.y            ,         1 * s.x       , -o.y],
-      [2 * s.x        , o.y             ,         1 * s.x       , o.y],
-      [2 * s.x        , 0               ,         1 * s.x       , 0])
-                                                                               ,         1 * s.x         , 0      ,
-      1 * s.x         , 0               ,         0             , 0            ,         (b0 ? b.x : 0)  , 0
+      [rsx            , -o.y            ,         s.x           , -o.y],
+      [rsx            , o.y             ,         s.x           , o.y],
+      [rsx            , 0               ,         s.x           , 0])
+                                                                               ,         s.x             , 0      ,
+      s.x             , 0               ,         0             , 0            ,         (b0 ? b.x : 0)  , 0
     ]
   }
 
