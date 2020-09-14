@@ -1,6 +1,7 @@
 const assert = require('assert');
 const Piece = require('../src/piece');
 const outline = require('../src/outline');
+const {None, Tab, Slot} = require('../src/insert');
 
 
 describe("Classic", () => {
@@ -91,20 +92,92 @@ describe("Classic", () => {
 })
 
 describe("Rounded", () => {
-  it("should produce an square", () => {
+  it("works with TTSS", () => {
+    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: Tab, down: Slot, left: Slot}), 150), [
+      0, 0,
+      0, 0, 0, 50, 0, 50,
+      40, 50, 40, 100, 0, 100, // insert
+      0, 100, 0, 150, 0, 150, // rect
+      0, 150, 50, 150, 50, 150, // rect
+      50, 110, 100, 110, 100, 150, // insert
+      100, 150, 150, 150, 150, 150, // rect
+      150, 150, 150, 100, 150, 100, // rect
+      190, 100, 190, 50, 150, 50, // insert
+      150, 50, 150, 0, 150, 0, // rect
+      150, 0, 100, 0, 100, 0, // rect
+      100, -40, 50, -40, 50, 0, // insert
+      50, 0, 0, 0, 0, 0, // rect
+    ])
+  })
+
+  it("works with TTST", () => {
+    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: Tab, down: Slot, left: Tab}), 150), [
+      0, 0,
+      0, 0, 0, 50, 0, 50,
+      -40, 50, -40, 100, 0, 100, // insert
+      0, 100, 0, 150, 0, 150, // rect
+      0, 150, 50, 150, 50, 150, // rect
+      50, 110, 100, 110, 100, 150, // insert
+      100, 150, 150, 150, 150, 150, // rect
+      150, 150, 150, 100, 150, 100, // rect
+      190, 100, 190, 50, 150, 50, // insert
+      150, 50, 150, 0, 150, 0, // rect
+      150, 0, 100, 0, 100, 0, // rect
+      100, -40, 50, -40, 50, 0, // insert
+      50, 0, 0, 0, 0, 0, // rect
+    ])
+  })
+
+  it("works with TSST", () => {
+    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: Slot, down: Slot, left: Tab}), 150), [
+      0, 0,
+      0, 0, 0, 50, 0, 50,
+      -40, 50, -40, 100, 0, 100, // insert
+      0, 100, 0, 150, 0, 150, // rect
+      0, 150, 50, 150, 50, 150, // rect
+      50, 110, 100, 110, 100, 150, // insert
+      100, 150, 150, 150, 150, 150, // rect
+      150, 150, 150, 100, 150, 100, // rect
+      110, 100, 110, 50, 150, 50, // insert
+      150, 50, 150, 0, 150, 0, // rect
+      150, 0, 100, 0, 100, 0, // rect
+      100, -40, 50, -40, 50, 0, // insert
+      50, 0, 0, 0, 0, 0, // rect
+    ])
+  })
+
+  it("works with T-ST", () => {
+    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: None, down: Slot, left: Tab}), 150), [
+      0, 0,
+      0, 0, 0, 50, 0, 50,
+      -40, 50, -40, 100, 0, 100, // insert
+      0, 100, 0, 150, 0, 150, // rect
+      0, 150, 50, 150, 50, 150, // rect
+      50, 110, 100, 110, 100, 150, // insert
+      100, 150, 150, 150, 150, 150, // rect
+      150, 150, 150, 100, 150, 100, // rect
+      150, 100, 150, 50, 150, 50, // insert
+      150, 50, 150, 0, 150, 0, // rect
+      150, 0, 100, 0, 100, 0, // rect
+      100, -40, 50, -40, 50, 0, // insert
+      50, 0, 0, 0, 0, 0, // rect
+    ])
+  })
+
+  it("works with ----", () => {
     assert.deepEqual(new outline.Rounded().draw(new Piece(), 150), [
       0, 0,
       0, 0, 0, 50, 0, 50,
-      40, 50, 40, 100, 0, 100, // in curve
+      0, 50, 0, 100, 0, 100, // insert
       0, 100, 0, 150, 0, 150, // rect
       0, 150, 50, 150, 50, 150, // rect
-      50, 110, 100, 110, 100, 150, // in curve
+      50, 150, 100, 150, 100, 150, // insert
       100, 150, 150, 150, 150, 150, // rect
       150, 150, 150, 100, 150, 100, // rect
-      190, 100, 190, 50, 150, 50, // out curve
+      150, 100, 150, 50, 150, 50, // insert
       150, 50, 150, 0, 150, 0, // rect
       150, 0, 100, 0, 100, 0, // rect
-      100, -40, 50, -40, 50, 0, // our curve
+      100, 0, 50, 0, 50, 0, // insert
       50, 0, 0, 0, 0, 0, // rect
     ])
   })
