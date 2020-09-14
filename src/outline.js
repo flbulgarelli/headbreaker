@@ -83,12 +83,24 @@ class Rounded {
    * @returns {number[]}
    */
   draw(p, size = 150, borderFill = 0) {
+    /** full piece size, from edge to edge */
     const fullSize = Vector.cast(size);
+
+    /** insert external diameter */
     const r = Math.trunc(Vector.min(fullSize) * (1 - 2 * this.borderLength) * 100) / 100;
+
+    /** edge length, from vertex to insert start */
     const s = Vector.divide(Vector.minus(fullSize, r), 2);
+
+    /** insert internal radio, from center to insert end */
     const o = Vector.multiply(r, this.insertDepth);
+
+    /** bezel radio */
     const b = Vector.multiply(s, this.bezelDepth);
+
+    /** the four bezel flags, starting at up-left corner */
     const [b0, b1, b2, b3] = this.bezels(p);
+
     const nx = (c) => c ? b.x : 0;
     const ny = (c) => c ? b.y : 0;
 
@@ -99,48 +111,48 @@ class Rounded {
 
 
     return [
-      //              0                                         1                                      2
-      nx(b0)          , 0               ,
+      /** col:  */ //               0                                         1                                      2
+      /** start: */  nx(b0)          , 0               ,
       ...(b0 ?
-      [0              , 0               ,         0             , 0             ,         0             , b.y         ] :
-      [                                                                                                               ]),
-      0               , ny(b0)          ,         0             , s.y           ,         0             , s.y           ,
+      /** bezel: */  [0              , 0               ,         0             , 0             ,         0             , b.y         ] :
+      /**        */  [                                                                                                               ]),
+      /** edge:  */  0               , ny(b0)          ,         0             , s.y           ,         0             , s.y           ,
       ...sl(p,
-      [-o.x           , s.y             ,         -o.x          , rsy],
-      [o.x            , s.y             ,         o.x           , rsy],
-      [0              , s.y             ,         0             , rsy])
-                                                                                ,         0              , rsy          ,
-      0               , rsy             ,         0             , r2sy          ,         0              , r2sy - ny(b1),
+      /** insert: */ [-o.x           , s.y             ,         -o.x          , rsy],
+      /**         */ [o.x            , s.y             ,         o.x           , rsy],
+      /**         */ [0              , s.y             ,         0             , rsy])
+      /**         */                                                                           ,         0              , rsy          ,
+      /** edge:   */ 0               , rsy             ,         0             , r2sy          ,         0              , r2sy - ny(b1),
       ...(b1 ?
-      [0              , r2sy            ,         0             , r2sy          ,         b.x            , r2sy        ] :
-      [                                                                                                                ]),
-      nx(b1)          , r2sy            ,         s.x           , r2sy          ,         s.x            , r2sy          ,
+      /** bezel: */  [0              , r2sy            ,         0             , r2sy          ,         b.x            , r2sy        ] :
+      /**        */  [                                                                                                                ]),
+      /** edge:   */ nx(b1)          , r2sy            ,         s.x           , r2sy          ,         s.x            , r2sy          ,
       ...sd(p,
-      [s.x            , r2sy + o.y      ,         rsx           , r2sy + o.y   ],
-      [s.x            , r2sy - o.y      ,         rsx           , r2sy - o.y   ],
-      [s.x            , r2sy            ,         rsx           , r2sy   ])
-                                                                               ,         rsx             , r2sy          ,
-      rsx             , r2sy            ,         r2sx          , r2sy         ,         r2sx - nx(b2)   , r2sy          ,
+      /** insert: */ [s.x            , r2sy + o.y      ,         rsx           , r2sy + o.y   ],
+      /**         */ [s.x            , r2sy - o.y      ,         rsx           , r2sy - o.y   ],
+      /**         */ [s.x            , r2sy            ,         rsx           , r2sy   ])
+      /**         */                                                                          ,         rsx             , r2sy          ,
+      /** edge:   */ rsx             , r2sy            ,         r2sx          , r2sy         ,         r2sx - nx(b2)   , r2sy          ,
       ...(b2 ?
-      [r2sx           , r2sy            ,         r2sx          , r2sy         ,         r2sx            , r2sy    - b.y]:
-      [                                                                                                                 ]),
-      r2sx            , r2sy - ny(b2)   ,         r2sx          , rsy          ,         r2sx            , rsy            ,
+      /** bezel: */  [r2sx           , r2sy            ,         r2sx          , r2sy         ,         r2sx            , r2sy    - b.y]:
+      /**        */  [                                                                                                                 ]),
+      /** edge:   */ r2sx            , r2sy - ny(b2)   ,         r2sx          , rsy          ,         r2sx            , rsy            ,
       ...sr(p,
-      [r2sx + o.x     , rsy             ,         r2sx + o.x    , s.y],
-      [r2sx - o.x     , rsy             ,         r2sx - o.x    , s.y],
-      [r2sx           , rsy             ,         r2sx          , s.y])
-                                                                               ,         r2sx            , s.y    ,
-      r2sx            , s.y             ,         r2sx          , 0            ,         r2sx            , ny(b3) ,
+      /** insert: */ [r2sx + o.x     , rsy             ,         r2sx + o.x    , s.y],
+      /**         */ [r2sx - o.x     , rsy             ,         r2sx - o.x    , s.y],
+      /**         */ [r2sx           , rsy             ,         r2sx          , s.y])
+      /**         */                                                                          ,         r2sx            , s.y    ,
+      /** edge:   */ r2sx            , s.y             ,         r2sx          , 0            ,         r2sx            , ny(b3) ,
       ...(b3 ?
-      [r2sx           , 0               ,         r2sx          , 0            ,         r2sx    - b.x   , 0] :
-      [                                                                                                     ]),
-      r2sx - nx(b3)   , 0               ,         rsx           , 0            ,         rsx             , 0      ,
+      /** bezel:  */ [r2sx           , 0               ,         r2sx          , 0            ,         r2sx    - b.x   , 0] :
+      /**         */ [                                                                                                     ]),
+      /** edge:   */ r2sx - nx(b3)   , 0               ,         rsx           , 0            ,         rsx             , 0      ,
       ...su(p,
-      [rsx            , -o.y            ,         s.x           , -o.y],
-      [rsx            , o.y             ,         s.x           , o.y],
-      [rsx            , 0               ,         s.x           , 0])
-                                                                               ,         s.x             , 0      ,
-      s.x             , 0               ,         0             , 0            ,         (b0 ? b.x : 0)  , 0
+      /** insert: */ [rsx            , -o.y            ,         s.x           , -o.y],
+      /**         */ [rsx            , o.y             ,         s.x           , o.y],
+      /**         */ [rsx            , 0               ,         s.x           , 0])
+      /**         */                                                                          ,         s.x             , 0      ,
+      /** edge:   */ s.x             , 0               ,         0             , 0            ,         (b0 ? b.x : 0)  , 0
     ]
   }
 
