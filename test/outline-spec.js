@@ -1,13 +1,12 @@
 const assert = require('assert');
 const Piece = require('../src/piece');
-const outline = require('../src/outline');
+const {Classic, Rounded} = require('../src/outline');
 const {None, Tab, Slot} = require('../src/insert');
 
 
 describe("Classic", () => {
-  const classic = new outline.Classic();
   it("should produce an square", () => {
-    assert.deepEqual(classic.draw(new Piece(), 5), [
+    assert.deepEqual(Classic.draw(new Piece(), 5), [
       0, 0,
       1, 0,
       2, 0,
@@ -28,7 +27,7 @@ describe("Classic", () => {
   })
 
   it("should produce a rectangle", () => {
-    assert.deepEqual(classic.draw(new Piece(), {x: 5, y: 50}), [
+    assert.deepEqual(Classic.draw(new Piece(), {x: 5, y: 50}), [
       0, 0,
       1, 0,
       2, 0,
@@ -49,7 +48,7 @@ describe("Classic", () => {
   })
 
   it("should produce an square with border fill", () => {
-    assert.deepEqual(classic.draw(new Piece(), 5, 0.5), [
+    assert.deepEqual(Classic.draw(new Piece(), 5, 0.5), [
       -0.5,  -0.5,
       1,     -0.5,
       2,     -0.5,
@@ -70,7 +69,7 @@ describe("Classic", () => {
   })
 
   it("should produce a rectangle with border fill", () => {
-    assert.deepEqual(classic.draw(new Piece(), {x: 5, y: 10}, {x: 0.5, y: 1}), [
+    assert.deepEqual(Classic.draw(new Piece(), {x: 5, y: 10}, {x: 0.5, y: 1}), [
       -0.5,  -1,
       1,     -1,
       2,     -1,
@@ -93,7 +92,7 @@ describe("Classic", () => {
 
 describe("Rounded", () => {
   it("works with TTSS", () => {
-    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: Tab, down: Slot, left: Slot}), 150), [
+    assert.deepEqual(new Rounded().draw(new Piece({up: Tab, right: Tab, down: Slot, left: Slot}), 150), [
       0, 0,
       0, 0, 0, 50, 0, 50,
       40, 50, 40, 100, 0, 100, // insert
@@ -111,7 +110,7 @@ describe("Rounded", () => {
   })
 
   it("works with TTST", () => {
-    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: Tab, down: Slot, left: Tab}), 150), [
+    assert.deepEqual(new Rounded().draw(new Piece({up: Tab, right: Tab, down: Slot, left: Tab}), 150), [
       0, 0,
       0, 0, 0, 50, 0, 50,
       -40, 50, -40, 100, 0, 100, // insert
@@ -129,7 +128,7 @@ describe("Rounded", () => {
   })
 
   it("works with TSST", () => {
-    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: Slot, down: Slot, left: Tab}), 150), [
+    assert.deepEqual(new Rounded().draw(new Piece({up: Tab, right: Slot, down: Slot, left: Tab}), 150), [
       0, 0,
       0, 0, 0, 50, 0, 50,
       -40, 50, -40, 100, 0, 100, // insert
@@ -147,7 +146,7 @@ describe("Rounded", () => {
   })
 
   it("works with T-ST", () => {
-    assert.deepEqual(new outline.Rounded().draw(new Piece({up: Tab, right: None, down: Slot, left: Tab}), 150), [
+    assert.deepEqual(new Rounded().draw(new Piece({up: Tab, right: None, down: Slot, left: Tab}), 150), [
       0, 0,
       0, 0, 0, 50, 0, 50,
       -40, 50, -40, 100, 0, 100, // insert
@@ -165,7 +164,7 @@ describe("Rounded", () => {
   })
 
   it("works with ----", () => {
-    assert.deepEqual(new outline.Rounded().draw(new Piece(), 150), [
+    assert.deepEqual(new Rounded().draw(new Piece(), 150), [
       0, 0,
       0, 0, 0, 50, 0, 50,
       0, 50, 0, 100, 0, 100, // insert
@@ -180,5 +179,9 @@ describe("Rounded", () => {
       100, 0, 50, 0, 50, 0, // insert
       50, 0, 0, 0, 0, 0, // rect
     ])
+  })
+
+  it("works with ----, bezelized", () => {
+    assert.equal(new Rounded({bezelize: true}).draw(new Piece(), 150).length, 98);
   })
 })

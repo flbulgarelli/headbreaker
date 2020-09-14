@@ -138,7 +138,7 @@ class Canvas {
     this._puzzleDiameter = Vector.cast(puzzleDiameter);
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
-    this._outline = outline || new Classic();
+    this._outline = outline || Classic;
   }
 
   _initialize() {
