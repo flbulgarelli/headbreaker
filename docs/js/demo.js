@@ -28,67 +28,37 @@ function registerButtons(id, canvas) {
 // Basic Canvas
 // ============
 
-var stage = new Konva.Stage({
-  container: '#basic-canvas',
-  width: 400,
-  height: 400,
+
+const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, outline: new headbreaker.outline.Rounded() });
+basic.sketchPiece({
+  structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-
-var layer = new Konva.Layer();
-
-var redLine = new Konva.Line({
-  points: [
-    0, -50,
-    0, -50, 0, 0, 0, 0,
-    40, 0, 40, 50, 0, 50, // in curve
-    0, 50, 0, 100, 0, 100, // rect
-    0, 100, 50, 100, 50, 100, // rect
-    50, 60, 100, 60, 100, 100, // in curve
-    100, 100, 150, 100, 150, 100, // rect
-    150, 100, 150, 50, 150, 50, // rect
-    190, 50, 190, 0, 150, 0, // out curve
-    150, 0, 150, -50, 150, -50, // rect
-    150, -50, 100, -50, 100, -50, // rect
-    100, -90, 50, -90, 50, -50, // our curve
-    50, -50, 0, -50, 0, -50, // rect
-  ],
-
-  strokeWidth: 0,
-  draggable: true,
-  bezier: true,
-  closed: true,
-  fill: 'red'
+basic.sketchPiece({
+  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
 });
-
-var blueLine = new Konva.Line({
-  points: [
-    0, -50,
-    0, -50, 0, 0, 0, 0,
-    40, 0, 40, 50, 0, 50, // in curve
-    0, 50, 0, 100, 0, 100, // rect
-    0, 100, 50, 100, 50, 100, // rect
-    50, 60, 100, 60, 100, 100, // in curve
-    100, 100, 150, 100, 150, 100, // rect
-    150, 100, 150, 50, 150, 50, // rect
-    190, 50, 190, 0, 150, 0, // out curve
-    150, 0, 150, -50, 150, -50, // rect
-    150, -50, 100, -50, 100, -50, // rect
-    100, -90, 50, -90, 50, -50, // our curve
-    50, -50, 0, -50, 0, -50, // rect
-  ],
-
-  strokeWidth: 0,
-  draggable: true,
-  bezier: true,
-  closed: true,
-  fill: 'navy'
+basic.sketchPiece({
+  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
+  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
 });
-
-layer.add(redLine);
-layer.add(blueLine);
-stage.add(layer);
-stage.setOffset({x: -100, y: -100});
-layer.draw();
+basic.sketchPiece({
+  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  metadata: { id: 'c', currentPosition: { x: 150, y: 50 }, color: '#B83361' }
+});
+basic.sketchPiece({
+  structure: { up: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
+  metadata: { id: 'd', currentPosition: { x: 150, y: 100 }, color: '#37AB8C' }
+});
+basic.sketchPiece({
+  structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Slot, left: headbreaker.Slot },
+  metadata: { id: 'e', currentPosition: { x: 250, y: 200 }, color: '#3934C2' }
+});
+basic.sketchPiece({
+  structure: { up: headbreaker.Tab, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Tab },
+  metadata: { id: 'f', currentPosition: { x: 350, y: 250 }, color: '#A4C234' }
+});
+basic.draw();
 
 // ===========
 // Soft Canvas

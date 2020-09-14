@@ -102,8 +102,9 @@ class KonvaPainter extends Painter {
    * @param {Canvas} canvas
    * @param {Piece} piece
    * @param {Figure} figure
+   * @param {import('./outline').Outline} outline
    */
-  sketch(canvas, piece, figure) {
+  sketch(canvas, piece, figure, outline) {
     figure.group = new Konva.Group({
       x: piece.metadata.currentPosition.x,
       y: piece.metadata.currentPosition.y,
@@ -111,8 +112,9 @@ class KonvaPainter extends Painter {
     });
 
     figure.shape = new Konva.Line({
-      points: Outline.draw(piece, piece.diameter, canvas.borderFill),
-      tension: canvas.lineSoftness,
+      points: outline.draw(piece, piece.diameter, canvas.borderFill),
+      bezier: outline.isBezier(),
+      tension: outline.isBezier() ? null : canvas.lineSoftness,
       stroke: piece.metadata.strokeColor || canvas.strokeColor,
       strokeWidth: canvas.strokeWidth,
       closed: true,

@@ -13,6 +13,7 @@ const {Horizontal, Vertical} = require('./axis');
 const Shuffler = require('./shuffler');
 const {diameter} = require('./size');
 const {itself} = require('./prelude');
+const {Classic} = require('./outline');
 
 /**
  * @typedef {object} Shape
@@ -99,6 +100,7 @@ class Canvas {
    *                                                                    You only need to specify this option when pieces are manually sketched and images must be adjusted
    * @param {import('./vector').Vector|number} [options.maxPiecesCount] the maximal amount of pieces used to calculate the maximal width and height.
    *                                                                    You only need to specify this option when pieces are manually sketched and images must be adjusted
+   * @param {import('./outline').Outline} [options.outline]
    */
   constructor(id, {
       width,
@@ -113,7 +115,9 @@ class Canvas {
       fixed = false,
       painter = null,
       puzzleDiameter = null,
-      maxPiecesCount = null }) {
+      maxPiecesCount = null,
+      outline = null
+    }) {
     this.width = width;
     this.height = height;
     this.pieceSize = diameter(pieceSize);
@@ -134,6 +138,7 @@ class Canvas {
     this._puzzleDiameter = Vector.cast(puzzleDiameter);
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
+    this._outline = outline || new Classic();
   }
 
   _initialize() {
@@ -165,7 +170,7 @@ class Canvas {
     const figure = {label: null, group: null, shape: null};
     this.figures[piece.metadata.id] = figure;
 
-    this._painter.sketch(this, piece, figure);
+    this._painter.sketch(this, piece, figure, this._outline);
 
     /** @type {LabelMetadata} */
     const label = piece.metadata.label;
