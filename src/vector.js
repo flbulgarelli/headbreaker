@@ -126,6 +126,16 @@ function minus(one, other) {
   return apply(one, other, (v1, v2) => v1 - v2);
 }
 
+
+/**
+ * @param {Vector} one
+ *
+ * @returns {number}
+ */
+function min(one) {
+  return Math.min(one.x, one.y);
+}
+
 /**
  * @param {Vector|number} one
  * @param {Vector|number} other
@@ -151,5 +161,6 @@ module.exports = {
   divide,
   plus,
   minus,
-  apply
+  apply,
+  min
 };

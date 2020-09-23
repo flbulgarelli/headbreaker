@@ -64,8 +64,9 @@ class Painter {
    * @param {Canvas} canvas
    * @param {Piece} piece
    * @param {import('./canvas').Figure} figure the rendering backend information for this piece. This method may mutate it if necessary
+   * @param {import('./outline').Outline} outline
    */
-  sketch(canvas, piece, figure) { }
+  sketch(canvas, piece, figure, outline) { }
 
   /**
    * Fills a piece using the canvas image information

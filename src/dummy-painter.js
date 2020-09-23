@@ -28,8 +28,9 @@ class DummyPainter extends Painter {
    * @param {Canvas} canvas
    * @param {Piece} _piece
    * @param {import('./canvas').Figure} _figure
+   * @param {import('./outline').Outline} outline
    */
-  sketch(canvas, _piece, _figure) {
+  sketch(canvas, _piece, _figure, outline) {
     canvas['__nullLayer__'].figures++;
   }
 }

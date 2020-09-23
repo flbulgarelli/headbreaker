@@ -49,14 +49,6 @@ soft.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
 });
-soft.sketchPiece({
-  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
-  metadata: { id: 'b', currentPosition: { x: 100, y: 50 }, color: '#B83361' }
-});
-soft.sketchPiece({
-  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
-  metadata: { id: 'g', currentPosition: { x: 100, y: 230 } }
-});
 // ... more pieces ...
 soft.draw();
 ```
@@ -64,6 +56,30 @@ soft.draw();
 ### Demo
 
 <div id="soft-canvas">
+</div>
+
+
+## Rounded lines
+
+### Code
+
+```javascript
+const rounded = new headbreaker.Canvas('rounded-canvas', {
+  width: 500, height: 300,
+  pieceSize: 50,
+  outline: new headbreaker.outline.Rounded()
+});
+rounded.sketchPiece({
+  structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
+  metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
+});
+// ... more pieces ...
+rounded.draw();
+```
+
+### Demo
+
+<div id="rounded-canvas">
 </div>
 
 
