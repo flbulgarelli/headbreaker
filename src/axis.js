@@ -14,7 +14,7 @@ const Vertical = {
   },
 
   /**
-   * @param {HTMLImageElement} image
+   * @param {HTMLImageElement|HTMLCanvasElement} image
    * @returns {number}
    */
   atDimension(image) {
@@ -32,7 +32,7 @@ const Horizontal = {
   },
 
   /**
-   * @param {HTMLImageElement} image
+   * @param {HTMLImageElement|HTMLCanvasElement} image
    * @returns {number}
    */
   atDimension(image) {

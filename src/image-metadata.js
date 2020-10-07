@@ -2,13 +2,13 @@ const {vector} = require('./vector');
 
 /**
  * @typedef {object} ImageMetadata
- * @property {HTMLImageElement}    content
+ * @property {HTMLImageElement|HTMLCanvasElement}    content
  * @property {import('./vector').Vector} [offset]
  * @property {number}   [scale]
  */
 
 /**
- * @typedef {HTMLImageElement|ImageMetadata} ImageLike
+ * @typedef {HTMLImageElement|HTMLCanvasElement|ImageMetadata} ImageLike
  */
 
 /**
@@ -22,7 +22,7 @@ const {vector} = require('./vector');
  * @returns {ImageMetadata}
  */
 function asImageMetadata(imageLike) {
-  if (imageLike instanceof HTMLImageElement) {
+  if (imageLike instanceof HTMLImageElement || imageLike instanceof HTMLCanvasElement) {
     return {
       content: imageLike,
       offset: vector(1, 1),

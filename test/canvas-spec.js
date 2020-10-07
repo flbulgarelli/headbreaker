@@ -3,7 +3,10 @@ const assert = require('assert');
 const {diameter, vector, Slot, Tab, None, Canvas, painters, generators, Puzzle} = require('../src/index');
 
 // @ts-ignore
-HTMLImageElement = function(){};
+HTMLImageElement = function() {};
+// @ts-ignore
+HTMLCanvasElement = function() {};
+
 
 describe("Canvas", () => {
   const painter = new painters.Dummy();
