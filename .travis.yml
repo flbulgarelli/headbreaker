@@ -7,10 +7,18 @@ script:
 - npm test
 - npm run build
 deploy:
-  provider: releases
+- provider: releases
   api_key:
     secure: FX+296U42qZ5W45oWnpGk35Wz5dXt5Zh2eEFiwjvGGslHxIYWk3J6AhMPZ8s4imd53JyZjr2iSJJKTyl7HQBg+LUwGaOrgozcmX9YmzJJ3myl6kmKBbomvOXUSlwXGxymg8WQv/okBZvJVGvFekI2jTM13nWgfi1ZCmDgS6zC1dhu8Qj3GhZJVqupULSz3YxJRsZTDGcP1LzuvpzspHQe2wnlpWEhgurG7XYSZjLTDwxWCuI94sWf4wTa0yzlvar2AHHHJahv/WlBdzWy9FX7E1UePhQl6xAXSXxbzjpTT73GhejjrRDHGc21s0a0crSuZP9Da3hUUgfj05/P+MHBhp5nMUReUIPlwtz5m0SvaKkjF2DHWNalALw6dDQwXta+c4MWtkSU4NeyWCsXi4W1mRfl392xWSbRo63DEGZJ3+6F/t6QQ0k3471Zk7xsiR3We/P3p6CRlTUvLm4X45dtVaRvYJJ7RUr5rzvuW8KNu+yoyxDsTiKSxUQlyySotomV+1wLisauV0cbdJXr5H6VJTL+gNGu2/x1pImd9rI1+2Q0D5tGY74LQu8b0Rma84fJcuQ1EftmZKUKLdAqS/fk3LBEBlaUewhEMYjFYKVFbhy7itj+55oxBe7kXtqaTHqzfQLRs4pv9J7//CQhvHE6LWBrR2X7wfBOZuZW4gpd18=
   file: dist/headbreaker.js
+  on:
+    repo: flbulgarelli/headbreaker
+    tags: true
+  skip_cleanup: true
+- provider: npm
+  email: franco@mumuki.org
+  api_key:
+    secure: Su8HOM+CYoNo+aJFtMXpgRkT1yIeNX8mxtFLxyqZOP8LQuOLfafKzkNJXgq6vUggo4YEhq+WCC4d6RQbFEbYucBcL33+5Qq/+Avp3OOequekKLvxBhtDDNUDMXP3v+F5XZzISBp65B58e3pq4UNY15/xA+hqp7PVkcDZpM+T1Vw+ImGx9EwjPxbJ7FWpxB4QOGHPZKoEGu0keDJPeVDEwszP1t5A4+2MYb0UCxyeyeWa0IfWKpS1nK8I8YBCutOuAA2i5JccvKm79pjD5dR9NHZxpKl+TPkJRAfVWngzNKxw7F6GaV7+kH7d+D1xg80d4b8d6pwDvy/KByxCIdD87xCJeLr5l7AIIPHiPtUVm4kcMUB4q/DN530LSI4rmpGau6wGpmODAMB+NEN/nHSGEplzi/sLUsNgob4YkN4FL0/3aDmZSS8kPqCNwC/Xoao1UdDzWhnWGOYfZ4+fQqQTHa0YSAbTKaFdICW4s+Mhvqjm/WMpFnVIIKJsNqBuqgA6s7p8PPc6icHiWy701rmdePyO0VZvJJ4+lVqL9K7GJqrj9eLcFezDiXFs7IYB2TkQyH015Te2wqIY9Ezm6wHD9SeHRTJapHR+VrtFeR7jAgz8dxoTgKpciV4exMAlbuyvYfzhkt8+Y3ftI5nsEItXW782UwGAj8XweIGfPFv7krI=
   on:
     repo: flbulgarelli/headbreaker
     tags: true
