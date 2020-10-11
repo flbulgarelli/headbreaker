@@ -2,7 +2,7 @@
   "name": "headbreaker",
   "version": "1.1.0",
   "description": "Jigsaw puzzles framework for js",
-  "main": "index.js",
+  "main": "src/index.js",
   "types": "dist/headbreaker.d.ts",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
