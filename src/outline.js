@@ -69,11 +69,22 @@ class Rounded {
     bezelize = false,
     bezelDepth = 2/5,
     insertDepth = 4/5,
-    borderLength = 1/3} = {}) {
+    borderLength = 1/3,
+    referenceInsertAxis = null} = {}) {
     this.bezelize = bezelize;
     this.bezelDepth = bezelDepth;
     this.insertDepth = insertDepth;
     this.borderLength = borderLength;
+    /** @type {import('./axis').Axis} */
+    this.referenceInsertAxis = referenceInsertAxis;
+  }
+
+  /**
+   * @param {import('./vector').Vector} fullSize
+   * @return {number}
+   */
+  referenceInsertAxisLength(fullSize) {
+    return this.referenceInsertAxis ? this.referenceInsertAxis.atVector(fullSize) : Vector.min(fullSize);
   }
 
   /**
@@ -87,7 +98,7 @@ class Rounded {
     const fullSize = Vector.cast(size);
 
     /** insert external diameter */
-    const r = Math.trunc(Vector.min(fullSize) * (1 - 2 * this.borderLength) * 100) / 100;
+    const r = Math.trunc(this.referenceInsertAxisLength(fullSize) * (1 - 2 * this.borderLength) * 100) / 100;
 
     /** edge length, from vertex to insert start */
     const s = Vector.divide(Vector.minus(fullSize, r), 2);
