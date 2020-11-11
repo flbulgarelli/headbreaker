@@ -41,6 +41,28 @@ describe("Canvas", () => {
     assert.deepEqual(canvas.puzzle.head.centralAnchor, {x: 50, y: 50});
   })
 
+  it("can create a single-piece puzzle with size overriden ", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      pieceSize: 100, proximity: 20,
+      painter: painter
+    })
+
+    canvas.sketchPiece({
+      structure: {right: Tab, down: Tab, left: Slot},
+      size: diameter({x: 50, y: 40}),
+      metadata: {
+        id: 'a',
+        currentPosition: {x: 50, y: 50},
+        color: 'red'
+      }
+    });
+
+    canvas.draw();
+    assert.deepEqual(canvas.puzzle.head.size, diameter({x: 50, y: 40}))
+    assert.deepEqual(canvas.puzzle.head.centralAnchor, {x: 50, y: 50});
+  })
+
   it("can create a non-homogenous two-pieces canvas", () => {
     const canvas = new Canvas('canvas', {
       width: 800, height: 800,

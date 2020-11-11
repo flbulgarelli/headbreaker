@@ -118,6 +118,41 @@ perfect.draw();
 <div id="perfect-canvas">
 </div>
 
+## Irregular
+
+### Code
+
+```javascript
+const irregular = new headbreaker.Canvas('irregular-canvas', {
+  proximity: 25,
+  width: 500, height: 300,
+  outline: new headbreaker.outline.Rounded() });
+irregular.sketchPiece({
+  structure: { right: headbreaker.Slot, left: headbreaker.Slot },
+  metadata: { id: 'a', color: '#B87D32' },
+  size: headbreaker.diameter({x: 50, y: 50})
+});
+// ... more pieces ...
+irregular.sketchPiece({
+  structure: { up: headbreaker.Slot, right: headbreaker.Tab, down: headbreaker.Slot, left: headbreaker.Tab },
+  metadata: { id: 'd', color: '#A4C234' },
+  size: headbreaker.diameter({x: 100, y: 50})
+});
+// ... more pieces ...
+irregular.sketchPiece({
+  structure: { up: headbreaker.Slot, right: headbreaker.Slot, down: headbreaker.Tab, left: headbreaker.Tab },
+  metadata: { id: 'g', color: '#B83361' },
+  size: headbreaker.diameter({x: 50, y: 100})
+});
+
+irregular.draw();
+```
+
+### Demo
+
+<div id="irregular-canvas">
+</div>
+
 ## Background
 
 ### Code

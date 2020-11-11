@@ -399,6 +399,26 @@ describe("piece", () => {
     assert.equal(b.connected, true);
   })
 
+  it("connects vertically irregular pieces", () => {
+    const puzzle = new Puzzle();
+
+    const a = puzzle.newPiece(
+      {right: Tab},
+      {size: diameter(10)});
+    const b = puzzle.newPiece(
+      {left: Slot},
+      {size: diameter({x: 20, y: 10})});
+
+    a.locateAt(0, 0);
+    b.locateAt(15, 0);
+
+    a.connectHorizontallyWith(b);
+
+    assert.equal(a.rightConnection, b);
+    assert.equal(a.connected, true);
+    assert.equal(b.connected, true);
+  })
+
   it("does not connect vertically when too away", () => {
     const puzzle = new Puzzle();
 
