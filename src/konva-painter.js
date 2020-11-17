@@ -210,8 +210,6 @@ class KonvaPainter extends Painter {
    * @param {import('./painter').VectorAction} f
    */
   onDrag(_canvas, piece, group, f) {
-    debugger
-
     group.on('mouseover', () => {
       document.body.style.cursor = 'pointer';
     });
