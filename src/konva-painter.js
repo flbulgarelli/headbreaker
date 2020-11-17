@@ -108,7 +108,31 @@ class KonvaPainter extends Painter {
     figure.group = new Konva.Group({
       x: piece.metadata.currentPosition.x,
       y: piece.metadata.currentPosition.y,
-      draggable: !piece.metadata.fixed
+      draggable: !piece.metadata.fixed,
+      dragBoundFunc: function (pos) {
+        let newX = pos.x;
+        let newY = pos.y;
+
+        // To bound the pieces inside the border of the canvas
+        if (pos.x + piece.size.radio.x >= canvas.width) {
+          newX = canvas.width - piece.size.radio.x;
+        }
+        if (pos.y + piece.size.radio.y >= canvas.height) {
+          newY = canvas.height - piece.size.radio.y;
+        }
+
+        if (pos.x <= piece.size.radio.x) {
+          newX = piece.size.radio.x;
+        }
+        if (pos.y <= piece.size.radio.y) {
+          newY = piece.size.radio.y;
+        }
+
+        return {
+          x: newX,
+          y: newY,
+        };
+      },
     });
 
     figure.shape = new Konva.Line({
@@ -186,6 +210,8 @@ class KonvaPainter extends Painter {
    * @param {import('./painter').VectorAction} f
    */
   onDrag(_canvas, piece, group, f) {
+    debugger
+
     group.on('mouseover', () => {
       document.body.style.cursor = 'pointer';
     });
