@@ -109,10 +109,10 @@ class KonvaPainter extends Painter {
       x: piece.metadata.currentPosition.x,
       y: piece.metadata.currentPosition.y,
       draggable: !piece.metadata.fixed,
-      dragBoundFunc: (position) => {
+      dragBoundFunc: canvas.preventOffstageDrag ? (position) => {
         const furthermost = Vector.minus(vector(canvas.width, canvas.height), piece.size.radio);
         return Vector.max(Vector.min(position, furthermost), piece.size.radio);
-      },
+      } : null,
     });
 
     figure.shape = new Konva.Line({

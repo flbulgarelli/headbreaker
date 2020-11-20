@@ -93,6 +93,7 @@ class Canvas {
    * @param {number} [options.strokeWidth]
    * @param {string} [options.strokeColor]
    * @param {number} [options.lineSoftness] how soft the line will be
+   * @param {boolean} [options.preventOffstageDrag] whether dragging out of canvas is prevented
    * @param {import('./image-metadata').ImageLike} [options.image] an optional background image for the puzzle that will be split across all pieces.
    * @param {boolean} [options.fixed] whether the canvas can is fixed or can be dragged
    * @param {Painter} [options.painter] the Painter object used to actually draw figures in canvas
@@ -111,6 +112,7 @@ class Canvas {
       strokeWidth = 3,
       strokeColor = 'black',
       lineSoftness = 0,
+      preventOffstageDrag = false,
       image = null,
       fixed = false,
       painter = null,
@@ -126,6 +128,7 @@ class Canvas {
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
     this.lineSoftness = lineSoftness;
+    this.preventOffstageDrag = preventOffstageDrag;
     this.proximity = proximity;
     this.fixed = fixed;
     /** @type {Painter} */
