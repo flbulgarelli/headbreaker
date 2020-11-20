@@ -11,6 +11,9 @@
     "api": "node_modules/jsdoc-import-support/jsdoc.js src/ -d docs/api -R README.md; exit 0",
     "types": "node_modules/jsdoc-import-support/jsdoc.js -t node_modules/tsd-jsdoc/dist/ -d dist/ -r src/; mv dist/types.d.ts dist/headbreaker.d.ts; exit 0"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/flbulgarelli/headbreaker.git"
