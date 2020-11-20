@@ -16,7 +16,7 @@ const Canvas = require('./canvas');
 const Outline = require('./outline');
 const Piece = require('./piece');
 const Pair = require('./pair');
-const Vector = require('./vector');
+const {vector, ...Vector} = require('./vector');
 const Painter = require('./painter');
 
 
@@ -109,29 +109,9 @@ class KonvaPainter extends Painter {
       x: piece.metadata.currentPosition.x,
       y: piece.metadata.currentPosition.y,
       draggable: !piece.metadata.fixed,
-      dragBoundFunc: function (pos) {
-        let newX = pos.x;
-        let newY = pos.y;
-
-        // To bound the pieces inside the border of the canvas
-        if (pos.x + piece.size.radio.x >= canvas.width) {
-          newX = canvas.width - piece.size.radio.x;
-        }
-        if (pos.y + piece.size.radio.y >= canvas.height) {
-          newY = canvas.height - piece.size.radio.y;
-        }
-
-        if (pos.x <= piece.size.radio.x) {
-          newX = piece.size.radio.x;
-        }
-        if (pos.y <= piece.size.radio.y) {
-          newY = piece.size.radio.y;
-        }
-
-        return {
-          x: newX,
-          y: newY,
-        };
+      dragBoundFunc: (position) => {
+        const furthermost = Vector.minus(vector(canvas.width, canvas.height), piece.size.radio);
+        return Vector.max(Vector.min(position, furthermost), piece.size.radio);
       },
     });
 

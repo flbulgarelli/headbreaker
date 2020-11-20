@@ -126,20 +126,30 @@ function minus(one, other) {
   return apply(one, other, (v1, v2) => v1 - v2);
 }
 
-
 /**
- * @param {Vector} one
+ * @param {Vector|number} one
+ * @param {Vector|number} other
  *
- * @returns {number}
+ * @returns {Vector}
  */
-function min(one) {
-  return Math.min(one.x, one.y);
+function min(one, other) {
+  return apply(one, other, Math.min);
 }
 
 /**
  * @param {Vector|number} one
  * @param {Vector|number} other
- * @param {(one: number, other: number) => number} [f]
+ *
+ * @returns {Vector}
+ */
+function max(one, other) {
+  return apply(one, other, Math.max);
+}
+
+/**
+ * @param {Vector|number} one
+ * @param {Vector|number} other
+ * @param {(one: number, other: number) => number} f
  *
  * @returns {Vector}
  */
@@ -147,6 +157,35 @@ function apply(one, other, f) {
   const first = cast(one);
   const second = cast(other);
   return {x: f(first.x, second.x), y: f(first.y, second.y)};
+}
+
+const inner = {
+  /**
+   * @param {Vector} one
+   *
+   * @returns {number}
+   */
+  min(one) {
+    return this.apply(one, Math.min);
+  },
+
+  /**
+   * @param {Vector} one
+   *
+   * @returns {number}
+   */
+  max(one) {
+    return this.apply(one, Math.max);
+  },
+
+  /**
+   * @param {Vector} one
+   * @param {(one: number, other: number) => number} f
+   * @return {number}
+   */
+  apply(one, f) {
+    return f(one.x, one.y)
+  }
 }
 
 module.exports = {
@@ -162,5 +201,7 @@ module.exports = {
   plus,
   minus,
   apply,
-  min
+  min,
+  max,
+  inner
 };
