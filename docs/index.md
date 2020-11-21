@@ -1,8 +1,30 @@
 <script src="js/headbreaker.js"></script>
 <style>
+
 .form-group {
   margin-top: 15px;
 }
+
+#responsive-canvas .konvajs-content canvas,
+#offstage-canvas .konvajs-content canvas {
+  border: solid !important;
+}
+
+#validated-canvas-overlay {
+  position:absolute;
+  left:0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease-in-out;
+}
+
+#validated-canvas-overlay.active {
+  opacity: 1;
+}
+
 </style>
 
 # Samples
@@ -232,6 +254,36 @@ xul.onload = () => {
   <button id="autogen-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
   <button id="autogen-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
   <button id="autogen-solve" class="btn btn-primary">Solve</button>
+</div>
+
+
+## Offstage drag prevention
+
+### Code
+
+```javascript
+let malharro = new Image();
+malharro.src = 'static/malharro.jpg';
+malharro.onload = () => {
+  const offstage = new headbreaker.Canvas('offstage-canvas', {
+    width: 400, height: 400, image: malharro,
+    // ... more configs ...
+    preventOffstageDrag: true
+  });
+
+  offstage.adjustImagesToPuzzleHeight();
+  offstage.autogenerate({
+    horizontalPiecesCount: 3,
+    verticalPiecesCount: 3
+  });
+  offstage.shuffleGrid();
+  offstage.draw();
+}
+```
+
+### Demo
+
+<div id="offstage-canvas">
 </div>
 
 ## Randomized positions
@@ -496,23 +548,6 @@ pettoruti.onload = () => {
 }
 ```
 
-<style>
-#validated-canvas-overlay {
-  position:absolute;
-  left:0;
-  top: 0;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 1s ease-in-out;
-}
-
-#validated-canvas-overlay.active {
-  opacity: 1;
-}
-</style>
-
 <div style="position:relative">
   <div id="validated-canvas">
   </div>
@@ -561,12 +596,6 @@ responsive.draw();
 ```
 
 ### Demo
-
-<style>
-#responsive-canvas .konvajs-content canvas {
-  border: solid !important;
-}
-</style>
 
 <div id="responsive-canvas">
 </div>

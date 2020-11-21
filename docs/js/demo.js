@@ -366,6 +366,30 @@ xul.onload = () => {
   registerButtons('autogen', autogen);
 }
 
+// ========================
+// Offstage drag prevention
+// ========================
+
+let malharro = new Image();
+malharro.src = 'static/malharro.jpg';
+malharro.onload = () => {
+  const offstage = new headbreaker.Canvas('offstage-canvas', {
+    width: 550, height: 550,
+    pieceSize: 100, proximity: 20,
+    strokeWidth: 5, strokeColor: '#302B00', image: malharro,
+    outline: new headbreaker.outline.Rounded(),
+    preventOffstageDrag: true
+  });
+
+  offstage.adjustImagesToPuzzleHeight();
+  offstage.autogenerate({
+    horizontalPiecesCount: 3,
+    verticalPiecesCount: 3
+  });
+  offstage.shuffleGrid();
+  offstage.draw();
+}
+
 // =================
 // Randomized Canvas
 // =================

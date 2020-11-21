@@ -84,7 +84,7 @@ class Rounded {
    * @return {number}
    */
   referenceInsertAxisLength(fullSize) {
-    return this.referenceInsertAxis ? this.referenceInsertAxis.atVector(fullSize) : Vector.min(fullSize);
+    return this.referenceInsertAxis ? this.referenceInsertAxis.atVector(fullSize) : Vector.inner.min(fullSize);
   }
 
   /**
@@ -107,7 +107,7 @@ class Rounded {
     const o = Vector.multiply(r, this.insertDepth);
 
     /** bezel radio */
-    const b = Vector.multiply(Vector.min(s), this.bezelDepth);
+    const b = Vector.multiply(Vector.inner.min(s), this.bezelDepth);
 
     /** the four bezel flags, starting at up-left corner */
     const [b0, b1, b2, b3] = this.bezels(p);

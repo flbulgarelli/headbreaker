@@ -99,3 +99,8 @@ const otherPuzzle = headbreaker.Puzzle.import(dump);
 
 See https://flbulgarelli.github.io/headbreaker/
 
+
+## Contributors
+
+* [@flbulgarelli](https://github.com/flbulgarelli)
+* [@Almo7aya](https://github.com/Almo7aya)
