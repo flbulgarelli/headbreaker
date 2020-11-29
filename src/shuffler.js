@@ -40,13 +40,13 @@ const grid = (pieces) => {
  * */
 const columns = (pieces) => {
   const destinations = pieces.map(it => it.centralAnchor.asVector());
-  const columns = [];
+  const columns = new Map();
 
   for (let destination of destinations) {
-    if (!columns[destination.x]) {
-      columns[destination.x] = destinations.filter(it => it.x == destination.x);
+    if (!columns.get(destination.x)) {
+      columns.set(destination.x, destinations.filter(it => it.x == destination.x));
     }
-    const column = columns[destination.x];
+    const column = columns.get(destination.x);
 
     const j = sampleIndex(column);
     const temp = column[j].y
@@ -56,6 +56,42 @@ const columns = (pieces) => {
   return destinations;
 };
 
+
+/**
+ * @type {Shuffler}
+ * */
+const line = (pieces) => {
+  const destinations = pieces.map(it => it.centralAnchor.asVector());
+  const columns = new Set(destinations.map(it => it.x));
+  const maxX = Math.max(...columns);
+  const minX = Math.min(...columns);
+  const width = (maxX - minX) / (columns.size - 1);
+  const pivot = minX + (width / 2);
+
+  const lineLength = destinations.length * width;
+  const linePivot = destinations.filter(it => it.x < pivot).length * width;
+
+  const init = [];
+  const tail = [];
+
+  for (let i = 0; i < linePivot; i += width) {
+    init.push(i);
+  }
+
+  for (let i = init[init.length - 1] + width; i < lineLength; i += width) {
+    tail.push(i);
+  }
+
+  for (let destination of destinations) {
+    const source = destination.x < pivot ? init : tail;
+    const index = sampleIndex(source);
+
+    destination.y = 0;
+    destination.x = source[index];
+    source.splice(index, 1);
+  }
+  return destinations;
+};
 
 /**
  * @param {number} padding
@@ -107,6 +143,7 @@ module.exports = {
   random,
   grid,
   columns,
+  line,
   noop,
   padder,
   noise

@@ -282,7 +282,7 @@ class Canvas {
    * @param {number} farness
    */
   shuffleColumns(farness = 1) {
-    this._shuffleSolution(farness, Shuffler.columns);
+    this.shuffleWith(farness, Shuffler.columns);
   }
 
   /**
@@ -291,15 +291,25 @@ class Canvas {
    * @param {number} farness
    */
   shuffleGrid(farness = 1) {
-    this._shuffleSolution(farness, Shuffler.grid);
+    this.shuffleWith(farness, Shuffler.grid);
   }
 
   /**
-   * @private
+   * **Warning**: this method requires {@code maxPiecesCount} to be set.
+   * **Warning**: this method requires puzzle to have an even number of columns
+   *
+   * @param {number} farness
+   */
+  shuffleLine(farness = 1) {
+    this.shuffleWith(farness, Shuffler.line);
+  }
+
+
+  /**
    * @param {number} farness
    * @param {import('./shuffler').Shuffler} shuffler
    */
-  _shuffleSolution(farness, shuffler) {
+  shuffleWith(farness, shuffler) {
     this.solve();
     this.puzzle.shuffleWith(Shuffler.padder(this.proximity * 3, this.maxPiecesCount.x, this.maxPiecesCount.y));
     this.puzzle.shuffleWith(shuffler)
