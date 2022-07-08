@@ -99,6 +99,19 @@ const otherPuzzle = headbreaker.Puzzle.import(dump);
 
 See https://flbulgarelli.github.io/headbreaker/
 
+## 🏗 Develop
+
+```bash
+# install project
+$ npm install
+# run tests
+$ npm run test
+# build whole project
+$ npm run all
+# start docs site locally
+# requires mkdocs
+$ mkdocs serve
+```
 
 ## Contributors
 
