@@ -378,19 +378,26 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   *
    * @param {number} dx
    * @param {number} dy
    */
   drag(dx, dy, quiet = false) {
     if (Pair.isNull(dx, dy)) return;
 
-    if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
+    if (this.dragShouldDisconnect(dx, dy)) {
       this.disconnect();
       this.translate(dx, dy, quiet);
     } else {
       this.push(dx, dy, quiet);
     }
+  }
+
+  /**
+   * @param {number} dx
+   * @param {number} dy
+   */
+  dragShouldDisconnect(dx, dy) {
+    return !this.puzzle.locked && this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy);
   }
 
   drop() {

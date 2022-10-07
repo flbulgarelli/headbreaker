@@ -22,6 +22,18 @@ function registerButtons(id, canvas) {
     canvas.solve();
     canvas.redraw();
   });
+
+  document.getElementById(`${id}-canvas`).addEventListener('keydown', function(e) {
+    if (e.shiftKey) {
+     canvas.puzzle.lock()
+    }
+  });
+
+  document.getElementById(`${id}-canvas`).addEventListener('keyup', function(e) {
+    if (e.shiftKey) {
+     canvas.puzzle.unlock()
+    }
+  });
 }
 
 // ============
