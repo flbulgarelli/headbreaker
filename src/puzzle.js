@@ -37,6 +37,8 @@ class Puzzle {
     this.pieces = [];
     /** @type {import('./validator').Validator} */
     this.validator = new NullValidator();
+    /** @type {Boolean} */
+    this.locked = false;
   }
 
   /**
@@ -328,6 +330,18 @@ class Puzzle {
    */
   get pieceRadio() {
     return this.pieceSize.radio;
+  }
+
+  /**
+   * Prevents pieces from disconnecting
+   */
+  lock() {
+    this.locked = true;
+  }
+
+  /** Enables disconnection of pieces */
+  unlock() {
+    this.locked = false;
   }
 
   /**
