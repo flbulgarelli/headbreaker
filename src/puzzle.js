@@ -138,6 +138,44 @@ class Puzzle {
   translate(dx, dy) {
     this.pieces.forEach(it => it.translate(dx, dy));
   }
+
+  /**
+   * Translates all the puzzle pieces so that are completely
+   * within the given bounds.
+   *
+   * @param {import('./pair').Pair} xBounds
+   * @param {import('./pair').Pair} yBounds
+   */
+  reframe(xBounds, yBounds) {
+    let dx;
+    const leftOffstage = xBounds[0] - Math.min(...this.pieces.map(it => it.leftAnchor.x));
+    if (leftOffstage > 0) {
+      dx = leftOffstage;
+    } else {
+      const rightOffstage = xBounds[1] - Math.max(...this.pieces.map(it => it.rightAnchor.x))
+      if (rightOffstage < 0) {
+        dx = rightOffstage;
+      } else {
+        dx = 0;
+      }
+    }
+
+    let dy;
+    const upOffstage = yBounds[0] - Math.min(...this.pieces.map(it => it.upAnchor.y));
+    if (upOffstage > 0) {
+      dy = upOffstage;
+    } else {
+      const downOffstage = yBounds[1] - Math.max(...this.pieces.map(it => it.downAnchor.y))
+      if (downOffstage < 0) {
+        dy = downOffstage;
+      } else {
+        dy = 0;
+      }
+    }
+
+    this.translate(dx, dy);
+  }
+
   /**
    * @param {import('./piece').TranslationListener} f
    */

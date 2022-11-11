@@ -446,6 +446,11 @@ class Canvas {
     });
   }
 
+  reframeToDimmensions() {
+    this.puzzle.reframe([0, this.width], [0, this.height]);
+    this.redraw();
+  }
+
   /**
    * @param {import('./validator').ValidationListener} f
    */
