@@ -26,7 +26,43 @@ npm install --save headbreaker
 npm install --save konva
 ```
 
+## ⏳ TL;DR sample
+
+If you just want to see a 2x2 puzzle in your web-browser, then create an HTML file with the following contents 😁:
+
+```html
+<script src="https://flbulgarelli.github.io/headbreaker/js/headbreaker.js"></script>
+<body>
+  <div id="puzzle"></div>
+  <script>
+    const autogen = new headbreaker.Canvas('puzzle', {
+      width: 800, height: 650,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2, lineSoftness: 0.18,
+    });
+    autogen.autogenerate({
+      horizontalPiecesCount: 2,
+      verticalPiecesCount: 2,
+      metadata: [
+        {color: '#B83361'},
+        {color: '#B87D32'},
+        {color: '#A4C234'},
+        {color: '#37AB8C'}
+      ]
+    });
+    autogen.draw();
+  </script>
+</body>
+```
+
 ## 🏁 Quick start
+
+`headbreaker` is a library which solves two different - but-related - problems:
+
+  * It implements a jigsaw-like data-structure, which can be used in tasks like modelling, traversing, importing and exporting and - of course - rendering. This data-structure is 100% pure JavaScript, with no dependencies, and can be used both in browsers and headless environments.
+  * It implements a simple and generic rendering system for the Web. `headbreaker` also ships a 100% functional [Konva.js](https://konvajs.org/)-based implementation, but you may want to develop and use your own implementation.
+
+`headbreaker` is designed to be included and compiled in your project as a `node` module, but you can also import it directly in your static pages from [https://flbulgarelli.github.io/headbreaker/js/headbreaker.js](`https://flbulgarelli.github.io/headbreaker/js/headbreaker.js`).
 
 ### HTML Puzzle
 
