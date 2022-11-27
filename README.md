@@ -2,7 +2,7 @@
 [![Code Climate](https://codeclimate.com/github/flbulgarelli/headbreaker/badges/gpa.svg)](https://codeclimate.com/github/flbulgarelli/headbreaker)
 [![Test Coverage](https://codeclimate.com/github/flbulgarelli/headbreaker/badges/coverage.svg)](https://codeclimate.com/github/flbulgarelli/headbreaker)
 
-# :jigsaw: :exploding_head: Headbreaker
+# 🧩 🤯 Headbreaker
 
 > Jigsaw Puzzles Framework for JavaScript
 
@@ -151,7 +151,7 @@ const otherPuzzle = headbreaker.Puzzle.import(dump);
 
 ## 👀 Demo and API Docs
 
-See https://flbulgarelli.github.io/headbreaker/
+See [flbulgarelli.github.io/headbreaker](https://flbulgarelli.github.io/headbreaker/)
 
 ## 🏗 Develop
 
