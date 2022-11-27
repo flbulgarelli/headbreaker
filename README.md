@@ -28,7 +28,7 @@ npm install --save konva
 
 ## ⏳ TL;DR sample
 
-If you just want to see a 2x2 puzzle in your web-browser, then create an HTML file with the following contents 😁:
+If you just want to see a - very basic - 2x2 puzzle in your web-browser, then create an HTML file with the following contents 😁:
 
 ```html
 <script src="https://flbulgarelli.github.io/headbreaker/js/headbreaker.js"></script>
@@ -54,6 +54,20 @@ If you just want to see a 2x2 puzzle in your web-browser, then create an HTML fi
   </script>
 </body>
 ```
+
+And voilà! 🎊
+
+![sample puzzle](https://raw.githubusercontent.com/flbulgarelli/headbreaker/master/docs/tldr_puzzle.png)
+
+However, there is a lot more that `headbreaker` can do for you. These are some of its coolest features:
+
+ * Customizable pieces outlines
+ * Irregular pieces
+ * Image support
+ * Sound support
+ * Event system
+ * Automatic validation
+ * Data import and export
 
 ## 🏁 Quick start
 
