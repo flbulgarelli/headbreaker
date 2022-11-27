@@ -4,5 +4,5 @@ nav:
   - Home: index.md
   - API: api/index.html
 repo_url: "https://github.com/flbulgarelli/headbreaker"
-copyright: '© Copyright 2020 Franco Leonardo Bulgarelli'
+copyright: '© Copyright 2020 - 2022 Franco Leonardo Bulgarelli'
 docs_dir: docs
