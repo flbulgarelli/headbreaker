@@ -151,6 +151,8 @@ class Canvas {
     this.figures = {};
     /** @type {Object<string, Template>} */
     this.templates = {};
+    /** @type {import('./vector').Vector} */
+    this._figurePadding = null;
   }
 
   /**
@@ -447,6 +449,22 @@ class Canvas {
   }
 
   /**
+   * Translates all the pieces - preserving their relative positions - so that
+   * they all can be visible, if possible. If they are already fully visible,
+   * this method does nothing.
+   *
+   * In order to prevent unexpected translations, this method will fail
+   * if canvas is not `fixed`.
+   */
+  reframeWithinDimmensions() {
+    if (!this.fixed) throw new Error("Only fixed canvas can be reframed")
+
+    this.puzzle.reframe(
+      this.figurePadding,
+      Vector.minus(vector(this.width, this.height), this.figurePadding));
+  }
+
+  /**
    * @param {import('./validator').ValidationListener} f
    */
   onValid(f) {
@@ -689,6 +707,16 @@ class Canvas {
    */
   get pieceDiameter() {
     return this.pieceSize.diameter;
+  }
+
+  /**
+   * @type {import('./vector').Vector}
+   */
+  get figurePadding() {
+    if (!this._figurePadding) {
+      this._figurePadding = Vector.plus(this.strokeWidth, this.borderFill);
+    }
+    return this._figurePadding;
   }
 
   /**

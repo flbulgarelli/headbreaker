@@ -138,6 +138,47 @@ class Puzzle {
   translate(dx, dy) {
     this.pieces.forEach(it => it.translate(dx, dy));
   }
+
+  /**
+   * Translates all the puzzle pieces so that are completely
+   * within the given bounds, if possible.
+   *
+   * If pieces can not be completly places within the given
+   * bounding box, the the `max` param is ignored.
+   *
+   * @param {import('./vector').Vector} min
+   * @param {import('./vector').Vector} max
+   */
+  reframe(min, max) {
+    let dx;
+    const leftOffstage = min.x - Math.min(...this.pieces.map(it => it.leftAnchor.x));
+    if (leftOffstage > 0) {
+      dx = leftOffstage;
+    } else {
+      const rightOffstage = max.x - Math.max(...this.pieces.map(it => it.rightAnchor.x))
+      if (rightOffstage < 0) {
+        dx = rightOffstage;
+      } else {
+        dx = 0;
+      }
+    }
+
+    let dy;
+    const upOffstage = min.y - Math.min(...this.pieces.map(it => it.upAnchor.y));
+    if (upOffstage > 0) {
+      dy = upOffstage;
+    } else {
+      const downOffstage = max.y - Math.max(...this.pieces.map(it => it.downAnchor.y))
+      if (downOffstage < 0) {
+        dy = downOffstage;
+      } else {
+        dy = 0;
+      }
+    }
+
+    this.translate(dx, dy);
+  }
+
   /**
    * @param {import('./piece').TranslationListener} f
    */

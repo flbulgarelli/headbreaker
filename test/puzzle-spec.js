@@ -1,5 +1,6 @@
 const assert = require('assert');
 const {Puzzle, Tab, Slot, PuzzleValidator, Shuffler} = require('../src/index');
+const {vector, ...Vector} = require('../src/vector');
 
 describe("puzzle", () => {
   /** @type {Puzzle} */
@@ -98,6 +99,71 @@ describe("puzzle", () => {
     assert.equal(b.rightConnection, null);
     assert.equal(c.downConnection, null);
   })
+
+  describe("reframing", () => {
+    it("reframes single offstage piece", () => {
+      puzzle = new Puzzle();
+      const piece = puzzle.newPiece({right: Tab, up: Tab});
+      piece.locateAt(-10, -10);
+
+      puzzle.reframe(Vector.zero(), vector(10, 10));
+
+      assert.deepEqual(piece.centralAnchor.asPair(), [2, 2]);
+    })
+
+    it("reframes single offstage piece - to the right", () => {
+      puzzle = new Puzzle();
+      const piece = puzzle.newPiece({right: Tab, up: Tab});
+      piece.locateAt(10, 15);
+
+      puzzle.reframe(Vector.zero(), vector(8, 12));
+
+      assert.deepEqual(piece.centralAnchor.asPair(), [6, 10]);
+    })
+
+    it("reframes multiple offstage pieces, preserving distances", () => {
+      puzzle = new Puzzle();
+      const one = puzzle.newPiece({right: Tab, up: Tab});
+      one.locateAt(-10, -10);
+
+      const other = puzzle.newPiece({right: Tab, up: Tab});
+      other.locateAt(-8, -6);
+
+      puzzle.reframe(Vector.zero(), vector(10, 10));
+
+      assert.deepEqual(one.centralAnchor.asPair(), [2, 2]);
+      assert.deepEqual(other.centralAnchor.asPair(), [4, 6]);
+    })
+
+    it("honors min bound when full refraiming is impossible", () => {
+      puzzle = new Puzzle();
+      const one = puzzle.newPiece({right: Tab, up: Tab});
+      one.locateAt(0, 0);
+
+      const other = puzzle.newPiece({right: Tab, up: Tab});
+      other.locateAt(12, 12);
+
+      puzzle.reframe(Vector.zero(), vector(10, 10));
+
+      assert.deepEqual(one.centralAnchor.asPair(), [2, 2]);
+      assert.deepEqual(other.centralAnchor.asPair(), [14, 14]);
+    })
+
+    it("reframes does nothing when pieces are already within bounds", () => {
+      puzzle = new Puzzle();
+      const one = puzzle.newPiece({right: Tab, up: Tab});
+      one.locateAt(3, 3);
+
+      const other = puzzle.newPiece({right: Tab, up: Tab});
+      other.locateAt(5, 9);
+
+      puzzle.reframe(Vector.zero(), vector(20, 20));
+
+      assert.deepEqual(one.centralAnchor.asPair(), [3, 3]);
+      assert.deepEqual(other.centralAnchor.asPair(), [5, 9]);
+    })
+
+  });
 
   describe("validation", () => {
     it("is invalid by default", () => {

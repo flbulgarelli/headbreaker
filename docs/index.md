@@ -268,7 +268,8 @@ malharro.onload = () => {
   const offstage = new headbreaker.Canvas('offstage-canvas', {
     width: 400, height: 400, image: malharro,
     // ... more configs ...
-    preventOffstageDrag: true
+    preventOffstageDrag: true,
+    fixed: true
   });
 
   offstage.adjustImagesToPuzzleHeight();
@@ -284,6 +285,10 @@ malharro.onload = () => {
 ### Demo
 
 <div id="offstage-canvas">
+</div>
+<div class="form-group">
+  <button id="offstage-solve" class="btn btn-primary">Solve</button>
+  <button id="offstage-reframe" class="btn btn-primary">Reframe</button>
 </div>
 
 ## Randomized positions

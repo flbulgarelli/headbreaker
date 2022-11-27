@@ -108,7 +108,7 @@ puzzle
   .newPiece({up: Tab})
   .locateAt(6, 3);
 
-// Connect puzzle's near pieces
+// Connect puzzle's nearby pieces
 puzzle.autoconnect();
 
 // Translate puzzle
@@ -116,6 +116,10 @@ puzzle.translate(10, 10);
 
 // Shuffle pieces
 puzzle.shuffle(100, 100);
+
+// Relocate pieces to fit into a bounding box
+// while preserving their relative positions, if possible
+puzzle.reframe(vector(0, 0), vector(20, 20));
 
 // Directly manipulate pieces
 const [a, b, c, d] = puzzle.pieces;
