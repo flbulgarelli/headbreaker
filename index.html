@@ -9,69 +9,56 @@
         <link rel="canonical" href="https://flbulgarelli.github.io/headbreaker/">
         <link rel="shortcut icon" href="img/favicon.ico">
         <title>Headbreaker</title>
-        <link href="css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/font-awesome.min.css" rel="stylesheet">
         <link href="css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
 
         <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap-3.0.3.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body class="homepage">
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href=".">Headbreaker</a>
-                </div>
+                <a class="navbar-brand" href=".">Headbreaker</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="active">
-                                <a href=".">Home</a>
+                            <li class="navitem active">
+                                <a href="." class="nav-link">Home</a>
                             </li>
-                            <li >
-                                <a href="api/">API</a>
+                            <li class="navitem">
+                                <a href="api/" class="nav-link">API</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li class="disabled">
-                                <a rel="next" >
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="api/">
+                            <li class="nav-item">
+                                <a rel="next" href="api/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/flbulgarelli/headbreaker/edit/master/docs/index.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/flbulgarelli/headbreaker/edit/master/docs/index.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -79,31 +66,92 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#samples">Samples</a></li>
-            <li><a href="#basic">Basic</a></li>
-            <li><a href="#soft-lines">Soft lines</a></li>
-            <li><a href="#rounded-lines">Rounded lines</a></li>
-            <li><a href="#perfect-match">Perfect match</a></li>
-            <li><a href="#irregular">Irregular</a></li>
-            <li><a href="#background">Background</a></li>
-            <li><a href="#autogenerated">Autogenerated</a></li>
-            <li><a href="#offstage-drag-prevention">Offstage drag prevention</a></li>
-            <li><a href="#randomized-positions">Randomized positions</a></li>
-            <li><a href="#labels">Labels</a></li>
-            <li><a href="#sound-and-visual-feedback">Sound and visual feedback</a></li>
-            <li><a href="#dynamic">Dynamic</a></li>
-            <li><a href="#persistent">Persistent</a></li>
-            <li><a href="#validated">Validated</a></li>
-            <li><a href="#responsive">Responsive</a></li>
-            <li><a href="#rectangular">Rectangular</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#samples" class="nav-link">Samples</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#basic" class="nav-link">Basic</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#soft-lines" class="nav-link">Soft lines</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#rounded-lines" class="nav-link">Rounded lines</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#perfect-match" class="nav-link">Perfect match</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#irregular" class="nav-link">Irregular</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#background" class="nav-link">Background</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#autogenerated" class="nav-link">Autogenerated</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#offstage-drag-prevention" class="nav-link">Offstage drag prevention</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#randomized-positions" class="nav-link">Randomized positions</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#labels" class="nav-link">Labels</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#sound-and-visual-feedback" class="nav-link">Sound and visual feedback</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#dynamic" class="nav-link">Dynamic</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#persistent" class="nav-link">Persistent</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#validated" class="nav-link">Validated</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#responsive" class="nav-link">Responsive</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#rectangular" class="nav-link">Rectangular</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <script src="js/headbreaker.js"></script>
-
 <style>
 
 .form-group {
@@ -135,7 +183,7 @@
 <h1 id="samples">Samples</h1>
 <h2 id="basic">Basic</h2>
 <h3 id="code">Code</h3>
-<pre><code class="javascript">const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
+<pre><code class="language-javascript">const basic = new headbreaker.Canvas('basic-canvas', { width: 500, height: 300, pieceSize: 50, proximity: 10 });
 basic.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
@@ -151,14 +199,13 @@ basic.sketchPiece({
 // ... more pieces ...
 basic.draw();.
 </code></pre>
-
 <h3 id="demo">Demo</h3>
 <div id="basic-canvas">
 </div>
 
 <h2 id="soft-lines">Soft lines</h2>
 <h3 id="code_1">Code</h3>
-<pre><code class="javascript">const soft = new headbreaker.Canvas('soft-canvas', {
+<pre><code class="language-javascript">const soft = new headbreaker.Canvas('soft-canvas', {
   width: 500, height: 300,
   pieceSize: 50, proximity: 10,
   lineSoftness: 0.2
@@ -170,14 +217,13 @@ soft.sketchPiece({
 // ... more pieces ...
 soft.draw();
 </code></pre>
-
 <h3 id="demo_1">Demo</h3>
 <div id="soft-canvas">
 </div>
 
 <h2 id="rounded-lines">Rounded lines</h2>
 <h3 id="code_2">Code</h3>
-<pre><code class="javascript">const rounded = new headbreaker.Canvas('rounded-canvas', {
+<pre><code class="language-javascript">const rounded = new headbreaker.Canvas('rounded-canvas', {
   width: 500, height: 300,
   pieceSize: 50,
   outline: new headbreaker.outline.Rounded()
@@ -189,14 +235,13 @@ rounded.sketchPiece({
 // ... more pieces ...
 rounded.draw();
 </code></pre>
-
 <h3 id="demo_2">Demo</h3>
 <div id="rounded-canvas">
 </div>
 
 <h2 id="perfect-match">Perfect match</h2>
 <h3 id="code_3">Code</h3>
-<pre><code class="javascript">const perfect = new headbreaker.Canvas('perfect-canvas', {
+<pre><code class="language-javascript">const perfect = new headbreaker.Canvas('perfect-canvas', {
   width: 800, height: 300,
   pieceSize: 100, proximity: 20,
   borderFill: 10,
@@ -219,14 +264,13 @@ perfect.sketchPiece({
 // ... more pieces ...
 perfect.draw();
 </code></pre>
-
 <h3 id="demo_3">Demo</h3>
 <div id="perfect-canvas">
 </div>
 
 <h2 id="irregular">Irregular</h2>
 <h3 id="code_4">Code</h3>
-<pre><code class="javascript">const irregular = new headbreaker.Canvas('irregular-canvas', {
+<pre><code class="language-javascript">const irregular = new headbreaker.Canvas('irregular-canvas', {
   proximity: 25,
   width: 500, height: 300,
   outline: new headbreaker.outline.Rounded() });
@@ -250,14 +294,13 @@ irregular.sketchPiece({
 
 irregular.draw();
 </code></pre>
-
 <h3 id="demo_4">Demo</h3>
 <div id="irregular-canvas">
 </div>
 
 <h2 id="background">Background</h2>
 <h3 id="code_5">Code</h3>
-<pre><code class="javascript">let vangogh = new Image();
+<pre><code class="language-javascript">let vangogh = new Image();
 vangogh.src = 'static/vangogh.jpg';
 vangogh.onload = () =&gt; {
   const background = new headbreaker.Canvas('background-canvas', {
@@ -286,11 +329,9 @@ vangogh.onload = () =&gt; {
   background.draw();
 }
 </code></pre>
-
 <h3 id="demo_5">Demo</h3>
 <div id="background-canvas">
 </div>
-
 <div class="form-group">
   <button id="background-shuffle" class="btn btn-primary">Shuffle</button>
   <button id="background-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
@@ -300,7 +341,7 @@ vangogh.onload = () =&gt; {
 
 <h2 id="autogenerated">Autogenerated</h2>
 <h3 id="code_6">Code</h3>
-<pre><code class="javascript">let xul = new Image();
+<pre><code class="language-javascript">let xul = new Image();
 xul.src = 'static/xul.jpg';
 xul.onload = () =&gt; {
   const autogen = new headbreaker.Canvas('autogen-canvas', {
@@ -318,11 +359,9 @@ xul.onload = () =&gt; {
   autogen.draw();
 }
 </code></pre>
-
 <h3 id="demo_6">Demo</h3>
 <div id="autogen-canvas">
 </div>
-
 <div class="form-group">
   <button id="autogen-shuffle" class="btn btn-primary">Shuffle</button>
   <button id="autogen-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
@@ -332,13 +371,14 @@ xul.onload = () =&gt; {
 
 <h2 id="offstage-drag-prevention">Offstage drag prevention</h2>
 <h3 id="code_7">Code</h3>
-<pre><code class="javascript">let malharro = new Image();
+<pre><code class="language-javascript">let malharro = new Image();
 malharro.src = 'static/malharro.jpg';
 malharro.onload = () =&gt; {
   const offstage = new headbreaker.Canvas('offstage-canvas', {
     width: 400, height: 400, image: malharro,
     // ... more configs ...
-    preventOffstageDrag: true
+    preventOffstageDrag: true,
+    fixed: true
   });
 
   offstage.adjustImagesToPuzzleHeight();
@@ -350,14 +390,17 @@ malharro.onload = () =&gt; {
   offstage.draw();
 }
 </code></pre>
-
 <h3 id="demo_7">Demo</h3>
 <div id="offstage-canvas">
+</div>
+<div class="form-group">
+  <button id="offstage-solve" class="btn btn-primary">Solve</button>
+  <button id="offstage-reframe" class="btn btn-primary">Reframe</button>
 </div>
 
 <h2 id="randomized-positions">Randomized positions</h2>
 <h3 id="code_8">Code</h3>
-<pre><code class="javascript">let dali = new Image();
+<pre><code class="language-javascript">let dali = new Image();
 dali.src = 'static/dali.jpg';
 dali.onload = () =&gt; {
   const randomized = new headbreaker.Canvas('randomized-canvas', {
@@ -373,14 +416,13 @@ dali.onload = () =&gt; {
   randomized.draw();
 }
 </code></pre>
-
 <h3 id="demo_8">Demo</h3>
 <div id="randomized-canvas">
 </div>
 
 <h2 id="labels">Labels</h2>
 <h3 id="code_9">Code</h3>
-<pre><code class="javascript">const labels = new headbreaker.Canvas('labels-canvas', {
+<pre><code class="language-javascript">const labels = new headbreaker.Canvas('labels-canvas', {
   width: 400, height: 400,
   pieceSize: 80, proximity: 25,
   borderFill: 10, strokeWidth: 2,
@@ -411,14 +453,13 @@ labels.sketchPiece({
 labels.shuffle(0.6);
 labels.draw();
 </code></pre>
-
 <h3 id="demo_9">Demo</h3>
 <div id="labels-canvas">
 </div>
 
 <h2 id="sound-and-visual-feedback">Sound and visual feedback</h2>
 <h4 id="code_10">Code</h4>
-<pre><code class="javascript">var audio = new Audio('static/connect.wav');
+<pre><code class="language-javascript">var audio = new Audio('static/connect.wav');
 let berni = new Image();
 berni.src = 'static/berni.jpg';
 berni.onload = () =&gt; {
@@ -462,11 +503,9 @@ berni.onload = () =&gt; {
   });
 }
 </code></pre>
-
 <h3 id="demo_10">Demo</h3>
 <div id="sound-canvas">
 </div>
-
 <div class="form-group">
   <button id="sound-shuffle" class="btn btn-primary">Shuffle</button>
   <button id="sound-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
@@ -476,7 +515,7 @@ berni.onload = () =&gt; {
 
 <h2 id="dynamic">Dynamic</h2>
 <h3 id="code_11">Code</h3>
-<pre><code class="javascript">function updateLabel(piece, figure, delta) {
+<pre><code class="language-javascript">function updateLabel(piece, figure, delta) {
   piece.metadata.label.text = Number(piece.metadata.label.text) + delta;
   figure.label.text(piece.metadata.label.text);
 }
@@ -514,14 +553,13 @@ dynamic.onDisconnect((piece, figure, target, targetFigure) =&gt; {
 dynamic.draw();
 
 </code></pre>
-
 <h3 id="demo_11">Demo</h3>
 <div id="dynamic-canvas">
 </div>
 
 <h2 id="persistent">Persistent</h2>
 <h3 id="code_12">Code</h3>
-<pre><code class="javascript">const exportArea = document.getElementById('export-area');
+<pre><code class="language-javascript">const exportArea = document.getElementById('export-area');
 
 function readDump() {
   return JSON.parse(exportArea.value);
@@ -551,14 +589,11 @@ document.getElementById('persistent-export').addEventListener('click', function(
   writeDump(persistent.puzzle.export({compact: true}));
 });
 </code></pre>
-
 <div id="persistent-canvas">
 </div>
-
 <div class="form-group">
   <textarea class="form-control" id="export-area" rows="10"></textarea>
 </div>
-
 <div class="form-group">
   <button id="persistent-export" class="btn btn-primary">Export</button>
   <button id="persistent-import" class="btn btn-primary">Import</button>
@@ -570,7 +605,7 @@ document.getElementById('persistent-export').addEventListener('click', function(
 
 <h2 id="validated">Validated</h2>
 <h3 id="code_13">Code</h3>
-<pre><code class="javascript">let pettoruti = new Image();
+<pre><code class="language-javascript">let pettoruti = new Image();
 pettoruti.src = 'static/pettoruti.jpg';
 pettoruti.onload = () =&gt; {
   const validated = new headbreaker.Canvas('validated-canvas', {
@@ -595,13 +630,11 @@ pettoruti.onload = () =&gt; {
   })
 }
 </code></pre>
-
 <div style="position:relative">
   <div id="validated-canvas">
   </div>
   <img id="validated-canvas-overlay" src="static/pettoruti.jpg">
 </div>
-
 <div class="form-group">
   <button id="validated-shuffle" class="btn btn-primary">Shuffle</button>
   <button id="validated-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
@@ -611,7 +644,7 @@ pettoruti.onload = () =&gt; {
 
 <h2 id="responsive">Responsive</h2>
 <h3 id="code_14">Code</h3>
-<pre><code class="javascript">const initialWidth = 800;
+<pre><code class="language-javascript">const initialWidth = 800;
 const responsive = new headbreaker.Canvas('responsive-canvas', {
   width: 800, height: 650,
   pieceSize: 100, proximity: 20,
@@ -639,11 +672,9 @@ responsive.draw();
   });
 });
 </code></pre>
-
 <h3 id="demo_12">Demo</h3>
 <div id="responsive-canvas">
 </div>
-
 <div class="form-group">
   <button id="responsive-shuffle" class="btn btn-primary">Shuffle</button>
   <button id="responsive-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
@@ -653,7 +684,7 @@ responsive.draw();
 
 <h2 id="rectangular">Rectangular</h2>
 <h3 id="code_15">Code</h3>
-<pre><code class="javascript">let quinquela = new Image();
+<pre><code class="language-javascript">let quinquela = new Image();
 quinquela.src = 'static/quinquela.jpg';
 quinquela.onload = () =&gt; {
   const rectangular = new headbreaker.Canvas('rectangular-canvas', {
@@ -672,11 +703,9 @@ quinquela.onload = () =&gt; {
   registerButtons('rectangular', rectangular);
 }
 </code></pre>
-
 <h3 id="demo_13">Demo</h3>
 <div id="rectangular-canvas">
 </div>
-
 <div class="form-group">
   <button id="rectangular-shuffle" class="btn btn-primary">Shuffle</button>
   <button id="rectangular-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
@@ -685,49 +714,47 @@ quinquela.onload = () =&gt; {
 </div>
 
 <script src="js/demo.js"></script></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
             <hr>
-                <p>© Copyright 2020 Franco Leonardo Bulgarelli</p>
+                <p>© Copyright 2020 - 2022 Franco Leonardo Bulgarelli</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
             var base_url = ".",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="js/base.js" defer></script>
         <script src="search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form role="form">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">
@@ -767,6 +794,6 @@ quinquela.onload = () =&gt; {
 </html>
 
 <!--
-MkDocs version : 1.0.4
-Build Date UTC : 2020-11-21 19:38:35
+MkDocs version : 1.3.0
+Build Date UTC : 2022-11-27 21:06:47.188469+00:00
 -->

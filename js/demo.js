@@ -2,24 +2,36 @@
 // Utils
 // =====
 
+function onClick(id, handler) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.addEventListener('click', function () { handler() });
+  }
+}
+
 function registerButtons(id, canvas) {
-  document.getElementById(`${id}-shuffle`).addEventListener('click', function() {
+  onClick(`${id}-shuffle`, () => {
     canvas.shuffle(0.8);
     canvas.redraw();
   });
 
-  document.getElementById(`${id}-shuffle-grid`).addEventListener('click', function() {
+  onClick(`${id}-shuffle-grid`, () => {
     canvas.shuffleGrid(1.2);
     canvas.redraw();
   });
 
-  document.getElementById(`${id}-shuffle-columns`).addEventListener('click', function() {
+  onClick(`${id}-shuffle-columns`, () => {
     canvas.shuffleColumns(1.2);
     canvas.redraw();
   });
 
-  document.getElementById(`${id}-solve`).addEventListener('click', function() {
+  onClick(`${id}-solve`, () => {
     canvas.solve();
+    canvas.redraw();
+  });
+
+  onClick(`${id}-reframe`, () => {
+    canvas.reframeWithinDimmensions();
     canvas.redraw();
   });
 }
@@ -374,11 +386,12 @@ let malharro = new Image();
 malharro.src = 'static/malharro.jpg';
 malharro.onload = () => {
   const offstage = new headbreaker.Canvas('offstage-canvas', {
-    width: 550, height: 550,
+    width: 500, height: 500,
     pieceSize: 100, proximity: 20,
     strokeWidth: 5, strokeColor: '#302B00', image: malharro,
     outline: new headbreaker.outline.Rounded(),
-    preventOffstageDrag: true
+    preventOffstageDrag: true,
+    fixed: true
   });
 
   offstage.adjustImagesToPuzzleHeight();
@@ -388,6 +401,7 @@ malharro.onload = () => {
   });
   offstage.shuffleGrid();
   offstage.draw();
+  registerButtons('offstage', offstage);
 }
 
 // =================

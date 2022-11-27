@@ -68,13 +68,13 @@ const grid = (pieces) => {
  * */
 const columns = (pieces) => {
   const destinations = pieces.map(it => it.centralAnchor.asVector());
-  const columns = [];
+  const columns = new Map();
 
   for (let destination of destinations) {
-    if (!columns[destination.x]) {
-      columns[destination.x] = destinations.filter(it => it.x == destination.x);
+    if (!columns.get(destination.x)) {
+      columns.set(destination.x, destinations.filter(it => it.x == destination.x));
     }
-    const column = columns[destination.x];
+    const column = columns.get(destination.x);
 
     const j = sampleIndex(column);
     const temp = column[j].y
@@ -84,6 +84,42 @@ const columns = (pieces) => {
   return destinations;
 };
 
+
+/**
+ * @type {Shuffler}
+ * */
+const line = (pieces) => {
+  const destinations = pieces.map(it => it.centralAnchor.asVector());
+  const columns = new Set(destinations.map(it => it.x));
+  const maxX = Math.max(...columns);
+  const minX = Math.min(...columns);
+  const width = (maxX - minX) / (columns.size - 1);
+  const pivot = minX + (width / 2);
+
+  const lineLength = destinations.length * width;
+  const linePivot = destinations.filter(it => it.x &lt; pivot).length * width;
+
+  const init = [];
+  const tail = [];
+
+  for (let i = 0; i &lt; linePivot; i += width) {
+    init.push(i);
+  }
+
+  for (let i = init[init.length - 1] + width; i &lt; lineLength; i += width) {
+    tail.push(i);
+  }
+
+  for (let destination of destinations) {
+    const source = destination.x &lt; pivot ? init : tail;
+    const index = sampleIndex(source);
+
+    destination.y = 0;
+    destination.x = source[index];
+    source.splice(index, 1);
+  }
+  return destinations;
+};
 
 /**
  * @param {number} padding
@@ -135,6 +171,7 @@ module.exports = {
   random,
   grid,
   columns,
+  line,
   noop,
   padder,
   noise
@@ -149,13 +186,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#line">line</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Nov 21 2020 16:38:22 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Oct 07 2022 13:30:27 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
