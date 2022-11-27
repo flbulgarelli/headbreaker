@@ -141,7 +141,10 @@ class Puzzle {
 
   /**
    * Translates all the puzzle pieces so that are completely
-   * within the given bounds.
+   * within the given bounds, if possible.
+   *
+   * If pieces can not be completly places within the given
+   * bounding box, the the `max` param is ignored.
    *
    * @param {import('./vector').Vector} min
    * @param {import('./vector').Vector} max
