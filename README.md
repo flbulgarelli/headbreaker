@@ -153,6 +153,10 @@ const otherPuzzle = headbreaker.Puzzle.import(dump);
 
 See [flbulgarelli.github.io/headbreaker](https://flbulgarelli.github.io/headbreaker/)
 
+## ❓ Questions
+
+Do you have any questions or doubts? Please feel free to check [the existing discussions](https://github.com/flbulgarelli/headbreaker/discussions) or open a new one 🙋.
+
 ## 🏗 Develop
 
 ```bash
