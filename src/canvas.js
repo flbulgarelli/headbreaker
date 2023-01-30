@@ -720,6 +720,13 @@ class Canvas {
   }
 
   /**
+   * @type {Number}
+   **/
+  get figuresCount() {
+    return Object.values(this.figures).length;
+  }
+
+  /**
    * The puzzle rendered by this canvas
    *
    * @type {Puzzle}

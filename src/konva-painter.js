@@ -184,12 +184,12 @@ class KonvaPainter extends Painter {
   }
 
   /**
-   * @param {Canvas} _canvas
+   * @param {Canvas} canvas
    * @param {Piece} piece
    * @param {Group} group
    * @param {import('./painter').VectorAction} f
    */
-  onDrag(_canvas, piece, group, f) {
+  onDrag(canvas, piece, group, f) {
     group.on('mouseover', () => {
       document.body.style.cursor = 'pointer';
     });
@@ -198,6 +198,7 @@ class KonvaPainter extends Painter {
     });
     group.on('dragmove', () => {
       let [dx, dy] = currentPositionDiff(piece, group);
+      group.zIndex(canvas.figuresCount - 1);
       f(dx, dy);
     });
   }
