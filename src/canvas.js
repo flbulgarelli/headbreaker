@@ -142,6 +142,7 @@ class Canvas {
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
     this._outline = outline || Classic;
+    this._drawn = false;
   }
 
   _initialize() {
@@ -336,12 +337,20 @@ class Canvas {
    * Draws this canvas for the first time
    */
   draw() {
+    if (this._drawn) {
+      throw new Error("This canvas has already been drawn. Call redraw instead");
+    }
+
+    this._painter.registerKeyboardGestures(this);
+
     if (!this.autoconnected) {
       this.autoconnect();
     }
     this.puzzle.updateValidity();
     this.autoconnected = false;
     this.redraw();
+
+    this._drawn = true;
   }
 
   /**

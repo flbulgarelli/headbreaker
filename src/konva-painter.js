@@ -214,6 +214,24 @@ class KonvaPainter extends Painter {
       f()
     });
   }
+
+  /**
+   * @param {Canvas} canvas
+   */
+  registerKeyboardGestures(canvas) {
+    const container = canvas['__konvaLayer__'].getStage().container();
+    container.tabIndex = -1;
+    container.addEventListener('keydown', function(e) {
+      if (e.keyCode == 16) {
+        canvas.puzzle.lock()
+      }
+    });
+    container.addEventListener('keyup', function(e) {
+      if (e.keyCode == 16) {
+        canvas.puzzle.unlock()
+      }
+    });
+  }
 }
 
 module.exports = KonvaPainter;

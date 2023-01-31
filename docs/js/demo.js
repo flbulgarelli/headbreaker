@@ -34,18 +34,6 @@ function registerButtons(id, canvas) {
     canvas.reframeWithinDimensions();
     canvas.redraw();
   });
-
-  document.getElementById(`${id}-canvas`).addEventListener('keydown', function(e) {
-    if (e.shiftKey) {
-     canvas.puzzle.lock()
-    }
-  });
-
-  document.getElementById(`${id}-canvas`).addEventListener('keyup', function(e) {
-    if (e.shiftKey) {
-     canvas.puzzle.unlock()
-    }
-  });
 }
 
 // ============
