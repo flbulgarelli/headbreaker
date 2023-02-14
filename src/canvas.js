@@ -334,10 +334,31 @@ class Canvas {
   }
 
   /**
-   * Registers keyboard gestures.
+   * Registers keyboard gestures. `gestures` must be an object with one or more entries with the following format:
+   *
+   * ```
+   * { keyStrokeNumber: (puzzle) => ...change drag mode... }
+   * ```
+   *
+   * For example, if you want to configure your canvas to force pieces to be moved together using the `alt` key, you can do the following:
+   *
+   * ```
+   * canvas.registerKeyboardGestures({ 18: (puzzle) => puzzle.forceConnectionWhileDragging() })
+   * ```
+   *
+   * If no gestures are given, then the following gestures are configured:
+   *
+   * - `16` (`shift`): drags blocks of pieces as a whole, regardless of the movement direction
+   * - `17` (`ctrl`): drags pieces individually, regardless of the movement direction
+   *
+   *
+   * @param {object} gestures
    */
-  registerKeyboardGestures() {
-    this._painter.registerKeyboardGestures(this);
+  registerKeyboardGestures(gestures = {
+    16: (puzzle) => puzzle.forceConnectionWhileDragging(),
+    17: (puzzle) => puzzle.forceDisconnectionWhileDragging()
+  }) {
+    this._painter.registerKeyboardGestures(this, gestures);
   }
 
   /**

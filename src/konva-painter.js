@@ -217,20 +217,31 @@ class KonvaPainter extends Painter {
 
   /**
    * @param {Canvas} canvas
+   * @param {object} gestures
    */
-  registerKeyboardGestures(canvas) {
+  registerKeyboardGestures(canvas, gestures) {
     const container = canvas['__konvaLayer__'].getStage().container();
     container.tabIndex = -1;
+    this._registerKeyDown(canvas, container, gestures);
+    this._registerKeyUp(canvas, container, gestures);
+  }
+
+  _registerKeyDown(canvas, container, gestures) {
     container.addEventListener('keydown', function(e) {
-      if (e.keyCode == 16) {
-        canvas.puzzle.forceConnectionWhileDragging();
-      } else if (e.keyCode == 17) {
-        canvas.puzzle.forceDisconnectionWhileDragging();
+      for (let keyCode in gestures) {
+        if (e.keyCode == keyCode) {
+          gestures[keyCode](canvas.puzzle)
+        }
       }
     });
+  }
+
+  _registerKeyUp(canvas, container, gestures) {
     container.addEventListener('keyup', function(e) {
-      if (e.keyCode == 16 || e.keyCode == 17) {
-        canvas.puzzle.tryDisconnectionWhileDragging();
+      for (let keyCode in gestures) {
+        if (e.keyCode == keyCode) {
+          canvas.puzzle.tryDisconnectionWhileDragging();
+        }
       }
     });
   }

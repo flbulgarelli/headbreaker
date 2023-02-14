@@ -127,8 +127,9 @@ class Painter {
    * Register keyboard gestures
    *
    * @param {Canvas} canvas
+   * @param {object} gestures a map of key strokes and puzzle actions
    */
-  registerKeyboardGestures(canvas) { }
+  registerKeyboardGestures(canvas, gestures) { }
 }
 
 module.exports = Painter;

@@ -444,7 +444,7 @@ amaral.onload = () => {
   });
 
   // make canvas focusable and listen
-  // to shift and ctrl keys in order to force
+  // to ctrl and shift keys in order to force
   // pieces to be dragged individually or as a whole,
   // respectively
   keyboard.registerKeyboardGestures();
@@ -456,7 +456,7 @@ amaral.onload = () => {
 
 ### Demo
 
-_Try dragging pieces while pressing `shift` and `ctrl` keys_
+_Try dragging pieces from the borders or the center while pressing `shift` and `ctrl` keys_
 
 <div id="keyboard-canvas">
 </div>
