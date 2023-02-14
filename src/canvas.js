@@ -225,7 +225,7 @@ class Canvas {
    */
   autogenerate({horizontalPiecesCount = 5, verticalPiecesCount = 5, insertsGenerator = twoAndTwo, metadata = []} = {}) {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(horizontalPiecesCount, verticalPiecesCount);
+    manufacturer.withDimensions(horizontalPiecesCount, verticalPiecesCount);
     manufacturer.withInsertsGenerator(insertsGenerator);
     manufacturer.withMetadata(metadata);
     this.autogenerateWithManufacturer(manufacturer);
@@ -456,7 +456,7 @@ class Canvas {
    * In order to prevent unexpected translations, this method will fail
    * if canvas is not `fixed`.
    */
-  reframeWithinDimmensions() {
+  reframeWithinDimensions() {
     if (!this.fixed) throw new Error("Only fixed canvas can be reframed")
 
     this.puzzle.reframe(

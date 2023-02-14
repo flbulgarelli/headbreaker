@@ -57,7 +57,7 @@ class Manufacturer {
    * @param {number} width
    * @param {number} height
    */
-  withDimmensions(width, height) {
+  withDimensions(width, height) {
     this.width = width;
     this.height = height;
   }

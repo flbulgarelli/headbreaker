@@ -8,7 +8,7 @@ describe("SpatialMetadata", () => {
   describe("standard validators", () => {
     beforeEach(() => {
       const manufacturer = new Manufacturer();
-      manufacturer.withDimmensions(2, 2);
+      manufacturer.withDimensions(2, 2);
       manufacturer.withStructure({pieceRadio: 10, proximity: 1});
       manufacturer.withHeadAt(anchor(0, 0));
       puzzle = manufacturer.build();

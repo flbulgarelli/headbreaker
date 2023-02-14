@@ -31,7 +31,7 @@ function registerButtons(id, canvas) {
   });
 
   onClick(`${id}-reframe`, () => {
-    canvas.reframeWithinDimmensions();
+    canvas.reframeWithinDimensions();
     canvas.redraw();
   });
 }

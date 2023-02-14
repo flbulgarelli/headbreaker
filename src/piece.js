@@ -508,8 +508,8 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   * Defines this piece's own dimmension, overriding puzzle's
-   * default dimmension
+   * Defines this piece's own dimension, overriding puzzle's
+   * default dimension
    *
    * @param {import('./size').Size} size
    */

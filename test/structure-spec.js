@@ -2,20 +2,20 @@ const assert = require('assert');
 const {Structure, Slot, Tab, None} = require('../src/index');
 
 describe("piece", () => {
-  describe("serialzie", () => {
-    it("can serialzie structure with up and down Slots", () => {
+  describe("serialize", () => {
+    it("can serialize structure with up and down Slots", () => {
       assert.deepEqual(Structure.serialize({up: Slot, down: Slot}), "-S-S");
     })
 
-    it("can serialzie structure with up and down Tabs", () => {
+    it("can serialize structure with up and down Tabs", () => {
       assert.deepEqual(Structure.serialize({up: Tab, down: Tab}), "-T-T");
     })
 
-    it("can serialzie structure with mixed Tabs and Slots", () => {
+    it("can serialize structure with mixed Tabs and Slots", () => {
       assert.deepEqual(Structure.serialize({up: Tab, down: Slot, left: Slot, right: Tab}), "TSST");
     })
 
-    it("can serialzie structure with mixed Tabs, Slots and Nones", () => {
+    it("can serialize structure with mixed Tabs, Slots and Nones", () => {
       assert.deepEqual(Structure.serialize({up: Tab, down: Slot, left: None, right: Tab}), "TS-T");
     })
   })

@@ -4,7 +4,7 @@ const {Tab, Slot, None, anchor, Manufacturer, generators} = require('../src/inde
 describe("manufacturer", () => {
   it("create 1 x 1", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(1, 1);
+    manufacturer.withDimensions(1, 1);
     manufacturer.withStructure({pieceRadio: 10, proximity: 1});
     const puzzle = manufacturer.build();
     const first = puzzle.pieces[0];
@@ -26,7 +26,7 @@ describe("manufacturer", () => {
 
   it("create 1 x 1 with central anchor", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(1, 1);
+    manufacturer.withDimensions(1, 1);
     manufacturer.withStructure({pieceRadio: 10, proximity: 1});
     manufacturer.withHeadAt(anchor(-3, 5));
     const puzzle = manufacturer.build();
@@ -37,7 +37,7 @@ describe("manufacturer", () => {
 
   it("create 2 x 1", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(2, 1);
+    manufacturer.withDimensions(2, 1);
     manufacturer.withStructure({pieceRadio: 10, proximity: 1});
     const puzzle = manufacturer.build();
 
@@ -62,7 +62,7 @@ describe("manufacturer", () => {
 
   it("create 3 x 1", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(3, 1);
+    manufacturer.withDimensions(3, 1);
     const puzzle = manufacturer.build();
 
     const [first, second, third] = puzzle.pieces;
@@ -91,7 +91,7 @@ describe("manufacturer", () => {
 
   it("create 1 x 2", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(1, 2);
+    manufacturer.withDimensions(1, 2);
     const puzzle = manufacturer.build();
 
     const [first, second] = puzzle.pieces;
@@ -114,7 +114,7 @@ describe("manufacturer", () => {
 
   it("create 3 x 2", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(3, 2);
+    manufacturer.withDimensions(3, 2);
     const puzzle = manufacturer.build();
 
     const [a, b, c, d, e, f] = puzzle.pieces;
@@ -154,7 +154,7 @@ describe("manufacturer", () => {
 
   it("create 2 x 2 with rectangular pieces", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(2, 2);
+    manufacturer.withDimensions(2, 2);
     manufacturer.withStructure({pieceRadio: {x:  2, y: 3}})
     const puzzle = manufacturer.build();
 
@@ -190,7 +190,7 @@ describe("manufacturer", () => {
 
   it("create 6 x 1 with flip flop", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(6, 1);
+    manufacturer.withDimensions(6, 1);
     manufacturer.withInsertsGenerator(generators.flipflop);
     const puzzle = manufacturer.build();
     const [a, b, c, d, e, f, g] = puzzle.pieces;
@@ -215,7 +215,7 @@ describe("manufacturer", () => {
 
   it("create 2 x 2 without metadata", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(2, 2);
+    manufacturer.withDimensions(2, 2);
     const puzzle = manufacturer.build();
 
     const [a, b, c, d] = puzzle.pieces;
@@ -228,7 +228,7 @@ describe("manufacturer", () => {
 
   it("create 2 x 2 with metadata", () => {
     const manufacturer = new Manufacturer();
-    manufacturer.withDimmensions(2, 2);
+    manufacturer.withDimensions(2, 2);
     manufacturer.withMetadata([{foo: 'a'}, {foo: 'b'}, {foo: 'c'}, {id: 'X'}]);
     const puzzle = manufacturer.build();
 
