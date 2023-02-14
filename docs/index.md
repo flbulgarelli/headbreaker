@@ -422,6 +422,52 @@ berni.onload = () => {
 </div>
 
 
+## Keyboard gestures
+
+#### Code
+
+```javascript
+let amaral = new Image();
+amaral.src = 'static/amaral.jpg';
+amaral.onload = () => {
+  const keyboard = new headbreaker.Canvas('keyboard-canvas', {
+    width: 800, height: 650, pieceSize: 60,
+    image: amaral, strokeWidth: 2.5, strokeColor: '#F0F0F0',
+    outline: new headbreaker.outline.Rounded()
+  });
+
+  keyboard.adjustImagesToPuzzleWidth();
+  keyboard.autogenerate({
+    horizontalPiecesCount: 6,
+    verticalPiecesCount: 7,
+    insertsGenerator: headbreaker.generators.random
+  });
+
+  // make canvas focusable and listen
+  // to shift and ctrl keys in order to force
+  // pieces to be dragged individually or as a whole,
+  // respectively
+  keyboard.registerKeyboardGestures();
+  keyboard.draw();
+
+  registerButtons('keyboard', keyboard);
+}
+```
+
+### Demo
+
+_Try dragging pieces while pressing `shift` and `ctrl` keys_
+
+<div id="keyboard-canvas">
+</div>
+<div class="form-group">
+  <button id="keyboard-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="keyboard-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="keyboard-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
+  <button id="keyboard-solve" class="btn btn-primary">Solve</button>
+</div>
+
+
 ## Dynamic
 
 ### Code
