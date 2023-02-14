@@ -124,6 +124,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#keyboard-gestures" class="nav-link">Keyboard gestures</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#dynamic" class="nav-link">Dynamic</a>
               <ul class="nav flex-column">
               </ul>
@@ -513,8 +517,47 @@ berni.onload = () =&gt; {
   <button id="sound-solve" class="btn btn-primary">Solve</button>
 </div>
 
+<h2 id="keyboard-gestures">Keyboard gestures</h2>
+<h4 id="code_11">Code</h4>
+<pre><code class="language-javascript">let amaral = new Image();
+amaral.src = 'static/amaral.jpg';
+amaral.onload = () =&gt; {
+  const keyboard = new headbreaker.Canvas('keyboard-canvas', {
+    width: 800, height: 650, pieceSize: 60,
+    image: amaral, strokeWidth: 2.5, strokeColor: '#F0F0F0',
+    outline: new headbreaker.outline.Rounded()
+  });
+
+  keyboard.adjustImagesToPuzzleWidth();
+  keyboard.autogenerate({
+    horizontalPiecesCount: 6,
+    verticalPiecesCount: 7,
+    insertsGenerator: headbreaker.generators.random
+  });
+
+  // make canvas focusable and listen
+  // to ctrl and shift keys in order to force
+  // pieces to be dragged individually or as a whole,
+  // respectively
+  keyboard.registerKeyboardGestures();
+  keyboard.draw();
+
+  registerButtons('keyboard', keyboard);
+}
+</code></pre>
+<h3 id="demo_11">Demo</h3>
+<p><em>Try dragging pieces from the borders or the center while pressing <code>shift</code> and <code>ctrl</code> keys</em></p>
+<div id="keyboard-canvas">
+</div>
+<div class="form-group">
+  <button id="keyboard-shuffle" class="btn btn-primary">Shuffle</button>
+  <button id="keyboard-shuffle-grid" class="btn btn-primary">Shuffle Grid</button>
+  <button id="keyboard-shuffle-columns" class="btn btn-primary">Shuffle Columns</button>
+  <button id="keyboard-solve" class="btn btn-primary">Solve</button>
+</div>
+
 <h2 id="dynamic">Dynamic</h2>
-<h3 id="code_11">Code</h3>
+<h3 id="code_12">Code</h3>
 <pre><code class="language-javascript">function updateLabel(piece, figure, delta) {
   piece.metadata.label.text = Number(piece.metadata.label.text) + delta;
   figure.label.text(piece.metadata.label.text);
@@ -553,12 +596,12 @@ dynamic.onDisconnect((piece, figure, target, targetFigure) =&gt; {
 dynamic.draw();
 
 </code></pre>
-<h3 id="demo_11">Demo</h3>
+<h3 id="demo_12">Demo</h3>
 <div id="dynamic-canvas">
 </div>
 
 <h2 id="persistent">Persistent</h2>
-<h3 id="code_12">Code</h3>
+<h3 id="code_13">Code</h3>
 <pre><code class="language-javascript">const exportArea = document.getElementById('export-area');
 
 function readDump() {
@@ -604,7 +647,7 @@ document.getElementById('persistent-export').addEventListener('click', function(
 </div>
 
 <h2 id="validated">Validated</h2>
-<h3 id="code_13">Code</h3>
+<h3 id="code_14">Code</h3>
 <pre><code class="language-javascript">let pettoruti = new Image();
 pettoruti.src = 'static/pettoruti.jpg';
 pettoruti.onload = () =&gt; {
@@ -643,7 +686,7 @@ pettoruti.onload = () =&gt; {
 </div>
 
 <h2 id="responsive">Responsive</h2>
-<h3 id="code_14">Code</h3>
+<h3 id="code_15">Code</h3>
 <pre><code class="language-javascript">const initialWidth = 800;
 const responsive = new headbreaker.Canvas('responsive-canvas', {
   width: 800, height: 650,
@@ -672,7 +715,7 @@ responsive.draw();
   });
 });
 </code></pre>
-<h3 id="demo_12">Demo</h3>
+<h3 id="demo_13">Demo</h3>
 <div id="responsive-canvas">
 </div>
 <div class="form-group">
@@ -683,7 +726,7 @@ responsive.draw();
 </div>
 
 <h2 id="rectangular">Rectangular</h2>
-<h3 id="code_15">Code</h3>
+<h3 id="code_16">Code</h3>
 <pre><code class="language-javascript">let quinquela = new Image();
 quinquela.src = 'static/quinquela.jpg';
 quinquela.onload = () =&gt; {
@@ -703,7 +746,7 @@ quinquela.onload = () =&gt; {
   registerButtons('rectangular', rectangular);
 }
 </code></pre>
-<h3 id="demo_13">Demo</h3>
+<h3 id="demo_14">Demo</h3>
 <div id="rectangular-canvas">
 </div>
 <div class="form-group">
@@ -795,5 +838,5 @@ quinquela.onload = () =&gt; {
 
 <!--
 MkDocs version : 1.3.0
-Build Date UTC : 2022-11-27 21:29:54.867338+00:00
+Build Date UTC : 2023-02-14 03:33:37.935852+00:00
 -->
