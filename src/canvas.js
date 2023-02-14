@@ -334,14 +334,19 @@ class Canvas {
   }
 
   /**
+   * Registers keyboard gestures.
+   */
+  registerKeyboardGestures() {
+    this._painter.registerKeyboardGestures(this);
+  }
+
+  /**
    * Draws this canvas for the first time
    */
   draw() {
     if (this._drawn) {
       throw new Error("This canvas has already been drawn. Call redraw instead");
     }
-
-    this._painter.registerKeyboardGestures(this);
 
     if (!this.autoconnected) {
       this.autoconnect();
