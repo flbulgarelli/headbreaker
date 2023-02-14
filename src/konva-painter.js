@@ -224,12 +224,12 @@ class KonvaPainter extends Painter {
     container.addEventListener('keydown', function(e) {
       if (e.keyCode == 16) {
         canvas.puzzle.forceConnectionWhileDragging();
-      } else if (e.keyCode == 18) {
+      } else if (e.keyCode == 17) {
         canvas.puzzle.forceDisconnectionWhileDragging();
       }
     });
     container.addEventListener('keyup', function(e) {
-      if (e.keyCode == 16 || e.keyCode == 18) {
+      if (e.keyCode == 16 || e.keyCode == 17) {
         canvas.puzzle.tryDisconnectionWhileDragging();
       }
     });
