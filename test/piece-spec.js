@@ -599,7 +599,6 @@ describe("piece", () => {
   })
 
   describe("relocates to", () => {
-    /** @type {Piece} */
     let piece;
     beforeEach(() => {
       const puzzle = new Puzzle();
@@ -781,6 +780,19 @@ describe("piece", () => {
       assert.equal(a.downConnection, null);
     })
 
+    it("drags single-connection-piece to right forcing disconnection", () => {
+      puzzle.forceDisconnectionWhileDragging();
+      a.drag(10, 0);
+
+      assert.deepEqual(a.centralAnchor, anchor(10, 0));
+      assert.deepEqual(b.centralAnchor, anchor(4, 0));
+
+      assert.equal(a.rightConnection, null);
+      assert.equal(a.leftConnection, null);
+      assert.equal(a.upConnection, null);
+      assert.equal(a.downConnection, null);
+    })
+
     it("drags single-connection-piece to left releasing", () => {
       a.drag(-10, 0);
 
@@ -857,6 +869,19 @@ describe("piece", () => {
       assert.equal(c.downConnection, null);
     })
 
+    it("drags multi-connection-piece up, forcing connection", () => {
+      puzzle.forceConnectionWhileDragging();
+      c.drag(0, -10);
+
+      assert.deepEqual(c.centralAnchor, anchor(8, -10));
+      assert.deepEqual(b.centralAnchor, anchor(4, -10));
+      assert.deepEqual(d.centralAnchor, anchor(8, -6));
+
+      assert.equal(c.rightConnection, null);
+      assert.equal(c.leftConnection, b);
+      assert.equal(c.upConnection, null);
+      assert.equal(c.downConnection, d);
+    })
 
     it("drags multi-connection-piece down pushing", () => {
       c.drag(0, 10);

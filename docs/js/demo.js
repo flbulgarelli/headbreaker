@@ -544,6 +544,37 @@ berni.onload = () => {
 }
 
 
+// ===============
+// Keyboard Canvas
+// ===============
+
+let amaral = new Image();
+amaral.src = 'static/amaral.jpg';
+amaral.onload = () => {
+  const keyboard = new headbreaker.Canvas('keyboard-canvas', {
+    width: 800, height: 650, pieceSize: 60,
+    image: amaral, strokeWidth: 2.5, strokeColor: '#F0F0F0',
+    outline: new headbreaker.outline.Rounded()
+  });
+
+  keyboard.adjustImagesToPuzzleWidth();
+  keyboard.autogenerate({
+    horizontalPiecesCount: 6,
+    verticalPiecesCount: 7,
+    insertsGenerator: headbreaker.generators.random
+  });
+
+  // make canvas focusable and listen
+  // to shift and ctrl keys in order to force
+  // pieces to be dragged individually or as a whole,
+  // respectively
+  keyboard.registerKeyboardGestures();
+  keyboard.draw();
+
+  registerButtons('keyboard', keyboard);
+}
+
+
 // ==============
 // Dynamic Canvas
 // ==============

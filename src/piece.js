@@ -378,19 +378,32 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
-   *
    * @param {number} dx
    * @param {number} dy
    */
   drag(dx, dy, quiet = false) {
     if (Pair.isNull(dx, dy)) return;
 
-    if (this.horizontallyOpenMovement(dx) && this.vericallyOpenMovement(dy)) {
+    if (this.dragShouldDisconnect(dx, dy)) {
       this.disconnect();
       this.translate(dx, dy, quiet);
     } else {
       this.push(dx, dy, quiet);
     }
+  }
+
+  /**
+   * Whether this piece should get disconnected
+   * while dragging on the given direction, according to
+   * its puzzle's drag mode.
+   *
+   * @param {number} dx
+   * @param {number} dy
+   *
+   * @see {@link Puzzle#dragShouldDisconnect}
+   **/
+  dragShouldDisconnect(dx, dy) {
+    return this.puzzle.dragShouldDisconnect(this, dx, dy);
   }
 
   drop() {
@@ -400,24 +413,6 @@ const {itself, orthogonalTransform} = require('./prelude');
   dragAndDrop(dx, dy) {
     this.drag(dx, dy);
     this.drop();
-  }
-
-  /**
-   *
-   * @param {number} dy
-   * @returns {boolean}
-   */
-  vericallyOpenMovement(dy) {
-    return connector.vertical.openMovement(this, dy);
-  }
-
-  /**
-   *
-   * @param {number} dx
-   * @returns {boolean}
-   */
-  horizontallyOpenMovement(dx) {
-    return connector.horizontal.openMovement(this, dx);
   }
 
   /**

@@ -122,6 +122,14 @@ class Painter {
    * @param {Action} f
    */
   onDragEnd(canvas, piece, group, f) { }
+
+  /**
+   * Register keyboard gestures
+   *
+   * @param {Canvas} canvas
+   * @param {object} gestures a map of key strokes and puzzle actions
+   */
+  registerKeyboardGestures(canvas, gestures) { }
 }
 
 module.exports = Painter;

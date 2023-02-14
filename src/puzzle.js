@@ -4,6 +4,7 @@ const {NullValidator} = require('./validator');
 const {vector, ...Vector} = require('./vector')
 const {radio} = require('./size')
 const Shuffler = require('./shuffler');
+const dragMode = require('./drag-mode');
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
@@ -37,6 +38,8 @@ class Puzzle {
     this.pieces = [];
     /** @type {import('./validator').Validator} */
     this.validator = new NullValidator();
+    /** @type {import('./drag-mode').DragMode} */
+    this.dragMode = dragMode.TryDisconnection;
   }
 
   /**
@@ -328,6 +331,31 @@ class Puzzle {
    */
   get pieceRadio() {
     return this.pieceSize.radio;
+  }
+
+  /** Prevents pieces from disconnecting */
+  forceConnectionWhileDragging() {
+    this.dragMode = dragMode.ForceConnection;
+  }
+
+  /** Forces pieces to disconnect */
+  forceDisconnectionWhileDragging() {
+    this.dragMode = dragMode.ForceDisconnection;
+  }
+
+  /** Forces pieces to disconnect */
+  tryDisconnectionWhileDragging() {
+    this.dragMode = dragMode.TryDisconnection;
+  }
+
+  /**
+   * @param {Piece} piece
+   * @param {number} dx
+   * @param {number} dy
+   * @see {@link Piece#dragShouldDisconnect}
+   */
+  dragShouldDisconnect(piece, dx, dy) {
+    return this.dragMode.dragShouldDisconnect(piece, dx, dy);
   }
 
   /**
