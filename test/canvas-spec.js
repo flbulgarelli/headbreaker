@@ -41,6 +41,21 @@ describe("Canvas", () => {
     assert.deepEqual(canvas.puzzle.head.centralAnchor, {x: 50, y: 50});
   })
 
+  it("can not draw a canvas twice", () => {
+    const canvas = new Canvas('canvas', {
+      width: 800, height: 800,
+      painter: painter
+    })
+
+    canvas.sketchPiece({
+      structure: {right: Tab, down: Tab, left: Slot},
+      metadata: {}
+    });
+
+    canvas.draw();
+    assert.throws(() => canvas.draw());
+  })
+
   it("can create a single-piece puzzle with size overriden ", () => {
     const canvas = new Canvas('canvas', {
       width: 800, height: 800,
@@ -265,10 +280,12 @@ describe("Canvas", () => {
     canvas.draw();
     canvas.clear();
 
+    assert.equal(canvas._drawn, false);
     assert.equal(canvas._painter, painter);
     assert.equal(canvas._puzzle, null);
     assert.equal(canvas.puzzle.pieces.length, 0);
     assert.deepEqual(canvas.figures, {});
+    assert.doesNotThrow(() => canvas.draw());
   })
 
   it("can sketch a whole puzzle", () => {

@@ -142,7 +142,6 @@ class Canvas {
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
     this._outline = outline || Classic;
-    this._drawn = false;
   }
 
   _initialize() {
@@ -154,6 +153,7 @@ class Canvas {
     this.templates = {};
     /** @type {import('./vector').Vector} */
     this._figurePadding = null;
+    this._drawn = false;
   }
 
   /**
