@@ -25,7 +25,7 @@
     "clean-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^5.5.0",
     "jsdoc-import-support": "^3.6.4",
-    "mocha": "^7.2.0",
+    "mocha": "^10.2.0",
     "tsd-jsdoc": "^2.5.0",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
