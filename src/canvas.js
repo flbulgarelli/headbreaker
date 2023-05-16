@@ -215,6 +215,12 @@ class Canvas {
     this.renderPieces(puzzle.pieces);
   }
 
+  rerender() {
+    const puzzle = this._puzzle;
+    this.clear();
+    this.renderPuzzle(puzzle);
+  }
+
   /**
    * Automatically creates and renders pieces given some configuration paramters
    *
