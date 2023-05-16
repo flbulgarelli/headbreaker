@@ -13,7 +13,7 @@ const {InsertSequence, ...generators} = require('./sequence');
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {vector, ...Vector} = require('./vector');
-const {radio, diameter} = require('./size');
+const {radius, diameter} = require('./size');
 const Shuffler = require('./shuffler');
 const outline = require('./outline');
 
@@ -23,7 +23,7 @@ const outline = require('./outline');
 module.exports = {
   anchor,
   vector,
-  radio,
+  radius,
   diameter,
   Anchor,
   Puzzle,

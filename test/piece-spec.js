@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Piece, Tab, Slot, None, anchor, vector, radio, diameter} = require('../src/index');
+const {Puzzle, Piece, Tab, Slot, None, anchor, vector, radius, diameter} = require('../src/index');
 
 describe("piece", () => {
   describe("can annotate a piece", () => {
@@ -107,7 +107,7 @@ describe("piece", () => {
       size: diameter(4)
     });
 
-    assert.deepEqual(piece.radio, vector(2, 2));
+    assert.deepEqual(piece.radius, vector(2, 2));
     assert.deepEqual(piece.centralAnchor, anchor(10, 0));
     assert.deepEqual(piece.metadata, {});
   })
@@ -115,9 +115,9 @@ describe("piece", () => {
   it("can create a piece with config", () => {
     const piece = new Piece(
       { up: Slot, left: Tab },
-      { metadata: {foo: 2}, centralAnchor: vector(10, 0), size: radio(4) });
+      { metadata: {foo: 2}, centralAnchor: vector(10, 0), size: radius(4) });
 
-    assert.deepEqual(piece.radio, vector(4, 4));
+    assert.deepEqual(piece.radius, vector(4, 4));
     assert.deepEqual(piece.centralAnchor, anchor(10, 0));
     assert.deepEqual(piece.metadata, {foo: 2});
   })
@@ -130,7 +130,7 @@ describe("piece", () => {
   })
 
   it("can compute diameter multiple times", () => {
-    const puzzle = new Puzzle({pieceRadio: vector(3, 2)});
+    const puzzle = new Puzzle({pieceRadius: vector(3, 2)});
     const piece = puzzle.newPiece();
 
     assert.deepEqual(piece.diameter, vector(6, 4));
@@ -141,12 +141,12 @@ describe("piece", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece();
 
-    assert.deepEqual(piece.radio, vector(2, 2));
+    assert.deepEqual(piece.radius, vector(2, 2));
     assert.deepEqual(piece.diameter, vector(4, 4));
 
-    piece.resize(radio(5));
+    piece.resize(radius(5));
 
-    assert.deepEqual(piece.radio, vector(5, 5));
+    assert.deepEqual(piece.radius, vector(5, 5));
     assert.deepEqual(piece.diameter, vector(10, 10));
   })
 
@@ -154,23 +154,23 @@ describe("piece", () => {
     const puzzle = new Puzzle();
     const piece = puzzle.newPiece();
 
-    assert.deepEqual(piece.radio, vector(2, 2));
+    assert.deepEqual(piece.radius, vector(2, 2));
     assert.deepEqual(piece.diameter, vector(4, 4));
 
-    piece.resize(radio(vector(5, 2)));
+    piece.resize(radius(vector(5, 2)));
 
-    assert.deepEqual(piece.radio, vector(5, 2));
+    assert.deepEqual(piece.radius, vector(5, 2));
     assert.deepEqual(piece.diameter, vector(10, 4));
   })
 
 
   it("can create a rectangular, wide piece from a puzzle", () => {
-    const puzzle = new Puzzle({pieceRadio: vector(6, 4)});
+    const puzzle = new Puzzle({pieceRadius: vector(6, 4)});
     const piece = puzzle.newPiece();
     piece.locateAt(0, 0);
 
     assert.equal(piece.puzzle, puzzle);
-    assert.deepEqual(piece.radio, vector(6, 4));
+    assert.deepEqual(piece.radius, vector(6, 4));
     assert.deepEqual(piece.rightAnchor, anchor(6, 0));
     assert.deepEqual(piece.leftAnchor, anchor(-6, 0));
     assert.deepEqual(piece.upAnchor, anchor(0, -4));
@@ -178,12 +178,12 @@ describe("piece", () => {
   })
 
   it("can create a rectangular, tall piece from a puzzle", () => {
-    const puzzle = new Puzzle({pieceRadio: {x: 3, y: 5}});
+    const puzzle = new Puzzle({pieceRadius: {x: 3, y: 5}});
     const piece = puzzle.newPiece();
     piece.locateAt(0, 0);
 
     assert.equal(piece.puzzle, puzzle);
-    assert.deepEqual(piece.radio, {x: 3, y: 5});
+    assert.deepEqual(piece.radius, {x: 3, y: 5});
     assert.deepEqual(piece.rightAnchor, anchor(3, 0));
     assert.deepEqual(piece.leftAnchor, anchor(-3, 0));
     assert.deepEqual(piece.upAnchor, anchor(0, -5));
@@ -205,7 +205,7 @@ describe("piece", () => {
 
 
   it("can check whether rectangular pieces are vertically close when overlapped", () => {
-    const puzzle = new Puzzle({pieceRadio: {x: 4, y: 10}});
+    const puzzle = new Puzzle({pieceRadius: {x: 4, y: 10}});
 
     const a = puzzle.newPiece();
     a.locateAt(0, 0);
@@ -365,7 +365,7 @@ describe("piece", () => {
 
 
   it("checks if rectangular pieces can connect vertically", () => {
-    const puzzle = new Puzzle({pieceRadio: {x: 2, y: 3}});
+    const puzzle = new Puzzle({pieceRadius: {x: 2, y: 3}});
 
     const a = puzzle.newPiece({down: Tab});
     const b = puzzle.newPiece({up: Slot, right: Tab});
@@ -679,7 +679,7 @@ describe("piece", () => {
   })
 
   it("pushes rectangular pieces when has connections and attracts", () => {
-    const puzzle = new Puzzle({pieceRadio: {x: 2, y: 3}});
+    const puzzle = new Puzzle({pieceRadius: {x: 2, y: 3}});
 
     const a = puzzle.newPiece({right: Tab});
     const b = puzzle.newPiece({left: Slot, right: Tab});
@@ -979,14 +979,14 @@ describe("piece", () => {
       const piece = new Piece({up: Slot, left: Tab});
       piece.locateAt(10, 0);
       piece.annotate({foo: 2});
-      piece.resize(radio(4));
+      piece.resize(radius(4));
 
       assert.deepEqual(piece.export(),  {
         centralAnchor: {x: 10, y: 0},
         structure: "--TS",
         connections: {right:null, down:null, left:null, up:null},
         metadata: {foo: 2},
-        size: {radio: {x: 4, y: 4}}
+        size: {radius: {x: 4, y: 4}}
       });
     })
 

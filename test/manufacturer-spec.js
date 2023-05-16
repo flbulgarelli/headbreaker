@@ -5,7 +5,7 @@ describe("manufacturer", () => {
   it("create 1 x 1", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(1, 1);
-    manufacturer.withStructure({pieceRadio: 10, proximity: 1});
+    manufacturer.withStructure({pieceRadius: 10, proximity: 1});
     const puzzle = manufacturer.build();
     const first = puzzle.pieces[0];
 
@@ -16,8 +16,8 @@ describe("manufacturer", () => {
     assert.equal(first.down, None);
     assert.equal(first.left, None);
 
-    assert.equal(first.radio.x, 10);
-    assert.equal(first.radio.y, 10);
+    assert.equal(first.radius.x, 10);
+    assert.equal(first.radius.y, 10);
     assert.equal(first.proximity, 1);
 
     assert.deepEqual(first.centralAnchor, anchor(20, 20));
@@ -27,7 +27,7 @@ describe("manufacturer", () => {
   it("create 1 x 1 with central anchor", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(1, 1);
-    manufacturer.withStructure({pieceRadio: 10, proximity: 1});
+    manufacturer.withStructure({pieceRadius: 10, proximity: 1});
     manufacturer.withHeadAt(anchor(-3, 5));
     const puzzle = manufacturer.build();
 
@@ -38,7 +38,7 @@ describe("manufacturer", () => {
   it("create 2 x 1", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(2, 1);
-    manufacturer.withStructure({pieceRadio: 10, proximity: 1});
+    manufacturer.withStructure({pieceRadius: 10, proximity: 1});
     const puzzle = manufacturer.build();
 
     const first = puzzle.pieces[0];
@@ -155,7 +155,7 @@ describe("manufacturer", () => {
   it("create 2 x 2 with rectangular pieces", () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(2, 2);
-    manufacturer.withStructure({pieceRadio: {x:  2, y: 3}})
+    manufacturer.withStructure({pieceRadius: {x:  2, y: 3}})
     const puzzle = manufacturer.build();
 
     const [a, b, c, d] = puzzle.pieces;
