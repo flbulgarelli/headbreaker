@@ -109,18 +109,18 @@ class KonvaPainter extends Painter {
       x: piece.metadata.currentPosition.x,
       y: piece.metadata.currentPosition.y,
       draggable: !piece.metadata.fixed,
-      dragBoundFunc: canvas.preventOffstageDrag ? (position) => {
+      dragBoundFunc: canvas._preventOffstageDrag ? (position) => {
         const furthermost = Vector.minus(vector(canvas.width, canvas.height), piece.size.radio);
         return Vector.max(Vector.min(position, furthermost), piece.size.radio);
       } : null,
     });
 
     figure.shape = new Konva.Line({
-      points: outline.draw(piece, piece.diameter, canvas.borderFill),
+      points: outline.draw(piece, piece.diameter, canvas._borderFill),
       bezier: outline.isBezier(),
-      tension: outline.isBezier() ? null : canvas.lineSoftness,
-      stroke: piece.metadata.strokeColor || canvas.strokeColor,
-      strokeWidth: canvas.strokeWidth,
+      tension: outline.isBezier() ? null : canvas._lineSoftness,
+      stroke: piece.metadata.strokeColor || canvas._strokeColor,
+      strokeWidth: canvas._strokeWidth,
       closed: true,
       ...Vector.multiply(piece.radio, -1),
     });

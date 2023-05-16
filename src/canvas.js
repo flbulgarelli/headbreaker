@@ -122,14 +122,14 @@ class Canvas {
     }) {
     this.width = width;
     this.height = height;
-    this.pieceSize = diameter(pieceSize);
-    this.borderFill = Vector.cast(borderFill);
-    this.imageMetadata = ImageMetadata.asImageMetadata(image);
-    this.strokeWidth = strokeWidth;
-    this.strokeColor = strokeColor;
-    this.lineSoftness = lineSoftness;
-    this.preventOffstageDrag = preventOffstageDrag;
-    this.proximity = proximity;
+    this._pieceSize = diameter(pieceSize);
+    this._borderFill = Vector.cast(borderFill);
+    this._imageMetadata = ImageMetadata.asImageMetadata(image);
+    this._strokeWidth = strokeWidth;
+    this._strokeColor = strokeColor;
+    this._lineSoftness = lineSoftness;
+    this._preventOffstageDrag = preventOffstageDrag;
+    this._proximity = proximity;
     this.fixed = fixed;
     /** @type {Painter} */
     this._painter = painter || new window['headbreaker']['painters']['Konva']();
@@ -204,13 +204,13 @@ class Canvas {
 
   /**
    * Renders a previously created puzzle object. This method
-   * overrides this canvas' {@link Canvas#pieceDiameter} and {@link Canvas#proximity}
+   * overrides this canvas' {@link Canvas#pieceDiameter} and {@link Canvas#_proximity}
    *
    * @param {Puzzle} puzzle
    */
   renderPuzzle(puzzle) {
-    this.pieceSize = puzzle.pieceSize;
-    this.proximity = puzzle.proximity * 2;
+    this._pieceSize = puzzle.pieceSize;
+    this._proximity = puzzle.proximity * 2;
     this._puzzle = puzzle;
     this.renderPieces(puzzle.pieces);
   }
@@ -320,9 +320,9 @@ class Canvas {
    */
   shuffleWith(farness, shuffler) {
     this.solve();
-    this.puzzle.shuffleWith(Shuffler.padder(this.proximity * 3, this.maxPiecesCount.x, this.maxPiecesCount.y));
+    this.puzzle.shuffleWith(Shuffler.padder(this._proximity * 3, this.maxPiecesCount.x, this.maxPiecesCount.y));
     this.puzzle.shuffleWith(shuffler)
-    this.puzzle.shuffleWith(Shuffler.noise(Vector.cast(this.proximity * farness / 2)))
+    this.puzzle.shuffleWith(Shuffler.noise(Vector.cast(this._proximity * farness / 2)))
     this.autoconnected = true;
   }
 
@@ -607,12 +607,12 @@ class Canvas {
    * @returns {import('./image-metadata').ImageMetadata}
    */
   _baseImageMetadataFor(piece) {
-    if (this.imageMetadata) {
-      const scale = piece.metadata.scale || this.imageMetadata.scale || 1;
+    if (this._imageMetadata) {
+      const scale = piece.metadata.scale || this._imageMetadata.scale || 1;
       const offset = Vector.plus(
         piece.metadata.targetPosition || Vector.zero(),
-        this.imageMetadata.offset || Vector.zero());
-      return { content: this.imageMetadata.content, offset, scale };
+        this._imageMetadata.offset || Vector.zero());
+      return { content: this._imageMetadata.content, offset, scale };
     } else {
       return ImageMetadata.asImageMetadata(piece.metadata.image);
     }
@@ -637,7 +637,7 @@ class Canvas {
   adjustImagesToPuzzle(axis) {
     this._imageAdjuster = (image) => {
       const scale = axis.atVector(this.puzzleDiameter) / axis.atDimension(image.content);
-      const offset = Vector.plus(image.offset, Vector.minus(this.borderFill, this.pieceDiameter));
+      const offset = Vector.plus(image.offset, Vector.minus(this._borderFill, this.pieceDiameter));
       return { content: image.content, scale, offset };
     };
   }
@@ -670,7 +670,7 @@ class Canvas {
   adjustImagesToPiece(axis) {
     this._imageAdjuster = (image) => {
       const scale = axis.atVector(this.pieceDiameter) / axis.atDimension(image.content);
-      const offset = Vector.plus(image.offset, this.borderFill);
+      const offset = Vector.plus(image.offset, this._borderFill);
       return { content: image.content, scale, offset };
     }
   }
@@ -726,7 +726,7 @@ class Canvas {
    * @type {import('./vector').Vector}
    * */
   get estimatedPuzzleDiameter() {
-    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2)
+    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this._strokeWidth * 2)
   }
 
   get maxPiecesCount() {
@@ -740,14 +740,14 @@ class Canvas {
    * @type {import('./vector').Vector}
    */
   get pieceRadio() {
-    return this.pieceSize.radio;
+    return this._pieceSize.radio;
   }
 
   /**
    * @type {import('./vector').Vector}
    */
   get pieceDiameter() {
-    return this.pieceSize.diameter;
+    return this._pieceSize.diameter;
   }
 
   /**
@@ -755,7 +755,7 @@ class Canvas {
    */
   get figurePadding() {
     if (!this._figurePadding) {
-      this._figurePadding = Vector.plus(this.strokeWidth, this.borderFill);
+      this._figurePadding = Vector.plus(this._strokeWidth, this._borderFill);
     }
     return this._figurePadding;
   }
@@ -783,7 +783,7 @@ class Canvas {
    * @type {import('./puzzle').Settings}
    */
   get settings() {
-    return {pieceRadio: this.pieceRadio, proximity: this.proximity}
+    return {pieceRadio: this.pieceRadio, proximity: this._proximity}
   }
 }
 
