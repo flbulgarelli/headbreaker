@@ -3,6 +3,7 @@
  * @module Connector
  */
 const {pivot} = require('./prelude');
+const connectionMode = require('./connection-mode');
 
 /**
  * @private
@@ -26,6 +27,8 @@ class Connector {
 
     this.forwardConnection = `${forward}Connection`;
     this.backwardConnection = `${backward}Connection`;
+
+    this.connectionMode = connectionMode.ConnectAlways;
   }
 
   /**
@@ -56,7 +59,7 @@ class Connector {
    * @returns {boolean}
    */
   canConnectWith(one, other, proximity) {
-    return this.closeTo(one, other, proximity) && this.match(one, other);
+    return this.closeTo(one, other, proximity) && this.match(one, other) && this.connectionMode.shouldConnectWith(one, other);
   }
 
   /**
@@ -95,6 +98,5 @@ class Connector {
 }
 
 module.exports = {
-  horizontal: new Connector("x", "right", "left"),
-  vertical: new Connector("y", "down", "up")
+  Connector
 };

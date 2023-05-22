@@ -200,14 +200,14 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {boolean} [back]
    */
   connectVerticallyWith(other, back = false) {
-    connector.vertical.connectWith(this, other, this.proximity, back);
+    this.verticalConnector.connectWith(this, other, this.proximity, back);
   }
 
   /**
    * @param {Piece} other
    */
   attractVertically(other, back = false) {
-    connector.vertical.attract(this, other, back);
+    this.verticalConnector.attract(this, other, back);
   }
 
   /**
@@ -215,14 +215,14 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {boolean} [back]
    */
   connectHorizontallyWith(other, back = false) {
-    connector.horizontal.connectWith(this, other, this.proximity, back);
+    this.horizontalConnector.connectWith(this, other, this.proximity, back);
   }
 
   /**
    * @param {Piece} other
    */
   attractHorizontally(other, back = false) {
-    connector.horizontal.attract(this, other, back);
+    this.horizontalConnector.attract(this, other, back);
   }
 
   /**
@@ -421,7 +421,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   canConnectHorizontallyWith(other) {
-    return connector.horizontal.canConnectWith(this, other, this.proximity);
+    return this.horizontalConnector.canConnectWith(this, other, this.proximity);
   }
 
   /**
@@ -430,7 +430,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   canConnectVerticallyWith(other) {
-    return connector.vertical.canConnectWith(this, other, this.proximity);
+    return this.verticalConnector.canConnectWith(this, other, this.proximity);
   }
 
   /**
@@ -439,7 +439,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   verticallyCloseTo(other) {
-    return connector.vertical.closeTo(this, other, this.proximity);
+    return this.verticalConnector.closeTo(this, other, this.proximity);
   }
 
   /**
@@ -448,7 +448,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   horizontallyCloseTo(other) {
-    return connector.horizontal.closeTo(this, other, this.proximity);
+    return this.horizontalConnector.closeTo(this, other, this.proximity);
   }
 
 
@@ -458,7 +458,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   verticallyMatch(other) {
-    return connector.vertical.match(this, other);
+    return this.verticalConnector.match(this, other);
   }
 
   /**
@@ -467,7 +467,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   horizontallyMatch(other) {
-    return connector.horizontal.match(this, other);
+    return this.horizontalConnector.match(this, other);
   }
 
   get connected() {
@@ -546,6 +546,14 @@ const {itself, orthogonalTransform} = require('./prelude');
    */
   get id() {
     return this.metadata.id;
+  }
+
+  get horizontalConnector() {
+    return this.puzzle.horizontalConnector;
+  }
+
+  get verticalConnector() {
+    return this.puzzle.verticalConnector;
   }
 
   /**

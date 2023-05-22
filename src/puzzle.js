@@ -5,6 +5,7 @@ const {vector, ...Vector} = require('./vector')
 const {radius} = require('./size')
 const Shuffler = require('./shuffler');
 const dragMode = require('./drag-mode');
+const {Connector} = require('./connector');
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
@@ -40,6 +41,9 @@ class Puzzle {
     this.validator = new NullValidator();
     /** @type {import('./drag-mode').DragMode} */
     this.dragMode = dragMode.TryDisconnection;
+
+    this.horizontalConnector = new Connector("x", "right", "left");
+    this.verticalConnector = new Connector("y", "down", "up");
   }
 
   /**
@@ -256,6 +260,28 @@ class Puzzle {
    */
   get headAnchor() {
     return this.head.centralAnchor;
+  }
+
+  /**
+   * @param {import('./connection-mode').ConnectionMode} mode
+   */
+  set horizontalConnectionMode(mode) {
+    this.horizontalConnector.connectionMode = mode;
+  }
+
+  /**
+   * @param {import('./connection-mode').ConnectionMode} mode
+   */
+  set verticalConnectionMode(mode) {
+    this.verticalConnector.connectionMode = mode;
+  }
+
+  /**
+   * @param {import('./connection-mode').ConnectionMode} mode
+   */
+  set connectionMode(mode) {
+    this.horizontalConnectionMode = mode;
+    this.verticalConnectionMode = mode;
   }
 
   /**
