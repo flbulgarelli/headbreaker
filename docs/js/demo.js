@@ -499,11 +499,10 @@ labels.sketchPiece({
 
 labels.shuffle(0.6);
 labels.draw();
-labels.puzzle.connectionMode = {
-  shouldConnectWith(one, other) {
-    return one.metadata.id.replace('-kanji') == other.metadata.id.replace('-emoji') ;
-  }
-}
+labels.puzzle.attachConnectionRequirement(
+  (one, other) => one.metadata.id.replace('-kanji', '') == other.metadata.id.replace('-emoji', '')
+)
+
 
 // =============
 // Sounds Canvas

@@ -42,8 +42,8 @@ class Puzzle {
     /** @type {import('./drag-mode').DragMode} */
     this.dragMode = dragMode.TryDisconnection;
 
-    this.horizontalConnector = new Connector("x", "right", "left");
-    this.verticalConnector = new Connector("y", "down", "up");
+    this.horizontalConnector = Connector.horizontal();
+    this.verticalConnector = Connector.vertical();
   }
 
   /**
@@ -263,25 +263,29 @@ class Puzzle {
   }
 
   /**
-   * @param {import('./connection-mode').ConnectionMode} mode
+   * @param {import('./connector').ConnectionRequirement} requirement
    */
-  set horizontalConnectionMode(mode) {
-    this.horizontalConnector.connectionMode = mode;
+  attachHorizontalConnectionRequirement(requirement) {
+    this.horizontalConnector.attachConnectionRequirement(requirement);
   }
 
   /**
-   * @param {import('./connection-mode').ConnectionMode} mode
+   * @param {import('./connector').ConnectionRequirement} requirement
    */
-  set verticalConnectionMode(mode) {
-    this.verticalConnector.connectionMode = mode;
+  attachVerticalConnectionRequirement(requirement) {
+    this.verticalConnector.attachConnectionRequirement(requirement);
   }
 
   /**
-   * @param {import('./connection-mode').ConnectionMode} mode
+   * @param {import('./connector').ConnectionRequirement} requirement
    */
-  set connectionMode(mode) {
-    this.horizontalConnectionMode = mode;
-    this.verticalConnectionMode = mode;
+  attachConnectionRequirement(requirement) {
+    this.attachHorizontalConnectionRequirement(requirement);
+    this.attachVerticalConnectionRequirement(requirement);
+  }
+
+  clearConnectionRequirement() {
+    this.attachConnectionRequirement(noConnectionRequirement)
   }
 
   /**

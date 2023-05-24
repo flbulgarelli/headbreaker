@@ -3,7 +3,17 @@
  * @module Connector
  */
 const {pivot} = require('./prelude');
-const connectionMode = require('./connection-mode');
+
+/**
+ * @typedef {(one: import('./piece'), other: import('./piece')) => boolean} ConnectionRequirement
+ */
+
+/**
+ * @type {ConnectionRequirement}
+ */
+function noConnectionRequirements(_one, _other) {
+  return true;
+}
 
 /**
  * @private
@@ -28,7 +38,8 @@ class Connector {
     this.forwardConnection = `${forward}Connection`;
     this.backwardConnection = `${backward}Connection`;
 
-    this.connectionMode = connectionMode.ConnectAlways;
+    /** @type {ConnectionRequirement} */
+    this.requirement = noConnectionRequirements;
   }
 
   /**
@@ -59,7 +70,7 @@ class Connector {
    * @returns {boolean}
    */
   canConnectWith(one, other, proximity) {
-    return this.closeTo(one, other, proximity) && this.match(one, other) && this.connectionMode.shouldConnectWith(one, other);
+    return this.closeTo(one, other, proximity) && this.match(one, other) && this.requirement(one, other);
   }
 
   /**
@@ -95,8 +106,24 @@ class Connector {
       one.fireConnect(other);
     }
   }
+
+  /**
+   * @param {ConnectionRequirement} requirement
+   */
+  attachRequirement(requirement) {
+    this.requirement = requirement;
+  }
+
+  static horizontal() {
+    return new Connector("x", "right", "left")
+  }
+
+  static vertical() {
+    return new Connector("y", "down", "up")
+  }
 }
 
 module.exports = {
-  Connector
+  Connector,
+  noConnectionRequirements
 };

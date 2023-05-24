@@ -1,7 +1,7 @@
 const Pair = require('./pair');
 const {anchor, Anchor} = require('./anchor');
 const {None} = require('./insert')
-const connector = require('./connector')
+const {Connector} = require('./connector')
 const Structure = require('./structure');
 const {itself, orthogonalTransform} = require('./prelude');
 
@@ -56,6 +56,12 @@ const {itself, orthogonalTransform} = require('./prelude');
       this.centralAnchor = null;
       /** @type {import('./size').Size} */
       this._size = null;
+
+      /** @type {import('./connector').Connector} */
+      this._horizontalConnector = null;
+      /** @type {import('./connector').Connector} */
+      this._verticalConnector = null;
+
       this._initializeListeners();
       this.configure(config);
     }
@@ -549,11 +555,17 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   get horizontalConnector() {
-    return this.puzzle.horizontalConnector;
+    if (this._horizontalConnector) return this._horizontalConnector;
+    if (this.puzzle) return this.puzzle.horizontalConnector;
+    this._horizontalConnector = Connector.horizontal();
+    return this._horizontalConnector;
   }
 
   get verticalConnector() {
-    return this.puzzle.verticalConnector;
+    if (this._verticalConnector) return this._verticalConnector;
+    if (this.puzzle) return this.puzzle.verticalConnector;
+    this._verticalConnector = Connector.vertical();
+    return this._verticalConnector;
   }
 
   /**

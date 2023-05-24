@@ -16,8 +16,8 @@ const {vector, ...Vector} = require('./vector');
 const {radius, diameter} = require('./size');
 const Shuffler = require('./shuffler');
 const outline = require('./outline');
-const connectionMode = require('./connection-mode');
 const dragMode = require('./drag-mode');
+const connector = require('./connector');
 
 /**
  * @module headbreaker
@@ -51,7 +51,7 @@ module.exports = {
   generators,
   outline,
   dragMode,
-  connectionMode,
+  connector,
   painters: {
     Dummy: require('./dummy-painter'),
     Konva: require('./konva-painter')
