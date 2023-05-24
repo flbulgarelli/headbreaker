@@ -110,8 +110,8 @@ class KonvaPainter extends Painter {
       y: piece.metadata.currentPosition.y,
       draggable: !piece.metadata.fixed,
       dragBoundFunc: canvas.preventOffstageDrag ? (position) => {
-        const furthermost = Vector.minus(vector(canvas.width, canvas.height), piece.size.radio);
-        return Vector.max(Vector.min(position, furthermost), piece.size.radio);
+        const furthermost = Vector.minus(vector(canvas.width, canvas.height), piece.size.radius);
+        return Vector.max(Vector.min(position, furthermost), piece.size.radius);
       } : null,
     });
 
@@ -122,7 +122,7 @@ class KonvaPainter extends Painter {
       stroke: piece.metadata.strokeColor || canvas.strokeColor,
       strokeWidth: canvas.strokeWidth,
       closed: true,
-      ...Vector.multiply(piece.radio, -1),
+      ...Vector.multiply(piece.radius, -1),
     });
     this.fill(canvas, piece, figure);
     figure.group.add(figure.shape);
@@ -154,7 +154,7 @@ class KonvaPainter extends Painter {
       ...Vector.minus({
         x: piece.metadata.label.x || (figure.group.width() / 2),
         y: piece.metadata.label.y || (figure.group.height() / 2),
-      }, piece.radio),
+      }, piece.radius),
       text:     piece.metadata.label.text,
       fontSize: piece.metadata.label.fontSize,
       fontFamily: piece.metadata.label.fontFamily || 'Sans Serif',

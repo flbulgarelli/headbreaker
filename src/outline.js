@@ -103,10 +103,10 @@ class Rounded {
     /** edge length, from vertex to insert start */
     const s = Vector.divide(Vector.minus(fullSize, r), 2);
 
-    /** insert internal radio, from center to insert end */
+    /** insert internal radius, from center to insert end */
     const o = Vector.multiply(r, this.insertDepth);
 
-    /** bezel radio */
+    /** bezel radius */
     const b = Vector.multiply(Vector.inner.min(s), this.bezelDepth);
 
     /** the four bezel flags, starting at up-left corner */

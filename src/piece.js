@@ -478,28 +478,28 @@ const {itself, orthogonalTransform} = require('./prelude');
    *@type {Anchor}
    */
   get downAnchor() {
-    return this.centralAnchor.translated(0, this.radio.y);
+    return this.centralAnchor.translated(0, this.radius.y);
   }
 
   /**
    *@type {Anchor}
    */
   get rightAnchor() {
-    return this.centralAnchor.translated(this.radio.x, 0);
+    return this.centralAnchor.translated(this.radius.x, 0);
   }
 
   /**
    *@type {Anchor}
    */
   get upAnchor() {
-    return this.centralAnchor.translated(0, -this.radio.y);
+    return this.centralAnchor.translated(0, -this.radius.y);
   }
 
   /**
    *@type {Anchor}
    */
   get leftAnchor() {
-    return this.centralAnchor.translated(-this.radio.x, 0);
+    return this.centralAnchor.translated(-this.radius.x, 0);
   }
 
   /**
@@ -515,12 +515,12 @@ const {itself, orthogonalTransform} = require('./prelude');
   /**
    * @type {import('./vector').Vector}
    */
-  get radio() {
-    return this.size.radio;
+  get radius() {
+    return this.size.radius;
   }
 
   /**
-   * The double of the radio
+   * The double of the radius
    *
    * @type {import('./vector').Vector}
    */
@@ -563,7 +563,7 @@ const {itself, orthogonalTransform} = require('./prelude');
       metadata: this.metadata
     };
     if (this._size) {
-      base.size = {radio: this._size.radio };
+      base.size = {radius: this._size.radius };
     }
     return compact ? base : Object.assign(base, {
       connections: orthogonalTransform(this.connections, it => ({id: it.id}))

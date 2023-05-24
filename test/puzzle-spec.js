@@ -198,7 +198,7 @@ describe("puzzle", () => {
   describe("exports", () => {
     it("exports with connections data", () => {
       assert.deepEqual(puzzle.export(), {
-        pieceRadio: {x: 2, y: 2},
+        pieceRadius: {x: 2, y: 2},
         proximity: 1,
         pieces: [
           {
@@ -263,7 +263,7 @@ describe("puzzle", () => {
 
     it("exports without connections data", () => {
       assert.deepEqual(puzzle.export({compact: true}), {
-        pieceRadio: {x: 2, y: 2},
+        pieceRadius: {x: 2, y: 2},
         proximity: 1,
         pieces: [
           {

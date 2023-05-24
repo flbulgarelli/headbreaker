@@ -11,7 +11,7 @@ describe("validator", () => {
   beforeEach(() => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(2, 2);
-    manufacturer.withStructure({pieceRadio: 10, proximity: 1});
+    manufacturer.withStructure({pieceRadius: 10, proximity: 1});
     manufacturer.withHeadAt(anchor(0, 0));
     puzzle = manufacturer.build();
   });

@@ -2,7 +2,7 @@ const {Anchor} = require('./anchor');
 const Piece = require('./piece');
 const {NullValidator} = require('./validator');
 const {vector, ...Vector} = require('./vector')
-const {radio} = require('./size')
+const {radius} = require('./size')
 const Shuffler = require('./shuffler');
 const dragMode = require('./drag-mode');
 
@@ -10,14 +10,14 @@ const dragMode = require('./drag-mode');
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PuzzleDump
- * @property {import('./vector').Vector} pieceRadio
+ * @property {import('./vector').Vector} pieceRadius
  * @property {number} proximity
  * @property {import('./piece').PieceDump[]} pieces
  */
 
 /**
  * @typedef {object} Settings
- * @property {import('./vector').Vector|number} [pieceRadio]
+ * @property {import('./vector').Vector|number} [pieceRadius]
  * @property {number} [proximity]
  */
 
@@ -31,8 +31,8 @@ class Puzzle {
   /**
    * @param {Settings} [options]
    */
-  constructor({pieceRadio = 2, proximity = 1} = {}) {
-    this.pieceSize = radio(pieceRadio);
+  constructor({pieceRadius = 2, proximity = 1} = {}) {
+    this.pieceSize = radius(pieceRadius);
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
@@ -316,7 +316,7 @@ class Puzzle {
 
   /**
    * The piece width, from edge to edge.
-   * This is the double of the {@link Puzzle#pieceRadio}
+   * This is the double of the {@link Puzzle#pieceRadius}
    *
    * @type {import('./vector').Vector}
    */
@@ -329,8 +329,8 @@ class Puzzle {
    *
    * @type {import('./vector').Vector}
    */
-  get pieceRadio() {
-    return this.pieceSize.radio;
+  get pieceRadius() {
+    return this.pieceSize.radius;
   }
 
   /** Prevents pieces from disconnecting */
@@ -368,7 +368,7 @@ class Puzzle {
    */
   export(options = {}) {
     return {
-      pieceRadio: this.pieceRadio,
+      pieceRadius: this.pieceRadius,
       proximity: this.proximity,
       pieces: this.pieces.map(it => it.export(options))
     }
@@ -379,7 +379,7 @@ class Puzzle {
    * @returns {Puzzle}
    */
   static import(dump) {
-    const puzzle = new Puzzle({pieceRadio: dump.pieceRadio, proximity: dump.proximity});
+    const puzzle = new Puzzle({pieceRadius: dump.pieceRadius, proximity: dump.proximity});
     puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
     puzzle.autoconnect();
     return puzzle;

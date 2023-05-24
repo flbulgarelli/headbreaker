@@ -273,7 +273,7 @@ class Canvas {
    * @param {number} farness from 0 to 1, how far pieces will be placed from x = pieceDiameter.x, y = pieceDiameter.y
    */
   shuffle(farness = 1) {
-    const offset = this.pieceRadio;
+    const offset = this.pieceRadius;
     this.puzzle.shuffle(farness * (this.width - offset.x), farness * (this.height - offset.y))
     this.puzzle.translate(offset.x, offset.y);
     this.autoconnected = true;
@@ -733,8 +733,8 @@ class Canvas {
   /**
    * @type {import('./vector').Vector}
    */
-  get pieceRadio() {
-    return this.pieceSize.radio;
+  get pieceRadius() {
+    return this.pieceSize.radius;
   }
 
   /**
@@ -777,7 +777,7 @@ class Canvas {
    * @type {import('./puzzle').Settings}
    */
   get settings() {
-    return {pieceRadio: this.pieceRadio, proximity: this.proximity}
+    return {pieceRadius: this.pieceRadius, proximity: this.proximity}
   }
 }
 
