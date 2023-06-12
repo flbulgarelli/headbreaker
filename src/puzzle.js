@@ -5,7 +5,7 @@ const {vector, ...Vector} = require('./vector')
 const {radius} = require('./size')
 const Shuffler = require('./shuffler');
 const dragMode = require('./drag-mode');
-const {Connector} = require('./connector');
+const {Connector, noConnectionRequirements} = require('./connector');
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
@@ -262,6 +262,14 @@ class Puzzle {
     return this.head.centralAnchor;
   }
 
+  get verticalRequirement() {
+    return this.verticalConnector.requirement;
+  }
+
+  get horizontalRequirement() {
+    return this.horizontalConnector.requirement;
+  }
+
   /**
    * @param {import('./connector').ConnectionRequirement} requirement
    */
@@ -284,8 +292,8 @@ class Puzzle {
     this.attachVerticalConnectionRequirement(requirement);
   }
 
-  clearConnectionRequirement() {
-    this.attachConnectionRequirement(noConnectionRequirement)
+  clearConnectionRequirements() {
+    this.attachConnectionRequirement(noConnectionRequirements)
   }
 
   /**
