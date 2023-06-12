@@ -266,14 +266,14 @@ class Puzzle {
    * @param {import('./connector').ConnectionRequirement} requirement
    */
   attachHorizontalConnectionRequirement(requirement) {
-    this.horizontalConnector.attachConnectionRequirement(requirement);
+    this.horizontalConnector.attachRequirement(requirement);
   }
 
   /**
    * @param {import('./connector').ConnectionRequirement} requirement
    */
   attachVerticalConnectionRequirement(requirement) {
-    this.verticalConnector.attachConnectionRequirement(requirement);
+    this.verticalConnector.attachRequirement(requirement);
   }
 
   /**
