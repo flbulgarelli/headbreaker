@@ -328,6 +328,14 @@ describe("piece", () => {
     assert.deepEqual(piece.leftAnchor, anchor(-2, 0));
   })
 
+  it("has native connectors", () => {
+    const piece = new Piece();
+
+    assert.notEqual(piece.verticalConnector, null);
+    assert.notEqual(piece.horizontalConnector, null);
+    assert.notEqual(piece.horizontalConnector, piece.verticalConnector);
+  })
+
   it("checks if can connect horizontally", () => {
     const puzzle = new Puzzle();
 
