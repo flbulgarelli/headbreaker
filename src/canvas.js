@@ -408,6 +408,19 @@ class Canvas {
   }
 
   /**
+   * @param {import('./connector').ConnectionRequirement} requirement
+   */
+  attachConnectionRequirement(requirement) {
+    this.puzzle.attachConnectionRequirement(requirement);
+  }
+
+  /**
+   */
+  clearConnectionRequirements() {
+    this.puzzle.clearConnectionRequirements();
+  }
+
+  /**
    * Sets a validator for the canvas' puzzle. Only one validator
    * can be attached, so subsequent calls of this method will override the previously
    * attached validator
