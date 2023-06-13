@@ -336,153 +336,131 @@ describe("piece", () => {
     assert.notEqual(piece.horizontalConnector, piece.verticalConnector);
   })
 
-  it("checks if can connect horizontally", () => {
-    const puzzle = new Puzzle();
+  describe("connection of regular pieces", () => {
+    /** @type {import('../src/puzzle')} */
+    let puzzle;
+    /** @type {import('../src/piece')} */
+    let a;
+    /** @type {import('../src/piece')} */
+    let b;
+    /** @type {import('../src/piece')} */
+    let c;
 
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
+    beforeEach(() => {
+      puzzle = new Puzzle();
+      a = puzzle.newPiece({down: Tab});
+      b = puzzle.newPiece({up: Slot, right: Tab});
+      c = puzzle.newPiece({left: Slot});
 
-    a.locateAt(0, 0);
-    b.locateAt(0, 3);
-    c.locateAt(3, 3);
+      a.locateAt(0, 0);
+      b.locateAt(0, 3);
+      c.locateAt(3, 3);
+    })
 
-    assert.equal(b.canConnectHorizontallyWith(c), true);
-    assert.equal(a.canConnectHorizontallyWith(b), false);
-    assert.equal(b.canConnectHorizontallyWith(a), false);
-    assert.equal(c.canConnectHorizontallyWith(b), false);
+
+    it("checks if can connect horizontally", () => {
+      assert.equal(b.canConnectHorizontallyWith(c), true);
+      assert.equal(a.canConnectHorizontallyWith(b), false);
+      assert.equal(b.canConnectHorizontallyWith(a), false);
+      assert.equal(c.canConnectHorizontallyWith(b), false);
+    })
+
+    it("can try to connect horizontally", () => {
+      assert.notEqual(b.rightConnection, c);
+      b.tryConnectHorizontallyWith(c);
+      assert.equal(b.rightConnection, c);
+    })
+
+    it("can try to connect horizontally", () => {
+      assert.notEqual(a.rightConnection, b);
+      a.tryConnectHorizontallyWith(b);
+      assert.notEqual(a.rightConnection, b);
+      assert.notEqual(b.rightConnection, a);
+    })
+
+    it("checks if can connect horizontally wih requirement that accepts all connections", () => {
+      puzzle.attachHorizontalConnectionRequirement((_) => true);
+
+      assert.equal(b.canConnectHorizontallyWith(c), true);
+      assert.equal(a.canConnectHorizontallyWith(b), false);
+      assert.equal(b.canConnectHorizontallyWith(a), false);
+      assert.equal(c.canConnectHorizontallyWith(b), false);
+    })
+
+    it("checks if can connect horizontally wih requirement that prevents all connections", () => {
+      puzzle.attachHorizontalConnectionRequirement((_) => false);
+
+      assert.equal(b.canConnectHorizontallyWith(c), false);
+      assert.equal(a.canConnectHorizontallyWith(b), false);
+      assert.equal(b.canConnectHorizontallyWith(a), false);
+      assert.equal(c.canConnectHorizontallyWith(b), false);
+    })
+
+    it("checks if can connect vertically", () => {
+      assert.equal(a.canConnectVerticallyWith(b), true);
+      assert.equal(b.canConnectVerticallyWith(a), false);
+      assert.equal(b.canConnectVerticallyWith(c), false);
+      assert.equal(c.canConnectVerticallyWith(b), false);
+    })
+
+    it("can try to connect vertically", () => {
+      assert.notEqual(a.downConnection, b);
+      a.tryConnectVerticallyWith(b);
+      assert.equal(a.downConnection, b);
+    })
+
+    it("can try to connect vertically", () => {
+      assert.notEqual(b.downConnection, c);
+      b.tryConnectVerticallyWith(c);
+      assert.notEqual(b.downConnection, c);
+      assert.notEqual(c.downConnection, b);
+    })
+
+    it("checks if can connect vertically wih requirement that accepts all connections", () => {
+      puzzle.attachVerticalConnectionRequirement((_) => true);
+
+      assert.equal(a.canConnectVerticallyWith(b), true);
+      assert.equal(b.canConnectVerticallyWith(a), false);
+      assert.equal(b.canConnectVerticallyWith(c), false);
+      assert.equal(c.canConnectVerticallyWith(b), false);
+    })
+
+    it("checks if can connect vertically wih requirement that prevents all connections", () => {
+      puzzle.attachVerticalConnectionRequirement((_) => false);
+
+      assert.equal(a.canConnectVerticallyWith(b), false);
+      assert.equal(b.canConnectVerticallyWith(a), false);
+      assert.equal(b.canConnectVerticallyWith(c), false);
+      assert.equal(c.canConnectVerticallyWith(b), false);
+    })
+
+
+    it("checks if rectangular pieces can connect vertically", () => {
+      const puzzle = new Puzzle({pieceRadius: {x: 2, y: 3}});
+
+      const a = puzzle.newPiece({down: Tab});
+      const b = puzzle.newPiece({up: Slot, right: Tab});
+      const c = puzzle.newPiece({left: Slot});
+
+      a.locateAt(0, 0);
+      b.locateAt(0, 5);
+      c.locateAt(3, 5);
+
+      assert.equal(a.canConnectVerticallyWith(b), true);
+      assert.equal(b.canConnectVerticallyWith(a), false);
+      assert.equal(b.canConnectVerticallyWith(c), false);
+      assert.equal(c.canConnectVerticallyWith(b), false);
+    })
+
+
+    it("connects vertically", () => {
+
+      a.connectVerticallyWith(b);
+      assert.equal(a.downConnection, b);
+      assert.equal(a.connected, true);
+      assert.equal(b.connected, true);
+    })
   })
-
-  it("checks if can connect horizontally wih requirement that accepts all connections", () => {
-    const puzzle = new Puzzle();
-
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
-
-    puzzle.attachHorizontalConnectionRequirement((_) => true);
-
-    a.locateAt(0, 0);
-    b.locateAt(0, 3);
-    c.locateAt(3, 3);
-
-    assert.equal(b.canConnectHorizontallyWith(c), true);
-    assert.equal(a.canConnectHorizontallyWith(b), false);
-    assert.equal(b.canConnectHorizontallyWith(a), false);
-    assert.equal(c.canConnectHorizontallyWith(b), false);
-  })
-
-  it("checks if can connect horizontally wih requirement that prevents all connections", () => {
-    const puzzle = new Puzzle();
-
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
-
-    puzzle.attachHorizontalConnectionRequirement((_) => false);
-
-    a.locateAt(0, 0);
-    b.locateAt(0, 3);
-    c.locateAt(3, 3);
-
-    assert.equal(b.canConnectHorizontallyWith(c), false);
-    assert.equal(a.canConnectHorizontallyWith(b), false);
-    assert.equal(b.canConnectHorizontallyWith(a), false);
-    assert.equal(c.canConnectHorizontallyWith(b), false);
-  })
-
-
-  it("checks if can connect vertically", () => {
-    const puzzle = new Puzzle();
-
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
-
-    a.locateAt(0, 0);
-    b.locateAt(0, 3);
-    c.locateAt(3, 3);
-
-    assert.equal(a.canConnectVerticallyWith(b), true);
-    assert.equal(b.canConnectVerticallyWith(a), false);
-    assert.equal(b.canConnectVerticallyWith(c), false);
-    assert.equal(c.canConnectVerticallyWith(b), false);
-  })
-
-  it("checks if can connect vertically wih requirement that accepts all connections", () => {
-    const puzzle = new Puzzle();
-
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
-
-    puzzle.attachVerticalConnectionRequirement((_) => true);
-
-    a.locateAt(0, 0);
-    b.locateAt(0, 3);
-    c.locateAt(3, 3);
-
-    assert.equal(a.canConnectVerticallyWith(b), true);
-    assert.equal(b.canConnectVerticallyWith(a), false);
-    assert.equal(b.canConnectVerticallyWith(c), false);
-    assert.equal(c.canConnectVerticallyWith(b), false);
-  })
-
-  it("checks if can connect vertically wih requirement that prevents all connections", () => {
-    const puzzle = new Puzzle();
-
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
-
-    puzzle.attachVerticalConnectionRequirement((_) => false);
-
-    a.locateAt(0, 0);
-    b.locateAt(0, 3);
-    c.locateAt(3, 3);
-
-    assert.equal(a.canConnectVerticallyWith(b), false);
-    assert.equal(b.canConnectVerticallyWith(a), false);
-    assert.equal(b.canConnectVerticallyWith(c), false);
-    assert.equal(c.canConnectVerticallyWith(b), false);
-  })
-
-
-  it("checks if rectangular pieces can connect vertically", () => {
-    const puzzle = new Puzzle({pieceRadius: {x: 2, y: 3}});
-
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
-
-    a.locateAt(0, 0);
-    b.locateAt(0, 5);
-    c.locateAt(3, 5);
-
-    assert.equal(a.canConnectVerticallyWith(b), true);
-    assert.equal(b.canConnectVerticallyWith(a), false);
-    assert.equal(b.canConnectVerticallyWith(c), false);
-    assert.equal(c.canConnectVerticallyWith(b), false);
-  })
-
-
-  it("connects vertically", () => {
-    const puzzle = new Puzzle();
-
-    const a = puzzle.newPiece({down: Tab});
-    const b = puzzle.newPiece({up: Slot, right: Tab});
-    const c = puzzle.newPiece({left: Slot});
-
-    a.locateAt(0, 0);
-    b.locateAt(0, 3);
-    c.locateAt(3, 3);
-
-    a.connectVerticallyWith(b);
-    assert.equal(a.downConnection, b);
-    assert.equal(a.connected, true);
-    assert.equal(b.connected, true);
-  })
-
 
   it("connects vertically irregular pieces", () => {
     const puzzle = new Puzzle();
