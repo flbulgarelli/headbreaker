@@ -365,13 +365,13 @@ describe("piece", () => {
       assert.equal(c.canConnectHorizontallyWith(b), false);
     })
 
-    it("can try to connect horizontally", () => {
+    it("can try to connect close pieces horizontally", () => {
       assert.notEqual(b.rightConnection, c);
       b.tryConnectHorizontallyWith(c);
       assert.equal(b.rightConnection, c);
     })
 
-    it("can try to connect horizontally", () => {
+    it("can try to connect distant pieces horizontally ", () => {
       assert.notEqual(a.rightConnection, b);
       a.tryConnectHorizontallyWith(b);
       assert.notEqual(a.rightConnection, b);
@@ -403,13 +403,13 @@ describe("piece", () => {
       assert.equal(c.canConnectVerticallyWith(b), false);
     })
 
-    it("can try to connect vertically", () => {
+    it("can try to connect close pieces vertically", () => {
       assert.notEqual(a.downConnection, b);
       a.tryConnectVerticallyWith(b);
       assert.equal(a.downConnection, b);
     })
 
-    it("can try to connect vertically", () => {
+    it("can try to connect distant pieces vertically", () => {
       assert.notEqual(b.downConnection, c);
       b.tryConnectVerticallyWith(c);
       assert.notEqual(b.downConnection, c);
