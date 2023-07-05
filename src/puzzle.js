@@ -5,6 +5,7 @@ const {vector, ...Vector} = require('./vector')
 const {radius} = require('./size')
 const Shuffler = require('./shuffler');
 const dragMode = require('./drag-mode');
+const {Connector, noConnectionRequirements} = require('./connector');
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
@@ -40,6 +41,9 @@ class Puzzle {
     this.validator = new NullValidator();
     /** @type {import('./drag-mode').DragMode} */
     this.dragMode = dragMode.TryDisconnection;
+
+    this.horizontalConnector = Connector.horizontal();
+    this.verticalConnector = Connector.vertical();
   }
 
   /**
@@ -256,6 +260,72 @@ class Puzzle {
    */
   get headAnchor() {
     return this.head.centralAnchor;
+  }
+
+  /**
+   * Returns the attached vertical ConnectionRequirement
+   * function.
+   *
+   * @returns {import('./connector').ConnectionRequirement}
+   */
+  get verticalRequirement() {
+    return this.verticalConnector.requirement;
+  }
+
+  /**
+   * Returns the attached horizontal ConnectionRequirement
+   * function.
+   *
+   * @returns {import('./connector').ConnectionRequirement}
+   */
+  get horizontalRequirement() {
+    return this.horizontalConnector.requirement;
+  }
+
+  /**
+   * Attaches a connection requirement function that will be used to check whether
+   * two horizontally close and matching pieces can be actually connected.
+   *
+   * By default no horizontal connection requirement is imposed which means that any horizontally
+   * close and matching pieces will be connected.
+   *
+   * @param {import('./connector').ConnectionRequirement} requirement
+   */
+  attachHorizontalConnectionRequirement(requirement) {
+    this.horizontalConnector.attachRequirement(requirement);
+  }
+
+  /**
+   * Attaches a connection requirement function that will be used to check whether
+   * two vertically close and matching pieces can be actually connected.
+   *
+   * By default no vertical connection requirement is imposed which means that any vertically
+   * close and matching pieces will be connected.
+   *
+   * @param {import('./connector').ConnectionRequirement} requirement
+   */
+  attachVerticalConnectionRequirement(requirement) {
+    this.verticalConnector.attachRequirement(requirement);
+  }
+
+  /**
+   * Attaches the given connection requirement as both a vertical and horizontal requirement.
+   *
+   * @see {@link Puzzle#attachVerticalConnectionRequirement}
+   * @see {@link Puzzle#attachHorizontalConnectionRequirement}
+   *
+   * @param {import('./connector').ConnectionRequirement} requirement
+   */
+  attachConnectionRequirement(requirement) {
+    this.attachHorizontalConnectionRequirement(requirement);
+    this.attachVerticalConnectionRequirement(requirement);
+  }
+
+  /**
+   * Removes the vertical and horizontal connection requirements, if any.
+   */
+  clearConnectionRequirements() {
+    this.attachConnectionRequirement(noConnectionRequirements)
   }
 
   /**

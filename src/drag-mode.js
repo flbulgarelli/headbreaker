@@ -7,7 +7,7 @@ const connector = require('./connector')
 const TryDisconnection = {
 
   dragShouldDisconnect(piece, dx, dy) {
-    return connector.horizontal.openMovement(piece, dx) && connector.vertical.openMovement(piece, dy);
+    return piece.horizontalConnector.openMovement(piece, dx) && piece.verticalConnector.openMovement(piece, dy);
   }
 }
 

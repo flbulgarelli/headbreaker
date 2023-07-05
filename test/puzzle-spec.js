@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Tab, Slot, PuzzleValidator, Shuffler} = require('../src/index');
+const {Puzzle, Tab, Slot, PuzzleValidator, Shuffler, connector} = require('../src/index');
 const {vector, ...Vector} = require('../src/vector');
 
 describe("puzzle", () => {
@@ -33,6 +33,31 @@ describe("puzzle", () => {
 
   it("has refs", () => {
     assert.deepEqual(puzzle.refs, [[0, 0], [0.75, 0], [1.5, 0], [1.5, 0.75]]);
+  })
+
+  describe("can register requirements", () => {
+    it("has initially no requirements", () => {
+      assert.equal(puzzle.horizontalRequirement, connector.noConnectionRequirements);
+      assert.equal(puzzle.verticalRequirement, connector.noConnectionRequirements);
+    })
+    it("can register a general connection requirement", () => {
+      const requirement = (_) => true;
+
+      puzzle.attachConnectionRequirement(requirement);
+
+      assert.equal(puzzle.horizontalRequirement, requirement);
+      assert.equal(puzzle.verticalRequirement, requirement);
+    })
+    it("can deregister connection requirements", () => {
+      const requirement = (_) => true;
+
+      puzzle.attachConnectionRequirement(requirement);
+      puzzle.clearConnectionRequirements();
+
+      assert.equal(puzzle.horizontalRequirement, connector.noConnectionRequirements);
+      assert.equal(puzzle.verticalRequirement, connector.noConnectionRequirements);
+    })
+
   })
 
   it("autoconnects puzzle", () => {
@@ -162,8 +187,9 @@ describe("puzzle", () => {
       assert.deepEqual(one.centralAnchor.asPair(), [3, 3]);
       assert.deepEqual(other.centralAnchor.asPair(), [5, 9]);
     })
-
   });
+
+
 
   describe("validation", () => {
     it("is invalid by default", () => {
