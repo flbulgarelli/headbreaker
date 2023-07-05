@@ -57,9 +57,15 @@ const {itself, orthogonalTransform} = require('./prelude');
       /** @type {import('./size').Size} */
       this._size = null;
 
-      /** @type {import('./connector').Connector} */
+      /**
+       * @private
+       * @type {import('./connector').Connector}
+       **/
       this._horizontalConnector = null;
-      /** @type {import('./connector').Connector} */
+      /**
+       * @private
+       * @type {import('./connector').Connector}
+       **/
       this._verticalConnector = null;
 
       this._initializeListeners();
@@ -554,18 +560,35 @@ const {itself, orthogonalTransform} = require('./prelude');
     return this.metadata.id;
   }
 
+  /**
+   * @returns {import('./connector').Connector}
+   */
   get horizontalConnector() {
-    if (this._horizontalConnector) return this._horizontalConnector;
-    if (this.puzzle) return this.puzzle.horizontalConnector;
-    this._horizontalConnector = Connector.horizontal();
-    return this._horizontalConnector;
+    return this.getConnector('horizontal');
   }
 
+  /**
+   * @returns {import('./connector').Connector}
+   */
   get verticalConnector() {
-    if (this._verticalConnector) return this._verticalConnector;
-    if (this.puzzle) return this.puzzle.verticalConnector;
-    this._verticalConnector = Connector.vertical();
-    return this._verticalConnector;
+    return this.getConnector('vertical');
+  }
+
+  /**
+   * Retrieves the requested connector, initializing
+   * it if necessary.
+   *
+   * @param {"vertical" | "horizontal"} kind
+   * @returns {import('./connector').Connector}
+   */
+  getConnector(kind) {
+    const connector = kind + "Connector";
+    const _connector = "_" + connector;
+    if (this.puzzle && !this[_connector]) return this.puzzle[connector];
+    if (!this[_connector]) {
+      this[_connector] = Connector[kind]();
+    }
+    return this[_connector];
   }
 
   /**
