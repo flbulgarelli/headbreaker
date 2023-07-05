@@ -118,7 +118,7 @@ soft.draw();
 
 const rounded = new headbreaker.Canvas('rounded-canvas', {
    width: 500, height: 300,
-   outline: new headbreaker.outline.Rounded({bezelize: true, bezelDepth: 1/2}) });
+   outline: new headbreaker.outline.Rounded() });
 rounded.sketchPiece({
   structure: { right: headbreaker.Tab, down: headbreaker.Tab, left: headbreaker.Slot },
   metadata: { id: 'a', currentPosition: { x: 50, y: 50 }, color: '#B87D32' }
@@ -389,7 +389,7 @@ malharro.onload = () => {
     width: 500, height: 500,
     pieceSize: 100, proximity: 20,
     strokeWidth: 5, strokeColor: '#302B00', image: malharro,
-    outline: new headbreaker.outline.Rounded({bezelize: true, bezelDepth: 3/4}),
+    outline: new headbreaker.outline.Rounded(),
     preventOffstageDrag: true,
     fixed: true
   });
