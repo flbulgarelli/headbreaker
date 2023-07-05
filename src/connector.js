@@ -114,10 +114,20 @@ class Connector {
     this.requirement = requirement;
   }
 
+  /**
+   * Returns a new right-to-left connector
+   *
+   * @returns {Connector}
+   */
   static horizontal() {
     return new Connector("x", "right", "left")
   }
 
+   /**
+   * Returns a new down-to-up connector
+   *
+   * @returns {Connector}
+   */
   static vertical() {
     return new Connector("y", "down", "up")
   }

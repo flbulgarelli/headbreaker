@@ -408,6 +408,11 @@ class Canvas {
   }
 
   /**
+   * Attaches a connection requirement function that will be used to check whether
+   * two close and matching pieces can be actually connected. By default no connection
+   * requirement is imposed which means that any close and matching pieces will be
+   * connected.
+   *
    * @param {import('./connector').ConnectionRequirement} requirement
    */
   attachConnectionRequirement(requirement) {
@@ -415,6 +420,7 @@ class Canvas {
   }
 
   /**
+   * Removes the connection requirement, if any. 
    */
   clearConnectionRequirements() {
     this.puzzle.clearConnectionRequirements();
