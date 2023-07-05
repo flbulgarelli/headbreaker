@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "types": "dist/headbreaker.d.ts",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha",
+    "test": "./node_modules/mocha/bin/mocha.js",
     "all": "npm test && npm run build && npm run types && npm run api",
     "build": "webpack --config webpack.prod.js",
     "api": "node_modules/jsdoc-import-support/jsdoc.js src/ -d docs/api -R README.md; exit 0",
@@ -25,7 +25,7 @@
     "clean-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^5.5.0",
     "jsdoc-import-support": "^3.6.4",
-    "mocha": "^7.2.0",
+    "mocha": "^10.0.0",
     "tsd-jsdoc": "^2.5.0",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
