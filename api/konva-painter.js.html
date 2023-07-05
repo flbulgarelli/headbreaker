@@ -138,8 +138,8 @@ class KonvaPainter extends Painter {
       y: piece.metadata.currentPosition.y,
       draggable: !piece.metadata.fixed,
       dragBoundFunc: canvas.preventOffstageDrag ? (position) => {
-        const furthermost = Vector.minus(vector(canvas.width, canvas.height), piece.size.radio);
-        return Vector.max(Vector.min(position, furthermost), piece.size.radio);
+        const furthermost = Vector.minus(vector(canvas.width, canvas.height), piece.size.radius);
+        return Vector.max(Vector.min(position, furthermost), piece.size.radius);
       } : null,
     });
 
@@ -150,7 +150,7 @@ class KonvaPainter extends Painter {
       stroke: piece.metadata.strokeColor || canvas.strokeColor,
       strokeWidth: canvas.strokeWidth,
       closed: true,
-      ...Vector.multiply(piece.radio, -1),
+      ...Vector.multiply(piece.radius, -1),
     });
     this.fill(canvas, piece, figure);
     figure.group.add(figure.shape);
@@ -182,7 +182,7 @@ class KonvaPainter extends Painter {
       ...Vector.minus({
         x: piece.metadata.label.x || (figure.group.width() / 2),
         y: piece.metadata.label.y || (figure.group.height() / 2),
-      }, piece.radio),
+      }, piece.radius),
       text:     piece.metadata.label.text,
       fontSize: piece.metadata.label.fontSize,
       fontFamily: piece.metadata.label.fontFamily || 'Sans Serif',
@@ -286,13 +286,13 @@ module.exports = KonvaPainter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#line">line</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#line">line</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radius">radius</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Feb 15 2023 01:06:49 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 05 2023 00:37:02 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

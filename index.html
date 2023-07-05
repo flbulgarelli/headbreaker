@@ -456,6 +456,9 @@ labels.sketchPiece({
 // ... more pieces ...
 labels.shuffle(0.6);
 labels.draw();
+labels.attachConnectionRequirement(
+  (one, other) =&gt; one.metadata.id.replace('-kanji', '') == other.metadata.id.replace('-emoji', '')
+);
 </code></pre>
 <h3 id="demo_9">Demo</h3>
 <div id="labels-canvas">
@@ -837,6 +840,6 @@ quinquela.onload = () =&gt; {
 </html>
 
 <!--
-MkDocs version : 1.3.0
-Build Date UTC : 2023-02-15 04:08:23.872346+00:00
+MkDocs version : 1.4.3
+Build Date UTC : 2023-07-05 03:42:03.852764+00:00
 -->

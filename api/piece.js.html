@@ -29,7 +29,7 @@
             <pre class="prettyprint source linenums"><code>const Pair = require('./pair');
 const {anchor, Anchor} = require('./anchor');
 const {None} = require('./insert')
-const connector = require('./connector')
+const {Connector} = require('./connector')
 const Structure = require('./structure');
 const {itself, orthogonalTransform} = require('./prelude');
 
@@ -84,6 +84,18 @@ const {itself, orthogonalTransform} = require('./prelude');
       this.centralAnchor = null;
       /** @type {import('./size').Size} */
       this._size = null;
+
+      /**
+       * @private
+       * @type {import('./connector').Connector}
+       **/
+      this._horizontalConnector = null;
+      /**
+       * @private
+       * @type {import('./connector').Connector}
+       **/
+      this._verticalConnector = null;
+
       this._initializeListeners();
       this.configure(config);
     }
@@ -228,14 +240,14 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {boolean} [back]
    */
   connectVerticallyWith(other, back = false) {
-    connector.vertical.connectWith(this, other, this.proximity, back);
+    this.verticalConnector.connectWith(this, other, this.proximity, back);
   }
 
   /**
    * @param {Piece} other
    */
   attractVertically(other, back = false) {
-    connector.vertical.attract(this, other, back);
+    this.verticalConnector.attract(this, other, back);
   }
 
   /**
@@ -243,14 +255,14 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {boolean} [back]
    */
   connectHorizontallyWith(other, back = false) {
-    connector.horizontal.connectWith(this, other, this.proximity, back);
+    this.horizontalConnector.connectWith(this, other, this.proximity, back);
   }
 
   /**
    * @param {Piece} other
    */
   attractHorizontally(other, back = false) {
-    connector.horizontal.attract(this, other, back);
+    this.horizontalConnector.attract(this, other, back);
   }
 
   /**
@@ -449,7 +461,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   canConnectHorizontallyWith(other) {
-    return connector.horizontal.canConnectWith(this, other, this.proximity);
+    return this.horizontalConnector.canConnectWith(this, other, this.proximity);
   }
 
   /**
@@ -458,7 +470,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   canConnectVerticallyWith(other) {
-    return connector.vertical.canConnectWith(this, other, this.proximity);
+    return this.verticalConnector.canConnectWith(this, other, this.proximity);
   }
 
   /**
@@ -467,7 +479,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   verticallyCloseTo(other) {
-    return connector.vertical.closeTo(this, other, this.proximity);
+    return this.verticalConnector.closeTo(this, other, this.proximity);
   }
 
   /**
@@ -476,7 +488,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   horizontallyCloseTo(other) {
-    return connector.horizontal.closeTo(this, other, this.proximity);
+    return this.horizontalConnector.closeTo(this, other, this.proximity);
   }
 
 
@@ -486,7 +498,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   verticallyMatch(other) {
-    return connector.vertical.match(this, other);
+    return this.verticalConnector.match(this, other);
   }
 
   /**
@@ -495,7 +507,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @returns {boolean}
    */
   horizontallyMatch(other) {
-    return connector.horizontal.match(this, other);
+    return this.horizontalConnector.match(this, other);
   }
 
   get connected() {
@@ -506,28 +518,28 @@ const {itself, orthogonalTransform} = require('./prelude');
    *@type {Anchor}
    */
   get downAnchor() {
-    return this.centralAnchor.translated(0, this.radio.y);
+    return this.centralAnchor.translated(0, this.radius.y);
   }
 
   /**
    *@type {Anchor}
    */
   get rightAnchor() {
-    return this.centralAnchor.translated(this.radio.x, 0);
+    return this.centralAnchor.translated(this.radius.x, 0);
   }
 
   /**
    *@type {Anchor}
    */
   get upAnchor() {
-    return this.centralAnchor.translated(0, -this.radio.y);
+    return this.centralAnchor.translated(0, -this.radius.y);
   }
 
   /**
    *@type {Anchor}
    */
   get leftAnchor() {
-    return this.centralAnchor.translated(-this.radio.x, 0);
+    return this.centralAnchor.translated(-this.radius.x, 0);
   }
 
   /**
@@ -543,12 +555,12 @@ const {itself, orthogonalTransform} = require('./prelude');
   /**
    * @type {import('./vector').Vector}
    */
-  get radio() {
-    return this.size.radio;
+  get radius() {
+    return this.size.radius;
   }
 
   /**
-   * The double of the radio
+   * The double of the radius
    *
    * @type {import('./vector').Vector}
    */
@@ -577,6 +589,37 @@ const {itself, orthogonalTransform} = require('./prelude');
   }
 
   /**
+   * @returns {import('./connector').Connector}
+   */
+  get horizontalConnector() {
+    return this.getConnector('horizontal');
+  }
+
+  /**
+   * @returns {import('./connector').Connector}
+   */
+  get verticalConnector() {
+    return this.getConnector('vertical');
+  }
+
+  /**
+   * Retrieves the requested connector, initializing
+   * it if necessary.
+   *
+   * @param {"vertical" | "horizontal"} kind
+   * @returns {import('./connector').Connector}
+   */
+  getConnector(kind) {
+    const connector = kind + "Connector";
+    const _connector = "_" + connector;
+    if (this.puzzle &amp;&amp; !this[_connector]) return this.puzzle[connector];
+    if (!this[_connector]) {
+      this[_connector] = Connector[kind]();
+    }
+    return this[_connector];
+  }
+
+  /**
    * Converts this piece into a plain, stringify-ready object.
    * Connections should have ids
    *
@@ -591,7 +634,7 @@ const {itself, orthogonalTransform} = require('./prelude');
       metadata: this.metadata
     };
     if (this._size) {
-      base.size = {radio: this._size.radio };
+      base.size = {radius: this._size.radius };
     }
     return compact ? base : Object.assign(base, {
       connections: orthogonalTransform(this.connections, it => ({id: it.id}))
@@ -623,13 +666,13 @@ module.exports = Piece;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#line">line</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#line">line</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radius">radius</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Feb 15 2023 01:06:49 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 05 2023 00:37:02 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

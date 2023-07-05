@@ -30,22 +30,23 @@
 const Piece = require('./piece');
 const {NullValidator} = require('./validator');
 const {vector, ...Vector} = require('./vector')
-const {radio} = require('./size')
+const {radius} = require('./size')
 const Shuffler = require('./shuffler');
 const dragMode = require('./drag-mode');
+const {Connector, noConnectionRequirements} = require('./connector');
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PuzzleDump
- * @property {import('./vector').Vector} pieceRadio
+ * @property {import('./vector').Vector} pieceRadius
  * @property {number} proximity
  * @property {import('./piece').PieceDump[]} pieces
  */
 
 /**
  * @typedef {object} Settings
- * @property {import('./vector').Vector|number} [pieceRadio]
+ * @property {import('./vector').Vector|number} [pieceRadius]
  * @property {number} [proximity]
  */
 
@@ -59,8 +60,8 @@ class Puzzle {
   /**
    * @param {Settings} [options]
    */
-  constructor({pieceRadio = 2, proximity = 1} = {}) {
-    this.pieceSize = radio(pieceRadio);
+  constructor({pieceRadius = 2, proximity = 1} = {}) {
+    this.pieceSize = radius(pieceRadius);
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
@@ -68,6 +69,9 @@ class Puzzle {
     this.validator = new NullValidator();
     /** @type {import('./drag-mode').DragMode} */
     this.dragMode = dragMode.TryDisconnection;
+
+    this.horizontalConnector = Connector.horizontal();
+    this.verticalConnector = Connector.vertical();
   }
 
   /**
@@ -287,6 +291,72 @@ class Puzzle {
   }
 
   /**
+   * Returns the attached vertical ConnectionRequirement
+   * function.
+   *
+   * @returns {import('./connector').ConnectionRequirement}
+   */
+  get verticalRequirement() {
+    return this.verticalConnector.requirement;
+  }
+
+  /**
+   * Returns the attached horizontal ConnectionRequirement
+   * function.
+   *
+   * @returns {import('./connector').ConnectionRequirement}
+   */
+  get horizontalRequirement() {
+    return this.horizontalConnector.requirement;
+  }
+
+  /**
+   * Attaches a connection requirement function that will be used to check whether
+   * two horizontally close and matching pieces can be actually connected.
+   *
+   * By default no horizontal connection requirement is imposed which means that any horizontally
+   * close and matching pieces will be connected.
+   *
+   * @param {import('./connector').ConnectionRequirement} requirement
+   */
+  attachHorizontalConnectionRequirement(requirement) {
+    this.horizontalConnector.attachRequirement(requirement);
+  }
+
+  /**
+   * Attaches a connection requirement function that will be used to check whether
+   * two vertically close and matching pieces can be actually connected.
+   *
+   * By default no vertical connection requirement is imposed which means that any vertically
+   * close and matching pieces will be connected.
+   *
+   * @param {import('./connector').ConnectionRequirement} requirement
+   */
+  attachVerticalConnectionRequirement(requirement) {
+    this.verticalConnector.attachRequirement(requirement);
+  }
+
+  /**
+   * Attaches the given connection requirement as both a vertical and horizontal requirement.
+   *
+   * @see {@link Puzzle#attachVerticalConnectionRequirement}
+   * @see {@link Puzzle#attachHorizontalConnectionRequirement}
+   *
+   * @param {import('./connector').ConnectionRequirement} requirement
+   */
+  attachConnectionRequirement(requirement) {
+    this.attachHorizontalConnectionRequirement(requirement);
+    this.attachVerticalConnectionRequirement(requirement);
+  }
+
+  /**
+   * Removes the vertical and horizontal connection requirements, if any.
+   */
+  clearConnectionRequirements() {
+    this.attachConnectionRequirement(noConnectionRequirements)
+  }
+
+  /**
    * @param {import('./validator').Validator} validator
    */
   attachValidator(validator) {
@@ -344,7 +414,7 @@ class Puzzle {
 
   /**
    * The piece width, from edge to edge.
-   * This is the double of the {@link Puzzle#pieceRadio}
+   * This is the double of the {@link Puzzle#pieceRadius}
    *
    * @type {import('./vector').Vector}
    */
@@ -357,8 +427,8 @@ class Puzzle {
    *
    * @type {import('./vector').Vector}
    */
-  get pieceRadio() {
-    return this.pieceSize.radio;
+  get pieceRadius() {
+    return this.pieceSize.radius;
   }
 
   /** Prevents pieces from disconnecting */
@@ -396,7 +466,7 @@ class Puzzle {
    */
   export(options = {}) {
     return {
-      pieceRadio: this.pieceRadio,
+      pieceRadius: this.pieceRadius,
       proximity: this.proximity,
       pieces: this.pieces.map(it => it.export(options))
     }
@@ -407,7 +477,7 @@ class Puzzle {
    * @returns {Puzzle}
    */
   static import(dump) {
-    const puzzle = new Puzzle({pieceRadio: dump.pieceRadio, proximity: dump.proximity});
+    const puzzle = new Puzzle({pieceRadius: dump.pieceRadius, proximity: dump.proximity});
     puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
     puzzle.autoconnect();
     return puzzle;
@@ -425,13 +495,13 @@ module.exports = Puzzle;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#line">line</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radio">radio</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-headbreaker.html">headbreaker</a></li><li><a href="module-ImageMetadata.html">ImageMetadata</a></li><li><a href="module-Metadata.html">Metadata</a></li><li><a href="module-Outline.html">Outline</a></li><li><a href="module-Pair.html">Pair</a></li><li><a href="module-Prelude.html">Prelude</a></li><li><a href="module-sequence.html">sequence</a></li><li><a href="module-SpatialMetadata.html">SpatialMetadata</a></li><li><a href="module-Structure.html">Structure</a></li><li><a href="module-Vector.html">Vector</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractValidator.html">AbstractValidator</a></li><li><a href="Anchor.html">Anchor</a></li><li><a href="Canvas.html">Canvas</a></li><li><a href="DummyPainter.html">DummyPainter</a></li><li><a href="KonvaPainter.html">KonvaPainter</a></li><li><a href="Manufacturer.html">Manufacturer</a></li><li><a href="module-sequence-InsertSequence.html">InsertSequence</a></li><li><a href="NullValidator.html">NullValidator</a></li><li><a href="Piece.html">Piece</a></li><li><a href="PieceValidator.html">PieceValidator</a></li><li><a href="Positioner.html">Positioner</a></li><li><a href="Puzzle.html">Puzzle</a></li><li><a href="PuzzleValidator.html">PuzzleValidator</a></li></ul><h3>Interfaces</h3><ul><li><a href="Painter.html">Painter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#anchor">anchor</a></li><li><a href="global.html#cast">cast</a></li><li><a href="global.html#columns">columns</a></li><li><a href="global.html#diameter">diameter</a></li><li><a href="global.html#grid">grid</a></li><li><a href="global.html#line">line</a></li><li><a href="global.html#noise">noise</a></li><li><a href="global.html#noop">noop</a></li><li><a href="global.html#padder">padder</a></li><li><a href="global.html#radius">radius</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#vector">vector</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Feb 15 2023 01:06:49 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 05 2023 00:37:02 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
