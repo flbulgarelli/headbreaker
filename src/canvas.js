@@ -1,4 +1,4 @@
-const Pair = require('./pair');
+const {pair} = require('./pair');
 const Piece = require('./piece');
 const Puzzle = require('./puzzle');
 const Manufacturer = require('./manufacturer');
@@ -602,7 +602,7 @@ class Canvas {
    */
   _bindPieceToGroup(piece, group) {
     this._painter.onDrag(this, piece, group, (dx, dy) => {
-      if (!Pair.isNull(dx, dy)) {
+      if (!pair.isNull(dx, dy)) {
         piece.drag(dx, dy, true);
         this._painter.logicalTranslate(this, piece, group);
         this.redraw();

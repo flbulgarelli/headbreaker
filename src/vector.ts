@@ -1,4 +1,4 @@
-import Pair = require('./pair');
+import pair, { Pair } from './pair';
 
 export interface Vector {
   x: number;
@@ -53,7 +53,7 @@ vector.zero = (): Vector => {
  * @returns {boolean}
  */
 vector.equal = (one: Vector, other: Vector, delta: number = 0): boolean => {
-  return Pair.equal(one.x, one.y, other.x, other.y, delta);
+  return pair.equal(one.x, one.y, other.x, other.y, delta);
 }
 
 /**
@@ -79,10 +79,10 @@ vector.update = (vector: Vector, x: any, y: any) => {
 /**
  * @param {Vector} one
  * @param {Vector} other
- * @returns {import('./pair').Pair};
+ * @returns {Pair};
  */
-vector.diff = (one: Vector, other: Vector): import('./pair').Pair => {
-  return Pair.diff(one.x, one.y, other.x, other.y);
+vector.diff = (one: Vector, other: Vector): Pair => {
+  return pair.diff(one.x, one.y, other.x, other.y);
 }
 
 /**

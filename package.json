@@ -6,10 +6,10 @@
   "types": "dist/headbreaker.d.ts",
   "scripts": {
     "test": "node_modules/ts-mocha/bin/ts-mocha -p tsconfig.json test/*",
-    "all": "npm test && npm run build && npm run types && npm run api",
+    "all": "npm test && npm run build && npm run api",
     "build": "webpack --config webpack.prod.js",
-    "api": "node_modules/jsdoc-import-support/jsdoc.js src/ -d docs/api -R README.md; exit 0",
-    "types": "node_modules/jsdoc-import-support/jsdoc.js -t node_modules/tsd-jsdoc/dist/ -d dist/ -r src/; mv dist/types.d.ts dist/headbreaker.d.ts; exit 0"
+    "prepublishOnly": "npm run build",
+    "api": "node_modules/jsdoc-import-support/jsdoc.js src/ -d docs/api -R README.md; exit 0"
   },
   "repository": {
     "type": "git",

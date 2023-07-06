@@ -1,8 +1,8 @@
 const {Anchor} = require('./anchor');
+import * as Piece from './piece';
+import {Vector} from './vector';
 
-/**
- * @typedef {(pieces: import("./piece")[]) => import("./vector").Vector[]} Shuffler
- */
+export type Shuffler = (pieces: Piece[]) => Vector[];
 
 /**
  * @private
@@ -17,14 +17,14 @@ function sampleIndex(list) {
  *
  * @returns {Shuffler}
  */
-function random(maxX, maxY) {
+function random(maxX: number, maxY: number): Shuffler {
   return (pieces) => pieces.map(_it => Anchor.atRandom(maxX, maxY));
 }
 
 /**
  * @type {Shuffler}
  * */
-const grid = (pieces) => {
+const grid: Shuffler = (pieces) => {
   const destinations = pieces.map(it => it.centralAnchor.asVector());
   for (let i = 0; i < destinations.length; i++) {
     const j = sampleIndex(destinations);
@@ -38,7 +38,7 @@ const grid = (pieces) => {
 /**
  * @type {Shuffler}
  * */
-const columns = (pieces) => {
+const columns: Shuffler = (pieces) => {
   const destinations = pieces.map(it => it.centralAnchor.asVector());
   const columns = new Map();
 
@@ -60,7 +60,7 @@ const columns = (pieces) => {
 /**
  * @type {Shuffler}
  * */
-const line = (pieces) => {
+const line: Shuffler = (pieces) => {
   const destinations = pieces.map(it => it.centralAnchor.asVector());
   const columns = new Set(destinations.map(it => it.x));
   const maxX = Math.max(...columns);
@@ -99,7 +99,7 @@ const line = (pieces) => {
  * @param {number} height
  * @returns {Shuffler}
  * */
-function padder(padding, width, height) {
+function padder(padding: number, width: number, height: number): Shuffler {
   return (pieces) => {
     const destinations = pieces.map(it => it.centralAnchor.asVector());
     let dx = 0;
@@ -123,7 +123,7 @@ function padder(padding, width, height) {
  * @param {import('./vector').Vector} maxDistance
  * @returns {Shuffler}
  */
-function noise(maxDistance) {
+function noise(maxDistance: import('./vector').Vector): Shuffler {
   return (pieces) => {
     return pieces.map(it =>
       Anchor
@@ -137,9 +137,9 @@ function noise(maxDistance) {
 /**
  * @type {Shuffler}
  * */
-const noop = (pieces) => pieces.map(it => it.centralAnchor);
+const noop: Shuffler = (pieces) => pieces.map(it => it.centralAnchor);
 
-module.exports = {
+export {
   random,
   grid,
   columns,

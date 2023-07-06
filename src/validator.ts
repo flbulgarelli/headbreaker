@@ -1,6 +1,6 @@
-import Puzzle = require('./puzzle');
-import Piece = require('./piece');
-import Pair = require('./pair');
+import * as Puzzle from './puzzle';
+import * as Piece from './piece';
+import pair, { Pair } from './pair';
 
 /**
  * @typedef {PieceValidator | PuzzleValidator | NullValidator} Validator
@@ -138,23 +138,23 @@ export class PuzzleValidator extends AbstractValidator {
   /**
    * Compares two pairs
    *
-   * @param {import('./pair').Pair} param0
-   * @param {import('./pair').Pair} param1
+   * @param {Pair} param0
+   * @param {Pair} param1
    *
    * @returns {boolean}
    */
-  static equalDiffs([dx0, dy0]: import('./pair').Pair, [dx, dy]: import('./pair').Pair): boolean {
-    return Pair.equal(dx0, dy0, dx, dy, PuzzleValidator.DIFF_DELTA);
+  static equalDiffs([dx0, dy0]: Pair, [dx, dy]: Pair): boolean {
+    return pair.equal(dx0, dy0, dx, dy, PuzzleValidator.DIFF_DELTA);
   }
 
   /**
-   * @param {import('./pair').Pair[]} expected the expected relative refs
+   * @param {Pair[]} expected the expected relative refs
    * @returns {PuzzleCondition}
    */
-  static relativeRefs(expected: import('./pair').Pair[]): PuzzleCondition {
+  static relativeRefs(expected: Pair[]): PuzzleCondition {
     return (puzzle) => {
       function diff(x, y, index) {
-        return Pair.diff(x, y, ...expected[index]);
+        return pair.diff(x, y, ...expected[index]);
       }
       const refs = puzzle.refs;
       const [x0, y0] = refs[0];

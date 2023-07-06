@@ -1,5 +1,5 @@
 import between from './between';
-import Pair = require('./pair');
+import pair, { Pair } from './pair';
 import vector, { Vector } from './vector';
 
 /**
@@ -9,8 +9,8 @@ import vector, { Vector } from './vector';
 export class Anchor {
   x: number;
   y: number;
+
   /**
-   *
    * @param {number} x
    * @param {number} y
    */
@@ -33,7 +33,7 @@ export class Anchor {
    * @returns {boolean}
    */
   isAt(x: number, y: number): boolean {
-    return Pair.equal(this.x, this.y, x, y);
+    return pair.equal(this.x, this.y, x, y);
   }
 
   /**
@@ -82,19 +82,19 @@ export class Anchor {
    * Calculates the difference between this anchor and another
    *
    * @param {Anchor} other
-   * @returns {import('./pair').Pair}
+   * @returns {Pair}
    */
-  diff(other: Anchor): import('./pair').Pair {
-    return Pair.diff(this.x, this.y, other.x, other.y)
+  diff(other: Anchor): Pair {
+    return pair.diff(this.x, this.y, other.x, other.y)
   }
 
   /**
    * Converts this anchor into a point
    *
-   * @returns {import('./pair').Pair}
+   * @returns {Pair}
    */
-  asPair(): import('./pair').Pair {
-    return [this.x, this.y];
+  asPair(): Pair {
+    return pair(this.x, this.y);
   }
 
   /**

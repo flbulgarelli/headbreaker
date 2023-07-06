@@ -1,18 +1,16 @@
 const assert = require('assert');
-const {Puzzle, Tab, Slot, PuzzleValidator, Shuffler, connector} = require('../src/index');
-import vector from '../src/vector';
+import { Puzzle, shuffler, Piece } from '../src/index';
+import vector, { Vector } from '../src/vector';
 
 describe("shuffler", () => {
-  function hasDuplicates(result) {
+  function hasDuplicates(result: Vector[]) {
     return result.some(it => {
       return result.some(other => other !== it && it.x == other.x && it.y == other.y)
     })
   }
   context("Complete puzzles", () => {
-      /** @type {Puzzle} */
-    let puzzle;
-    /** @type {Piece[]} */
-    let pieces;
+    let puzzle: Puzzle;
+    let pieces: Piece[];
     before(() => {
       puzzle = new Puzzle();
       pieces = [
@@ -26,25 +24,26 @@ describe("shuffler", () => {
     })
 
     it("grid", () => {
-      const result = Shuffler.grid(pieces);
+      const result = shuffler.grid(pieces);
       assert.equal(hasDuplicates(result), false, "There must not be any duplicates");
     })
 
     it("columns", () => {
-      const result = Shuffler.columns(pieces);
+      const result = shuffler.columns(pieces);
       assert.deepEqual(result.map(it => it.x), [0, 10, 0, 10, 0, 10])
       assert.equal(hasDuplicates(result), false, "There must not be any duplicates");
     })
 
     it("line", () => {
-      const result = Shuffler.line(pieces);
+      const result = shuffler.line(pieces);
+      console.log(result);
       assert.deepEqual(result.map(it => it.y), [0, 0, 0, 0, 0, 0])
       assert.deepEqual(result.every((it, index) => index % 2 === 0 ? it.x < 30 : it.x >= 30), true)
       assert.equal(hasDuplicates(result), false, "There must not be any duplicates");
     })
 
     it("noop", () => {
-      assert.deepEqual(Shuffler.noop(pieces), [
+      assert.deepEqual(shuffler.noop(pieces), [
         vector(0, 0), vector(10, 0),
         vector(0, 10), vector(10, 10),
         vector(0, 20), vector(10, 20)
@@ -52,7 +51,7 @@ describe("shuffler", () => {
     })
 
     it("noisy", () => {
-      assert.deepEqual(Shuffler.noise(vector(0, 0))(pieces), [
+      assert.deepEqual(shuffler.noise(vector(0, 0))(pieces), [
         vector(0, 0), vector(10, 0),
         vector(0, 10), vector(10, 10),
         vector(0, 20), vector(10, 20)
@@ -60,7 +59,7 @@ describe("shuffler", () => {
     })
 
     it("padder", () => {
-      assert.deepEqual(Shuffler.padder(5, 2, 3)(pieces), [
+      assert.deepEqual(shuffler.padder(5, 2, 3)(pieces), [
         vector(0, 0), vector(15, 0),
         vector(0, 15), vector(15, 15),
         vector(0, 30), vector(15, 30)
@@ -69,10 +68,8 @@ describe("shuffler", () => {
   })
 
   context("Incomplete puzzles", () => {
-    /** @type {Puzzle} */
-    let puzzle;
-    /** @type {Piece[]} */
-    let pieces;
+    let puzzle: Puzzle;
+    let pieces: Piece[];
     before(() => {
       puzzle = new Puzzle();
       pieces = [
@@ -85,7 +82,7 @@ describe("shuffler", () => {
     })
 
     it("line", () => {
-      const result = Shuffler.line(pieces);
+      const result = shuffler.line(pieces);
       assert.deepEqual(result.map(it => it.y), [0, 0, 0, 0])
       assert.deepEqual(result.slice(0, 3).every(it => it.x <= 20), true)
       assert.deepEqual(result[3].x, 30);

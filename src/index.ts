@@ -5,20 +5,20 @@ export { Horizontal, Vertical } from './axis';
 export { Tab, Slot, None } from './insert';
 
 import vector from './vector';
-import Pair = require('./pair');
-import Puzzle = require('./puzzle');
-import Piece = require('./piece');
-import Structure = require('./structure');
-import Canvas = require('./canvas');
-import Manufacturer = require('./manufacturer');
-import Metadata = require('./metadata');
-import SpatialMetadata = require('./spatial-metadata');
-import Shuffler = require('./shuffler');
+import pair from './pair';
+import * as Puzzle from './puzzle';
+import * as  Piece from './piece';
+import * as Structure from './structure';
+import * as Canvas from './canvas';
+const Manufacturer = require('./manufacturer');
+import * as Metadata from './metadata';
+import * as SpatialMetadata from './spatial-metadata';
+import * as shuffler from './shuffler';
 import * as outline from './outline';
-import dragMode = require('./drag-mode');
-import connector = require('./connector');
-import Dummy = require('./dummy-painter');
-import Konva = require('./konva-painter');
+import * as dragMode from './drag-mode';
+import * as connector from './connector';
+const Dummy = require('./dummy-painter');
+const Konva = require('./konva-painter');
 
 const {InsertSequence, ...generators} = require('./sequence');
 
@@ -31,11 +31,11 @@ export {
   Canvas,
   Manufacturer,
   InsertSequence,
-  Pair,
+  pair,
   Metadata,
   SpatialMetadata,
   Structure,
-  Shuffler,
+  shuffler,
   generators,
   outline,
   dragMode,

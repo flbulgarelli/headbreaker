@@ -1,6 +1,5 @@
 import vector from './vector';
-import Piece = require('./piece');
-import Pair = require('./pair');
+import * as Piece from './piece';
 import { PuzzleValidator } from './validator';
 
 interface SpatialMetadata {

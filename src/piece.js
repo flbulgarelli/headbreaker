@@ -1,9 +1,9 @@
-const Pair = require('./pair');
-const {anchor, Anchor} = require('./anchor');
-const {None} = require('./insert')
-const {Connector} = require('./connector')
+const pair = require('./pair').default;
+const { anchor, Anchor } = require('./anchor');
+const { None } = require('./insert')
+const { Connector } = require('./connector')
 const Structure = require('./structure');
-const {itself, orthogonalTransform} = require('./prelude');
+const { itself, orthogonalTransform } = require('./prelude');
 
 /**
  * @callback TranslationListener
@@ -366,7 +366,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   translate(dx, dy, quiet = false) {
-    if (!Pair.isNull(dx, dy)) {
+    if (!pair.isNull(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
       if (!quiet) {
         this.fireTranslate(dx, dy);
@@ -394,7 +394,7 @@ const {itself, orthogonalTransform} = require('./prelude');
    * @param {number} dy
    */
   drag(dx, dy, quiet = false) {
-    if (Pair.isNull(dx, dy)) return;
+    if (pair.isNull(dx, dy)) return;
 
     if (this.dragShouldDisconnect(dx, dy)) {
       this.disconnect();

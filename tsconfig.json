@@ -2,10 +2,15 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "allowJs": true,
-    "target": "es5",
+    "target": "es2016",
     "skipLibCheck": true,
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "moduleResolution": "node",
+    "lib": [
+      "es2016",
+      "dom"
+    ],
   },
   "include": ["./src/**/*"]
 }

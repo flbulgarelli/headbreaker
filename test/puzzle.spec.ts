@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Tab, Slot, PuzzleValidator, Shuffler, connector} = require('../src/index');
+const {Puzzle, Tab, Slot, PuzzleValidator, shuffler, connector} = require('../src/index');
 import vector from '../src/vector';
 
 describe("puzzle", () => {
@@ -86,7 +86,7 @@ describe("puzzle", () => {
     puzzle.autoconnect();
     assert.equal(puzzle.connected, true);
 
-    puzzle.shuffleWith(Shuffler.noop);
+    puzzle.shuffleWith(shuffler.noop);
 
     assert.equal(puzzle.pieces.length, 4);
     assert.equal(puzzle.connected, true);
@@ -95,7 +95,7 @@ describe("puzzle", () => {
   it("connects disconnected puzzle after shuffle", () => {
     assert.equal(puzzle.connected, false);
 
-    puzzle.shuffleWith(Shuffler.noop);
+    puzzle.shuffleWith(shuffler.noop);
 
     assert.equal(puzzle.pieces.length, 4);
     assert.equal(puzzle.connected, true);

@@ -3,10 +3,9 @@ const assert = require('assert');
 import {diameter, vector, Slot, Tab, None, Canvas, painters, generators, Puzzle} from '../src/index';
 
 // @ts-ignore
-var HTMLImageElement = function() {};
+global.HTMLImageElement = function() {};
 // @ts-ignore
-var HTMLCanvasElement = function() {};
-
+global.HTMLCanvasElement = function() {};
 
 describe("Canvas", () => {
   const painter = new painters.Dummy();
