@@ -1,5 +1,5 @@
 const {Anchor} = require('./anchor');
-import * as Piece from './piece';
+import Piece from './piece';
 import {Vector} from './vector';
 
 export type Shuffler = (pieces: Piece[]) => Vector[];

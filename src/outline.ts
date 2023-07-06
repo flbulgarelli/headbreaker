@@ -1,4 +1,4 @@
-import * as Piece from './piece';
+import Piece from './piece';
 import vector from './vector';
 import { Vector } from './vector';
 import { Insert } from './insert';

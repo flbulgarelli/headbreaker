@@ -1,5 +1,5 @@
 const Canvas = require('./canvas');
-const Piece = require('./piece');
+const Piece = require('./piece').default;
 const Painter = require('./painter');
 
 /**

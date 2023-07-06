@@ -1,9 +1,9 @@
 const {pair} = require('./pair');
-const Piece = require('./piece');
+const Piece = require('./piece').default;
 const Puzzle = require('./puzzle');
-const Manufacturer = require('./manufacturer');
+const Manufacturer = require('./manufacturer').default;
 const {twoAndTwo} = require('./sequence');
-const Structure = require('./structure');
+const structure = require('./structure').default;
 const ImageMetadata = require('./image-metadata');
 const vector = require('./vector').default;
 const Metadata = require('./metadata');
@@ -718,7 +718,7 @@ class Canvas {
    */
   _newPiece(structureLike, size, metadata) {
     let piece = this.puzzle.newPiece(
-      Structure.asStructure(structureLike),
+      structure.asStructure(structureLike),
       { centralAnchor: vector(metadata.currentPosition.x, metadata.currentPosition.y), metadata, size });
     return piece;
   }

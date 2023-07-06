@@ -1,10 +1,4 @@
-/**
- * A connection element of a piece
- *
- * @typedef {(Tab|Slot|None)} Insert
- */
-
-const Tab = {
+export const Tab = {
   isSlot: () => false,
   isTab:  () => true,
   isNone:  () => false,
@@ -14,7 +8,7 @@ const Tab = {
   serialize: () => 'T'
 }
 
-const Slot = {
+export const Slot = {
   isSlot: () => true,
   isTab:  () => false,
   isNone:  () => false,
@@ -24,7 +18,7 @@ const Slot = {
   serialize: () => 'S'
 }
 
-const None = {
+export const None = {
   isSlot: () => false,
   isTab:  () => false,
   isNone:  () => true,
@@ -34,10 +28,4 @@ const None = {
   serialize: () => '-'
 }
 
-module.exports = {
-  None,
-  Slot,
-  Tab
-};
-
-
+export type Insert = (typeof Tab | typeof Slot | typeof None);

@@ -1,51 +1,62 @@
-const pair = require('./pair').default;
-const { anchor, Anchor } = require('./anchor');
-const { None } = require('./insert')
-const { Connector } = require('./connector')
-const Structure = require('./structure');
-const { itself, orthogonalTransform } = require('./prelude');
+import pair from './pair';
 
-/**
- * @callback TranslationListener
- * @param {Piece} piece
- * @param {number} dx
- * @param {number} dy
- */
+import structure, { Structure } from './structure';
+import { Orthogonal } from './prelude';
+import { anchor, Anchor } from './anchor';
+import { Insert, None } from './insert';
+import { Connector } from './connector';
+import { itself, orthogonalTransform } from './prelude';
+import { Vector } from './vector';
+import { radius, Size } from './size';
 
-/**
- * @callback ConnectionListener
- * @param {Piece} piece
- * @param {Piece} target
- */
+import * as Puzzle from './puzzle';
 
- /**
-  * @typedef {Object} PieceConfig
-  * @property {import('./vector').Vector} [centralAnchor]
-  * @property {import('./size').Size} [size]
-  * @property {any} [metadata]
-  */
+export type TranslationListener = (piece: Piece, dx: number, dy: number) => void
 
-/**
- * A piece primitive representation that can be easily stringified, exchanged and persisted
- *
- * @typedef {object} PieceDump
- * @property {import('./vector').Vector} centralAnchor
- * @property {import('./size').Size} [size]
- * @property {any} metadata
- * @property {import('./prelude').Orthogonal<object>} [connections]
- * @property {string} structure
- */
+export type ConnectionListener = (piece: Piece, target: Piece) => void
+
+export interface PieceConfig {
+  centralAnchor?: Vector;
+  size?: Size;
+  metadata?: any;
+}
+
+export interface PieceDump {
+  centralAnchor: Vector;
+  size?: Size;
+  metadata: any;
+  connections?: Orthogonal<object>;
+  structure: string;
+}
 
  /**
   * A jigsaw piece
   */
- class Piece {
+export default class Piece {
+  up: Insert;
+  down: Insert;
+  left: Insert;
+  right: Insert;
+  metadata: any;
+  centralAnchor?: Anchor;
+  _size?: Size;
+  _horizontalConnector?: Connector;
+  _verticalConnector?: Connector;
+
+  translateListeners: TranslationListener[];
+  connectListeners: ConnectionListener[];
+  disconnectListeners: ConnectionListener[];
+  puzzle?: Puzzle;
+  rightConnection?: Piece;
+  downConnection?: Piece;
+  leftConnection?: Piece;
+  upConnection?: Piece;
 
    /**
-    * @param {import('./structure').Structure} [structure]
+    * @param {Structure} [structure]
     * @param {PieceConfig} [config]
     */
-   constructor({up = None, down = None, left = None, right = None} = {}, config = {}) {
+   constructor({up = None, down = None, left = None, right = None}: Structure = {}, config: PieceConfig = {}) {
       this.up = up;
       this.down = down;
       this.left = left;
@@ -54,17 +65,17 @@ const { itself, orthogonalTransform } = require('./prelude');
       this.metadata = {};
       /** @type {Anchor} */
       this.centralAnchor = null;
-      /** @type {import('./size').Size} */
+      /** @type {Size} */
       this._size = null;
 
       /**
        * @private
-       * @type {import('./connector').Connector}
+       * @type {Connector}
        **/
       this._horizontalConnector = null;
       /**
        * @private
-       * @type {import('./connector').Connector}
+       * @type {Connector}
        **/
       this._verticalConnector = null;
 
@@ -87,7 +98,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    *
    * @param {PieceConfig} config
    */
-  configure(config) {
+  configure(config: PieceConfig) {
     if (config.centralAnchor) {
       this.centerAround(Anchor.import(config.centralAnchor));
     }
@@ -107,7 +118,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    *
    * @param {object} metadata
    */
-  annotate(metadata) {
+  annotate(metadata: object) {
     Object.assign(this.metadata, metadata);
   }
 
@@ -119,14 +130,14 @@ const { itself, orthogonalTransform } = require('./prelude');
    *
    * @param {object} metadata
    */
-  reannotate(metadata) {
+  reannotate(metadata: object) {
     this.metadata = metadata;
   }
 
   /**
    * @param {import('./puzzle')} puzzle
    */
-  belongTo(puzzle) {
+  belongTo(puzzle: import('./puzzle')) {
     this.puzzle = puzzle;
   }
 
@@ -164,21 +175,21 @@ const { itself, orthogonalTransform } = require('./prelude');
   /**
    * @param {TranslationListener} f the callback
    */
-  onTranslate(f) {
+  onTranslate(f: TranslationListener) {
     this.translateListeners.push(f);
   }
 
   /**
    * @param {ConnectionListener} f the callback
    */
-  onConnect(f) {
+  onConnect(f: ConnectionListener) {
     this.connectListeners.push(f);
   }
 
   /**
    * @param {ConnectionListener} f the callback
    */
-  onDisconnect(f) {
+  onDisconnect(f: ConnectionListener) {
     this.disconnectListeners.push(f);
   }
 
@@ -186,21 +197,21 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {number} dx
    * @param {number} dy
    */
-  fireTranslate(dx, dy) {
+  fireTranslate(dx: number, dy: number) {
     this.translateListeners.forEach(it => it(this, dx, dy));
   }
 
   /**
    * @param {Piece} other
    */
-  fireConnect(other) {
+  fireConnect(other: Piece) {
     this.connectListeners.forEach(it => it(this, other));
   }
 
     /**
    * @param {Piece[]} others
    */
-  fireDisconnect(others) {
+  fireDisconnect(others: Piece[]) {
     others.forEach(other => {
       this.disconnectListeners.forEach(it => it(this, other));
     });
@@ -211,14 +222,14 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @param {boolean} [back]
    */
-  connectVerticallyWith(other, back = false) {
+  connectVerticallyWith(other: Piece, back: boolean = false) {
     this.verticalConnector.connectWith(this, other, this.proximity, back);
   }
 
   /**
    * @param {Piece} other
    */
-  attractVertically(other, back = false) {
+  attractVertically(other: Piece, back = false) {
     this.verticalConnector.attract(this, other, back);
   }
 
@@ -226,14 +237,14 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @param {boolean} [back]
    */
-  connectHorizontallyWith(other, back = false) {
+  connectHorizontallyWith(other: Piece, back: boolean = false) {
     this.horizontalConnector.connectWith(this, other, this.proximity, back);
   }
 
   /**
    * @param {Piece} other
    */
-  attractHorizontally(other, back = false) {
+  attractHorizontally(other: Piece, back = false) {
     this.horizontalConnector.attract(this, other, back);
   }
 
@@ -241,7 +252,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @param {boolean} [back]
    */
-  tryConnectWith(other, back = false) {
+  tryConnectWith(other: Piece, back: boolean = false) {
     this.tryConnectHorizontallyWith(other, back);
     this.tryConnectVerticallyWith(other, back);
   }
@@ -251,7 +262,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @param {boolean} [back]
    */
-  tryConnectHorizontallyWith(other, back = false) {
+  tryConnectHorizontallyWith(other: Piece, back: boolean = false) {
     if (this.canConnectHorizontallyWith(other)) {
       this.connectHorizontallyWith(other, back);
     }
@@ -261,7 +272,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @param {boolean} [back]
    */
-  tryConnectVerticallyWith(other, back = false) {
+  tryConnectVerticallyWith(other: Piece, back: boolean = false) {
     if (this.canConnectVerticallyWith(other)) {
       this.connectVerticallyWith(other, back);
     }
@@ -303,7 +314,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    *
    * @param {Anchor} anchor
    */
-  centerAround(anchor) {
+  centerAround(anchor: Anchor) {
     if (this.centralAnchor) {
       throw new Error("this pieces has already being centered. Use recenterAround instead");
     }
@@ -318,7 +329,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {number} x
    * @param {number} y
    */
-  locateAt(x, y) {
+  locateAt(x: number, y: number) {
     this.centerAround(anchor(x, y));
   }
 
@@ -329,7 +340,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {number} y
    * @return {boolean}
    */
-  isAt(x, y) {
+  isAt(x: number, y: number): boolean {
     return this.centralAnchor.isAt(x, y);
   }
 
@@ -340,7 +351,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Anchor} anchor the new central anchor
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
-  recenterAround(anchor, quiet = false) {
+  recenterAround(anchor: Anchor, quiet: boolean = false) {
     const [dx, dy] = anchor.diff(this.centralAnchor);
     this.translate(dx, dy, quiet);
   }
@@ -354,7 +365,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {number} y the final y position
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
-  relocateTo(x, y, quiet = false) {
+  relocateTo(x: number, y: number, quiet: boolean = false) {
     this.recenterAround(anchor(x, y), quiet);
   }
 
@@ -365,7 +376,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {number} dy the y distance
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
-  translate(dx, dy, quiet = false) {
+  translate(dx: number, dy: number, quiet: boolean = false) {
     if (!pair.isNull(dx, dy)) {
       this.centralAnchor.translate(dx, dy);
       if (!quiet) {
@@ -381,7 +392,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {boolean} [quiet]
    * @param {Piece[]} [pushedPieces]
    */
-  push(dx, dy, quiet = false, pushedPieces = [this]) {
+  push(dx: number, dy: number, quiet: boolean = false, pushedPieces: Piece[] = [this]) {
     this.translate(dx, dy, quiet);
 
     const stationaries = this.presentConnections.filter(it => pushedPieces.indexOf(it) === -1);
@@ -393,7 +404,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {number} dx
    * @param {number} dy
    */
-  drag(dx, dy, quiet = false) {
+  drag(dx: number, dy: number, quiet = false) {
     if (pair.isNull(dx, dy)) return;
 
     if (this.dragShouldDisconnect(dx, dy)) {
@@ -414,7 +425,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    *
    * @see {@link Puzzle#dragShouldDisconnect}
    **/
-  dragShouldDisconnect(dx, dy) {
+  dragShouldDisconnect(dx: number, dy: number) {
     return this.puzzle.dragShouldDisconnect(this, dx, dy);
   }
 
@@ -432,7 +443,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @returns {boolean}
    */
-  canConnectHorizontallyWith(other) {
+  canConnectHorizontallyWith(other: Piece): boolean {
     return this.horizontalConnector.canConnectWith(this, other, this.proximity);
   }
 
@@ -441,7 +452,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @returns {boolean}
    */
-  canConnectVerticallyWith(other) {
+  canConnectVerticallyWith(other: Piece): boolean {
     return this.verticalConnector.canConnectWith(this, other, this.proximity);
   }
 
@@ -450,7 +461,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @returns {boolean}
    */
-  verticallyCloseTo(other) {
+  verticallyCloseTo(other: Piece): boolean {
     return this.verticalConnector.closeTo(this, other, this.proximity);
   }
 
@@ -459,7 +470,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @returns {boolean}
    */
-  horizontallyCloseTo(other) {
+  horizontallyCloseTo(other: Piece): boolean {
     return this.horizontalConnector.closeTo(this, other, this.proximity);
   }
 
@@ -469,7 +480,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @returns {boolean}
    */
-  verticallyMatch(other) {
+  verticallyMatch(other: Piece): boolean {
     return this.verticalConnector.match(this, other);
   }
 
@@ -478,7 +489,7 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {Piece} other
    * @returns {boolean}
    */
-  horizontallyMatch(other) {
+  horizontallyMatch(other: Piece): boolean {
     return this.horizontalConnector.match(this, other);
   }
 
@@ -518,14 +529,14 @@ const { itself, orthogonalTransform } = require('./prelude');
    * Defines this piece's own dimension, overriding puzzle's
    * default dimension
    *
-   * @param {import('./size').Size} size
+   * @param {Size} size
    */
-  resize(size) {
+  resize(size: Size) {
     this._size = size;
   }
 
   /**
-   * @type {import('./vector').Vector}
+   * @type {Vector}
    */
   get radius() {
     return this.size.radius;
@@ -534,7 +545,7 @@ const { itself, orthogonalTransform } = require('./prelude');
   /**
    * The double of the radius
    *
-   * @type {import('./vector').Vector}
+   * @type {Vector}
    */
   get diameter() {
     return this.size.diameter;
@@ -561,16 +572,16 @@ const { itself, orthogonalTransform } = require('./prelude');
   }
 
   /**
-   * @returns {import('./connector').Connector}
+   * @returns {Connector}
    */
-  get horizontalConnector() {
+  get horizontalConnector(): Connector {
     return this.getConnector('horizontal');
   }
 
   /**
-   * @returns {import('./connector').Connector}
+   * @returns {Connector}
    */
-  get verticalConnector() {
+  get verticalConnector(): Connector {
     return this.getConnector('vertical');
   }
 
@@ -579,9 +590,9 @@ const { itself, orthogonalTransform } = require('./prelude');
    * it if necessary.
    *
    * @param {"vertical" | "horizontal"} kind
-   * @returns {import('./connector').Connector}
+   * @returns {Connector}
    */
-  getConnector(kind) {
+  getConnector(kind: "vertical" | "horizontal"): Connector {
     const connector = kind + "Connector";
     const _connector = "_" + connector;
     if (this.puzzle && !this[_connector]) return this.puzzle[connector];
@@ -599,14 +610,14 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {boolean} [options.compact]
    * @returns {PieceDump}
    */
-  export({compact = false} = {}) {
-    const base = {
+  export({compact = false}: { compact?: boolean; } = {}): PieceDump {
+    const base: PieceDump = {
       centralAnchor: this.centralAnchor && this.centralAnchor.export(),
-      structure: Structure.serialize(this),
+      structure: structure.serialize(this),
       metadata: this.metadata
     };
     if (this._size) {
-      base.size = {radius: this._size.radius };
+      base.size = radius(this._size.radius);
     }
     return compact ? base : Object.assign(base, {
       connections: orthogonalTransform(this.connections, it => ({id: it.id}))
@@ -620,11 +631,9 @@ const { itself, orthogonalTransform } = require('./prelude');
    * @param {PieceDump} dump
    * @returns {Piece}
    */
-  static import(dump) {
+  static import(dump: PieceDump): Piece {
     return new Piece(
-      Structure.deserialize(dump.structure),
+      structure.deserialize(dump.structure),
       {centralAnchor: dump.centralAnchor, metadata: dump.metadata, size: dump.size});
   }
 }
-
-module.exports = Piece;

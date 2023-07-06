@@ -1,5 +1,5 @@
 import * as Puzzle from './puzzle';
-import * as Piece from './piece';
+import Piece from './piece';
 import pair, { Pair } from './pair';
 
 /**

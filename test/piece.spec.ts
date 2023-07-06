@@ -1049,7 +1049,7 @@ describe("piece", () => {
         structure: "--TS",
         connections: {right:null, down:null, left:null, up:null},
         metadata: {foo: 2},
-        size: {radius: {x: 4, y: 4}}
+        size: {radius: {x: 4, y: 4}, diameter: {x: 8, y: 8}}
       });
     })
 

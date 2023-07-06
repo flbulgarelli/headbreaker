@@ -1,15 +1,24 @@
-const Puzzle = require('./puzzle');
-const Piece = require('./piece');
-const {Anchor} = require('./anchor');
-const {anchor} = require('./anchor');
-const {fixed, InsertSequence} = require('./sequence')
-const Metadata = require('./metadata');
+import Piece from './piece';
+
+import * as Puzzle from './puzzle';
+import * as Metadata from './metadata';
+
+import { anchor, Anchor } from './anchor';
+import { fixed, InsertSequence, InsertsGenerator } from './sequence';
+import { Insert } from './insert';
 
 /**
  * A manufacturer allows to create rectangular
  * puzzles by automatically generating inserts
  */
-class Manufacturer {
+export default class Manufacturer {
+  insertsGenerator: (_n: number) => Insert;
+  metadata: any[];
+  headAnchor: Anchor;
+  structure: any;
+  width: number;
+  height: number;
+
   constructor() {
     this.insertsGenerator = fixed;
     this.metadata = [];
@@ -22,14 +31,14 @@ class Manufacturer {
    *
    * @param {object[]} metadata list of metadata that will be attached to each generated piece
    */
-  withMetadata(metadata) {
+  withMetadata(metadata: object[]) {
     this.metadata = metadata;
   }
 
   /**
-   * @param {import('./sequence').InsertsGenerator} generator
+   * @param {InsertsGenerator} generator
    */
-  withInsertsGenerator(generator) {
+  withInsertsGenerator(generator: InsertsGenerator) {
     this.insertsGenerator = generator || this.insertsGenerator;
   }
 
@@ -39,7 +48,7 @@ class Manufacturer {
    *
    * @param {Anchor} anchor
    */
-  withHeadAt(anchor) {
+  withHeadAt(anchor: Anchor) {
     this.headAnchor = anchor;
   }
 
@@ -48,7 +57,7 @@ class Manufacturer {
    *
    * @param {import('./puzzle').Settings} structure
    */
-  withStructure(structure) {
+  withStructure(structure: import('./puzzle').Settings) {
     this.structure = structure
   }
 
@@ -57,7 +66,7 @@ class Manufacturer {
    * @param {number} width
    * @param {number} height
    */
-  withDimensions(width, height) {
+  withDimensions(width: number, height: number) {
     this.width = width;
     this.height = height;
   }
@@ -65,7 +74,7 @@ class Manufacturer {
    /**
    * @returns {Puzzle}
    */
-  build() {
+  build(): Puzzle {
     const puzzle = new Puzzle(this.structure);
     const positioner = new Positioner(puzzle, this.headAnchor);
 
@@ -89,7 +98,7 @@ class Manufacturer {
   /**
    * @param {Piece[]} pieces
    */
-  _annotateAll(pieces) {
+  _annotateAll(pieces: Piece[]) {
     pieces.forEach((piece, index) => this._annotate(piece, index));
   }
 
@@ -97,7 +106,7 @@ class Manufacturer {
    * @param {Piece} piece
    * @param {number} index
    */
-  _annotate(piece, index) {
+  _annotate(piece: Piece, index: number) {
     const baseMetadata = this.metadata[index];
     const metadata = baseMetadata ? Metadata.copy(baseMetadata) : {};
     metadata.id = metadata.id || String(index + 1);
@@ -113,7 +122,7 @@ class Manufacturer {
    * @param {InsertSequence} horizontalSequence
    * @param {InsertSequence} verticalSequence
    */
-  _buildPiece(puzzle, horizontalSequence, verticalSequence) {
+  _buildPiece(puzzle: Puzzle, horizontalSequence: InsertSequence, verticalSequence: InsertSequence) {
     return puzzle.newPiece({
       left: horizontalSequence.previousComplement(),
       up: verticalSequence.previousComplement(),
@@ -124,12 +133,14 @@ class Manufacturer {
 }
 
 class Positioner {
+  puzzle: any;
+  offset: any;
   /**
    *
    * @param {Puzzle} puzzle
    * @param {Anchor} headAnchor
    */
-  constructor(puzzle, headAnchor) {
+  constructor(puzzle: Puzzle, headAnchor: Anchor) {
     this.puzzle = puzzle;
     this.initializeOffset(headAnchor);
   }
@@ -137,7 +148,7 @@ class Positioner {
   /**
    * @param {Anchor} headAnchor
    */
-  initializeOffset(headAnchor) {
+  initializeOffset(headAnchor: Anchor) {
     if (headAnchor) {
       /** @type {import('./vector').Vector} */
       this.offset = headAnchor.asVector();
@@ -155,11 +166,9 @@ class Positioner {
    * @param {number} x
    * @param {number} y
    */
-  naturalAnchor(x, y) {
+  naturalAnchor(x: number, y: number) {
     return anchor(
       x * this.pieceDiameter.x + this.offset.x,
       y * this.pieceDiameter.y + this.offset.y);
   }
 }
-
-module.exports = Manufacturer;

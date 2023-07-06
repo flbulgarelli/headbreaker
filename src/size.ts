@@ -1,6 +1,6 @@
 import vector, { Vector } from './vector';
 
-interface Size {
+export interface Size {
   radius: Vector;
   diameter: Vector;
 }

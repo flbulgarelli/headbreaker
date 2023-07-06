@@ -1,32 +1,24 @@
-const connector = require('./connector')
+import Piece from "./piece";
 
-/**
- * @typedef {TryDisconnection|ForceDisconnection|ForceConnection} DragMode
- */
+export type DragMode = { dragShouldDisconnect: (piece: Piece, dx: number, dy: number) => boolean };
 
-const TryDisconnection = {
+export const TryDisconnection: DragMode = {
 
   dragShouldDisconnect(piece, dx, dy) {
     return piece.horizontalConnector.openMovement(piece, dx) && piece.verticalConnector.openMovement(piece, dy);
   }
 }
 
-const ForceDisconnection = {
+export const ForceDisconnection: DragMode = {
 
   dragShouldDisconnect(_piece, _dx, _dy) {
     return true;
   }
 }
 
-const ForceConnection = {
+export const ForceConnection: DragMode = {
 
   dragShouldDisconnect(_piece, _dx, _dy) {
     return false;
   }
-}
-
-module.exports = {
-  TryDisconnection,
-  ForceDisconnection,
-  ForceConnection,
 }

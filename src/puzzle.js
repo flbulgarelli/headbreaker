@@ -1,5 +1,5 @@
 const {Anchor} = require('./anchor');
-const Piece = require('./piece');
+const Piece = require('./piece').default;
 const {NullValidator} = require('./validator');
 const {vector, ...Vector} = require('./vector')
 const {radius} = require('./size')

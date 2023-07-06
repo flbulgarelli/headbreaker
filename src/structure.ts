@@ -1,13 +1,12 @@
-const {Slot, Tab, None} = require('./insert');
-const {orthogonalMap} = require('./prelude');
+import { Slot, Tab, None, Insert } from './insert';
+import { orthogonalMap } from './prelude';
 
-/**
- * @typedef {object} Structure
- * @property {import('./insert').Insert} [up]
- * @property {import('./insert').Insert} [left]
- * @property {import('./insert').Insert} [down]
- * @property {import('./insert').Insert} [right]
- */
+export interface Structure {
+  up?: Insert;
+  left?: Insert;
+  down?: Insert;
+  right?: Insert;
+}
 
 /**
  * @module Structure
@@ -16,9 +15,9 @@ const {orthogonalMap} = require('./prelude');
 /**
  * @private
  * @param {string} insert
- * @returns {import('./insert').Insert}
+ * @returns {Insert}
  */
-function parseInsert(insert) {
+function parseInsert(insert: string): Insert {
   return insert === 'S' ? Slot : insert === 'T' ? Tab : None;
 }
 
@@ -27,7 +26,7 @@ function parseInsert(insert) {
  * @param {Structure} structure
  * @returns {string}
  */
-function serialize(structure) {
+function serialize(structure: Structure): string {
   return orthogonalMap([structure.right, structure.down, structure.left, structure.up], it => it.serialize(), None).join('');
 }
 
@@ -36,7 +35,7 @@ function serialize(structure) {
  * @param {string} string
  * @returns {Structure}
  */
-function deserialize(string) {
+function deserialize(string: string): Structure {
 
   if (string.length !== 4) {
     throw new Error("structure string must be 4-chars long");
@@ -50,25 +49,21 @@ function deserialize(string) {
   };
 }
 
-/**
- * @typedef {Structure|string} StructureLike
- */
+export type StructureLike = Structure | string;
 
 /**
  * @param {StructureLike} structureLike
  * @returns {Structure}
  */
-function asStructure(structureLike) {
+function asStructure(structureLike: StructureLike): Structure {
   if (typeof(structureLike) === 'string') {
     return deserialize(structureLike);
   }
   return structureLike;
 }
 
-module.exports = {
+export default {
   serialize,
   deserialize,
-  asStructure
-};
-
-
+  asStructure,
+}

@@ -14,7 +14,7 @@ try {
 
 const Canvas = require('./canvas');
 const Outline = require('./outline');
-const Piece = require('./piece');
+const Piece = require('./piece').default;
 const Pair = require('./pair');
 const {vector, ...Vector} = require('./vector');
 const Painter = require('./painter');

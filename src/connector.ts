@@ -1,31 +1,37 @@
 /**
- * @private
  * @module Connector
  */
-const {pivot} = require('./prelude');
+import Piece from './piece';
+import { pivot } from './prelude';
 
-/**
- * @typedef {(one: import('./piece'), other: import('./piece')) => boolean} ConnectionRequirement
- */
+type ConnectionRequirement = (one: Piece, other: Piece) => boolean;
 
 /**
  * @type {ConnectionRequirement}
  */
-function noConnectionRequirements(_one, _other) {
+export function noConnectionRequirements(_one, _other) {
   return true;
 }
 
 /**
  * @private
  */
-class Connector {
+export class Connector {
+  axis: string;
+  forward: string;
+  backward: string;
+  forwardAnchor: string;
+  backwardAnchor: string;
+  forwardConnection: string;
+  backwardConnection: string;
+  requirement: ConnectionRequirement;
 
   /**
    * @param {"x" | "y"} axis
    * @param {"right" | "down"} forward
    * @param {"left" | "up"} backward
    */
-  constructor(axis, forward, backward) {
+  constructor(axis: "x" | "y", forward: "right" | "down", backward: "left" | "up") {
 
     this.axis = axis;
 
@@ -45,7 +51,7 @@ class Connector {
   /**
    * @param {boolean} [back]
    */
-  attract(one, other, back = false) {
+  attract(one, other, back: boolean = false) {
     const [iron, magnet] = pivot(one, other, back);
     let dx, dy;
     if (magnet.centralAnchor[this.axis] > iron.centralAnchor[this.axis]) {
@@ -61,7 +67,7 @@ class Connector {
    * @param {number} delta
    * @returns {boolean}
    */
-  openMovement(one, delta) {
+  openMovement(one, delta: number): boolean {
     return (delta > 0 && !one[this.forwardConnection]) || (delta < 0 && !one[this.backwardConnection]) || delta == 0;
   }
 
@@ -69,7 +75,7 @@ class Connector {
    * @param {number} proximity
    * @returns {boolean}
    */
-  canConnectWith(one, other, proximity) {
+  canConnectWith(one, other, proximity: number): boolean {
     return this.closeTo(one, other, proximity) && this.match(one, other) && this.requirement(one, other);
   }
 
@@ -78,24 +84,24 @@ class Connector {
    * @param {number} proximity
    * @returns {boolean}
    */
-  closeTo(one, other, proximity) {
+  closeTo(one, other, proximity: number): boolean {
     return one[this.forwardAnchor].closeTo(other[this.backwardAnchor], proximity);
   }
 
   /**
    * @returns {boolean}
    */
-  match(one, other) {
+  match(one, other): boolean {
     return one[this.forward].match(other[this.backward]);
   }
 
   /**
-   * @param {import('./piece')} one
+   * @param {Piece} one
    * @param {*} other
    * @param {number} proximity
    * @param {boolean} back
    */
-  connectWith(one, other, proximity, back) {
+  connectWith(one: Piece, other: any, proximity: number, back: boolean) {
     if (!this.canConnectWith(one, other, proximity)) {
       throw new Error(`can not connect ${this.forward}!`);
     }
@@ -110,7 +116,7 @@ class Connector {
   /**
    * @param {ConnectionRequirement} requirement
    */
-  attachRequirement(requirement) {
+  attachRequirement(requirement: ConnectionRequirement) {
     this.requirement = requirement;
   }
 
@@ -119,7 +125,7 @@ class Connector {
    *
    * @returns {Connector}
    */
-  static horizontal() {
+  static horizontal(): Connector {
     return new Connector("x", "right", "left")
   }
 
@@ -128,12 +134,7 @@ class Connector {
    *
    * @returns {Connector}
    */
-  static vertical() {
+  static vertical(): Connector {
     return new Connector("y", "down", "up")
   }
 }
-
-module.exports = {
-  Connector,
-  noConnectionRequirements
-};

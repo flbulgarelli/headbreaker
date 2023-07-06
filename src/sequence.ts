@@ -4,7 +4,7 @@ import { Tab, Slot, None, Insert } from './insert';
 /**
  * A function for generating {@link Insert}s sequentially
  */
-type InsertsGenerator = (index: number) => Insert
+export type InsertsGenerator = (index: number) => Insert
 
 /**
  * This module exports several {@link Insert}s sequences strategies: {@link fixed}, {@link flipflop}, {@link twoAndTwo} and {@link random}
