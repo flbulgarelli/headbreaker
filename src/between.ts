@@ -9,8 +9,6 @@
  * @param {number} max
  * @returns {boolean}
  */
-function between(value, min, max) {
+export default function between(value: number, min: number, max: number): boolean {
   return min <= value && value <= max;
 }
-
-module.exports = between;

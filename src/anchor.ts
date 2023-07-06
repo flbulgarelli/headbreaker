@@ -1,18 +1,20 @@
-const between = require('./between');
-const Pair = require('./pair')
-const {vector} = require('./vector')
+import between from './between';
+import Pair = require('./pair');
+import { vector, Vector } from './vector';
 
 /**
  * An Anchor is a mutable 2D point that
  * is used to locate pieces and pieces inserts
  */
-class Anchor {
+export class Anchor {
+  x: number;
+  y: number;
   /**
    *
    * @param {number} x
    * @param {number} y
    */
-  constructor(x, y) {
+  constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
   }
@@ -21,7 +23,7 @@ class Anchor {
    * @param {Anchor} other
    * @returns {boolean}
    */
-  equal(other) {
+  equal(other: Anchor): boolean {
     return this.isAt(other.x, other.y);
   }
 
@@ -30,7 +32,7 @@ class Anchor {
    * @param {number} y
    * @returns {boolean}
    */
-  isAt(x, y) {
+  isAt(x: number, y: number): boolean {
     return Pair.equal(this.x, this.y, x, y);
   }
 
@@ -42,7 +44,7 @@ class Anchor {
    * @param {number} dy
    * @returns {Anchor}
    */
-  translated(dx, dy) {
+  translated(dx: number, dy: number): Anchor {
     return this.copy().translate(dx, dy);
   }
 
@@ -52,7 +54,7 @@ class Anchor {
    * @param {number} dx
    * @param {number} dy
    */
-  translate(dx, dy) {
+  translate(dx: number, dy: number) {
     this.x += dx;
     this.y += dy;
     return this;
@@ -65,14 +67,14 @@ class Anchor {
    * @param {number} tolerance the max distance within its radius is considered to be "close"
    * @returns {boolean}
    */
-  closeTo(other, tolerance) {
+  closeTo(other: Anchor, tolerance: number): boolean {
     return between(this.x, other.x-tolerance, other.x + tolerance) && between(this.y, other.y-tolerance, other.y + tolerance)
   }
 
   /**
    * @returns {Anchor}
    */
-  copy() {
+  copy(): Anchor {
     return new Anchor(this.x, this.y);
   }
 
@@ -82,7 +84,7 @@ class Anchor {
    * @param {Anchor} other
    * @returns {import('./pair').Pair}
    */
-  diff(other) {
+  diff(other: Anchor): import('./pair').Pair {
     return Pair.diff(this.x, this.y, other.x, other.y)
   }
 
@@ -91,23 +93,23 @@ class Anchor {
    *
    * @returns {import('./pair').Pair}
    */
-  asPair() {
+  asPair(): import('./pair').Pair {
     return [this.x, this.y];
   }
 
   /**
    * Converts this anchor into a vector
    *
-   * @returns {import('./vector').Vector}
+   * @returns {Vector}
    */
-  asVector() {
+  asVector(): Vector {
     return vector(this.x, this.y);
   }
 
   /**
-   * @returns {import('./vector').Vector}
+   * @returns {Vector}
    */
-  export() {
+  export(): Vector {
     return this.asVector();
   }
 
@@ -116,16 +118,16 @@ class Anchor {
    * @param {number} maxY
    * @returns {Anchor}
    */
-  static atRandom(maxX, maxY) {
+  static atRandom(maxX: number, maxY: number): Anchor {
     return new Anchor(Math.random() * maxX, Math.random() * maxY);
   }
 
   /**
    *
-   * @param {import('./vector').Vector} vector
+   * @param {Vector} vector
    * @returns {Anchor}
    */
-  static import(vector) {
+  static import(vector: Vector): Anchor {
     return anchor(vector.x, vector.y);
   }
 }
@@ -137,11 +139,6 @@ class Anchor {
  * @param {number} y
  * @returns {Anchor}
  */
-function anchor(x, y) {
+export function anchor(x: number, y: number): Anchor {
   return new Anchor(x, y);
-}
-
-module.exports = {
-  anchor,
-  Anchor
 }

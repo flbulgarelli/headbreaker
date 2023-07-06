@@ -1,17 +1,15 @@
-const Vector = require('./vector');
+import Vector = require('./vector');
 
-/**
- * @typedef {Object} Size
- * @property {import('./vector').Vector} radius
- * @property {import('./vector').Vector} diameter
- **/
-
+interface Size {
+  radius: import('./vector').Vector;
+  diameter: import('./vector').Vector;
+}
 
 /**
  * @param {import('./vector').Vector|number} value
  * @returns {Size}
  */
-function radius(value) {
+export function radius(value: import('./vector').Vector | number): Size {
   const vector = Vector.cast(value)
   return {
     radius: vector,
@@ -23,15 +21,10 @@ function radius(value) {
  * @param {import('./vector').Vector|number} value
  * @returns {Size}
  */
-function diameter(value) {
+export function diameter(value: import('./vector').Vector | number): Size {
   const vector = Vector.cast(value)
   return {
     radius: Vector.multiply(vector, 0.5),
     diameter: vector
   };
-}
-
-module.exports = {
-  radius,
-  diameter
 }

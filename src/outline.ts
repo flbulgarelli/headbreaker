@@ -65,6 +65,12 @@ class Squared {
 }
 
 class Rounded {
+  bezelize: boolean;
+  bezelDepth: number;
+  insertDepth: number;
+  borderLength: number;
+
+  referenceInsertAxis: any;
   constructor({
     bezelize = false,
     bezelDepth = 2/5,
@@ -186,7 +192,7 @@ class Rounded {
   }
 }
 
-module.exports = {
+export default {
   Classic: new Squared(),
   Squared,
   Rounded

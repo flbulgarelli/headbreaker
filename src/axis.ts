@@ -1,15 +1,17 @@
 
 
+import { Vector } from "./vector";
+
 /**
  * @typedef {Vertical|Horizontal} Axis
  */
 
-const Vertical = {
+export const Vertical = {
   /**
-   * @param {import("./vector").Vector} vector
+   * @param {Vector} vector
    * @returns {number}
    */
-  atVector(vector) {
+  atVector(vector: Vector): number {
     return vector.y
   },
 
@@ -17,17 +19,17 @@ const Vertical = {
    * @param {HTMLImageElement|HTMLCanvasElement} image
    * @returns {number}
    */
-  atDimension(image) {
+  atDimension(image: HTMLImageElement | HTMLCanvasElement): number {
     return image.height;
   }
 }
 
-const Horizontal = {
+export const Horizontal = {
   /**
-   * @param {import("./vector").Vector} vector
+   * @param {Vector} vector
    * @returns {number}
    */
-  atVector(vector) {
+  atVector(vector: Vector): number {
     return vector.x
   },
 
@@ -35,12 +37,7 @@ const Horizontal = {
    * @param {HTMLImageElement|HTMLCanvasElement} image
    * @returns {number}
    */
-  atDimension(image) {
+  atDimension(image: HTMLImageElement | HTMLCanvasElement): number {
     return image.width;
   }
-}
-
-module.exports = {
-  Vertical,
-  Horizontal
 }

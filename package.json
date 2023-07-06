@@ -33,6 +33,9 @@
     "webpack-merge": "^4.2.1"
   },
   "optionalDependencies": {
-    "konva": "^6.0.0"
+    "konva": "^7.0"
+  },
+  "dependencies": {
+    "typescript": "^5.1.6"
   }
 }

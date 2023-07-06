@@ -5,7 +5,7 @@
 /**
  * Utilities for handling 2D vectors, expressed a two-elements list
  *
- * @module Pair
+ * @module pair
  */
 
 /**

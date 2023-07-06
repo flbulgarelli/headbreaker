@@ -1,20 +1,11 @@
-/**
- * @template A
- * @typedef {Object} Orthogonal
- * @property {A} up
- * @property {A} down
- * @property {A} left
- * @property {A} right
- */
+interface Orthogonal<A> {
+  up: A;
+  down: A;
+  left: A;
+  right: A;
+}
 
-/**
- * @template A
- * @template B
- *
- * @callback Mapper
- * @param {A} value
- * @returns {B}
- */
+type Mapper<A, B> = (a: A) => B
 
 /**
  * Misc generic functions
@@ -29,7 +20,7 @@
  * @param {boolean} [back]
  * @returns {[T, T]}
  */
-function pivot(one, other, back = false) {
+function pivot<T>(one: T, other: T, back: boolean = false): [T, T] {
   return back ? [one, other] : [other, one];
 }
 
@@ -42,7 +33,7 @@ function pivot(one, other, back = false) {
  * @param {A} replacement
  * @returns {B[]}
  */
-function orthogonalMap(values, mapper, replacement = null) {
+function orthogonalMap<A, B>(values: A[], mapper: Mapper<A, B>, replacement: A = null): B[] {
   return values.map(it => {
     const value = it || replacement;
     return value && mapper(value)
@@ -57,7 +48,7 @@ function orthogonalMap(values, mapper, replacement = null) {
  * @param {A} replacement
  * @returns {Orthogonal<B>}
  */
-function orthogonalTransform(values, mapper, replacement = null) {
+function orthogonalTransform<A, B>(values: A[], mapper: Mapper<A, B>, replacement: A = null): Orthogonal<B> {
   const [right, down, left, up] = orthogonalMap(values, mapper, replacement)
   return {right, down, left, up};
 }
@@ -67,7 +58,7 @@ function orthogonalTransform(values, mapper, replacement = null) {
  * @param {A} arg
  * @returns {A}
  */
-function itself(arg) {
+function itself<A>(arg: A): A {
   return arg;
 }
 
