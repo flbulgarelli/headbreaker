@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "types": "dist/headbreaker.d.ts",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha.js",
+    "test": "node_modules/ts-mocha/bin/ts-mocha -p tsconfig.json test/*",
     "all": "npm test && npm run build && npm run types && npm run api",
     "build": "webpack --config webpack.prod.js",
     "api": "node_modules/jsdoc-import-support/jsdoc.js src/ -d docs/api -R README.md; exit 0",
@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/flbulgarelli/headbreaker#readme",
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
     "clean-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^5.5.0",
     "jsdoc-import-support": "^3.6.4",
     "mocha": "^10.0.0",
+    "ts-mocha": "^10.0.0",
     "tsd-jsdoc": "^2.5.0",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
@@ -33,7 +35,7 @@
     "webpack-merge": "^4.2.1"
   },
   "optionalDependencies": {
-    "konva": "^7.0"
+    "konva": "^6.0"
   },
   "dependencies": {
     "typescript": "^5.1.6"
