@@ -1,7 +1,7 @@
 const assert = require('assert');
-const Piece = require('../src/piece');
-const {Classic, Rounded} = require('../src/outline');
-const {None, Tab, Slot} = require('../src/insert');
+import * as Piece from '../src/piece';
+import { Classic, Rounded } from '../src/outline';
+import { None, Tab, Slot } from '../src/insert';
 
 
 describe("Classic", () => {

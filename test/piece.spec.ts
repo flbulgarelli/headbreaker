@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Puzzle, Piece, Tab, Slot, None, anchor, vector, radius, diameter} = require('../src/index');
+import {Puzzle, Piece, Tab, Slot, None, anchor, vector, radius, diameter} from '../src/index';
 
 describe("piece", () => {
   describe("can annotate a piece", () => {

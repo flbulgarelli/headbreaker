@@ -1,11 +1,11 @@
 require('mocha');
 const assert = require('assert');
-const {diameter, vector, Slot, Tab, None, Canvas, painters, generators, Puzzle} = require('../src/index');
+import {diameter, vector, Slot, Tab, None, Canvas, painters, generators, Puzzle} from '../src/index';
 
 // @ts-ignore
-HTMLImageElement = function() {};
+var HTMLImageElement = function() {};
 // @ts-ignore
-HTMLCanvasElement = function() {};
+var HTMLCanvasElement = function() {};
 
 
 describe("Canvas", () => {

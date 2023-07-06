@@ -1,19 +1,16 @@
-const Vector = require('./vector');
-const Piece = require('./piece');
-const Pair = require('./pair');
-const {PuzzleValidator} = require('./validator');
+import vector from './vector';
+import Piece = require('./piece');
+import Pair = require('./pair');
+import { PuzzleValidator } from './validator';
 
-/**
- * @typedef {object} SpatialMetadata
- * @property {import('./vector').Vector} [targetPosition]
- * @property {import('./vector').Vector} [currentPosition]
- */
+interface SpatialMetadata {
+  targetPosition?: import('./vector').Vector;
+  currentPosition?: import('./vector').Vector;
+}
 
 /**
  * Functions for handling spatial metadata
  * and pieces and puzzles that are annotated with it
- *
- * @module SpatialMetadata
  */
 
  /**
@@ -21,7 +18,7 @@ const {PuzzleValidator} = require('./validator');
   * @param {Piece} piece
   */
 function diffToTarget(piece) {
-  return Vector.diff(piece.metadata.targetPosition, piece.centralAnchor.asVector());
+  return vector.diff(piece.metadata.targetPosition, piece.centralAnchor.asVector());
 }
 
 /**
@@ -40,7 +37,7 @@ const relativePosition = (puzzle) => {
 /**
  *@type {import('../src/validator').PieceCondition}
  */
-const absolutePosition = (piece) => Vector.equal(piece.centralAnchor.asVector(), piece.metadata.targetPosition);
+const absolutePosition = (piece) => vector.equal(piece.centralAnchor.asVector(), piece.metadata.targetPosition);
 
 
 /**
@@ -50,7 +47,7 @@ const absolutePosition = (piece) => Vector.equal(piece.centralAnchor.asVector(),
  */
 function initialize(metadata, target, current) {
   metadata.targetPosition = metadata.targetPosition || target;
-  metadata.currentPosition = metadata.currentPosition || current || Vector.copy(metadata.targetPosition);
+  metadata.currentPosition = metadata.currentPosition || current || vector.copy(metadata.targetPosition);
 }
 
 module.exports = {

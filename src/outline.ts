@@ -1,5 +1,7 @@
-const Piece = require('./piece');
-const {vector, ...Vector} = require('./vector');
+import Piece = require('./piece');
+import vector from './vector';
+import { Vector } from './vector';
+import { Insert } from './insert';
 
 /**
  * @typedef {Squared|Rounded} Outline
@@ -14,13 +16,13 @@ const {vector, ...Vector} = require('./vector');
 
 /**
  * @template T
- * @param {import('./insert').Insert} insert
+ * @param {Insert} insert
  * @param {T} t
  * @param {T} s
  * @param {T} n
  * @returns {T}
  */
-function select(insert, t, s, n) {
+function select<T>(insert: Insert, t: T, s: T, n: T): T {
   return insert.isTab() ? t : insert.isSlot() ? s : n;
 }
 
@@ -29,16 +31,16 @@ const sr = (p, t, s, n) => select(p.right, t, s, n);
 const su = (p, t, s, n) => select(p.up, t, s, n);
 const sd = (p, t, s, n) => select(p.down, t, s, n);
 
-class Squared {
+export class Squared {
   /**
    * @param {Piece} piece
-   * @param {import('./vector').Vector|number} [size]
-   * @param {import('./vector').Vector|number} [borderFill]
+   * @param {Vector|number} [size]
+   * @param {Vector|number} [borderFill]
    * @returns {number[]}
    */
-  draw(piece, size = 50, borderFill = 0) {
-    const sizeVector = Vector.cast(size);
-    const offset = Vector.divide(Vector.multiply(borderFill, 5), sizeVector);
+  draw(piece: Piece, size: Vector | number = 50, borderFill: Vector | number = 0): number[] {
+    const sizeVector = vector.cast(size);
+    const offset = vector.divide(vector.multiply(borderFill, 5), sizeVector);
     return [
       (0 - offset.x),                                                  (0 - offset.y),
       1,                                                               (0 - offset.y),
@@ -64,7 +66,7 @@ class Squared {
   }
 }
 
-class Rounded {
+export class Rounded {
   bezelize: boolean;
   bezelDepth: number;
   insertDepth: number;
@@ -86,34 +88,34 @@ class Rounded {
   }
 
   /**
-   * @param {import('./vector').Vector} fullSize
+   * @param {Vector} fullSize
    * @return {number}
    */
-  referenceInsertAxisLength(fullSize) {
-    return this.referenceInsertAxis ? this.referenceInsertAxis.atVector(fullSize) : Vector.inner.min(fullSize);
+  referenceInsertAxisLength(fullSize: Vector): number {
+    return this.referenceInsertAxis ? this.referenceInsertAxis.atVector(fullSize) : vector.inner.min(fullSize);
   }
 
   /**
    * @param {Piece} p
-   * @param {import('./vector').Vector|number} [size]
-   * @param {import('./vector').Vector|number} [borderFill]
+   * @param {Vector|number} [size]
+   * @param {Vector|number} [borderFill]
    * @returns {number[]}
    */
-  draw(p, size = 150, borderFill = 0) {
+  draw(p: Piece, size: Vector | number = 150, borderFill: Vector | number = 0): number[] {
     /** full piece size, from edge to edge */
-    const fullSize = Vector.cast(size);
+    const fullSize = vector.cast(size);
 
     /** insert external diameter */
     const r = Math.trunc(this.referenceInsertAxisLength(fullSize) * (1 - 2 * this.borderLength) * 100) / 100;
 
     /** edge length, from vertex to insert start */
-    const s = Vector.divide(Vector.minus(fullSize, r), 2);
+    const s = vector.divide(vector.minus(fullSize, r), 2);
 
     /** insert internal radius, from center to insert end */
-    const o = Vector.multiply(r, this.insertDepth);
+    const o = vector.multiply(r, this.insertDepth);
 
     /** bezel radius */
-    const b = Vector.multiply(Vector.inner.min(s), this.bezelDepth);
+    const b = vector.multiply(vector.inner.min(s), this.bezelDepth);
 
     /** the four bezel flags, starting at up-left corner */
     const [b0, b1, b2, b3] = this.bezels(p);
@@ -192,8 +194,4 @@ class Rounded {
   }
 }
 
-export default {
-  Classic: new Squared(),
-  Squared,
-  Rounded
-}
+export const Classic = new Squared();

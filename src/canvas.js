@@ -1,11 +1,11 @@
 const Pair = require('./pair');
 const Piece = require('./piece');
 const Puzzle = require('./puzzle');
-const Manufacturer = require('../src/manufacturer');
+const Manufacturer = require('./manufacturer');
 const {twoAndTwo} = require('./sequence');
 const Structure = require('./structure');
 const ImageMetadata = require('./image-metadata');
-const {vector, ...Vector} = require('./vector');
+const vector = require('./vector').default;
 const Metadata = require('./metadata');
 const SpatialMetadata = require('./spatial-metadata');
 const {PuzzleValidator, PieceValidator} = require('./validator');
@@ -123,7 +123,7 @@ class Canvas {
     this.width = width;
     this.height = height;
     this.pieceSize = diameter(pieceSize);
-    this.borderFill = Vector.cast(borderFill);
+    this.borderFill = vector.cast(borderFill);
     this.imageMetadata = ImageMetadata.asImageMetadata(image);
     this.strokeWidth = strokeWidth;
     this.strokeColor = strokeColor;
@@ -136,9 +136,9 @@ class Canvas {
     this._initialize();
     this._painter.initialize(this, id);
     /** @type {import('./vector').Vector} */
-    this._maxPiecesCount = Vector.cast(maxPiecesCount);
+    this._maxPiecesCount = vector.cast(maxPiecesCount);
     /** @type {import('./vector').Vector} */
-    this._puzzleDiameter = Vector.cast(puzzleDiameter);
+    this._puzzleDiameter = vector.cast(puzzleDiameter);
     /** @type {(image: import('./image-metadata').ImageMetadata) => import('./image-metadata').ImageMetadata} */
     this._imageAdjuster = itself;
     this._outline = outline || Classic;
@@ -162,7 +162,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({structure, size = null, metadata}) {
-    SpatialMetadata.initialize(metadata, Vector.zero())
+    SpatialMetadata.initialize(metadata, vector.zero())
     this.renderPiece(this._newPiece(structure, size, metadata));
   }
 
@@ -316,7 +316,7 @@ class Canvas {
     this.solve();
     this.puzzle.shuffleWith(Shuffler.padder(this.proximity * 3, this.maxPiecesCount.x, this.maxPiecesCount.y));
     this.puzzle.shuffleWith(shuffler)
-    this.puzzle.shuffleWith(Shuffler.noise(Vector.cast(this.proximity * farness / 2)))
+    this.puzzle.shuffleWith(Shuffler.noise(vector.cast(this.proximity * farness / 2)))
     this.autoconnected = true;
   }
 
@@ -420,7 +420,7 @@ class Canvas {
   }
 
   /**
-   * Removes the connection requirement, if any. 
+   * Removes the connection requirement, if any.
    */
   clearConnectionRequirements() {
     this.puzzle.clearConnectionRequirements();
@@ -515,7 +515,7 @@ class Canvas {
 
     this.puzzle.reframe(
       this.figurePadding,
-      Vector.minus(vector(this.width, this.height), this.figurePadding));
+      vector.minus(vector(this.width, this.height), this.figurePadding));
   }
 
   /**
@@ -572,7 +572,7 @@ class Canvas {
    * @param {import('./vector').Vector|number} factor
    */
   scale(factor) {
-    this._painter.scale(this, Vector.cast(factor));
+    this._painter.scale(this, vector.cast(factor));
   }
 
   /**
@@ -580,7 +580,7 @@ class Canvas {
    */
   _annotatePiecePosition(piece) {
     const p = piece.centralAnchor.asVector();
-    SpatialMetadata.initialize(piece.metadata, p, Vector.copy(p));
+    SpatialMetadata.initialize(piece.metadata, p, vector.copy(p));
   }
 
   /**
@@ -622,9 +622,9 @@ class Canvas {
   _baseImageMetadataFor(piece) {
     if (this.imageMetadata) {
       const scale = piece.metadata.scale || this.imageMetadata.scale || 1;
-      const offset = Vector.plus(
-        piece.metadata.targetPosition || Vector.zero(),
-        this.imageMetadata.offset || Vector.zero());
+      const offset = vector.plus(
+        piece.metadata.targetPosition || vector.zero(),
+        this.imageMetadata.offset || vector.zero());
       return { content: this.imageMetadata.content, offset, scale };
     } else {
       return ImageMetadata.asImageMetadata(piece.metadata.image);
@@ -650,7 +650,7 @@ class Canvas {
   adjustImagesToPuzzle(axis) {
     this._imageAdjuster = (image) => {
       const scale = axis.atVector(this.puzzleDiameter) / axis.atDimension(image.content);
-      const offset = Vector.plus(image.offset, Vector.minus(this.borderFill, this.pieceDiameter));
+      const offset = vector.plus(image.offset, vector.minus(this.borderFill, this.pieceDiameter));
       return { content: image.content, scale, offset };
     };
   }
@@ -683,7 +683,7 @@ class Canvas {
   adjustImagesToPiece(axis) {
     this._imageAdjuster = (image) => {
       const scale = axis.atVector(this.pieceDiameter) / axis.atDimension(image.content);
-      const offset = Vector.plus(image.offset, this.borderFill);
+      const offset = vector.plus(image.offset, this.borderFill);
       return { content: image.content, scale, offset };
     }
   }
@@ -739,7 +739,7 @@ class Canvas {
    * @type {import('./vector').Vector}
    * */
   get estimatedPuzzleDiameter() {
-    return Vector.plus(Vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2)
+    return vector.plus(vector.multiply(this.pieceDiameter, this.maxPiecesCount), this.strokeWidth * 2)
   }
 
   get maxPiecesCount() {
@@ -768,7 +768,7 @@ class Canvas {
    */
   get figurePadding() {
     if (!this._figurePadding) {
-      this._figurePadding = Vector.plus(this.strokeWidth, this.borderFill);
+      this._figurePadding = vector.plus(this.strokeWidth, this.borderFill);
     }
     return this._figurePadding;
   }

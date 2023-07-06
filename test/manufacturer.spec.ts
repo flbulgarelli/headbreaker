@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {Tab, Slot, None, anchor, Manufacturer, generators} = require('../src/index');
+import {Tab, Slot, None, anchor, Manufacturer, generators} from '../src/index';
 
 describe("manufacturer", () => {
   it("create 1 x 1", () => {

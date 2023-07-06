@@ -1,6 +1,6 @@
 import between from './between';
 import Pair = require('./pair');
-import { vector, Vector } from './vector';
+import vector, { Vector } from './vector';
 
 /**
  * An Anchor is a mutable 2D point that

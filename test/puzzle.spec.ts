@@ -1,6 +1,6 @@
 const assert = require('assert');
 const {Puzzle, Tab, Slot, PuzzleValidator, Shuffler, connector} = require('../src/index');
-const {vector, ...Vector} = require('../src/vector');
+import vector from '../src/vector';
 
 describe("puzzle", () => {
   /** @type {Puzzle} */
@@ -131,7 +131,7 @@ describe("puzzle", () => {
       const piece = puzzle.newPiece({right: Tab, up: Tab});
       piece.locateAt(-10, -10);
 
-      puzzle.reframe(Vector.zero(), vector(10, 10));
+      puzzle.reframe(vector.zero(), vector(10, 10));
 
       assert.deepEqual(piece.centralAnchor.asPair(), [2, 2]);
     })
@@ -141,7 +141,7 @@ describe("puzzle", () => {
       const piece = puzzle.newPiece({right: Tab, up: Tab});
       piece.locateAt(10, 15);
 
-      puzzle.reframe(Vector.zero(), vector(8, 12));
+      puzzle.reframe(vector.zero(), vector(8, 12));
 
       assert.deepEqual(piece.centralAnchor.asPair(), [6, 10]);
     })
@@ -154,7 +154,7 @@ describe("puzzle", () => {
       const other = puzzle.newPiece({right: Tab, up: Tab});
       other.locateAt(-8, -6);
 
-      puzzle.reframe(Vector.zero(), vector(10, 10));
+      puzzle.reframe(vector.zero(), vector(10, 10));
 
       assert.deepEqual(one.centralAnchor.asPair(), [2, 2]);
       assert.deepEqual(other.centralAnchor.asPair(), [4, 6]);
@@ -168,7 +168,7 @@ describe("puzzle", () => {
       const other = puzzle.newPiece({right: Tab, up: Tab});
       other.locateAt(12, 12);
 
-      puzzle.reframe(Vector.zero(), vector(10, 10));
+      puzzle.reframe(vector.zero(), vector(10, 10));
 
       assert.deepEqual(one.centralAnchor.asPair(), [2, 2]);
       assert.deepEqual(other.centralAnchor.asPair(), [14, 14]);
@@ -182,7 +182,7 @@ describe("puzzle", () => {
       const other = puzzle.newPiece({right: Tab, up: Tab});
       other.locateAt(5, 9);
 
-      puzzle.reframe(Vector.zero(), vector(20, 20));
+      puzzle.reframe(vector.zero(), vector(20, 20));
 
       assert.deepEqual(one.centralAnchor.asPair(), [3, 3]);
       assert.deepEqual(other.centralAnchor.asPair(), [5, 9]);

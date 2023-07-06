@@ -1,30 +1,30 @@
-import Vector = require('./vector');
+import vector, { Vector } from './vector';
 
 interface Size {
-  radius: import('./vector').Vector;
-  diameter: import('./vector').Vector;
+  radius: Vector;
+  diameter: Vector;
 }
 
 /**
- * @param {import('./vector').Vector|number} value
+ * @param {Vector|number} value
  * @returns {Size}
  */
-export function radius(value: import('./vector').Vector | number): Size {
-  const vector = Vector.cast(value)
+export function radius(value: Vector | number): Size {
+  const v = vector.cast(value)
   return {
-    radius: vector,
-    diameter: Vector.multiply(vector, 2)
+    radius: v,
+    diameter: vector.multiply(v, 2)
   };
 }
 
 /**
- * @param {import('./vector').Vector|number} value
+ * @param {Vector|number} value
  * @returns {Size}
  */
-export function diameter(value: import('./vector').Vector | number): Size {
-  const vector = Vector.cast(value)
+export function diameter(value: Vector | number): Size {
+  const v = vector.cast(value)
   return {
-    radius: Vector.multiply(vector, 0.5),
-    diameter: vector
+    radius: vector.multiply(v, 0.5),
+    diameter: v
   };
 }

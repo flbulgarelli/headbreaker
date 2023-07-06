@@ -1,10 +1,9 @@
-const Pair = require('./pair');
+import Pair = require('./pair');
 
-/**
- * @typedef {object} Vector
- * @property {number} x
- * @property {number} y
- */
+export interface Vector {
+  x: number;
+  y: number;
+}
 
 /**
  *
@@ -13,7 +12,7 @@ const Pair = require('./pair');
  *
  * @returns {Vector}
  */
-function vector(x, y) {
+export default function vector(x: number, y: number): Vector {
   return { x, y };
 }
 
@@ -21,7 +20,7 @@ function vector(x, y) {
  * @param {Vector|number} value
  * @returns {Vector}
  */
-function cast(value) {
+vector.cast = (value: Vector | number): Vector => {
   if (typeof value === 'number') {
     return vector(value, value);
   } else {
@@ -41,7 +40,7 @@ function cast(value) {
  *
  * @returns {Vector}
  */
-function zero() {
+vector.zero = (): Vector => {
   return vector(0, 0);
 }
 
@@ -53,7 +52,7 @@ function zero() {
  * @param {number} [delta] the tolance in comparison
  * @returns {boolean}
  */
-function equal(one, other, delta = 0) {
+vector.equal = (one: Vector, other: Vector, delta: number = 0): boolean => {
   return Pair.equal(one.x, one.y, other.x, other.y, delta);
 }
 
@@ -63,7 +62,7 @@ function equal(one, other, delta = 0) {
  * @param {Vector} one
  * @returns {Vector}
  */
-function copy({x, y}) {
+vector.copy = ({x, y}: Vector): Vector => {
   return {x, y}
 }
 
@@ -72,7 +71,7 @@ function copy({x, y}) {
  * @param {any} x
  * @param {any} y
  */
-function update(vector, x, y) {
+vector.update = (vector: Vector, x: any, y: any) => {
   vector.x = x;
   vector.y = y;
 }
@@ -82,7 +81,7 @@ function update(vector, x, y) {
  * @param {Vector} other
  * @returns {import('./pair').Pair};
  */
-function diff(one, other) {
+vector.diff = (one: Vector, other: Vector): import('./pair').Pair => {
   return Pair.diff(one.x, one.y, other.x, other.y);
 }
 
@@ -92,8 +91,8 @@ function diff(one, other) {
  *
  * @returns {Vector}
  */
-function multiply(one, other) {
-  return apply(one, other, (v1, v2) => v1 * v2);
+vector.multiply = (one: Vector | number, other: Vector | number): Vector => {
+  return _apply(one, other, (v1, v2) => v1 * v2);
 }
 
 /**
@@ -102,8 +101,8 @@ function multiply(one, other) {
  *
  * @returns {Vector}
  */
-function divide(one, other) {
-  return apply(one, other, (v1, v2) => v1 / v2);
+vector.divide = (one: Vector | number, other: Vector | number): Vector => {
+  return _apply(one, other, (v1, v2) => v1 / v2);
 }
 
 /**
@@ -112,8 +111,8 @@ function divide(one, other) {
  *
  * @returns {Vector}
  */
-function plus(one, other) {
-  return apply(one, other, (v1, v2) => v1 + v2);
+vector.plus = (one: Vector | number, other: Vector | number): Vector => {
+  return _apply(one, other, (v1, v2) => v1 + v2);
 }
 
 /**
@@ -122,8 +121,8 @@ function plus(one, other) {
  *
  * @returns {Vector}
  */
-function minus(one, other) {
-  return apply(one, other, (v1, v2) => v1 - v2);
+vector.minus = (one: Vector | number, other: Vector | number): Vector => {
+  return _apply(one, other, (v1, v2) => v1 - v2);
 }
 
 /**
@@ -132,8 +131,8 @@ function minus(one, other) {
  *
  * @returns {Vector}
  */
-function min(one, other) {
-  return apply(one, other, Math.min);
+vector.min = (one: Vector | number, other: Vector | number): Vector => {
+  return _apply(one, other, Math.min);
 }
 
 /**
@@ -142,31 +141,24 @@ function min(one, other) {
  *
  * @returns {Vector}
  */
-function max(one, other) {
-  return apply(one, other, Math.max);
+vector.max = (one: Vector | number, other: Vector | number): Vector => {
+  return _apply(one, other, Math.max);
 }
 
-/**
- * @param {Vector|number} one
- * @param {Vector|number} other
- * @param {(one: number, other: number) => number} f
- *
- * @returns {Vector}
- */
-function apply(one, other, f) {
-  const first = cast(one);
-  const second = cast(other);
+function _apply(one: Vector | number, other: Vector | number, f: (one: number, other: number) => number): Vector {
+  const first = vector.cast(one);
+  const second = vector.cast(other);
   return {x: f(first.x, second.x), y: f(first.y, second.y)};
 }
 
-const inner = {
+vector.inner = {
   /**
    * @param {Vector} one
    *
    * @returns {number}
    */
-  min(one) {
-    return this.apply(one, Math.min);
+  min(one: Vector): number {
+    return _innerApply(one, Math.min);
   },
 
   /**
@@ -174,34 +166,11 @@ const inner = {
    *
    * @returns {number}
    */
-  max(one) {
-    return this.apply(one, Math.max);
+  max(one: Vector): number {
+    return _innerApply(one, Math.max);
   },
-
-  /**
-   * @param {Vector} one
-   * @param {(one: number, other: number) => number} f
-   * @return {number}
-   */
-  apply(one, f) {
-    return f(one.x, one.y)
-  }
 }
 
-module.exports = {
-  cast,
-  vector,
-  copy,
-  equal,
-  zero,
-  update,
-  diff,
-  multiply,
-  divide,
-  plus,
-  minus,
-  apply,
-  min,
-  max,
-  inner
-};
+function _innerApply(one: Vector, f: (one: number, other: number) => number): number {
+  return f(one.x, one.y)
+}

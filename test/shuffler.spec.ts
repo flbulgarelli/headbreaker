@@ -1,6 +1,6 @@
 const assert = require('assert');
-const {anchor, vector, Puzzle, Piece, Shuffler} = require('../src/index');
-
+const {Puzzle, Tab, Slot, PuzzleValidator, Shuffler, connector} = require('../src/index');
+import vector from '../src/vector';
 
 describe("shuffler", () => {
   function hasDuplicates(result) {
