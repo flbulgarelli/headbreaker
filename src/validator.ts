@@ -1,18 +1,17 @@
-const Puzzle = require('./puzzle');
-const Piece = require('./piece');
-const Pair = require('./pair');
+import Puzzle = require('./puzzle');
+import Piece = require('./piece');
+import Pair = require('./pair');
 
 /**
  * @typedef {PieceValidator | PuzzleValidator | NullValidator} Validator
  **/
 
-/**
- * @callback ValidationListener
- * @param {Puzzle} puzzle
- */
+type ValidationListener = (puzzle: Puzzle) => void
 
 /** An abstract base validator */
-class AbstractValidator {
+export class AbstractValidator {
+  validListeners: ValidationListener[];
+  _valid: boolean | undefined;
 
   constructor() {
     /** @type {ValidationListener[]} */
@@ -26,7 +25,7 @@ class AbstractValidator {
    *
    * @param {Puzzle} puzzle
    */
-  validate(puzzle) {
+  validate(puzzle: Puzzle) {
     const wasValid = this._valid;
     this.updateValidity(puzzle);
     if (this._valid && !wasValid) {
@@ -39,7 +38,7 @@ class AbstractValidator {
    *
    * @param {Puzzle} puzzle
    */
-  updateValidity(puzzle) {
+  updateValidity(puzzle: Puzzle) {
     // @ts-ignore
     this._valid = this.isValid(puzzle);
   }
@@ -47,7 +46,7 @@ class AbstractValidator {
   /**
    * @param {Puzzle} puzzle
    */
-  fireValid(puzzle) {
+  fireValid(puzzle: Puzzle) {
     this.validListeners.forEach(it => it(puzzle));
   }
 
@@ -56,7 +55,7 @@ class AbstractValidator {
    *
    * @param {ValidationListener} f
    */
-  onValid(f) {
+  onValid(f: ValidationListener) {
     this.validListeners.push(f);
   }
 
@@ -80,26 +79,17 @@ class AbstractValidator {
   }
 }
 
-/**
- * @callback PieceCondition
- * @param {Piece} puzzle
- * @returns {boolean}
- */
-
-
-/**
- * @callback PuzzleCondition
- * @param {Puzzle} puzzle
- * @returns {boolean}
- */
+export type PieceCondition = (piece: Piece) => boolean
+export type PuzzleCondition = (puzzle: Puzzle) => boolean
 
 /** A validator that evaluates each piece independently */
-class PieceValidator extends AbstractValidator {
+export class PieceValidator extends AbstractValidator {
+  condition: PieceCondition;
 
   /**
    * @param {PieceCondition} f
    */
-  constructor(f) {
+  constructor(f: PieceCondition) {
     super();
     this.condition = f;
   }
@@ -108,18 +98,32 @@ class PieceValidator extends AbstractValidator {
    * @param {Puzzle} puzzle
    * @returns {boolean}
    */
-  isValid(puzzle) {
+  isValid(puzzle: Puzzle): boolean {
     return puzzle.pieces.every(it => this.condition(it));
   }
 }
 
 /** A validator that evaluates the whole puzzle */
-class PuzzleValidator extends AbstractValidator {
+export class PuzzleValidator extends AbstractValidator {
+  condition: PuzzleCondition;
+
+  /**
+   * The delta used to compare distances
+   *
+   * @type {number}
+   */
+  static DIFF_DELTA: number = 0.01;
+
+  /**
+  * @type {PuzzleCondition}
+  */
+  static connected: PuzzleCondition = (puzzle) => puzzle.connected;
+
 
   /**
    * @param {PuzzleCondition} f
    */
-  constructor(f) {
+  constructor(f: PuzzleCondition) {
     super();
     this.condition = f;
   }
@@ -127,7 +131,7 @@ class PuzzleValidator extends AbstractValidator {
   /**
    * @param {Puzzle} puzzle
    */
-  isValid(puzzle) {
+  isValid(puzzle: Puzzle) {
     return this.condition(puzzle);
   }
 
@@ -139,18 +143,34 @@ class PuzzleValidator extends AbstractValidator {
    *
    * @returns {boolean}
    */
-  static equalDiffs([dx0, dy0], [dx, dy]) {
+  static equalDiffs([dx0, dy0]: import('./pair').Pair, [dx, dy]: import('./pair').Pair): boolean {
     return Pair.equal(dx0, dy0, dx, dy, PuzzleValidator.DIFF_DELTA);
+  }
+
+  /**
+   * @param {import('./pair').Pair[]} expected the expected relative refs
+   * @returns {PuzzleCondition}
+   */
+  static relativeRefs(expected: import('./pair').Pair[]): PuzzleCondition {
+    return (puzzle) => {
+      function diff(x, y, index) {
+        return Pair.diff(x, y, ...expected[index]);
+      }
+      const refs = puzzle.refs;
+      const [x0, y0] = refs[0];
+      const diff0 = diff(x0, y0, 0);
+      return refs.every(([x, y], index) => PuzzleValidator.equalDiffs(diff0, diff(x, y, index)));
+    };
   }
 }
 
 /** A validator that always is invalid */
-class NullValidator extends AbstractValidator {
+export class NullValidator extends AbstractValidator {
 
   /**
    * @param {Puzzle} puzzle
    */
-  isValid(puzzle) {
+  isValid(puzzle: Puzzle) {
     return false;
   }
 
@@ -161,37 +181,3 @@ class NullValidator extends AbstractValidator {
     return true;
   }
 };
-
-/**
- * The delta used to compare distances
- *
- * @type {number}
- */
-PuzzleValidator.DIFF_DELTA = 0.01;
-
-/**
-* @type {PuzzleCondition}
-*/
-PuzzleValidator.connected = (puzzle) => puzzle.connected;
-
-/**
- * @param {import('./pair').Pair[]} expected the expected relative refs
- * @returns {PuzzleCondition}
- */
-PuzzleValidator.relativeRefs = (expected) => {
-  return (puzzle) => {
-    function diff(x, y, index) {
-      return Pair.diff(x, y, ...expected[index]);
-    }
-    const refs = puzzle.refs;
-    const [x0, y0] = refs[0];
-    const diff0 = diff(x0, y0, 0);
-    return refs.every(([x, y], index) => PuzzleValidator.equalDiffs(diff0, diff(x, y, index)));
-  };
-};
-
-module.exports = {
-  PuzzleValidator,
-  PieceValidator,
-  NullValidator
-}

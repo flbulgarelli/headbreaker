@@ -46,7 +46,7 @@ class Manufacturer {
   /**
    * If nothing is configured, default Puzzle structured is assumed
    *
-   * @param {import('../src/puzzle').Settings} structure
+   * @param {import('./puzzle').Settings} structure
    */
   withStructure(structure) {
     this.structure = structure
