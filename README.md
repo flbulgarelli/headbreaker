@@ -149,6 +149,104 @@ const dump = puzzle.export();
 const otherPuzzle = headbreaker.Puzzle.import(dump);
 ```
 
+## React Puzzle
+
+> Check https://github.com/flbulgarelli/headbreaker-react-sample
+ 
+```jsx
+import { Canvas, painters } from 'headbreaker';
+import { useEffect, useRef } from 'react';
+
+
+function DemoPuzzle({ id }) {
+  const puzzleRef = useRef(null)
+
+
+  useEffect(() => {
+    const puzzle = puzzleRef.current
+    const canvas = new Canvas(puzzle.id, {
+      width: 800, height: 650,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2, lineSoftness: 0.18,
+      painter: new painters.Konva() // <-- this is important. See https://github.com/flbulgarelli/headbreaker/issues/51 
+    });
+
+    canvas.autogenerate({
+      horizontalPiecesCount: 2,
+      verticalPiecesCount: 2,
+      metadata: [
+        { color: '#B83361' },
+        { color: '#B87D32' },
+        { color: '#A4C234' },
+        { color: '#37AB8C' }
+      ]
+    });
+
+    canvas.draw();
+  }, [])
+
+  return <div ref={puzzleRef} id={id}></div>
+}
+
+export default function Home() {
+  return (
+    <main>
+      <h1>Headbreaker From React</h1>
+      <DemoPuzzle id="puzzle" />
+    </main>
+  )
+}
+```
+
+## Vue Puzzle
+
+> See https://github.com/flbulgarelli/headbreaker-vue-sample
+
+```vue
+<template>
+  <div id="app">
+    <div>Headbreaker from Vue</div>
+    <div id="puzzle"></div>
+  </div>
+</template>
+
+<script>
+import headbreaker from 'headbreaker';
+
+const drawPuzzle = () => {
+  const autogen = new headbreaker.Canvas('puzzle', {
+    width: 800,
+    height: 650,
+    pieceSize: 100,
+    proximity: 20,
+    borderFill: 10,
+    strokeWidth: 2,
+    lineSoftness: 0.18,
+    painter: new headbreaker.painters.Konva(),
+  });
+
+  autogen.autogenerate({
+    horizontalPiecesCount: 2,
+    verticalPiecesCount: 2,
+    metadata: [
+      { color: '#B83361' },
+      { color: '#B87D32' },
+      { color: '#A4C234' },
+      { color: '#37AB8C' },
+    ],
+  });
+
+  autogen.draw();
+};
+
+export default {
+  mounted() {
+    drawPuzzle()
+  },
+};
+</script>
+```
+
 ## 👀 Demo and API Docs
 
 See [flbulgarelli.github.io/headbreaker](https://flbulgarelli.github.io/headbreaker/)
