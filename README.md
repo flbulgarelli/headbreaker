@@ -6,7 +6,7 @@
 
 > Jigsaw Puzzles Framework for JavaScript
 
-`headbreaker` - a spanish pun for _rompecabezas_ - is a JavaScript framework for building all kind of jigsaw puzzles.
+`headbreaker` - a Spanish pun for _rompecabezas_ - is a JavaScript framework for building all kind of jigsaw puzzles.
 
 ## ☑️ Features
 
@@ -100,11 +100,25 @@ However, there is a lot more that `headbreaker` can do for you. These are some o
 </script>
 ```
 
-### Headless Puzzle
+`Canvas` is a visual representation of a `Puzzle` and as such, it mirrors many of the most
+common `Puzzle` methods - see next section for more details. However, if you need to access
+the associated `Puzzle` object, you can call `puzzle` accessor anytime:
 
 ```javascript
-// headbreaker can also be loaded on the server, which allows to
-// fully manipulate its model
+// create and configure the canvas
+const canvas = new headbreaker.Canvas(...);
+// ...
+
+// now you can access and interact with the puzzle object
+const puzzle = canvas.puzzle;
+```
+
+### Headless Puzzle
+
+Headbreaker provides a `Puzzle` object which allows to fully manipulate its model and its individual `Piece`s. Since `Puzzle`s are not coupled
+to any visual representation, it can be even loaded in headless environments, like in a `node` server:
+
+```javascript
 const headbreaker = require('headbreaker');
 
 // Create a puzzle
@@ -144,6 +158,29 @@ a.drag(10, 5);
 // Connect two pieces (if possible)
 a.tryConnectWith(b);
 
+// Add custom metadata to pieces
+a.metadata.flavour = "chocolate";
+a.metadata.sugar = true;
+b.metadata.flavour = "chocolate";
+b.metadata.sugar = false;
+
+c.metadata.flavour = "vainilla";
+c.metadata.sugar = false;
+d.metadata.flavour = "vainilla";
+d.metadata.sugar = true;
+
+// Require pieces to match a given condition in
+// order to be connected
+puzzle.attachConnectionRequirement((one, other) => one.metadata.flavour === other.metadata.flavour);
+
+// Alternatively, set individual requirements for horizontal
+// and vertical connections
+puzzle.attachVerticalConnectionRequirement((one, other) => one.metadata.flavour === other.metadata.flavour);
+puzzle.attachHorizontalConnectionRequirement((one, other) => one.metadata.sugar !== other.metadata.sugar);
+
+// Remove all - vertical and horizontal - connection requirements
+puzzle.clearConnectionRequirements();
+
 // Export and import puzzle
 const dump = puzzle.export();
 const otherPuzzle = headbreaker.Puzzle.import(dump);
@@ -151,8 +188,8 @@ const otherPuzzle = headbreaker.Puzzle.import(dump);
 
 ## React Puzzle
 
-> Check https://github.com/flbulgarelli/headbreaker-react-sample
- 
+> Check also [https://github.com/flbulgarelli/headbreaker-react-sample](https://github.com/flbulgarelli/headbreaker-react-sample)
+
 ```jsx
 import { Canvas, painters } from 'headbreaker';
 import { useEffect, useRef } from 'react';
@@ -168,7 +205,7 @@ function DemoPuzzle({ id }) {
       width: 800, height: 650,
       pieceSize: 100, proximity: 20,
       borderFill: 10, strokeWidth: 2, lineSoftness: 0.18,
-      painter: new painters.Konva() // <-- this is important. See https://github.com/flbulgarelli/headbreaker/issues/51 
+      painter: new painters.Konva() // <-- this is important. See https://github.com/flbulgarelli/headbreaker/issues/51
     });
 
     canvas.autogenerate({
@@ -200,7 +237,7 @@ export default function Home() {
 
 ## Vue Puzzle
 
-> See https://github.com/flbulgarelli/headbreaker-vue-sample
+> Check also [https://github.com/flbulgarelli/headbreaker-vue-sample](https://github.com/flbulgarelli/headbreaker-vue-sample)
 
 ```vue
 <template>
