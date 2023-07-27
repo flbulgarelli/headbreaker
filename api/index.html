@@ -50,7 +50,7 @@
 <blockquote>
 <p>Jigsaw Puzzles Framework for JavaScript</p>
 </blockquote>
-<p><code>headbreaker</code> - a spanish pun for <em>rompecabezas</em> - is a JavaScript framework for building all kind of jigsaw puzzles.</p>
+<p><code>headbreaker</code> - a Spanish pun for <em>rompecabezas</em> - is a JavaScript framework for building all kind of jigsaw puzzles.</p>
 <h2>☑️ Features</h2>
 <ul>
 <li>100% pure JavaScript</li>
@@ -129,10 +129,20 @@ npm install --save konva
   }
 &lt;/script>
 </code></pre>
+<p><code>Canvas</code> is a visual representation of a <code>Puzzle</code> and as such, it mirrors many of the most
+common <code>Puzzle</code> methods - see next section for more details. However, if you need to access
+the associated <code>Puzzle</code> object, you can call <code>puzzle</code> accessor anytime:</p>
+<pre class="prettyprint source lang-javascript"><code>// create and configure the canvas
+const canvas = new headbreaker.Canvas(...);
+// ...
+
+// now you can access and interact with the puzzle object
+const puzzle = canvas.puzzle;
+</code></pre>
 <h3>Headless Puzzle</h3>
-<pre class="prettyprint source lang-javascript"><code>// headbreaker can also be loaded on the server, which allows to
-// fully manipulate its model
-const headbreaker = require('headbreaker');
+<p>Headbreaker provides a <code>Puzzle</code> object which allows to fully manipulate its model and its individual <code>Piece</code>s. Since <code>Puzzle</code>s are not coupled
+to any visual representation, it can be even loaded in headless environments, like in a <code>node</code> server:</p>
+<pre class="prettyprint source lang-javascript"><code>const headbreaker = require('headbreaker');
 
 // Create a puzzle
 const puzzle = new headbreaker.Puzzle();
@@ -171,9 +181,126 @@ a.drag(10, 5);
 // Connect two pieces (if possible)
 a.tryConnectWith(b);
 
+// Add custom metadata to pieces
+a.metadata.flavour = &quot;chocolate&quot;;
+a.metadata.sugar = true;
+b.metadata.flavour = &quot;chocolate&quot;;
+b.metadata.sugar = false;
+
+c.metadata.flavour = &quot;vainilla&quot;;
+c.metadata.sugar = false;
+d.metadata.flavour = &quot;vainilla&quot;;
+d.metadata.sugar = true;
+
+// Require pieces to match a given condition in
+// order to be connected
+puzzle.attachConnectionRequirement((one, other) => one.metadata.flavour === other.metadata.flavour);
+
+// Alternatively, set individual requirements for horizontal
+// and vertical connections
+puzzle.attachVerticalConnectionRequirement((one, other) => one.metadata.flavour === other.metadata.flavour);
+puzzle.attachHorizontalConnectionRequirement((one, other) => one.metadata.sugar !== other.metadata.sugar);
+
+// Remove all - vertical and horizontal - connection requirements
+puzzle.clearConnectionRequirements();
+
 // Export and import puzzle
 const dump = puzzle.export();
 const otherPuzzle = headbreaker.Puzzle.import(dump);
+</code></pre>
+<h2>React Puzzle</h2>
+<blockquote>
+<p>Check also <a href="https://github.com/flbulgarelli/headbreaker-react-sample">https://github.com/flbulgarelli/headbreaker-react-sample</a></p>
+</blockquote>
+<pre class="prettyprint source lang-jsx"><code>import { Canvas, painters } from 'headbreaker';
+import { useEffect, useRef } from 'react';
+
+
+function DemoPuzzle({ id }) {
+  const puzzleRef = useRef(null)
+
+
+  useEffect(() => {
+    const puzzle = puzzleRef.current
+    const canvas = new Canvas(puzzle.id, {
+      width: 800, height: 650,
+      pieceSize: 100, proximity: 20,
+      borderFill: 10, strokeWidth: 2, lineSoftness: 0.18,
+      painter: new painters.Konva() // &lt;-- this is important. See https://github.com/flbulgarelli/headbreaker/issues/51
+    });
+
+    canvas.autogenerate({
+      horizontalPiecesCount: 2,
+      verticalPiecesCount: 2,
+      metadata: [
+        { color: '#B83361' },
+        { color: '#B87D32' },
+        { color: '#A4C234' },
+        { color: '#37AB8C' }
+      ]
+    });
+
+    canvas.draw();
+  }, [])
+
+  return &lt;div ref={puzzleRef} id={id}>&lt;/div>
+}
+
+export default function Home() {
+  return (
+    &lt;main>
+      &lt;h1>Headbreaker From React&lt;/h1>
+      &lt;DemoPuzzle id=&quot;puzzle&quot; />
+    &lt;/main>
+  )
+}
+</code></pre>
+<h2>Vue Puzzle</h2>
+<blockquote>
+<p>Check also <a href="https://github.com/flbulgarelli/headbreaker-vue-sample">https://github.com/flbulgarelli/headbreaker-vue-sample</a></p>
+</blockquote>
+<pre class="prettyprint source lang-vue"><code>&lt;template>
+  &lt;div id=&quot;app&quot;>
+    &lt;div>Headbreaker from Vue&lt;/div>
+    &lt;div id=&quot;puzzle&quot;>&lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;script>
+import headbreaker from 'headbreaker';
+
+const drawPuzzle = () => {
+  const autogen = new headbreaker.Canvas('puzzle', {
+    width: 800,
+    height: 650,
+    pieceSize: 100,
+    proximity: 20,
+    borderFill: 10,
+    strokeWidth: 2,
+    lineSoftness: 0.18,
+    painter: new headbreaker.painters.Konva(),
+  });
+
+  autogen.autogenerate({
+    horizontalPiecesCount: 2,
+    verticalPiecesCount: 2,
+    metadata: [
+      { color: '#B83361' },
+      { color: '#B87D32' },
+      { color: '#A4C234' },
+      { color: '#37AB8C' },
+    ],
+  });
+
+  autogen.draw();
+};
+
+export default {
+  mounted() {
+    drawPuzzle()
+  },
+};
+&lt;/script>
 </code></pre>
 <h2>👀 Demo and API Docs</h2>
 <p>See <a href="https://flbulgarelli.github.io/headbreaker/">flbulgarelli.github.io/headbreaker</a></p>
@@ -211,7 +338,7 @@ $ mkdocs serve
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 05 2023 00:37:02 GMT-0300 (Argentina Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 26 2023 22:28:11 GMT-0300 (Argentina Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
