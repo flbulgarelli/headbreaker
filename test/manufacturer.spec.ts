@@ -200,7 +200,7 @@ describe('manufacturer', () => {
     manufacturer.withDimensions(6, 1);
     manufacturer.withInsertsGenerator(generators.flipflop);
     const puzzle = manufacturer.build();
-    const [a, b, c, d, e, f, g] = puzzle.pieces;
+    const [a, b, c, d, e, f] = puzzle.pieces;
 
     assert.equal(puzzle.pieces.length, 6);
 
@@ -210,7 +210,6 @@ describe('manufacturer', () => {
     assert.equal(d.right, Slot);
     assert.equal(e.right, Tab);
     assert.equal(f.right, None);
-    assert.equal(g.right, None);
 
     assert.equal(a.left, None);
     assert.equal(b.left, Slot);
@@ -218,7 +217,6 @@ describe('manufacturer', () => {
     assert.equal(d.left, Slot);
     assert.equal(e.left, Tab);
     assert.equal(f.left, Slot);
-    assert.equal(g.left, None);
   });
 
   test('create 2 x 2 without metadata', () => {
