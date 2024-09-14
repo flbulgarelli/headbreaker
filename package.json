@@ -3,9 +3,11 @@
   "version": "3.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "vite --config vite.config.website.ts",
+    "build:website": "vite build --config vite.config.website.ts",
+    "build:lib": "vite build --config vite.config.lib.ts",
+    "build": "npm run build:website && npm run build:lib",
+    "preview": "vite preview --config vite.config.website.ts",
     "test": "vitest"
   },
   "repository": {
