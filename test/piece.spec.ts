@@ -494,7 +494,7 @@ describe('piece', () => {
     a.locateAt(0, 0);
     b.locateAt(10, 30);
 
-    assert.throws(() => a.connectVerticallyWith(b), /can not connect down!/);
+    assert.throws(() => a.connectVerticallyWith(b), /Cannot connect down!/);
   });
 
   test('connects vertically with attracts', () => {
