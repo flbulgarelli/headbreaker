@@ -8,9 +8,6 @@ import { Vector } from './vector';
 import { Size } from './size';
 
 import Puzzle from './puzzle';
-import { SpatialMetadata } from './spatial-metadata';
-import { CanvasMetadata, LabelMetadata } from './canvas';
-import { ImageMetadata } from './image-metadata';
 
 export type TranslationListener = (
   piece: Piece,
@@ -42,9 +39,7 @@ export default class Piece {
   down: Insert;
   left: Insert;
   right: Insert;
-  metadata:
-    | (SpatialMetadata & CanvasMetadata & LabelMetadata & ImageMetadata)
-    | any;
+  metadata: any;
   centralAnchor?: Anchor;
   _size?: Size;
   _horizontalConnector?: Connector;
