@@ -2,7 +2,7 @@ import pair from './pair';
 import Piece from './piece';
 import Puzzle from './puzzle';
 import Manufacturer from './manufacturer';
-import { twoAndTwo } from './sequence';
+import { InsertsGenerator, twoAndTwo } from './sequence';
 import structure, { StructureLike } from './structure';
 import vector, { Vector } from './vector';
 import Metadata from './metadata';
@@ -307,7 +307,7 @@ class Canvas {
    * @param {object} options
    * @param {number} [options.horizontalPiecesCount]
    * @param {number} [options.verticalPiecesCount]
-   * @param {import('./sequence').InsertsGenerator} [options.insertsGenerator]
+   * @param {InsertsGenerator} [options.insertsGenerator]
    * @param {CanvasMetadata[]} [options.metadata] optional list of metadata that will be attached to each generated piece
    */
   autogenerate({
@@ -318,7 +318,7 @@ class Canvas {
   }: {
     horizontalPiecesCount?: number;
     verticalPiecesCount?: number;
-    insertsGenerator?: import('./sequence').InsertsGenerator;
+    insertsGenerator?: InsertsGenerator;
     metadata?: CanvasMetadata[];
   } = {}) {
     const manufacturer = new Manufacturer();
