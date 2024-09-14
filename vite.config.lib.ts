@@ -13,6 +13,7 @@ export default defineConfig({
   },
   publicDir: 'false',
   build: {
+    outDir: 'dist/lib',
     lib: {
       entry: path.resolve(__dirname, 'src/headbreaker/index.ts'),
       name: 'Headbreaker',
