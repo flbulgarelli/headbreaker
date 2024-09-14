@@ -57,7 +57,7 @@ const absolutePosition: PieceCondition = (piece) =>
 function initialize(
   metadata: SpatialMetadata,
   target: Vector,
-  current: Vector
+  current?: Vector
 ) {
   metadata.targetPosition = metadata.targetPosition || target;
   metadata.currentPosition =

@@ -231,7 +231,7 @@ class Canvas {
    * @param {Template} options
    */
   sketchPiece({ structure, size, metadata }: Template) {
-    SpatialMetadata.initialize(metadata, vector.zero(), vector.zero());
+    SpatialMetadata.initialize(metadata, vector.zero());
     const piece = this._newPiece(structure, size, metadata);
     if (piece) {
       this.renderPiece(piece);
