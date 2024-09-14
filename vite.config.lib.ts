@@ -11,6 +11,7 @@ export default defineConfig({
       },
     ],
   },
+  publicDir: 'false',
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/headbreaker/index.ts'),
