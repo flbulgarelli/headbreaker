@@ -1,11 +1,18 @@
-const assert = require('assert');
-import {Tab, Slot, None, anchor, Manufacturer, generators} from '../src/index';
+import { describe, assert, test } from 'vitest';
+import {
+  Tab,
+  Slot,
+  None,
+  anchor,
+  Manufacturer,
+  generators,
+} from '../src/headbreaker/index';
 
-describe("manufacturer", () => {
-  it("create 1 x 1", () => {
+describe('manufacturer', () => {
+  test('create 1 x 1', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(1, 1);
-    manufacturer.withStructure({pieceRadius: 10, proximity: 1});
+    manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
     const puzzle = manufacturer.build();
     const first = puzzle.pieces[0];
 
@@ -16,29 +23,29 @@ describe("manufacturer", () => {
     assert.equal(first.down, None);
     assert.equal(first.left, None);
 
-    assert.equal(first.radius.x, 10);
-    assert.equal(first.radius.y, 10);
+    assert.isDefined(first.radius);
+    assert.equal(first.radius!.x, 10);
+    assert.equal(first.radius!.y, 10);
     assert.equal(first.proximity, 1);
 
     assert.deepEqual(first.centralAnchor, anchor(20, 20));
+  });
 
-  })
-
-  it("create 1 x 1 with central anchor", () => {
+  test('create 1 x 1 with central anchor', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(1, 1);
-    manufacturer.withStructure({pieceRadius: 10, proximity: 1});
+    manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
     manufacturer.withHeadAt(anchor(-3, 5));
     const puzzle = manufacturer.build();
 
     assert.equal(puzzle.pieces.length, 1);
     assert.deepEqual(puzzle.head.centralAnchor, anchor(-3, 5));
-  })
+  });
 
-  it("create 2 x 1", () => {
+  test('create 2 x 1', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(2, 1);
-    manufacturer.withStructure({pieceRadius: 10, proximity: 1});
+    manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
     const puzzle = manufacturer.build();
 
     const first = puzzle.pieces[0];
@@ -58,9 +65,9 @@ describe("manufacturer", () => {
 
     assert.deepEqual(first.centralAnchor, anchor(20, 20));
     assert.deepEqual(second.centralAnchor, anchor(40, 20));
-  })
+  });
 
-  it("create 3 x 1", () => {
+  test('create 3 x 1', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(3, 1);
     const puzzle = manufacturer.build();
@@ -87,9 +94,9 @@ describe("manufacturer", () => {
     assert.deepEqual(first.centralAnchor, anchor(4, 4));
     assert.deepEqual(second.centralAnchor, anchor(8, 4));
     assert.deepEqual(third.centralAnchor, anchor(12, 4));
-  })
+  });
 
-  it("create 1 x 2", () => {
+  test('create 1 x 2', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(1, 2);
     const puzzle = manufacturer.build();
@@ -110,9 +117,9 @@ describe("manufacturer", () => {
 
     assert.deepEqual(first.centralAnchor, anchor(4, 4));
     assert.deepEqual(second.centralAnchor, anchor(4, 8));
-  })
+  });
 
-  it("create 3 x 2", () => {
+  test('create 3 x 2', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(3, 2);
     const puzzle = manufacturer.build();
@@ -150,12 +157,12 @@ describe("manufacturer", () => {
     assert.equal(f.right, None);
     assert.equal(f.down, None);
     assert.equal(f.left, Slot);
-  })
+  });
 
-  it("create 2 x 2 with rectangular pieces", () => {
+  test('create 2 x 2 with rectangular pieces', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(2, 2);
-    manufacturer.withStructure({pieceRadius: {x:  2, y: 3}})
+    manufacturer.withStructure({ pieceRadius: { x: 2, y: 3 } });
     const puzzle = manufacturer.build();
 
     const [a, b, c, d] = puzzle.pieces;
@@ -186,9 +193,9 @@ describe("manufacturer", () => {
     assert.deepEqual(b.centralAnchor, anchor(8, 6));
     assert.deepEqual(c.centralAnchor, anchor(4, 12));
     assert.deepEqual(d.centralAnchor, anchor(8, 12));
-  })
+  });
 
-  it("create 6 x 1 with flip flop", () => {
+  test('create 6 x 1 with flip flop', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(6, 1);
     manufacturer.withInsertsGenerator(generators.flipflop);
@@ -203,6 +210,7 @@ describe("manufacturer", () => {
     assert.equal(d.right, Slot);
     assert.equal(e.right, Tab);
     assert.equal(f.right, None);
+    assert.equal(g.right, None);
 
     assert.equal(a.left, None);
     assert.equal(b.left, Slot);
@@ -210,10 +218,10 @@ describe("manufacturer", () => {
     assert.equal(d.left, Slot);
     assert.equal(e.left, Tab);
     assert.equal(f.left, Slot);
-  })
+    assert.equal(g.left, None);
+  });
 
-
-  it("create 2 x 2 without metadata", () => {
+  test('create 2 x 2 without metadata', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(2, 2);
     const puzzle = manufacturer.build();
@@ -224,23 +232,28 @@ describe("manufacturer", () => {
     assert.equal(b.metadata.id, 2);
     assert.equal(c.metadata.id, 3);
     assert.equal(d.metadata.id, 4);
-  })
+  });
 
-  it("create 2 x 2 with metadata", () => {
+  test('create 2 x 2 with metadata', () => {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(2, 2);
-    manufacturer.withMetadata([{foo: 'a'}, {foo: 'b'}, {foo: 'c'}, {id: 'X'}]);
+    manufacturer.withMetadata([
+      { foo: 'a' },
+      { foo: 'b' },
+      { foo: 'c' },
+      { id: 'X' },
+    ]);
     const puzzle = manufacturer.build();
 
     const [a, b, c, d] = puzzle.pieces;
 
     assert.equal(a.metadata.id, 1);
-    assert.equal(a.metadata.foo,  'a');
+    assert.equal(a.metadata.foo, 'a');
     assert.equal(b.metadata.id, 2);
     assert.equal(b.metadata.foo, 'b');
     assert.equal(c.metadata.id, 3);
     assert.equal(c.metadata.foo, 'c');
     assert.equal(d.metadata.id, 'X');
     assert.equal(d.metadata.foo, null);
-  })
-})
+  });
+});
