@@ -11,7 +11,7 @@ import vector from '../src/headbreaker/vector';
 
 describe('puzzle', () => {
   /** @type {Puzzle} */
-  let puzzle;
+  let puzzle: Puzzle;
 
   beforeEach(() => {
     puzzle = new Puzzle();
@@ -153,7 +153,7 @@ describe('puzzle', () => {
 
       puzzle.reframe(vector.zero(), vector(10, 10));
 
-      assert.deepEqual(piece.centralAnchor.asPair(), [2, 2]);
+      assert.deepEqual(piece.centralAnchor!.asPair(), [2, 2]);
     });
 
     test('reframes single offstage piece - to the right', () => {
@@ -163,7 +163,7 @@ describe('puzzle', () => {
 
       puzzle.reframe(vector.zero(), vector(8, 12));
 
-      assert.deepEqual(piece.centralAnchor.asPair(), [6, 10]);
+      assert.deepEqual(piece.centralAnchor!.asPair(), [6, 10]);
     });
 
     test('reframes multiple offstage pieces, preserving distances', () => {
@@ -176,8 +176,8 @@ describe('puzzle', () => {
 
       puzzle.reframe(vector.zero(), vector(10, 10));
 
-      assert.deepEqual(one.centralAnchor.asPair(), [2, 2]);
-      assert.deepEqual(other.centralAnchor.asPair(), [4, 6]);
+      assert.deepEqual(one.centralAnchor!.asPair(), [2, 2]);
+      assert.deepEqual(other.centralAnchor!.asPair(), [4, 6]);
     });
 
     test('honors min bound when full refraiming is impossible', () => {
@@ -190,8 +190,8 @@ describe('puzzle', () => {
 
       puzzle.reframe(vector.zero(), vector(10, 10));
 
-      assert.deepEqual(one.centralAnchor.asPair(), [2, 2]);
-      assert.deepEqual(other.centralAnchor.asPair(), [14, 14]);
+      assert.deepEqual(one.centralAnchor!.asPair(), [2, 2]);
+      assert.deepEqual(other.centralAnchor!.asPair(), [14, 14]);
     });
 
     test('reframes does nothing when pieces are already within bounds', () => {
@@ -204,8 +204,8 @@ describe('puzzle', () => {
 
       puzzle.reframe(vector.zero(), vector(20, 20));
 
-      assert.deepEqual(one.centralAnchor.asPair(), [3, 3]);
-      assert.deepEqual(other.centralAnchor.asPair(), [5, 9]);
+      assert.deepEqual(one.centralAnchor!.asPair(), [3, 3]);
+      assert.deepEqual(other.centralAnchor!.asPair(), [5, 9]);
     });
   });
 

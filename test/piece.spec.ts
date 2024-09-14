@@ -346,13 +346,13 @@ describe('piece', () => {
 
   describe('connection of regular pieces', () => {
     /** @type {import('../src/puzzle')} */
-    let puzzle;
+    let puzzle: Puzzle;
     /** @type {import('../src/piece')} */
-    let a;
+    let a: Piece;
     /** @type {import('../src/piece')} */
-    let b;
+    let b: Piece;
     /** @type {import('../src/piece')} */
-    let c;
+    let c: Piece;
 
     beforeEach(() => {
       puzzle = new Puzzle();
@@ -804,8 +804,8 @@ describe('piece', () => {
   });
 
   describe('drags when there are connections', () => {
-    let puzzle;
-    let a, b, c, d;
+    let puzzle: Puzzle;
+    let a: Piece, b: Piece, c: Piece, d: Piece;
 
     beforeEach(() => {
       puzzle = new Puzzle();
