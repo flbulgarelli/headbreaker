@@ -335,8 +335,8 @@ class Canvas {
     manufacturer.withStructure(this.settings);
     this._puzzle = manufacturer.build();
     this._maxPiecesCount = vector(manufacturer.width, manufacturer.height);
-    if (this.puzzle) {
-      this.renderPieces(this.puzzle.pieces);
+    if (this._puzzle) {
+      this.renderPieces(this._puzzle.pieces);
     }
   }
 
@@ -777,7 +777,7 @@ class Canvas {
   }
 
   /**
-   * Configures canvas to adjust images axis to puzzle's axis.
+   * Configures canvas to adjust images to puzzle's dimensions.
    *
    * **Warning**: this method requires {@code maxPiecesCount} or {@code puzzleDiameter} to be set.
    *
@@ -879,7 +879,9 @@ class Canvas {
    * @type {Vector}
    * */
   get puzzleDiameter() {
-    return this._puzzleDiameter || this.estimatedPuzzleDiameter;
+    return this._puzzleDiameter && !vector.isZero(this._puzzleDiameter)
+      ? this._puzzleDiameter
+      : this.estimatedPuzzleDiameter;
   }
 
   /**

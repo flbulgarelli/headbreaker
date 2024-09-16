@@ -26,14 +26,14 @@ vector.cast = (value: Vector | number): Vector => {
   } else {
     return value;
   }
-}
+};
 
- /**
-  * This module contains functions for dealing with objects with x and y
-  * coordinates that represent or include point data
-  *
-  * @module Vector
-  */
+/**
+ * This module contains functions for dealing with objects with x and y
+ * coordinates that represent or include point data
+ *
+ * @module Vector
+ */
 
 /**
  * Returns a new (0, 0) vector
@@ -42,7 +42,15 @@ vector.cast = (value: Vector | number): Vector => {
  */
 vector.zero = (): Vector => {
   return vector(0, 0);
-}
+};
+
+/**
+ * @param {Vector} vector
+ * @returns {boolean}
+ */
+vector.isZero = (vector: Vector): boolean => {
+  return vector.x === 0 && vector.y === 0;
+};
 
 /**
  * Compares two points
@@ -54,7 +62,7 @@ vector.zero = (): Vector => {
  */
 vector.equal = (one: Vector, other: Vector, delta: number = 0): boolean => {
   return pair.equal(one.x, one.y, other.x, other.y, delta);
-}
+};
 
 /**
  * Creates a copy of the given point
@@ -62,9 +70,9 @@ vector.equal = (one: Vector, other: Vector, delta: number = 0): boolean => {
  * @param {Vector} one
  * @returns {Vector}
  */
-vector.copy = ({x, y}: Vector): Vector => {
-  return {x, y}
-}
+vector.copy = ({ x, y }: Vector): Vector => {
+  return { x, y };
+};
 
 /**
  * @param {Vector} vector
@@ -74,7 +82,7 @@ vector.copy = ({x, y}: Vector): Vector => {
 vector.update = (vector: Vector, x: any, y: any) => {
   vector.x = x;
   vector.y = y;
-}
+};
 
 /**
  * @param {Vector} one
@@ -83,7 +91,7 @@ vector.update = (vector: Vector, x: any, y: any) => {
  */
 vector.diff = (one: Vector, other: Vector): Pair => {
   return pair.diff(one.x, one.y, other.x, other.y);
-}
+};
 
 /**
  * @param {Vector|number} one
@@ -93,7 +101,7 @@ vector.diff = (one: Vector, other: Vector): Pair => {
  */
 vector.multiply = (one: Vector | number, other: Vector | number): Vector => {
   return _apply(one, other, (v1, v2) => v1 * v2);
-}
+};
 
 /**
  * @param {Vector|number} one
@@ -103,7 +111,7 @@ vector.multiply = (one: Vector | number, other: Vector | number): Vector => {
  */
 vector.divide = (one: Vector | number, other: Vector | number): Vector => {
   return _apply(one, other, (v1, v2) => v1 / v2);
-}
+};
 
 /**
  * @param {Vector|number} one
@@ -113,7 +121,7 @@ vector.divide = (one: Vector | number, other: Vector | number): Vector => {
  */
 vector.plus = (one: Vector | number, other: Vector | number): Vector => {
   return _apply(one, other, (v1, v2) => v1 + v2);
-}
+};
 
 /**
  * @param {Vector|number} one
@@ -123,7 +131,7 @@ vector.plus = (one: Vector | number, other: Vector | number): Vector => {
  */
 vector.minus = (one: Vector | number, other: Vector | number): Vector => {
   return _apply(one, other, (v1, v2) => v1 - v2);
-}
+};
 
 /**
  * @param {Vector|number} one
@@ -133,7 +141,7 @@ vector.minus = (one: Vector | number, other: Vector | number): Vector => {
  */
 vector.min = (one: Vector | number, other: Vector | number): Vector => {
   return _apply(one, other, Math.min);
-}
+};
 
 /**
  * @param {Vector|number} one
@@ -143,12 +151,16 @@ vector.min = (one: Vector | number, other: Vector | number): Vector => {
  */
 vector.max = (one: Vector | number, other: Vector | number): Vector => {
   return _apply(one, other, Math.max);
-}
+};
 
-function _apply(one: Vector | number, other: Vector | number, f: (one: number, other: number) => number): Vector {
+function _apply(
+  one: Vector | number,
+  other: Vector | number,
+  f: (one: number, other: number) => number
+): Vector {
   const first = vector.cast(one);
   const second = vector.cast(other);
-  return {x: f(first.x, second.x), y: f(first.y, second.y)};
+  return { x: f(first.x, second.x), y: f(first.y, second.y) };
 }
 
 vector.inner = {
@@ -169,8 +181,11 @@ vector.inner = {
   max(one: Vector): number {
     return _innerApply(one, Math.max);
   },
-}
+};
 
-function _innerApply(one: Vector, f: (one: number, other: number) => number): number {
-  return f(one.x, one.y)
+function _innerApply(
+  one: Vector,
+  f: (one: number, other: number) => number
+): number {
+  return f(one.x, one.y);
 }
