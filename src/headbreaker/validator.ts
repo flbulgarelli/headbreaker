@@ -168,7 +168,7 @@ export class NullValidator extends AbstractValidator {
   /**
    * @param {Puzzle} _puzzle
    */
-  isValid() {
+  isValid(_puzzle: Puzzle) {
     return false;
   }
 

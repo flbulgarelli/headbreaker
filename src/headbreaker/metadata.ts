@@ -16,8 +16,3 @@ function copy<T>(metadata: T): T {
 }
 
 export default { copy };
-
-export type Metadata<T = any> = {
-  id: string;
-  [key: string]: T | string;
-};
