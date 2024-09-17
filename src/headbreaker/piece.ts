@@ -8,6 +8,7 @@ import { Vector } from './vector';
 import { Size } from './size';
 
 import Puzzle from './puzzle';
+import { Metadata } from './metadata';
 
 export type TranslationListener = (
   piece: Piece,
@@ -20,13 +21,13 @@ export type ConnectionListener = (piece: Piece, target: Piece) => void;
 export interface PieceConfig {
   centralAnchor?: Vector;
   size?: Size;
-  metadata?: any;
+  metadata?: Metadata;
 }
 
 export interface PieceDump {
   centralAnchor?: Vector;
   size?: Size;
-  metadata: any;
+  metadata: Metadata;
   connections?: Orthogonal<object>;
   structure: string;
 }
@@ -39,7 +40,7 @@ export default class Piece {
   down: Insert;
   left: Insert;
   right: Insert;
-  metadata: any;
+  metadata: Metadata;
   centralAnchor?: Anchor;
   _size?: Size;
   _horizontalConnector?: Connector;
@@ -67,7 +68,7 @@ export default class Piece {
     this.left = left;
     this.right = right;
     /** @type {any} */
-    this.metadata = {};
+    this.metadata = {} as Metadata;
     /** @type {Anchor} */
     this.centralAnchor = undefined;
     /** @type {Size} */
@@ -120,10 +121,10 @@ export default class Piece {
   /**
    * Adds unestructured user-defined metadata on this piece.
    *
-   * @param {object} metadata
+   * @param {Metadata} metadata
    */
-  annotate(metadata?: object) {
-    Object.assign(this.metadata, metadata);
+  annotate(metadata?: Metadata) {
+    this.metadata = { ...this.metadata, ...metadata };
   }
 
   /**
@@ -132,14 +133,14 @@ export default class Piece {
    * This object has no strong requirement, but it is recommended to have an
    * id property.
    *
-   * @param {object} metadata
+   * @param {T} metadata
    */
-  reannotate(metadata: object) {
+  reannotate(metadata: Metadata) {
     this.metadata = metadata;
   }
 
   /**
-   * @param {import('./puzzle')} puzzle
+   * @param {Puzzle} puzzle
    */
   belongTo(puzzle: Puzzle) {
     this.puzzle = puzzle;
@@ -165,7 +166,7 @@ export default class Piece {
   }
 
   /**
-   * @type {import('./insert').Insert[]}
+   * @type {Insert[]}
    */
   get inserts() {
     return [this.right, this.down, this.left, this.up];

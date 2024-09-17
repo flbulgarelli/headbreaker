@@ -1,7 +1,8 @@
-import Piece, { PieceConfig } from './piece';
+import Piece, { PieceConfig, PieceDump } from './piece';
 import { NullValidator, ValidationListener, Validator } from './validator';
 import { radius, Size } from './size';
 import {
+  DragMode,
   ForceConnection,
   ForceDisconnection,
   TryDisconnection,
@@ -14,32 +15,21 @@ import {
 import { Structure } from './structure';
 import Shuffler from './shuffler';
 import { Vector } from './vector';
+import { Pair } from './pair';
+import { Metadata } from './metadata';
 
-export interface Settings {
+interface Settings {
   pieceRadius?: Size | number | Vector;
   proximity?: number;
+  metadata?: Metadata;
 }
 
 interface PuzzleDump {
   pieceRadius: Size | number | Vector;
   proximity: number;
-  pieces: any[];
+  pieces: PieceDump[];
+  metadata?: Metadata;
 }
-
-/**
- * A puzzle primitive representation that can be easily stringified, exchanged and persisted
- *
- * @typedef {object} PuzzleDump
- * @property {Vector} pieceRadius
- * @property {number} proximity
- * @property {PieceDump[]} pieces
- */
-
-/**
- * @typedef {object} Settings
- * @property {Vector|number} [pieceRadius]
- * @property {number} [proximity]
- */
 
 /**
  * A set of a {@link Piece}s that can be manipulated as a whole, and that can be
@@ -49,14 +39,16 @@ class Puzzle {
   pieceSize: Size;
   proximity: number;
   pieces: Piece[];
-  validator: NullValidator;
-  dragMode: any;
+  validator: Validator;
+  dragMode: DragMode;
   horizontalConnector: Connector;
   verticalConnector: Connector;
+  metadata?: Metadata;
+
   /**
    * @param {Settings} [options]
    */
-  constructor({ pieceRadius = 2, proximity = 1 }: Settings = {} as Settings) {
+  constructor({ pieceRadius = 2, proximity = 1, metadata }: Settings = {}) {
     this.pieceSize = radius(
       typeof pieceRadius === 'number'
         ? pieceRadius
@@ -72,6 +64,7 @@ class Puzzle {
 
     this.horizontalConnector = Connector.horizontal();
     this.verticalConnector = Connector.vertical();
+    this.metadata = metadata;
   }
 
   /**
@@ -105,18 +98,18 @@ class Puzzle {
   /**
    * Annotates all the pieces with the given list of metadata
    *
-   * @param {object[]} metadata
+   * @param {T[]} metadata
    */
-  annotate(metadata: object[]) {
+  annotate(metadata: Metadata) {
     this.pieces.forEach((piece, index) => piece.annotate(metadata[index]));
   }
 
   /**
    * Relocates all the pieces to the given list of points
    *
-   * @param {import('./pair').Pair[]} points
+   * @param {Pair[]} points
    */
-  relocateTo(points: import('./pair').Pair[]) {
+  relocateTo(points: Pair[]) {
     this.pieces.forEach((piece, index) => piece.relocateTo(...points[index]));
   }
 
@@ -252,7 +245,7 @@ class Puzzle {
    * Answers the list of points where
    * central anchors of pieces are located
    *
-   * @type {import('./pair').Pair[]}
+   * @type {Pair[]}
    */
   get points() {
     return this.pieces.map((it) => it.centralAnchor?.asPair() ?? [0, 0]);
@@ -262,7 +255,7 @@ class Puzzle {
    * Answers a list of points whose coordinates are scaled
    * to the {@link Puzzle#pieceWidth}
    *
-   * @type {import('./pair').Pair[]}
+   * @type {Pair[]}
    */
   get refs() {
     return this.points.map(([x, y], index) => {
@@ -271,13 +264,6 @@ class Puzzle {
       const actualDiameter = diameter ?? defaultDiameter;
       return [x / actualDiameter.x, y / actualDiameter.y];
     });
-  }
-
-  /**
-   * @type {any[]}
-   */
-  get metadata() {
-    return this.pieces.map((it) => it.metadata);
   }
 
   /**
@@ -483,6 +469,7 @@ class Puzzle {
       pieceRadius: this.pieceRadius,
       proximity: this.proximity,
       pieces: this.pieces.map((it) => it.export(options)),
+      metadata: this.metadata,
     };
   }
 
@@ -497,10 +484,15 @@ class Puzzle {
           ? dump.pieceRadius
           : 2, // default value
       proximity: dump.proximity,
+      metadata: dump.metadata,
     });
     puzzle.addPieces(dump.pieces.map((it) => Piece.import(it)));
     puzzle.autoconnect();
     return puzzle;
+  }
+
+  get getMetadata(): Metadata | undefined {
+    return this.metadata;
   }
 }
 
