@@ -37,7 +37,7 @@ interface PuzzleDump {
 
 /**
  * @typedef {object} Settings
- * @property {import('./vector').Vector|number} [pieceRadius]
+ * @property {Vector|number} [pieceRadius]
  * @property {number} [proximity]
  */
 
@@ -183,10 +183,10 @@ class Puzzle {
    * If pieces can not be completly places within the given
    * bounding box, the the `max` param is ignored.
    *
-   * @param {import('./vector').Vector} min
-   * @param {import('./vector').Vector} max
+   * @param {Vector} min
+   * @param {Vector} max
    */
-  reframe(min: import('./vector').Vector, max: import('./vector').Vector) {
+  reframe(min: Vector, max: Vector) {
     let dx;
     const leftOffstage =
       min.x - Math.min(...this.pieces.map((it) => it.leftAnchor?.x ?? 0));
@@ -430,7 +430,7 @@ class Puzzle {
    * The piece width, from edge to edge.
    * This is the double of the {@link Puzzle#pieceRadius}
    *
-   * @type {import('./vector').Vector}
+   * @type {Vector}
    */
   get pieceDiameter() {
     return this.pieceSize.diameter;
@@ -439,7 +439,7 @@ class Puzzle {
   /**
    * The piece width, from center to edge
    *
-   * @type {import('./vector').Vector}
+   * @type {Vector}
    */
   get pieceRadius() {
     return this.pieceSize.radius;

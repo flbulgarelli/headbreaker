@@ -1,28 +1,26 @@
-import Piece from './piece';
-
-import { anchor, Anchor } from './anchor';
-import { fixed, InsertSequence, InsertsGenerator } from './sequence';
-import { Insert } from './insert';
 import Puzzle, { Settings } from './puzzle';
+import Piece from './piece';
+import { Anchor, anchor } from './anchor';
+import { fixed, InsertSequence, InsertsGenerator } from './sequence';
 import Metadata from './metadata';
+import { Vector } from './vector';
 
 /**
  * A manufacturer allows to create rectangular
  * puzzles by automatically generating inserts
  */
 export default class Manufacturer {
-  insertsGenerator: (_n: number) => Insert;
-  metadata: any[];
-  headAnchor: Anchor;
-  structure: any;
+  private insertsGenerator: InsertsGenerator;
+  private metadata: any[];
+  private headAnchor: Anchor | null;
+  private structure?: Settings;
   width: number = 0;
   height: number = 0;
 
   constructor() {
     this.insertsGenerator = fixed;
     this.metadata = [];
-    /** @type {Anchor} */
-    this.headAnchor = anchor(0, 0); // Initialize with a default Anchor value
+    this.headAnchor = null;
   }
 
   /**
@@ -30,14 +28,14 @@ export default class Manufacturer {
    *
    * @param {object[]} metadata list of metadata that will be attached to each generated piece
    */
-  withMetadata(metadata: object[]) {
+  withMetadata(metadata: object[]): void {
     this.metadata = metadata;
   }
 
   /**
    * @param {InsertsGenerator} generator
    */
-  withInsertsGenerator(generator: InsertsGenerator) {
+  withInsertsGenerator(generator: InsertsGenerator): void {
     this.insertsGenerator = generator || this.insertsGenerator;
   }
 
@@ -47,7 +45,7 @@ export default class Manufacturer {
    *
    * @param {Anchor} anchor
    */
-  withHeadAt(anchor: Anchor) {
+  withHeadAt(anchor: Anchor): void {
     this.headAnchor = anchor;
   }
 
@@ -56,7 +54,7 @@ export default class Manufacturer {
    *
    * @param {Settings} structure
    */
-  withStructure(structure: Settings) {
+  withStructure(structure: Settings): void {
     this.structure = structure;
   }
 
@@ -65,7 +63,7 @@ export default class Manufacturer {
    * @param {number} width
    * @param {number} height
    */
-  withDimensions(width: number, height: number) {
+  withDimensions(width: number, height: number): void {
     this.width = width;
     this.height = height;
   }
@@ -78,7 +76,7 @@ export default class Manufacturer {
     const positioner = new Positioner(puzzle, this.headAnchor);
 
     let verticalSequence = this._newSequence();
-    let horizontalSequence;
+    let horizontalSequence: InsertSequence;
 
     for (let y = 0; y < this.height; y++) {
       horizontalSequence = this._newSequence();
@@ -98,38 +96,26 @@ export default class Manufacturer {
     return puzzle;
   }
 
-  /**
-   * @param {Piece[]} pieces
-   */
-  _annotateAll(pieces: Piece[]) {
+  private _annotateAll(pieces: Piece[]): void {
     pieces.forEach((piece, index) => this._annotate(piece, index));
   }
 
-  /**
-   * @param {Piece} piece
-   * @param {number} index
-   */
-  _annotate(piece: Piece, index: number) {
+  private _annotate(piece: Piece, index: number): void {
     const baseMetadata = this.metadata[index];
     const metadata = baseMetadata ? Metadata.copy(baseMetadata) : {};
     metadata.id = metadata.id || String(index + 1);
     piece.annotate(metadata);
   }
 
-  _newSequence() {
+  private _newSequence(): InsertSequence {
     return new InsertSequence(this.insertsGenerator);
   }
 
-  /**
-   * @param {Puzzle} puzzle
-   * @param {InsertSequence} horizontalSequence
-   * @param {InsertSequence} verticalSequence
-   */
-  _buildPiece(
+  private _buildPiece(
     puzzle: Puzzle,
     horizontalSequence: InsertSequence,
     verticalSequence: InsertSequence
-  ) {
+  ): Piece {
     return puzzle.newPiece({
       left: horizontalSequence.previousComplement(),
       up: verticalSequence.previousComplement(),
@@ -140,39 +126,27 @@ export default class Manufacturer {
 }
 
 class Positioner {
-  puzzle: any;
-  offset: any;
-  /**
-   *
-   * @param {Puzzle} puzzle
-   * @param {Anchor} headAnchor
-   */
-  constructor(puzzle: Puzzle, headAnchor: Anchor) {
+  private puzzle: Puzzle;
+  private offset: Vector;
+
+  constructor(puzzle: Puzzle, headAnchor: Anchor | null) {
     this.puzzle = puzzle;
-    this.initializeOffset(headAnchor);
+    this.offset = this.initializeOffset(headAnchor);
   }
 
-  /**
-   * @param {Anchor} headAnchor
-   */
-  initializeOffset(headAnchor: Anchor) {
+  private initializeOffset(headAnchor: Anchor | null): Vector {
     if (headAnchor) {
-      /** @type {import('./vector').Vector} */
-      this.offset = headAnchor.asVector();
+      return headAnchor.asVector();
     } else {
-      this.offset = this.pieceDiameter;
+      return this.pieceDiameter;
     }
   }
 
-  get pieceDiameter() {
+  private get pieceDiameter(): Vector {
     return this.puzzle.pieceDiameter;
   }
 
-  /**
-   * @param {number} x
-   * @param {number} y
-   */
-  naturalAnchor(x: number, y: number) {
+  naturalAnchor(x: number, y: number): Anchor {
     return anchor(
       x * this.pieceDiameter.x + this.offset.x,
       y * this.pieceDiameter.y + this.offset.y
