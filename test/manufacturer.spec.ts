@@ -9,155 +9,155 @@ import {
 } from '../src/headbreaker/index';
 
 describe('manufacturer', () => {
-  // test('create 1 x 1', () => {
-  //   const manufacturer = new Manufacturer();
-  //   manufacturer.withDimensions(1, 1);
-  //   manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
-  //   const puzzle = manufacturer.build();
-  //   const first = puzzle.pieces[0];
+  test('create 1 x 1', () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimensions(1, 1);
+    manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
+    const puzzle = manufacturer.build();
+    const first = puzzle.pieces[0];
 
-  //   assert.equal(puzzle.pieces.length, 1);
+    assert.equal(puzzle.pieces.length, 1);
 
-  //   assert.equal(first.up, None);
-  //   assert.equal(first.right, None);
-  //   assert.equal(first.down, None);
-  //   assert.equal(first.left, None);
+    assert.equal(first.up, None);
+    assert.equal(first.right, None);
+    assert.equal(first.down, None);
+    assert.equal(first.left, None);
 
-  //   assert.isDefined(first.radius);
-  //   assert.equal(first.radius!.x, 10);
-  //   assert.equal(first.radius!.y, 10);
-  //   assert.equal(first.proximity, 1);
+    assert.isDefined(first.radius);
+    assert.equal(first.radius!.x, 10);
+    assert.equal(first.radius!.y, 10);
+    assert.equal(first.proximity, 1);
 
-  //   assert.deepEqual(first.centralAnchor, anchor(20, 20));
-  // });
+    assert.deepEqual(first.centralAnchor, anchor(20, 20));
+  });
 
-  // test('create 1 x 1 with central anchor', () => {
-  //   const manufacturer = new Manufacturer();
-  //   manufacturer.withDimensions(1, 1);
-  //   manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
-  //   manufacturer.withHeadAt(anchor(-3, 5));
-  //   const puzzle = manufacturer.build();
+  test('create 1 x 1 with central anchor', () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimensions(1, 1);
+    manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
+    manufacturer.withHeadAt(anchor(-3, 5));
+    const puzzle = manufacturer.build();
 
-  //   assert.equal(puzzle.pieces.length, 1);
-  //   assert.deepEqual(puzzle.head.centralAnchor, anchor(-3, 5));
-  // });
+    assert.equal(puzzle.pieces.length, 1);
+    assert.deepEqual(puzzle.head.centralAnchor, anchor(-3, 5));
+  });
 
-  // test('create 2 x 1', () => {
-  //   const manufacturer = new Manufacturer();
-  //   manufacturer.withDimensions(2, 1);
-  //   manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
-  //   const puzzle = manufacturer.build();
+  test('create 2 x 1', () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimensions(2, 1);
+    manufacturer.withStructure({ pieceRadius: 10, proximity: 1 });
+    const puzzle = manufacturer.build();
 
-  //   const first = puzzle.pieces[0];
-  //   const second = puzzle.pieces[1];
+    const first = puzzle.pieces[0];
+    const second = puzzle.pieces[1];
 
-  //   assert.equal(puzzle.pieces.length, 2);
+    assert.equal(puzzle.pieces.length, 2);
 
-  //   assert.equal(first.up, None);
-  //   assert.equal(first.right, Tab);
-  //   assert.equal(first.down, None);
-  //   assert.equal(first.left, None);
+    assert.equal(first.up, None);
+    assert.equal(first.right, Tab);
+    assert.equal(first.down, None);
+    assert.equal(first.left, None);
 
-  //   assert.equal(second.up, None);
-  //   assert.equal(second.right, None);
-  //   assert.equal(second.down, None);
-  //   assert.equal(second.left, Slot);
+    assert.equal(second.up, None);
+    assert.equal(second.right, None);
+    assert.equal(second.down, None);
+    assert.equal(second.left, Slot);
 
-  //   assert.deepEqual(first.centralAnchor, anchor(20, 20));
-  //   assert.deepEqual(second.centralAnchor, anchor(40, 20));
-  // });
+    assert.deepEqual(first.centralAnchor, anchor(20, 20));
+    assert.deepEqual(second.centralAnchor, anchor(40, 20));
+  });
 
-  // test('create 3 x 1', () => {
-  //   const manufacturer = new Manufacturer();
-  //   manufacturer.withDimensions(3, 1);
-  //   const puzzle = manufacturer.build();
+  test('create 3 x 1', () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimensions(3, 1);
+    const puzzle = manufacturer.build();
 
-  //   const [first, second, third] = puzzle.pieces;
+    const [first, second, third] = puzzle.pieces;
 
-  //   assert.equal(puzzle.pieces.length, 3);
+    assert.equal(puzzle.pieces.length, 3);
 
-  //   assert.equal(first.up, None);
-  //   assert.equal(first.right, Tab);
-  //   assert.equal(first.down, None);
-  //   assert.equal(first.left, None);
+    assert.equal(first.up, None);
+    assert.equal(first.right, Tab);
+    assert.equal(first.down, None);
+    assert.equal(first.left, None);
 
-  //   assert.equal(second.up, None);
-  //   assert.equal(second.right, Tab);
-  //   assert.equal(second.down, None);
-  //   assert.equal(second.left, Slot);
+    assert.equal(second.up, None);
+    assert.equal(second.right, Tab);
+    assert.equal(second.down, None);
+    assert.equal(second.left, Slot);
 
-  //   assert.equal(third.up, None);
-  //   assert.equal(third.right, None);
-  //   assert.equal(third.down, None);
-  //   assert.equal(third.left, Slot);
+    assert.equal(third.up, None);
+    assert.equal(third.right, None);
+    assert.equal(third.down, None);
+    assert.equal(third.left, Slot);
 
-  //   assert.deepEqual(first.centralAnchor, anchor(4, 4));
-  //   assert.deepEqual(second.centralAnchor, anchor(8, 4));
-  //   assert.deepEqual(third.centralAnchor, anchor(12, 4));
-  // });
+    assert.deepEqual(first.centralAnchor, anchor(4, 4));
+    assert.deepEqual(second.centralAnchor, anchor(8, 4));
+    assert.deepEqual(third.centralAnchor, anchor(12, 4));
+  });
 
-  // test('create 1 x 2', () => {
-  //   const manufacturer = new Manufacturer();
-  //   manufacturer.withDimensions(1, 2);
-  //   const puzzle = manufacturer.build();
+  test('create 1 x 2', () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimensions(1, 2);
+    const puzzle = manufacturer.build();
 
-  //   const [first, second] = puzzle.pieces;
+    const [first, second] = puzzle.pieces;
 
-  //   assert.equal(puzzle.pieces.length, 2);
+    assert.equal(puzzle.pieces.length, 2);
 
-  //   assert.equal(first.up, None);
-  //   assert.equal(first.right, None);
-  //   assert.equal(first.down, Tab);
-  //   assert.equal(first.left, None);
+    assert.equal(first.up, None);
+    assert.equal(first.right, None);
+    assert.equal(first.down, Tab);
+    assert.equal(first.left, None);
 
-  //   assert.equal(second.up, Slot);
-  //   assert.equal(second.right, None);
-  //   assert.equal(second.down, None);
-  //   assert.equal(second.left, None);
+    assert.equal(second.up, Slot);
+    assert.equal(second.right, None);
+    assert.equal(second.down, None);
+    assert.equal(second.left, None);
 
-  //   assert.deepEqual(first.centralAnchor, anchor(4, 4));
-  //   assert.deepEqual(second.centralAnchor, anchor(4, 8));
-  // });
+    assert.deepEqual(first.centralAnchor, anchor(4, 4));
+    assert.deepEqual(second.centralAnchor, anchor(4, 8));
+  });
 
-  // test('create 3 x 2', () => {
-  //   const manufacturer = new Manufacturer();
-  //   manufacturer.withDimensions(3, 2);
-  //   const puzzle = manufacturer.build();
+  test('create 3 x 2', () => {
+    const manufacturer = new Manufacturer();
+    manufacturer.withDimensions(3, 2);
+    const puzzle = manufacturer.build();
 
-  //   const [a, b, c, d, e, f] = puzzle.pieces;
+    const [a, b, c, d, e, f] = puzzle.pieces;
 
-  //   assert.equal(puzzle.pieces.length, 6);
+    assert.equal(puzzle.pieces.length, 6);
 
-  //   assert.equal(a.up, None);
-  //   assert.equal(a.right, Tab);
-  //   assert.equal(a.down, Tab);
-  //   assert.equal(a.left, None);
+    assert.equal(a.up, None);
+    assert.equal(a.right, Tab);
+    assert.equal(a.down, Tab);
+    assert.equal(a.left, None);
 
-  //   assert.equal(b.up, None);
-  //   assert.equal(b.right, Tab);
-  //   assert.equal(b.down, Tab);
-  //   assert.equal(b.left, Slot);
+    assert.equal(b.up, None);
+    assert.equal(b.right, Tab);
+    assert.equal(b.down, Tab);
+    assert.equal(b.left, Slot);
 
-  //   assert.equal(c.up, None);
-  //   assert.equal(c.right, None);
-  //   assert.equal(c.down, Tab);
-  //   assert.equal(c.left, Slot);
+    assert.equal(c.up, None);
+    assert.equal(c.right, None);
+    assert.equal(c.down, Tab);
+    assert.equal(c.left, Slot);
 
-  //   assert.equal(d.up, Slot);
-  //   assert.equal(d.right, Tab);
-  //   assert.equal(d.down, None);
-  //   assert.equal(d.left, None);
+    assert.equal(d.up, Slot);
+    assert.equal(d.right, Tab);
+    assert.equal(d.down, None);
+    assert.equal(d.left, None);
 
-  //   assert.equal(e.up, Slot);
-  //   assert.equal(e.right, Tab);
-  //   assert.equal(e.down, None);
-  //   assert.equal(e.left, Slot);
+    assert.equal(e.up, Slot);
+    assert.equal(e.right, Tab);
+    assert.equal(e.down, None);
+    assert.equal(e.left, Slot);
 
-  //   assert.equal(f.up, Slot);
-  //   assert.equal(f.right, None);
-  //   assert.equal(f.down, None);
-  //   assert.equal(f.left, Slot);
-  // });
+    assert.equal(f.up, Slot);
+    assert.equal(f.right, None);
+    assert.equal(f.down, None);
+    assert.equal(f.left, Slot);
+  });
 
   test('create 2 x 2 with rectangular pieces', () => {
     const manufacturer = new Manufacturer();
