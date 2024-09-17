@@ -31,30 +31,10 @@ export interface Figure {
   label?: Konva.Label;
 }
 
-export interface LabelMetadata {
-  text?: string;
-  fontSize?: number;
-  color?: string;
-  fontFamily?: string;
-  x?: number;
-  y?: number;
-}
-
-export interface CanvasMetadata {
-  id?: string;
-  targetPosition?: Vector;
-  currentPosition?: Vector;
-  color?: string;
-  fixed?: boolean;
-  strokeColor?: string;
-  image?: ImageLike;
-  label?: LabelMetadata;
-}
-
 export interface Template {
   structure: StructureLike;
   size: Size;
-  metadata: CanvasMetadata;
+  metadata: any;
 }
 
 export interface Painters {
@@ -259,8 +239,8 @@ class Canvas {
 
     this._painter.sketch(this, piece, figure, this._outline);
 
-    /** @type {LabelMetadata} */
-    const label: LabelMetadata = piece.metadata.label;
+    /** @type {any} */
+    const label: any = piece.metadata.label;
     if (label && label.text) {
       label.fontSize =
         label.fontSize || (piece.diameter ? piece.diameter.y * 0.55 : 0);
@@ -308,18 +288,18 @@ class Canvas {
    * @param {number} [options.horizontalPiecesCount]
    * @param {number} [options.verticalPiecesCount]
    * @param {InsertsGenerator} [options.insertsGenerator]
-   * @param {CanvasMetadata[]} [options.metadata] optional list of metadata that will be attached to each generated piece
+   * @param {any} [options.metadata] optional list of metadata that will be attached to each generated piece
    */
   autogenerate({
     horizontalPiecesCount = 5,
     verticalPiecesCount = 5,
     insertsGenerator = twoAndTwo,
-    metadata = [],
+    metadata = {},
   }: {
     horizontalPiecesCount?: number;
     verticalPiecesCount?: number;
     insertsGenerator?: InsertsGenerator;
-    metadata?: CanvasMetadata[];
+    metadata?: any;
   } = {}) {
     const manufacturer = new Manufacturer();
     manufacturer.withDimensions(horizontalPiecesCount, verticalPiecesCount);
@@ -854,13 +834,9 @@ class Canvas {
   /**
    * @param {StructureLike} structureLike the piece structure
    * @param {Size} size
-   * @param {CanvasMetadata} metadata
+   * @param {any} metadata
    */
-  _newPiece(
-    structureLike: StructureLike,
-    size: Size,
-    metadata: CanvasMetadata
-  ) {
+  _newPiece(structureLike: StructureLike, size: Size, metadata: any) {
     let piece = this.puzzle?.newPiece(structure.asStructure(structureLike), {
       centralAnchor: vector(
         metadata.currentPosition?.x ?? 0,
