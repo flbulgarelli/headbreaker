@@ -68,7 +68,10 @@ export class Anchor {
    * @returns {boolean}
    */
   closeTo(other: Anchor, tolerance: number): boolean {
-    return between(this.x, other.x-tolerance, other.x + tolerance) && between(this.y, other.y-tolerance, other.y + tolerance)
+    return (
+      between(this.x, other.x - tolerance, other.x + tolerance) &&
+      between(this.y, other.y - tolerance, other.y + tolerance)
+    );
   }
 
   /**
@@ -85,7 +88,7 @@ export class Anchor {
    * @returns {Pair}
    */
   diff(other: Anchor): Pair {
-    return pair.diff(this.x, this.y, other.x, other.y)
+    return pair.diff(this.x, this.y, other.x, other.y);
   }
 
   /**

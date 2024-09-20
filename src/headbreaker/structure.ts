@@ -27,7 +27,11 @@ function parseInsert(insert: string): Insert {
  * @returns {string}
  */
 function serialize(structure: Structure): string {
-  return orthogonalMap([structure.right, structure.down, structure.left, structure.up], it => it.serialize(), None).join('');
+  return orthogonalMap(
+    [structure.right, structure.down, structure.left, structure.up],
+    (it) => (it ? it.serialize() : ''),
+    None
+  ).join('');
 }
 
 /**
@@ -36,9 +40,8 @@ function serialize(structure: Structure): string {
  * @returns {Structure}
  */
 function deserialize(string: string): Structure {
-
   if (string.length !== 4) {
-    throw new Error("structure string must be 4-chars long");
+    throw new Error('structure string must be 4-chars long');
   }
 
   return {
@@ -56,7 +59,7 @@ export type StructureLike = Structure | string;
  * @returns {Structure}
  */
 function asStructure(structureLike: StructureLike): Structure {
-  if (typeof(structureLike) === 'string') {
+  if (typeof structureLike === 'string') {
     return deserialize(structureLike);
   }
   return structureLike;
@@ -66,4 +69,4 @@ export default {
   serialize,
   deserialize,
   asStructure,
-}
+};

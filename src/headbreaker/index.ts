@@ -1,6 +1,7 @@
 export { anchor, Anchor } from './anchor';
 export { radius, diameter } from './size';
 export { NullValidator, PieceValidator, PuzzleValidator } from './validator';
+export type { Validator } from './validator';
 export { Horizontal, Vertical } from './axis';
 export { Tab, Slot, None } from './insert';
 
@@ -10,22 +11,22 @@ import Piece from './piece';
 import vector from './vector';
 import pair from './pair';
 import structure from './structure';
-
-import * as Puzzle from './puzzle';
-import * as Canvas from './canvas';
+import Canvas from './canvas';
+export type { Template } from './canvas';
+import Puzzle from './puzzle';
 import * as Metadata from './metadata';
-import * as SpatialMetadata from './spatial-metadata';
-import * as shuffler from './shuffler';
+import SpatialMetadata from './spatial-metadata';
+import shuffler from './shuffler';
 import * as outline from './outline';
 import * as dragMode from './drag-mode';
 import * as connector from './connector';
 
-const Dummy = require('./dummy-painter');
-const Konva = require('./konva-painter');
+import Dummy from './dummy-painter';
+import Konva from './konva-painter';
 
-const {InsertSequence, ...generators} = require('./sequence');
+import { InsertSequence, generators } from './sequence';
 
-export const painters = { Dummy, Konva }
+export const painters = { Dummy, Konva };
 
 export {
   vector,
@@ -42,5 +43,5 @@ export {
   generators,
   outline,
   dragMode,
-  connector
-}
+  connector,
+};

@@ -1,46 +1,77 @@
-const {Anchor} = require('./anchor');
-const Piece = require('./piece').default;
-const {NullValidator} = require('./validator');
-const {vector, ...Vector} = require('./vector')
-const {radius} = require('./size')
-const Shuffler = require('./shuffler');
-const dragMode = require('./drag-mode');
-const {Connector, noConnectionRequirements} = require('./connector');
+import Piece, { PieceConfig, PieceDump } from './piece';
+import { NullValidator, ValidationListener, Validator } from './validator';
+import { radius, Size } from './size';
+import {
+  DragMode,
+  ForceConnection,
+  ForceDisconnection,
+  TryDisconnection,
+} from './drag-mode';
+import {
+  ConnectionRequirement,
+  Connector,
+  noConnectionRequirements,
+} from './connector';
+import { Structure } from './structure';
+import Shuffler from './shuffler';
+import { Vector } from './vector';
+
+export interface Settings {
+  pieceRadius?: Size | number | Vector;
+  proximity?: number;
+}
+
+interface PuzzleDump {
+  pieceRadius: Size | number | Vector;
+  proximity: number;
+  pieces: PieceDump[];
+}
 
 /**
  * A puzzle primitive representation that can be easily stringified, exchanged and persisted
  *
  * @typedef {object} PuzzleDump
- * @property {import('./vector').Vector} pieceRadius
+ * @property {Vector} pieceRadius
  * @property {number} proximity
- * @property {import('./piece').PieceDump[]} pieces
+ * @property {PieceDump[]} pieces
  */
 
 /**
  * @typedef {object} Settings
- * @property {import('./vector').Vector|number} [pieceRadius]
+ * @property {Vector|number} [pieceRadius]
  * @property {number} [proximity]
  */
 
-
- /**
-  * A set of a {@link Piece}s that can be manipulated as a whole, and that can be
-  * used as a pieces factory
-  */
+/**
+ * A set of a {@link Piece}s that can be manipulated as a whole, and that can be
+ * used as a pieces factory
+ */
 class Puzzle {
-
+  pieceSize: Size;
+  proximity: number;
+  pieces: Piece[];
+  validator: NullValidator;
+  dragMode: DragMode;
+  horizontalConnector: Connector;
+  verticalConnector: Connector;
   /**
    * @param {Settings} [options]
    */
-  constructor({pieceRadius = 2, proximity = 1} = {}) {
-    this.pieceSize = radius(pieceRadius);
+  constructor({ pieceRadius = 2, proximity = 1 }: Settings = {} as Settings) {
+    this.pieceSize = radius(
+      typeof pieceRadius === 'number'
+        ? pieceRadius
+        : 'radius' in pieceRadius
+        ? pieceRadius.radius
+        : pieceRadius
+    );
     this.proximity = proximity;
     /** @type {Piece[]} */
     this.pieces = [];
     /** @type {import('./validator').Validator} */
     this.validator = new NullValidator();
     /** @type {import('./drag-mode').DragMode} */
-    this.dragMode = dragMode.TryDisconnection;
+    this.dragMode = TryDisconnection;
 
     this.horizontalConnector = Connector.horizontal();
     this.verticalConnector = Connector.vertical();
@@ -49,11 +80,11 @@ class Puzzle {
   /**
    * Creates and adds to this puzzle a new piece
    *
-   * @param {import('./structure').Structure} [structure] the piece structure
-   * @param {import('./piece').PieceConfig} [config] the piece config
+   * @param {Structure} [structure] the piece structure
+   * @param {PieceConfig} [config] the piece config
    * @returns {Piece} the new piece
    */
-  newPiece(structure = {}, config = {}) {
+  newPiece(structure: Structure = {}, config: PieceConfig = {}): Piece {
     const piece = new Piece(structure, config);
     this.addPiece(piece);
     return piece;
@@ -62,7 +93,7 @@ class Puzzle {
   /**
    * @param {Piece} piece
    */
-  addPiece(piece) {
+  addPiece(piece: Piece) {
     this.pieces.push(piece);
     piece.belongTo(this);
   }
@@ -70,8 +101,8 @@ class Puzzle {
   /**
    * @param {Piece[]} pieces
    */
-  addPieces(pieces) {
-    pieces.forEach(it => this.addPiece(it));
+  addPieces(pieces: Piece[]) {
+    pieces.forEach((it) => this.addPiece(it));
   }
 
   /**
@@ -79,16 +110,16 @@ class Puzzle {
    *
    * @param {object[]} metadata
    */
-  annotate(metadata) {
+  annotate(metadata: object[]) {
     this.pieces.forEach((piece, index) => piece.annotate(metadata[index]));
   }
 
-   /**
+  /**
    * Relocates all the pieces to the given list of points
    *
    * @param {import('./pair').Pair[]} points
    */
-  relocateTo(points) {
+  relocateTo(points: import('./pair').Pair[]) {
     this.pieces.forEach((piece, index) => piece.relocateTo(...points[index]));
   }
 
@@ -97,14 +128,14 @@ class Puzzle {
    * This method is O(n^2)
    */
   autoconnect() {
-    this.pieces.forEach(it => this.autoconnectWith(it));
+    this.pieces.forEach((it) => this.autoconnectWith(it));
   }
 
   /**
    * Disconnects all pieces
    */
   disconnect() {
-    this.pieces.forEach(it => it.disconnect());
+    this.pieces.forEach((it) => it.disconnect());
   }
 
   /**
@@ -112,27 +143,29 @@ class Puzzle {
    * This method is O(n)
    * @param {Piece} piece
    */
-  autoconnectWith(piece) {
-    this.pieces.filter(it => it !== piece).forEach(other => {
-      piece.tryConnectWith(other);
-      other.tryConnectWith(piece, true);
-    })
+  autoconnectWith(piece: Piece) {
+    this.pieces
+      .filter((it) => it !== piece)
+      .forEach((other) => {
+        piece.tryConnectWith(other);
+        other.tryConnectWith(piece, true);
+      });
   }
 
   /**
    * @param {number} maxX
    * @param {number} maxY
    */
-  shuffle(maxX, maxY) {
+  shuffle(maxX: number, maxY: number) {
     this.shuffleWith(Shuffler.random(maxX, maxY));
   }
 
   /**
    * @param {import('./shuffler').Shuffler} shuffler
    */
-  shuffleWith(shuffler) {
+  shuffleWith(shuffler: import('./shuffler').Shuffler) {
     this.disconnect();
-    shuffler(this.pieces).forEach(({x, y}, index) => {
+    shuffler(this.pieces).forEach(({ x, y }, index) => {
       this.pieces[index].relocateTo(x, y);
     });
     this.autoconnect();
@@ -142,8 +175,8 @@ class Puzzle {
    * @param {number} dx
    * @param {number} dy
    */
-  translate(dx, dy) {
-    this.pieces.forEach(it => it.translate(dx, dy));
+  translate(dx: number, dy: number) {
+    this.pieces.forEach((it) => it.translate(dx, dy));
   }
 
   /**
@@ -153,16 +186,18 @@ class Puzzle {
    * If pieces can not be completly places within the given
    * bounding box, the the `max` param is ignored.
    *
-   * @param {import('./vector').Vector} min
-   * @param {import('./vector').Vector} max
+   * @param {Vector} min
+   * @param {Vector} max
    */
-  reframe(min, max) {
+  reframe(min: Vector, max: Vector) {
     let dx;
-    const leftOffstage = min.x - Math.min(...this.pieces.map(it => it.leftAnchor.x));
+    const leftOffstage =
+      min.x - Math.min(...this.pieces.map((it) => it.leftAnchor?.x ?? 0));
     if (leftOffstage > 0) {
       dx = leftOffstage;
     } else {
-      const rightOffstage = max.x - Math.max(...this.pieces.map(it => it.rightAnchor.x))
+      const rightOffstage =
+        max.x - Math.max(...this.pieces.map((it) => it.rightAnchor?.x ?? 0));
       if (rightOffstage < 0) {
         dx = rightOffstage;
       } else {
@@ -171,11 +206,13 @@ class Puzzle {
     }
 
     let dy;
-    const upOffstage = min.y - Math.min(...this.pieces.map(it => it.upAnchor.y));
+    const upOffstage =
+      min.y - Math.min(...this.pieces.map((it) => it.upAnchor?.y ?? 0));
     if (upOffstage > 0) {
       dy = upOffstage;
     } else {
-      const downOffstage = max.y - Math.max(...this.pieces.map(it => it.downAnchor.y))
+      const downOffstage =
+        max.y - Math.max(...this.pieces.map((it) => it.downAnchor.y));
       if (downOffstage < 0) {
         dy = downOffstage;
       } else {
@@ -189,28 +226,28 @@ class Puzzle {
   /**
    * @param {import('./piece').TranslationListener} f
    */
-  onTranslate(f) {
-    this.pieces.forEach(it => it.onTranslate(f));
+  onTranslate(f: import('./piece').TranslationListener) {
+    this.pieces.forEach((it) => it.onTranslate(f));
   }
 
   /**
    * @param {import('./piece').ConnectionListener} f
    */
-  onConnect(f) {
-    this.pieces.forEach(it => it.onConnect(f));
+  onConnect(f: import('./piece').ConnectionListener) {
+    this.pieces.forEach((it) => it.onConnect(f));
   }
 
   /**
    * @param {import('./piece').ConnectionListener} f
    */
-  onDisconnect(f) {
-    this.pieces.forEach(it => it.onDisconnect(f));
+  onDisconnect(f: import('./piece').ConnectionListener) {
+    this.pieces.forEach((it) => it.onDisconnect(f));
   }
 
   /**
-   * @param {import('./validator').ValidationListener} f
+   * @param {ValidationListener} f
    */
-  onValid(f) {
+  onValid(f: ValidationListener) {
     this.validator.onValid(f);
   }
 
@@ -221,7 +258,7 @@ class Puzzle {
    * @type {import('./pair').Pair[]}
    */
   get points() {
-    return this.pieces.map(it => it.centralAnchor.asPair());
+    return this.pieces.map((it) => it.centralAnchor?.asPair() ?? [0, 0]);
   }
 
   /**
@@ -233,15 +270,17 @@ class Puzzle {
   get refs() {
     return this.points.map(([x, y], index) => {
       const diameter = this.pieces[index].diameter;
-      return [x / diameter.x, y / diameter.y]
-    })
+      const defaultDiameter = { x: 1, y: 1 };
+      const actualDiameter = diameter ?? defaultDiameter;
+      return [x / actualDiameter.x, y / actualDiameter.y];
+    });
   }
 
   /**
    * @type {any[]}
    */
   get metadata() {
-    return this.pieces.map(it => it.metadata);
+    return this.pieces.map((it) => it.metadata);
   }
 
   /**
@@ -266,9 +305,9 @@ class Puzzle {
    * Returns the attached vertical ConnectionRequirement
    * function.
    *
-   * @returns {import('./connector').ConnectionRequirement}
+   * @returns {ConnectionRequirement}
    */
-  get verticalRequirement() {
+  get verticalRequirement(): ConnectionRequirement {
     return this.verticalConnector.requirement;
   }
 
@@ -278,7 +317,7 @@ class Puzzle {
    *
    * @returns {import('./connector').ConnectionRequirement}
    */
-  get horizontalRequirement() {
+  get horizontalRequirement(): import('./connector').ConnectionRequirement {
     return this.horizontalConnector.requirement;
   }
 
@@ -291,7 +330,9 @@ class Puzzle {
    *
    * @param {import('./connector').ConnectionRequirement} requirement
    */
-  attachHorizontalConnectionRequirement(requirement) {
+  attachHorizontalConnectionRequirement(
+    requirement: import('./connector').ConnectionRequirement
+  ) {
     this.horizontalConnector.attachRequirement(requirement);
   }
 
@@ -304,7 +345,9 @@ class Puzzle {
    *
    * @param {import('./connector').ConnectionRequirement} requirement
    */
-  attachVerticalConnectionRequirement(requirement) {
+  attachVerticalConnectionRequirement(
+    requirement: import('./connector').ConnectionRequirement
+  ) {
     this.verticalConnector.attachRequirement(requirement);
   }
 
@@ -316,7 +359,9 @@ class Puzzle {
    *
    * @param {import('./connector').ConnectionRequirement} requirement
    */
-  attachConnectionRequirement(requirement) {
+  attachConnectionRequirement(
+    requirement: import('./connector').ConnectionRequirement
+  ) {
     this.attachHorizontalConnectionRequirement(requirement);
     this.attachVerticalConnectionRequirement(requirement);
   }
@@ -325,13 +370,13 @@ class Puzzle {
    * Removes the vertical and horizontal connection requirements, if any.
    */
   clearConnectionRequirements() {
-    this.attachConnectionRequirement(noConnectionRequirements)
+    this.attachConnectionRequirement(noConnectionRequirements);
   }
 
   /**
-   * @param {import('./validator').Validator} validator
+   * @param {Validator} validator
    */
-  attachValidator(validator) {
+  attachValidator(validator: Validator) {
     this.validator = validator;
   }
 
@@ -343,7 +388,7 @@ class Puzzle {
    *
    * @returns {boolean}
    */
-  isValid() {
+  isValid(): boolean {
     return this.validator.isValid(this);
   }
 
@@ -381,14 +426,14 @@ class Puzzle {
    * @type {boolean}
    */
   get connected() {
-    return this.pieces.every(it => it.connected);
+    return this.pieces.every((it) => it.connected);
   }
 
   /**
    * The piece width, from edge to edge.
    * This is the double of the {@link Puzzle#pieceRadius}
    *
-   * @type {import('./vector').Vector}
+   * @type {Vector}
    */
   get pieceDiameter() {
     return this.pieceSize.diameter;
@@ -397,7 +442,7 @@ class Puzzle {
   /**
    * The piece width, from center to edge
    *
-   * @type {import('./vector').Vector}
+   * @type {Vector}
    */
   get pieceRadius() {
     return this.pieceSize.radius;
@@ -405,17 +450,17 @@ class Puzzle {
 
   /** Prevents pieces from disconnecting */
   forceConnectionWhileDragging() {
-    this.dragMode = dragMode.ForceConnection;
+    this.dragMode = ForceConnection;
   }
 
   /** Forces pieces to disconnect */
   forceDisconnectionWhileDragging() {
-    this.dragMode = dragMode.ForceDisconnection;
+    this.dragMode = ForceDisconnection;
   }
 
   /** Forces pieces to disconnect */
   tryDisconnectionWhileDragging() {
-    this.dragMode = dragMode.TryDisconnection;
+    this.dragMode = TryDisconnection;
   }
 
   /**
@@ -424,7 +469,7 @@ class Puzzle {
    * @param {number} dy
    * @see {@link Piece#dragShouldDisconnect}
    */
-  dragShouldDisconnect(piece, dx, dy) {
+  dragShouldDisconnect(piece: Piece, dx: number, dy: number) {
     return this.dragMode.dragShouldDisconnect(piece, dx, dy);
   }
 
@@ -436,24 +481,30 @@ class Puzzle {
    * @param {boolean} [options.compact] if connection information must be omitted
    * @returns {PuzzleDump}
    */
-  export(options = {}) {
+  export(options: { compact?: boolean } = {}): PuzzleDump {
     return {
       pieceRadius: this.pieceRadius,
       proximity: this.proximity,
-      pieces: this.pieces.map(it => it.export(options))
-    }
+      pieces: this.pieces.map((it) => it.export(options)),
+    };
   }
 
   /**
    * @param {PuzzleDump} dump
    * @returns {Puzzle}
    */
-  static import(dump) {
-    const puzzle = new Puzzle({pieceRadius: dump.pieceRadius, proximity: dump.proximity});
-    puzzle.addPieces(dump.pieces.map(it => Piece.import(it)));
+  static import(dump: PuzzleDump): Puzzle {
+    const puzzle = new Puzzle({
+      pieceRadius:
+        typeof dump.pieceRadius === 'number' || 'radius' in dump.pieceRadius
+          ? dump.pieceRadius
+          : 2, // default value
+      proximity: dump.proximity,
+    });
+    puzzle.addPieces(dump.pieces.map((it) => Piece.import(it)));
     puzzle.autoconnect();
     return puzzle;
   }
 }
 
-module.exports = Puzzle;
+export default Puzzle;

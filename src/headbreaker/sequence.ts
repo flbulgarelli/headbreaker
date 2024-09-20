@@ -1,10 +1,9 @@
 import { Tab, Slot, None, Insert } from './insert';
 
-
 /**
  * A function for generating {@link Insert}s sequentially
  */
-export type InsertsGenerator = (index: number) => Insert
+export type InsertsGenerator = (index: number) => Insert;
 
 /**
  * This module exports several {@link Insert}s sequences strategies: {@link fixed}, {@link flipflop}, {@link twoAndTwo} and {@link random}
@@ -61,7 +60,7 @@ export class InsertSequence {
    */
   constructor(generator: InsertsGenerator) {
     this.generator = generator;
-    this.n = 0
+    this.n = 0;
     this._previous = None;
     this._current = None;
   }
@@ -80,9 +79,9 @@ export class InsertSequence {
    *
    * @returns {Insert}
    */
-  current(max): Insert {
+  current(max: number): Insert {
     if (this.n == max) {
-      return None
+      return None;
     }
     return this._current;
   }
@@ -96,3 +95,5 @@ export class InsertSequence {
     return this._current;
   }
 }
+
+export const generators = { fixed, flipflop, twoAndTwo, random };

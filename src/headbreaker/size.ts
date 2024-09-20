@@ -10,10 +10,10 @@ export interface Size {
  * @returns {Size}
  */
 export function radius(value: Vector | number): Size {
-  const v = vector.cast(value)
+  const v = vector.cast(value);
   return {
     radius: v,
-    diameter: vector.multiply(v, 2)
+    diameter: vector.multiply(v, 2),
   };
 }
 
@@ -22,9 +22,9 @@ export function radius(value: Vector | number): Size {
  * @returns {Size}
  */
 export function diameter(value: Vector | number): Size {
-  const v = vector.cast(value)
+  const v = vector.cast(value);
   return {
     radius: vector.multiply(v, 0.5),
-    diameter: v
+    diameter: v,
   };
 }

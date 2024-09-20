@@ -1,5 +1,3 @@
-import pair from './pair';
-
 import structure, { Structure } from './structure';
 import { Orthogonal } from './prelude';
 import { anchor, Anchor } from './anchor';
@@ -7,13 +5,17 @@ import { Insert, None } from './insert';
 import { Connector } from './connector';
 import { itself, orthogonalTransform } from './prelude';
 import { Vector } from './vector';
-import { radius, Size } from './size';
+import { Size } from './size';
 
-import * as Puzzle from './puzzle';
+import Puzzle from './puzzle';
 
-export type TranslationListener = (piece: Piece, dx: number, dy: number) => void
+export type TranslationListener = (
+  piece: Piece,
+  dx: number,
+  dy: number
+) => void;
 
-export type ConnectionListener = (piece: Piece, target: Piece) => void
+export type ConnectionListener = (piece: Piece, target: Piece) => void;
 
 export interface PieceConfig {
   centralAnchor?: Vector;
@@ -22,16 +24,16 @@ export interface PieceConfig {
 }
 
 export interface PieceDump {
-  centralAnchor: Vector;
+  centralAnchor?: Vector;
   size?: Size;
   metadata: any;
   connections?: Orthogonal<object>;
   structure: string;
 }
 
- /**
-  * A jigsaw piece
-  */
+/**
+ * A jigsaw piece
+ */
 export default class Piece {
   up: Insert;
   down: Insert;
@@ -43,45 +45,48 @@ export default class Piece {
   _horizontalConnector?: Connector;
   _verticalConnector?: Connector;
 
-  translateListeners: TranslationListener[];
-  connectListeners: ConnectionListener[];
-  disconnectListeners: ConnectionListener[];
+  translateListeners?: TranslationListener[];
+  connectListeners?: ConnectionListener[];
+  disconnectListeners?: ConnectionListener[];
   puzzle?: Puzzle;
   rightConnection?: Piece;
   downConnection?: Piece;
   leftConnection?: Piece;
   upConnection?: Piece;
 
-   /**
-    * @param {Structure} [structure]
-    * @param {PieceConfig} [config]
-    */
-   constructor({up = None, down = None, left = None, right = None}: Structure = {}, config: PieceConfig = {}) {
-      this.up = up;
-      this.down = down;
-      this.left = left;
-      this.right = right;
-      /** @type {any} */
-      this.metadata = {};
-      /** @type {Anchor} */
-      this.centralAnchor = null;
-      /** @type {Size} */
-      this._size = null;
+  /**
+   * @param {Structure} [structure]
+   * @param {PieceConfig} [config]
+   */
+  constructor(
+    { up = None, down = None, left = None, right = None }: Structure = {},
+    config: PieceConfig = {}
+  ) {
+    this.up = up;
+    this.down = down;
+    this.left = left;
+    this.right = right;
+    /** @type {any} */
+    this.metadata = {};
+    /** @type {Anchor} */
+    this.centralAnchor = undefined;
+    /** @type {Size} */
+    this._size = undefined;
 
-      /**
-       * @private
-       * @type {Connector}
-       **/
-      this._horizontalConnector = null;
-      /**
-       * @private
-       * @type {Connector}
-       **/
-      this._verticalConnector = null;
+    /**
+     * @private
+     * @type {Connector}
+     **/
+    this._horizontalConnector = undefined;
+    /**
+     * @private
+     * @type {Connector}
+     **/
+    this._verticalConnector = undefined;
 
-      this._initializeListeners();
-      this.configure(config);
-    }
+    this._initializeListeners();
+    this.configure(config);
+  }
 
   _initializeListeners() {
     /** @type {TranslationListener[]} */
@@ -108,17 +113,16 @@ export default class Piece {
     }
 
     if (config.size) {
-      this.resize(config.size)
+      this.resize(config.size);
     }
   }
-
 
   /**
    * Adds unestructured user-defined metadata on this piece.
    *
    * @param {object} metadata
    */
-  annotate(metadata: object) {
+  annotate(metadata?: object) {
     Object.assign(this.metadata, metadata);
   }
 
@@ -137,7 +141,7 @@ export default class Piece {
   /**
    * @param {import('./puzzle')} puzzle
    */
-  belongTo(puzzle: import('./puzzle')) {
+  belongTo(puzzle: Puzzle) {
     this.puzzle = puzzle;
   }
 
@@ -151,46 +155,41 @@ export default class Piece {
   /**
    * @type {Piece[]}
    */
-  get connections() {
+  get connections(): Piece[] {
     return [
       this.rightConnection,
       this.downConnection,
       this.leftConnection,
-      this.upConnection
-    ];
+      this.upConnection,
+    ].filter((connection): connection is Piece => connection !== undefined);
   }
 
   /**
    * @type {import('./insert').Insert[]}
    */
   get inserts() {
-    return [
-      this.right,
-      this.down,
-      this.left,
-      this.up
-    ];
+    return [this.right, this.down, this.left, this.up];
   }
 
   /**
    * @param {TranslationListener} f the callback
    */
   onTranslate(f: TranslationListener) {
-    this.translateListeners.push(f);
+    this.translateListeners?.push(f);
   }
 
   /**
    * @param {ConnectionListener} f the callback
    */
   onConnect(f: ConnectionListener) {
-    this.connectListeners.push(f);
+    this.connectListeners?.push(f);
   }
 
   /**
    * @param {ConnectionListener} f the callback
    */
   onDisconnect(f: ConnectionListener) {
-    this.disconnectListeners.push(f);
+    this.disconnectListeners?.push(f);
   }
 
   /**
@@ -198,22 +197,22 @@ export default class Piece {
    * @param {number} dy
    */
   fireTranslate(dx: number, dy: number) {
-    this.translateListeners.forEach(it => it(this, dx, dy));
+    this.translateListeners?.forEach((it) => it(this, dx, dy));
   }
 
   /**
    * @param {Piece} other
    */
   fireConnect(other: Piece) {
-    this.connectListeners.forEach(it => it(this, other));
+    this.connectListeners?.forEach((it) => it(this, other));
   }
 
-    /**
+  /**
    * @param {Piece[]} others
    */
   fireDisconnect(others: Piece[]) {
-    others.forEach(other => {
-      this.disconnectListeners.forEach(it => it(this, other));
+    others.forEach((other) => {
+      this.disconnectListeners?.forEach((it) => it(this, other));
     });
   }
 
@@ -223,7 +222,7 @@ export default class Piece {
    * @param {boolean} [back]
    */
   connectVerticallyWith(other: Piece, back: boolean = false) {
-    this.verticalConnector.connectWith(this, other, this.proximity, back);
+    this.verticalConnector.connectWith(this, other, this.proximity ?? 0, back);
   }
 
   /**
@@ -238,7 +237,12 @@ export default class Piece {
    * @param {boolean} [back]
    */
   connectHorizontallyWith(other: Piece, back: boolean = false) {
-    this.horizontalConnector.connectWith(this, other, this.proximity, back);
+    this.horizontalConnector.connectWith(
+      this,
+      other,
+      this.proximity ?? 0,
+      back
+    );
   }
 
   /**
@@ -285,25 +289,25 @@ export default class Piece {
     const connections = this.presentConnections;
 
     if (this.upConnection) {
-      this.upConnection.downConnection = null;
+      this.upConnection.downConnection = undefined;
       /** @type {Piece} */
-      this.upConnection = null;
+      this.upConnection = undefined;
     }
 
     if (this.downConnection) {
-      this.downConnection.upConnection = null;
-      this.downConnection = null;
+      this.downConnection.upConnection = undefined;
+      this.downConnection = undefined;
     }
 
     if (this.leftConnection) {
-      this.leftConnection.rightConnection = null;
+      this.leftConnection.rightConnection = undefined;
       /** @type {Piece} */
-      this.leftConnection = null;
+      this.leftConnection = undefined;
     }
 
     if (this.rightConnection) {
-      this.rightConnection.leftConnection = null;
-      this.rightConnection = null;
+      this.rightConnection.leftConnection = undefined;
+      this.rightConnection = undefined;
     }
 
     this.fireDisconnect(connections);
@@ -316,11 +320,12 @@ export default class Piece {
    */
   centerAround(anchor: Anchor) {
     if (this.centralAnchor) {
-      throw new Error("this pieces has already being centered. Use recenterAround instead");
+      throw new Error(
+        'this pieces has already being centered. Use recenterAround instead'
+      );
     }
     this.centralAnchor = anchor;
   }
-
 
   /**
    * Sets the initial position of this piece. This method is similar to {@link Piece#centerAround},
@@ -341,7 +346,7 @@ export default class Piece {
    * @return {boolean}
    */
   isAt(x: number, y: number): boolean {
-    return this.centralAnchor.isAt(x, y);
+    return this.centralAnchor ? this.centralAnchor.isAt(x, y) : false;
   }
 
   /**
@@ -352,6 +357,9 @@ export default class Piece {
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   recenterAround(anchor: Anchor, quiet: boolean = false) {
+    if (!this.centralAnchor) {
+      throw new Error('Central anchor is not defined');
+    }
     const [dx, dy] = anchor.diff(this.centralAnchor);
     this.translate(dx, dy, quiet);
   }
@@ -377,8 +385,8 @@ export default class Piece {
    * @param {boolean} [quiet] indicates whether events should be suppressed
    */
   translate(dx: number, dy: number, quiet: boolean = false) {
-    if (!pair.isNull(dx, dy)) {
-      this.centralAnchor.translate(dx, dy);
+    if (dx !== undefined && dy !== undefined) {
+      this.centralAnchor?.translate(dx, dy);
       if (!quiet) {
         this.fireTranslate(dx, dy);
       }
@@ -392,12 +400,22 @@ export default class Piece {
    * @param {boolean} [quiet]
    * @param {Piece[]} [pushedPieces]
    */
-  push(dx: number, dy: number, quiet: boolean = false, pushedPieces: Piece[] = [this]) {
-    this.translate(dx, dy, quiet);
+  push(
+    dx: number,
+    dy: number,
+    quiet: boolean = false,
+    pushedPieces: Set<Piece> = new Set()
+  ) {
+    if (pushedPieces.has(this)) return;
 
-    const stationaries = this.presentConnections.filter(it => pushedPieces.indexOf(it) === -1);
-    pushedPieces.push(...stationaries);
-    stationaries.forEach(it => it.push(dx, dy, false, pushedPieces));
+    this.translate(dx, dy, quiet);
+    pushedPieces.add(this);
+
+    this.presentConnections.forEach((connectedPiece) => {
+      if (!pushedPieces.has(connectedPiece)) {
+        connectedPiece.push(dx, dy, quiet, pushedPieces);
+      }
+    });
   }
 
   /**
@@ -405,7 +423,7 @@ export default class Piece {
    * @param {number} dy
    */
   drag(dx: number, dy: number, quiet = false) {
-    if (pair.isNull(dx, dy)) return;
+    if (dx === undefined || dy === undefined) return;
 
     if (this.dragShouldDisconnect(dx, dy)) {
       this.disconnect();
@@ -426,14 +444,14 @@ export default class Piece {
    * @see {@link Puzzle#dragShouldDisconnect}
    **/
   dragShouldDisconnect(dx: number, dy: number) {
-    return this.puzzle.dragShouldDisconnect(this, dx, dy);
+    return this.puzzle?.dragShouldDisconnect(this, dx, dy);
   }
 
   drop() {
-    this.puzzle.autoconnectWith(this);
+    this.puzzle?.autoconnectWith(this);
   }
 
-  dragAndDrop(dx, dy) {
+  dragAndDrop(dx: number, dy: number) {
     this.drag(dx, dy);
     this.drop();
   }
@@ -444,7 +462,11 @@ export default class Piece {
    * @returns {boolean}
    */
   canConnectHorizontallyWith(other: Piece): boolean {
-    return this.horizontalConnector.canConnectWith(this, other, this.proximity);
+    return this.horizontalConnector.canConnectWith(
+      this,
+      other,
+      this.proximity ?? 0
+    );
   }
 
   /**
@@ -453,7 +475,11 @@ export default class Piece {
    * @returns {boolean}
    */
   canConnectVerticallyWith(other: Piece): boolean {
-    return this.verticalConnector.canConnectWith(this, other, this.proximity);
+    return this.verticalConnector.canConnectWith(
+      this,
+      other,
+      this.proximity ?? 0
+    );
   }
 
   /**
@@ -462,7 +488,7 @@ export default class Piece {
    * @returns {boolean}
    */
   verticallyCloseTo(other: Piece): boolean {
-    return this.verticalConnector.closeTo(this, other, this.proximity);
+    return this.verticalConnector.closeTo(this, other, this.proximity ?? 0);
   }
 
   /**
@@ -471,9 +497,8 @@ export default class Piece {
    * @returns {boolean}
    */
   horizontallyCloseTo(other: Piece): boolean {
-    return this.horizontalConnector.closeTo(this, other, this.proximity);
+    return this.horizontalConnector.closeTo(this, other, this.proximity ?? 0);
   }
-
 
   /**
    *
@@ -493,36 +518,41 @@ export default class Piece {
     return this.horizontalConnector.match(this, other);
   }
 
-  get connected() {
-    return !!(this.upConnection || this.downConnection || this.leftConnection || this.rightConnection);
+  get connected(): boolean {
+    return !!(
+      this.upConnection ||
+      this.downConnection ||
+      this.leftConnection ||
+      this.rightConnection
+    );
   }
 
   /**
    *@type {Anchor}
    */
   get downAnchor() {
-    return this.centralAnchor.translated(0, this.radius.y);
+    return this.centralAnchor!.translated(0, this.radius?.y ?? 0);
   }
 
   /**
    *@type {Anchor}
    */
   get rightAnchor() {
-    return this.centralAnchor.translated(this.radius.x, 0);
+    return this.centralAnchor?.translated(this.radius?.x ?? 0, 0);
   }
 
   /**
    *@type {Anchor}
    */
   get upAnchor() {
-    return this.centralAnchor.translated(0, -this.radius.y);
+    return this.centralAnchor?.translated(0, -(this.radius?.y ?? 0));
   }
 
   /**
    *@type {Anchor}
    */
   get leftAnchor() {
-    return this.centralAnchor.translated(-this.radius.x, 0);
+    return this.centralAnchor?.translated(-(this.radius?.x ?? 0), 0);
   }
 
   /**
@@ -539,7 +569,7 @@ export default class Piece {
    * @type {Vector}
    */
   get radius() {
-    return this.size.radius;
+    return this.size?.radius;
   }
 
   /**
@@ -548,18 +578,18 @@ export default class Piece {
    * @type {Vector}
    */
   get diameter() {
-    return this.size.diameter;
+    return this.size?.diameter;
   }
 
   get size() {
-    return this._size || this.puzzle.pieceSize;
+    return this._size || this.puzzle?.pieceSize;
   }
 
   /**
    * @type {number}
    */
   get proximity() {
-    return this.puzzle.proximity;
+    return this.puzzle?.proximity;
   }
 
   /**
@@ -586,20 +616,26 @@ export default class Piece {
   }
 
   /**
-   * Retrieves the requested connector, initializing
-   * it if necessary.
+   * Retrieves the requested connector, initializing it if necessary.
    *
-   * @param {"vertical" | "horizontal"} kind
-   * @returns {Connector}
+   * @param {"vertical" | "horizontal"} kind - The type of connector to retrieve.
+   * @returns {Connector} - The requested connector.
    */
-  getConnector(kind: "vertical" | "horizontal"): Connector {
-    const connector = kind + "Connector";
-    const _connector = "_" + connector;
-    if (this.puzzle && !this[_connector]) return this.puzzle[connector];
-    if (!this[_connector]) {
-      this[_connector] = Connector[kind]();
+
+  getConnector(kind: 'vertical' | 'horizontal'): Connector {
+    const connectorKey =
+      kind === 'vertical' ? '_verticalConnector' : '_horizontalConnector';
+
+    if (this.puzzle && !this[connectorKey]) {
+      return this.puzzle[`${kind}Connector`] as Connector;
     }
-    return this[_connector];
+
+    if (!this[connectorKey]) {
+      this[connectorKey] =
+        kind === 'vertical' ? Connector.vertical() : Connector.horizontal();
+    }
+
+    return this[connectorKey]!;
   }
 
   /**
@@ -610,18 +646,29 @@ export default class Piece {
    * @param {boolean} [options.compact]
    * @returns {PieceDump}
    */
-  export({compact = false}: { compact?: boolean; } = {}): PieceDump {
-    const base: PieceDump = {
+  export({ compact = false }: { compact?: boolean } = {}): PieceDump {
+    const base = {
       centralAnchor: this.centralAnchor && this.centralAnchor.export(),
       structure: structure.serialize(this),
-      metadata: this.metadata
+      metadata: this.metadata,
+    } as {
+      centralAnchor: Vector | undefined;
+      structure: string;
+      metadata: any;
+      size?: Size;
     };
+
     if (this._size) {
-      base.size = radius(this._size.radius);
+      base.size = this._size;
     }
-    return compact ? base : Object.assign(base, {
-      connections: orthogonalTransform(this.connections, it => ({id: it.id}))
-    })
+
+    return compact
+      ? base
+      : Object.assign(base, {
+          connections: orthogonalTransform(this.connections, (it) => ({
+            id: it.id,
+          })),
+        });
   }
 
   /**
@@ -632,8 +679,10 @@ export default class Piece {
    * @returns {Piece}
    */
   static import(dump: PieceDump): Piece {
-    return new Piece(
-      structure.deserialize(dump.structure),
-      {centralAnchor: dump.centralAnchor, metadata: dump.metadata, size: dump.size});
+    return new Piece(structure.deserialize(dump.structure), {
+      centralAnchor: dump.centralAnchor,
+      metadata: dump.metadata,
+      size: dump.size,
+    });
   }
 }

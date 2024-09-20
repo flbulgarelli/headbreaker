@@ -1,12 +1,10 @@
-import * as Puzzle from './puzzle';
+import Puzzle from './puzzle';
 import Piece from './piece';
 import pair, { Pair } from './pair';
 
-/**
- * @typedef {PieceValidator | PuzzleValidator | NullValidator} Validator
- **/
+export type Validator = PieceValidator | PuzzleValidator | NullValidator;
 
-type ValidationListener = (puzzle: Puzzle) => void
+export type ValidationListener = (puzzle: Puzzle) => void;
 
 /** An abstract base validator */
 export class AbstractValidator {
@@ -47,7 +45,7 @@ export class AbstractValidator {
    * @param {Puzzle} puzzle
    */
   fireValid(puzzle: Puzzle) {
-    this.validListeners.forEach(it => it(puzzle));
+    this.validListeners.forEach((it) => it(puzzle));
   }
 
   /**
@@ -79,8 +77,8 @@ export class AbstractValidator {
   }
 }
 
-export type PieceCondition = (piece: Piece) => boolean
-export type PuzzleCondition = (puzzle: Puzzle) => boolean
+export type PieceCondition = (piece: Piece) => boolean;
+export type PuzzleCondition = (puzzle: Puzzle) => boolean;
 
 /** A validator that evaluates each piece independently */
 export class PieceValidator extends AbstractValidator {
@@ -99,7 +97,7 @@ export class PieceValidator extends AbstractValidator {
    * @returns {boolean}
    */
   isValid(puzzle: Puzzle): boolean {
-    return puzzle.pieces.every(it => this.condition(it));
+    return puzzle.pieces.every((it) => this.condition(it));
   }
 }
 
@@ -115,10 +113,9 @@ export class PuzzleValidator extends AbstractValidator {
   static DIFF_DELTA: number = 0.01;
 
   /**
-  * @type {PuzzleCondition}
-  */
+   * @type {PuzzleCondition}
+   */
   static connected: PuzzleCondition = (puzzle) => puzzle.connected;
-
 
   /**
    * @param {PuzzleCondition} f
@@ -153,24 +150,25 @@ export class PuzzleValidator extends AbstractValidator {
    */
   static relativeRefs(expected: Pair[]): PuzzleCondition {
     return (puzzle) => {
-      function diff(x, y, index) {
+      function diff(x: number, y: number, index: number) {
         return pair.diff(x, y, ...expected[index]);
       }
       const refs = puzzle.refs;
       const [x0, y0] = refs[0];
       const diff0 = diff(x0, y0, 0);
-      return refs.every(([x, y], index) => PuzzleValidator.equalDiffs(diff0, diff(x, y, index)));
+      return refs.every(([x, y], index) =>
+        PuzzleValidator.equalDiffs(diff0, diff(x, y, index))
+      );
     };
   }
 }
 
 /** A validator that always is invalid */
 export class NullValidator extends AbstractValidator {
-
   /**
-   * @param {Puzzle} puzzle
+   * @param {Puzzle} _puzzle
    */
-  isValid(puzzle: Puzzle) {
+  isValid(_puzzle: Puzzle) {
     return false;
   }
 
@@ -180,4 +178,4 @@ export class NullValidator extends AbstractValidator {
   get isNull() {
     return true;
   }
-};
+}

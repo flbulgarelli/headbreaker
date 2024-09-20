@@ -11,10 +11,8 @@
  * @param {T} metadata
  * @returns {T}
  */
-function copy(metadata) {
+function copy<T>(metadata: T): T {
   return JSON.parse(JSON.stringify(metadata));
 }
 
-module.exports = {
-  copy
-}
+export default { copy };

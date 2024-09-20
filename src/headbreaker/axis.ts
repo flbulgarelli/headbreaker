@@ -1,10 +1,6 @@
+import { Vector } from './vector';
 
-
-import { Vector } from "./vector";
-
-/**
- * @typedef {Vertical|Horizontal} Axis
- */
+export type Axis = typeof Vertical | typeof Horizontal;
 
 export const Vertical = {
   /**
@@ -12,7 +8,7 @@ export const Vertical = {
    * @returns {number}
    */
   atVector(vector: Vector): number {
-    return vector.y
+    return vector.y;
   },
 
   /**
@@ -21,8 +17,8 @@ export const Vertical = {
    */
   atDimension(image: HTMLImageElement | HTMLCanvasElement): number {
     return image.height;
-  }
-}
+  },
+};
 
 export const Horizontal = {
   /**
@@ -30,7 +26,7 @@ export const Horizontal = {
    * @returns {number}
    */
   atVector(vector: Vector): number {
-    return vector.x
+    return vector.x;
   },
 
   /**
@@ -39,5 +35,5 @@ export const Horizontal = {
    */
   atDimension(image: HTMLImageElement | HTMLCanvasElement): number {
     return image.width;
-  }
-}
+  },
+};

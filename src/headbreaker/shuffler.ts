@@ -1,14 +1,14 @@
-const {Anchor} = require('./anchor');
+import { Anchor } from './anchor';
 import Piece from './piece';
-import {Vector} from './vector';
+import { Vector } from './vector';
 
 export type Shuffler = (pieces: Piece[]) => Vector[];
 
 /**
  * @private
  */
-function sampleIndex(list) {
-  return Math.round(Math.random() * (list.length - 1));
+function sampleIndex<T>(list: T[]): number {
+  return Math.floor(Math.random() * list.length);
 }
 
 /**
@@ -18,14 +18,16 @@ function sampleIndex(list) {
  * @returns {Shuffler}
  */
 function random(maxX: number, maxY: number): Shuffler {
-  return (pieces) => pieces.map(_it => Anchor.atRandom(maxX, maxY));
+  return (pieces) => pieces.map((_it) => Anchor.atRandom(maxX, maxY));
 }
 
 /**
  * @type {Shuffler}
  * */
 const grid: Shuffler = (pieces) => {
-  const destinations = pieces.map(it => it.centralAnchor.asVector());
+  const destinations = pieces.map((it) =>
+    it.centralAnchor ? it.centralAnchor.asVector() : new Anchor(0, 0).asVector()
+  );
   for (let i = 0; i < destinations.length; i++) {
     const j = sampleIndex(destinations);
     const temp = destinations[j];
@@ -39,37 +41,43 @@ const grid: Shuffler = (pieces) => {
  * @type {Shuffler}
  * */
 const columns: Shuffler = (pieces) => {
-  const destinations = pieces.map(it => it.centralAnchor.asVector());
+  const destinations = pieces.map((it) =>
+    it.centralAnchor ? it.centralAnchor.asVector() : new Anchor(0, 0).asVector()
+  );
   const columns = new Map();
 
   for (let destination of destinations) {
     if (!columns.get(destination.x)) {
-      columns.set(destination.x, destinations.filter(it => it.x == destination.x));
+      columns.set(
+        destination.x,
+        destinations.filter((it) => it.x == destination.x)
+      );
     }
     const column = columns.get(destination.x);
 
     const j = sampleIndex(column);
-    const temp = column[j].y
+    const temp = column[j].y;
     column[j].y = destination.y;
     destination.y = temp;
   }
   return destinations;
 };
 
-
 /**
  * @type {Shuffler}
  * */
 const line: Shuffler = (pieces) => {
-  const destinations = pieces.map(it => it.centralAnchor.asVector());
-  const columns = new Set(destinations.map(it => it.x));
+  const destinations = pieces.map((it) =>
+    it.centralAnchor ? it.centralAnchor.asVector() : new Anchor(0, 0).asVector()
+  );
+  const columns = new Set(destinations.map((it) => it.x));
   const maxX = Math.max(...columns);
   const minX = Math.min(...columns);
   const width = (maxX - minX) / (columns.size - 1);
-  const pivot = minX + (width / 2);
+  const pivot = minX + width / 2;
 
   const lineLength = destinations.length * width;
-  const linePivot = destinations.filter(it => it.x < pivot).length * width;
+  const linePivot = destinations.filter((it) => it.x < pivot).length * width;
 
   const init = [];
   const tail = [];
@@ -101,7 +109,11 @@ const line: Shuffler = (pieces) => {
  * */
 function padder(padding: number, width: number, height: number): Shuffler {
   return (pieces) => {
-    const destinations = pieces.map(it => it.centralAnchor.asVector());
+    const destinations = pieces.map((it) =>
+      it.centralAnchor
+        ? it.centralAnchor.asVector()
+        : new Anchor(0, 0).asVector()
+    );
     let dx = 0;
     let dy = 0;
     for (let j = 0; j < height; j++) {
@@ -116,7 +128,7 @@ function padder(padding: number, width: number, height: number): Shuffler {
       dy += padding;
     }
     return destinations;
-  }
+  };
 }
 
 /**
@@ -125,26 +137,22 @@ function padder(padding: number, width: number, height: number): Shuffler {
  */
 function noise(maxDistance: import('./vector').Vector): Shuffler {
   return (pieces) => {
-    return pieces.map(it =>
-      Anchor
-        .atRandom(2 * maxDistance.x, 2 * maxDistance.y)
+    return pieces.map((it) =>
+      Anchor.atRandom(2 * maxDistance.x, 2 * maxDistance.y)
         .translate(-maxDistance.x, -maxDistance.y)
-        .translate(it.centralAnchor.x, it.centralAnchor.y)
-        .asVector());
-  }
+        .translate(it.centralAnchor?.x ?? 0, it.centralAnchor?.y ?? 0)
+        .asVector()
+    );
+  };
 }
 
 /**
  * @type {Shuffler}
  * */
-const noop: Shuffler = (pieces) => pieces.map(it => it.centralAnchor);
+const noop: Shuffler = (pieces) =>
+  pieces.map(
+    (it) => it.centralAnchor?.asVector() ?? new Anchor(0, 0).asVector()
+  );
 
-export {
-  random,
-  grid,
-  columns,
-  line,
-  noop,
-  padder,
-  noise
-}
+// Export default example: shuffler.random etc
+export default { random, grid, columns, line, padder, noise, noop };
