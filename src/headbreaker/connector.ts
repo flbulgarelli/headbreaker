@@ -1,6 +1,7 @@
 /**
  * @module Connector
  */
+import { Anchor } from './anchor';
 import Piece from './piece';
 import { pivot } from './prelude';
 
@@ -56,19 +57,26 @@ export class Connector {
    */
   attract(one: Piece, other: Piece, back: boolean = false) {
     const [iron, magnet] = pivot(one, other, back);
-    let dx, dy;
     const forwardAnchorKey = this.forwardAnchor as keyof Piece;
     const backwardAnchorKey = this.backwardAnchor as keyof Piece;
+
+    let dx: number, dy: number;
+
     if (
       magnet.centralAnchor &&
       iron.centralAnchor &&
       magnet.centralAnchor[this.axis as keyof typeof magnet.centralAnchor] >
         iron.centralAnchor[this.axis as keyof typeof iron.centralAnchor]
     ) {
-      [dx, dy] = magnet[backwardAnchorKey].diff(iron[forwardAnchorKey]);
+      const magnetAnchor = magnet[backwardAnchorKey] as Anchor;
+      const ironAnchor = iron[forwardAnchorKey] as Anchor;
+      [dx, dy] = magnetAnchor.diff(ironAnchor);
     } else {
-      [dx, dy] = magnet[forwardAnchorKey].diff(iron[backwardAnchorKey]);
+      const magnetAnchor = magnet[forwardAnchorKey] as Anchor;
+      const ironAnchor = iron[backwardAnchorKey] as Anchor;
+      [dx, dy] = magnetAnchor.diff(ironAnchor);
     }
+
     iron.push(dx, dy);
   }
 

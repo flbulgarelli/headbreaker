@@ -60,7 +60,9 @@ class Puzzle {
     this.pieceSize = radius(
       typeof pieceRadius === 'number'
         ? pieceRadius
-        : (pieceRadius as Size).radius
+        : 'radius' in pieceRadius
+        ? pieceRadius.radius
+        : pieceRadius
     );
     this.proximity = proximity;
     /** @type {Piece[]} */

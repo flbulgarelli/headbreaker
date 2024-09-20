@@ -404,15 +404,18 @@ export default class Piece {
     dx: number,
     dy: number,
     quiet: boolean = false,
-    pushedPieces: Piece[] = []
+    pushedPieces: Set<Piece> = new Set()
   ) {
-    this.translate(dx, dy, quiet);
+    if (pushedPieces.has(this)) return;
 
-    const stationaries = this.presentConnections.filter(
-      (it) => pushedPieces.indexOf(it) === -1
-    );
-    pushedPieces.push(...stationaries);
-    stationaries.forEach((it) => it.push(dx, dy, false, pushedPieces));
+    this.translate(dx, dy, quiet);
+    pushedPieces.add(this);
+
+    this.presentConnections.forEach((connectedPiece) => {
+      if (!pushedPieces.has(connectedPiece)) {
+        connectedPiece.push(dx, dy, quiet, pushedPieces);
+      }
+    });
   }
 
   /**
