@@ -623,22 +623,19 @@ export default class Piece {
    */
 
   getConnector(kind: 'vertical' | 'horizontal'): Connector {
-    const connectorKey = `_${kind}Connector` as keyof this; // Type assertion for the key
-    const puzzleConnectorKey = `${kind}Connector`; // Key for the connector in puzzle
+    const connectorKey =
+      kind === 'vertical' ? '_verticalConnector' : '_horizontalConnector';
 
-    // If the puzzle has the connector and it's not cached locally, return the puzzle's version
     if (this.puzzle && !this[connectorKey]) {
-      return this.puzzle[
-        puzzleConnectorKey as keyof typeof this.puzzle
-      ] as Connector;
+      return this.puzzle[`${kind}Connector`] as Connector;
     }
 
-    // If not cached, create and store the connector
     if (!this[connectorKey]) {
-      this[connectorKey] = Connector[kind]() as any; // Type assertion to bypass error
+      this[connectorKey] =
+        kind === 'vertical' ? Connector.vertical() : Connector.horizontal();
     }
 
-    return this[connectorKey] as Connector; // Type assertion to ensure it's treated as a Connector
+    return this[connectorKey]!;
   }
 
   /**

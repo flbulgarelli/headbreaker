@@ -137,14 +137,18 @@ export class Connector {
       throw new Error(`Cannot connect ${this.forward}!`);
     }
 
-    // Type assertion to let TypeScript know these properties exist
-    const forwardConnection = this.forwardConnection as keyof Piece;
-    const backwardConnection = this.backwardConnection as keyof Piece;
+    type ConnectionKey =
+      | 'rightConnection'
+      | 'leftConnection'
+      | 'upConnection'
+      | 'downConnection';
+    const forwardConnection = this.forwardConnection as ConnectionKey;
+    const backwardConnection = this.backwardConnection as ConnectionKey;
 
     if (one[forwardConnection] !== other) {
       this.attract(other, one, back);
-      (one as any)[forwardConnection] = other;
-      (other as any)[backwardConnection] = one;
+      one[forwardConnection] = other;
+      other[backwardConnection] = one;
       one.fireConnect(other);
     }
   }
