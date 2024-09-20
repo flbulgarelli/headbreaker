@@ -79,7 +79,7 @@ vector.copy = ({ x, y }: Vector): Vector => {
  * @param {any} x
  * @param {any} y
  */
-vector.update = (vector: Vector, x: any, y: any) => {
+vector.update = (vector: Vector, x: number, y: number) => {
   vector.x = x;
   vector.y = y;
 };

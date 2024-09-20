@@ -1,7 +1,8 @@
-import Piece, { PieceConfig } from './piece';
+import Piece, { PieceConfig, PieceDump } from './piece';
 import { NullValidator, ValidationListener, Validator } from './validator';
 import { radius, Size } from './size';
 import {
+  DragMode,
   ForceConnection,
   ForceDisconnection,
   TryDisconnection,
@@ -23,7 +24,7 @@ export interface Settings {
 interface PuzzleDump {
   pieceRadius: Size | number | Vector;
   proximity: number;
-  pieces: any[];
+  pieces: PieceDump[];
 }
 
 /**
@@ -50,7 +51,7 @@ class Puzzle {
   proximity: number;
   pieces: Piece[];
   validator: NullValidator;
-  dragMode: any;
+  dragMode: DragMode;
   horizontalConnector: Connector;
   verticalConnector: Connector;
   /**

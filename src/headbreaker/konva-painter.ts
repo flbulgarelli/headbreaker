@@ -4,7 +4,8 @@ import Pair from './pair';
 import Painter from './painter';
 import Canvas, { Figure } from './canvas';
 import { Outline } from './outline';
-import vector from './vector';
+import vector, { Vector } from './vector';
+import Puzzle from './puzzle';
 
 function currentPositionDiff(model: Piece, group: Konva.Group) {
   return Pair.diff(
@@ -74,9 +75,9 @@ class KonvaPainter extends Painter {
 
   /**
    * @param {Canvas} canvas
-   * @param {import('./vector').Vector} factor
+   * @param {Vector} factor
    */
-  scale(canvas: Canvas, factor: any): void {
+  scale(canvas: Canvas, factor: Vector): void {
     const layer = canvas['__konvaLayer__'];
     if (layer) {
       layer.getStage().scale(factor);
@@ -89,7 +90,7 @@ class KonvaPainter extends Painter {
    * @param {Figure} figure
    * @param {import('./outline').Outline} outline
    */
-  sketch(canvas: Canvas, piece: Piece, figure: any, outline: Outline): void {
+  sketch(canvas: Canvas, piece: Piece, figure: Figure, outline: Outline): void {
     figure.group = new Konva.Group({
       x: piece.metadata.currentPosition?.x ?? 0,
       y: piece.metadata.currentPosition?.y ?? 0,
@@ -131,12 +132,12 @@ class KonvaPainter extends Painter {
    * @param {Piece} piece
    * @param {Figure} figure
    */
-  fill(canvas: Canvas, piece: Piece, figure: any): void {
+  fill(canvas: Canvas, piece: Piece, figure: Figure): void {
     const image = canvas.imageMetadataFor(piece);
-    figure.shape.fill(!image ? piece.metadata.color || 'black' : null);
-    figure.shape.fillPatternImage(image && image.content);
-    figure.shape.fillPatternScale(image && { x: image.scale, y: image.scale });
-    figure.shape.fillPatternOffset(
+    figure.shape?.fill(!image ? piece.metadata.color || 'black' : null);
+    figure.shape?.fillPatternImage(image && image.content);
+    figure.shape?.fillPatternScale(image && { x: image.scale, y: image.scale });
+    figure.shape?.fillPatternOffset(
       image && vector.divide(image.offset, image.scale)
     );
   }
@@ -230,7 +231,7 @@ class KonvaPainter extends Painter {
    */
   registerKeyboardGestures(
     canvas: Canvas,
-    gestures: Record<number, (puzzle: any) => void>
+    gestures: Record<number, (puzzle: Puzzle) => void>
   ): void {
     const layer = canvas['__konvaLayer__'];
     if (layer) {
@@ -244,11 +245,11 @@ class KonvaPainter extends Painter {
   _registerKeyDown(
     canvas: Canvas,
     container: HTMLElement,
-    gestures: Record<number, (puzzle: any) => void>
+    gestures: Record<number, (puzzle: Puzzle) => void>
   ): void {
     container.addEventListener('keydown', (e) => {
       const keyCode = e.keyCode;
-      if (gestures[keyCode]) {
+      if (gestures[keyCode] && canvas.puzzle) {
         gestures[keyCode](canvas.puzzle);
       }
     });
@@ -257,7 +258,7 @@ class KonvaPainter extends Painter {
   _registerKeyUp(
     canvas: Canvas,
     container: HTMLElement,
-    gestures: Record<number, (puzzle: any) => void>
+    gestures: Record<number, (puzzle: Puzzle) => void>
   ): void {
     container.addEventListener('keyup', (e) => {
       const keyCode = e.keyCode;

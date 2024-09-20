@@ -7,8 +7,8 @@ export type Shuffler = (pieces: Piece[]) => Vector[];
 /**
  * @private
  */
-function sampleIndex(list: any[]): number {
-  return Math.round(Math.random() * (list.length - 1));
+function sampleIndex<T>(list: T[]): number {
+  return Math.floor(Math.random() * list.length);
 }
 
 /**

@@ -29,5 +29,8 @@
   "optionalDependencies": {
     "canvas": "^2.11.2",
     "konva": "^9.3.15"
+  },
+  "dependencies": {
+    "headbreaker": "file:"
   }
 }

@@ -2,6 +2,7 @@ import Piece from './piece';
 import vector from './vector';
 import { Vector } from './vector';
 import { Insert } from './insert';
+import { Axis } from './axis';
 
 export type Outline = Squared | Rounded;
 
@@ -96,7 +97,7 @@ export class Rounded {
   insertDepth: number;
   borderLength: number;
 
-  referenceInsertAxis: any;
+  referenceInsertAxis: Axis | null;
   constructor({
     bezelize = false,
     bezelDepth = 2 / 5,
